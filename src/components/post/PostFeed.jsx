@@ -1,18 +1,9 @@
-import Layout from "../components/common/Layout";
-import PostLine from "../components/post/PostLine";
-import DetailsHeader from "../components/postDetailsPage/DetailsHeader";
-import Image from "../components/postDetailsPage/Image";
-import { useNavigate } from "react-router-dom";
+import PostLine from "./PostLine";
 
-export default function PostDetailsPage() {
-  const navigate = useNavigate();
+PostLine;
 
-  const handleTagClick = (tag) => {
-    // 선택된 태그를 URL 파라미터로 전달하고 검색 페이지로 이동
-    navigate(`/search?keyword=${tag}`);
-  };
+export default function PostFeed() {
   //TODO : 사진 제목 카테고리 태그 내용 (일정) 댓글 좋아요
-
   const feedData = [
     {
       postId: "1",
@@ -26,22 +17,6 @@ export default function PostDetailsPage() {
       viewNum: "3",
       commentNum: "5",
       createdAt: "8분전",
-      commentList: [
-        {
-          nickName: "robie",
-          comments: "좋았어요.",
-          createdAt: "2023-09-02",
-          modifiedAt: "2023-09-03",
-          replyList: [
-            {
-              nickName: "rebere",
-              contents: "저도 좋았어요.",
-              createdAt: "2023-09-02",
-              modifiedAt: "2023-09-03",
-            },
-          ],
-        },
-      ],
     },
     {
       postId: "2",
@@ -82,55 +57,63 @@ export default function PostDetailsPage() {
       commentNum: "1",
       createdAt: "1시간전",
     },
+    // 다른 피드 아이템들 추가
   ];
-
   return (
-    <Layout>
-      <div>
-        <DetailsHeader />
-        <Image />
-        <div className="w-393 h-275 bg-white flex flex-col ">
+    <div>
+      {feedData.map((item, index) => (
+        <div
+          key={index}
+          className="w-393 h-275 bg-white flex flex-col relative"
+        >
           <div className="flex items-center justify-between mb-2 mt-5">
             <div className="flex items-center">
               <div className="w-12 h-12 bg-gray-300 rounded-full ml-4  cursor-pointer"></div>
               <div className="flex flex-col ml-[13px]">
                 <p className="text-[18px] font-semibold  cursor-pointer">
-                  {feedData[0].title}
+                  {item.title}
                 </p>
-                <div className="">
-                  {feedData[0].tagList.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="text-gray-500 text-sm m-[2px] cursor-pointer"
-                      onClick={() => handleTagClick(tag)}
-                    >
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
+                <p className="text-xs text-gray-500 mt-1 cursor-pointer">
+                  {item.postCategory}
+                </p>
               </div>
             </div>
+            <p className="text-xs text-gray-500 mr-4">
+              {item.createdAt}
+              <p className="w-2 h-2 ml-[11px] mr-[15px] bg-gray-400 rounded-full inline-block"></p>
+            </p>
           </div>
           <p className="text-3 mt-4 mx-5  cursor-pointer">
-            {feedData[0].contents}
+            {item.contents.length > 100
+              ? item.contents.slice(0, 100) + "..."
+              : item.contents}
           </p>
-          <p className="text-3 mt-4 mx-5  cursor-pointer"></p>
-          <div className="flex items-center text-xs text-gray-500 mb-6 mt-6 ml-4"></div>
+          <div className="flex items-center text-xs text-gray-500 mb-6 mt-6 ml-4">
+            <div>
+              <p className="ml-1">좋아요 {item.likeNum} · </p>
+            </div>
+            <div>
+              <p className="ml-1">댓글 {item.commentNum} · </p>
+            </div>
+            <div>
+              <p className="ml-1">조회수 {item.viewNum}</p>
+            </div>
+          </div>
           <div className="flex items-center justify-between text-sm text-gray-500 h-[40px] bordertop-solid border-t-2">
             <div className="flex items-center space-x-2 flex-1 justify-center ">
               <div className=" cursor-pointer w-4 h-4 bg-gray-400 rounded-full"></div>
-              <p className="cursor-pointer">좋아요 {feedData[0].likeNum}</p>
+              <p className="cursor-pointer">좋아요</p>
             </div>
 
             <div className="border border-gray-500 "></div>
             <div className="flex items-center space-x-2 flex-1 justify-center">
               <div className="w-4 h-4 bg-gray-400 rounded-full cursor-pointer"></div>
-              <p className="cursor-pointer">댓글달기 {feedData[0].likeNum}</p>
+              <p className="cursor-pointer">댓글달기</p>
             </div>
           </div>
           <PostLine />
         </div>
-      </div>
-    </Layout>
+      ))}
+    </div>
   );
 }
