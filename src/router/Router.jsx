@@ -1,0 +1,23 @@
+import { createBrowserRouter } from "react-router-dom";
+import Page from "../pages";
+
+export const router = createBrowserRouter([
+  { path: "/", element: <Page.MySchedulesPage /> },
+  { path: "/posts", element: <Page.PostListPage /> },
+  { path: "/posts/search", element: <Page.PostSearchPage /> },
+  { path: "/signup", element: <Page.SignUpPage /> },
+  { path: "/signup/admin", element: <Page.SignUpAdminPage /> },
+  { path: "/signup/complete", element: <Page.SignUpCompletePage /> },
+  { path: "/login", element: <Page.LoginPage /> },
+  { path: "/post/:id", element: <Page.PostDetailsPage /> },
+  { path: "/post/create", element: <Page.PostCreatePage /> },
+  { path: "/post/edit", element: <Page.PostEditPage /> },
+  { path: "/myschedules/create/info", element: <Page.SchedulesInfoPage /> },
+  { path: "/myschedules/create/date", element: <Page.SchedulesDatePage /> },
+  {
+    path: "/myschedules/create/schedule",
+    element: <Page.SchedulesCreatePage />,
+  },
+  { path: "/myschedules/details", element: <Page.SchedulesDetailPage /> },
+  { path: "/mypage", element: <Page.MyPage /> },
+]);
