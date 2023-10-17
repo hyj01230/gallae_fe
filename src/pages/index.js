@@ -2,6 +2,8 @@ import SchedulesDetailPage from "./SchedulesDetailPage";
 import LoginPage from "./LoginPage";
 import PostListPage from "./PostListPage";
 import MyPage from "./MyPage";
+import MyPageCommentList from "./MyPageCommentList";
+import MyPageLikeList from "./MyPageLikeList";
 import MySchedulesPage from "./MySchedulesPage";
 import PostCreatePage from "./PostCreatePage";
 import PostDetailsPage from "./PostDetailsPage";
@@ -17,6 +19,8 @@ import PostSearchPage from "./PostSearchPage";
 export default {
   LoginPage,
   MyPage,
+  MyPageCommentList,
+  MyPageLikeList,
   MySchedulesPage,
   PostCreatePage,
   PostDetailsPage,

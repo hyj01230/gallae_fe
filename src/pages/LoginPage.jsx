@@ -35,10 +35,7 @@ export default function LoginPage() {
       console.log("response", response);
 
       if (response.data.statusCode === 200) {
-        localStorage.setItem(
-          "accessToken",
-          response.headers.authorization.split(" ")[1] // 공백을 기준으로 뒤만 저장(Bearer 삭제하고 저장하기!)
-        );
+        localStorage.setItem("accessToken", response.headers.authorization);
       }
       alert(response.data.msg);
     } catch (error) {
