@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   DownArrow,
   Hamburger,
@@ -11,12 +11,13 @@ import {
   Person,
 } from "../assets/Icon";
 import Layout from "../components/common/Layout";
-import { useState } from "react";
-
-const date = ["01월 11일 목", "01월 12일 금", "01월 13일 토"];
+import { scheduleState } from "../store/atom";
+import { useRecoilState } from "recoil";
+import List from "../components/schedulesDetail/List";
 
 export default function SchedulesDetailPage() {
   const navigate = useNavigate();
+  const [schedule, setSchedule] = useRecoilState(scheduleState);
 
   return (
     <Layout>
@@ -39,7 +40,7 @@ export default function SchedulesDetailPage() {
       </div>
 
       <div className="flex justify-between items-center h-10 mt-4 mx-4 p-4 border border-[#EBEBEB] rounded-lg">
-        <div>가족과 전주 여행</div>
+        <div>{schedule?.tripDateList[0]?.subTitle || "값이 없음"}</div>
         <div>
           <DownArrow />
         </div>
@@ -48,7 +49,7 @@ export default function SchedulesDetailPage() {
       <div className="w-full h-36">{/* <Map /> */}</div>
 
       <div className="flex justify-between mx-4 mt-4 border border-[#EBEBEB] rounded-3xl">
-        {date.map((value, index) => (
+        {schedule?.tripDateList.map((value, index) => (
           <div
             className="p-1 cursor-pointer"
             key={index}
@@ -56,10 +57,12 @@ export default function SchedulesDetailPage() {
               navigate("/myschedules/create/schedule", { state: value })
             }
           >
-            {value}
+            {value.chosenDate}
           </div>
         ))}
       </div>
+
+      {/* <List /> */}
 
       <div
         className="flex justify-center items-center gap-3 mt-4 text-[#666] cursor-pointer"

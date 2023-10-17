@@ -2,8 +2,10 @@ import { useNavigate } from "react-router-dom";
 import { LeftArrow } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { useState } from "react";
+import { useRecoilState } from "recoil";
+import { scheduleState } from "../store/atom";
 
-const categorys = ["가족", "친구", "연인", "친척", "반려동물", "단체"];
+const categorys = ["가족", "우정", "연인", "친척", "반려동물", "단체"];
 
 const purposes = [
   "휴식",
@@ -19,6 +21,8 @@ const purposes = [
 
 export default function SchedulesInfoPage() {
   const navigate = useNavigate();
+
+  const [schedule, setSchedule] = useRecoilState(scheduleState);
 
   const [post, setPost] = useState({
     title: null,
@@ -37,24 +41,23 @@ export default function SchedulesInfoPage() {
     const { textContent } = event.currentTarget;
     const tagsList = post.tagsList;
 
-    if (textContent) {
-      const index = tagsList.indexOf(textContent);
+    const index = tagsList.indexOf(textContent);
 
-      if (index === -1) {
-        tagsList.push(textContent);
-        if (tagsList.length > 3) {
-          return;
-        }
-      } else {
-        tagsList.splice(index, 1);
+    if (index === -1) {
+      tagsList.push(textContent);
+      if (tagsList.length > 3) {
+        return;
       }
+    } else {
+      tagsList.splice(index, 1);
     }
 
     setPost((post) => ({ ...post, tagsList }));
   };
 
   const handleSubmitClick = async () => {
-    navigate("/myschedules/create/date", { state: post });
+    setSchedule(post);
+    navigate("/myschedules/create/date");
   };
 
   return (
@@ -113,7 +116,10 @@ export default function SchedulesInfoPage() {
             placeholder="여행의 이름을 입력해주세요."
             className="w-full p-4 border border-[#C9C9C9] rounded-lg text-sm"
             onChange={(event) =>
-              setPost((post) => ({ ...post, subTitle: event.target.value }))
+              setPost((post) => ({
+                ...post,
+                tripDateList: [{ subTitle: event.target.value }],
+              }))
             }
           />
         </div>

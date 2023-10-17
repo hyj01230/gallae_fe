@@ -8,9 +8,19 @@ import {
   SpeechBubble,
 } from "../assets/Icon";
 import Layout from "../components/common/Layout";
+import { useQuery } from "react-query";
+import { getMySchedules } from "../api";
 
 export default function MySchedulesPage() {
   const navigate = useNavigate();
+  const { data, isLoading, error } = useQuery("mySchedule", getMySchedules);
+
+  if (isLoading) {
+    return <div>로딩중</div>;
+  }
+
+  console.log(data);
+
   return (
     <Layout>
       <div className="flex items-center justify-between gap-x-1 p-2 border-b border-gray-300">

@@ -12,10 +12,22 @@ import {
 } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { useState } from "react";
+// 세부일정 옵션 선택 시  schedule에 값이 하나씩 저장
+// 일정 수정 완료 버튼을 클릭하면 recoil에 저장
+
+// 버튼 클릭 시 소요시간에 추가추가
+
+const category = ["카테고리를 선택해주세요", "교통", "숙박", "컨텐츠", "식사"];
+const time = [
+  { minute: 5, text: "5분" },
+  { minute: 10, text: "10분" },
+  { minute: 30, text: "30분" },
+  { minute: 60, text: "1시간" },
+];
 
 export default function SchedulesCreatePage() {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
+  const [timeSpent, setTimeSpent] = useState({ time: 0, text: "" });
   const [schedule, setSchedule] = useState({
     schedulesCategory: "",
     costs: 0,
@@ -25,16 +37,34 @@ export default function SchedulesCreatePage() {
     referenceURL: "",
   });
 
-  const date = useLocation().state;
+  console.log(schedule);
 
-  const getData = (data) => {
-    setSchedule((schedule) => ({ ...schedule, placeName: data.address }));
-    setIsOpen(false);
+  const value = useLocation().state;
+
+  const handleClick = (value) => {
+    const number = timeSpent.time + value;
+
+    if (number >= 60) {
+      setTimeSpent({
+        time: number,
+        text: `${Math.floor(number / 60)}시간  ${number % 60}분`,
+      });
+    } else {
+      setTimeSpent({
+        time: number,
+        text: `${number}분`,
+      });
+    }
+
+    setSchedule((prev) => ({ ...prev, timeSpent: timeSpent.text }));
   };
 
   return (
     <Layout>
-      <div className="flex items-center gap-x-1 p-2">
+      <div
+        className="flex items-center gap-x-1 p-2"
+        onClick={() => navigate("/myschedules/details")}
+      >
         <div className="mr-2">
           <LeftArrow />
         </div>
@@ -43,16 +73,30 @@ export default function SchedulesCreatePage() {
 
       <div className="flex border border-[#EBEBEB] rounded-lg mx-4">
         <div className="flex items-center w-full h-10 p-4">
-          가족과 전주 여행
+          {value.subTitle || "서브제목"}
         </div>
-        <div className="flex items-center w-full h-10 p-4">{date}</div>
+        <div className="flex items-center w-full h-10 p-4">
+          {value.chosenDate || "01월 01일 월요일"}
+        </div>
       </div>
 
       <div className="flex gap-3 mx-7 mt-6 border-b p-1">
         <div className="flex justify-between items-center w-2/5">
           <div className="flex items-center gap-2 text-[14px]">
             <Circle />
-            명소
+            <select
+              className="w-full"
+              onChange={(e) =>
+                setSchedule((prev) => ({
+                  ...prev,
+                  schedulesCategory: e.target.value,
+                }))
+              }
+            >
+              {category.map((value, index) => (
+                <option key={index}>{value}</option>
+              ))}
+            </select>
           </div>
           <DownArrow />
         </div>
@@ -60,16 +104,17 @@ export default function SchedulesCreatePage() {
         <div className="flex justify-between items-center w-3/5">
           <div className="flex items-center gap-2 text-[14px]">
             <Marker />
-            {schedule.placeName ? schedule.placeName : "장소를 검색하세요"}
+            <input
+              placeholder="장소를 입력하세요"
+              onChange={(e) =>
+                setSchedule((prev) => ({ ...prev, placeName: e.target.value }))
+              }
+            />
+            {/* {schedule.placeName ? schedule.placeName : "장소를 검색하세요"}  */}
           </div>
           <DownArrow />
         </div>
       </div>
-      {isOpen && (
-        <>
-          <DaumPostcode onComplete={getData} />
-        </>
-      )}
 
       <div className="mt-3 mx-4">
         <div className="w-36 h-36 flex justify-center items-center bg-[#F2F2F2]">
@@ -82,14 +127,15 @@ export default function SchedulesCreatePage() {
           <Clock />
           <div className="w-full flex items-center gap-8 border border-[#D9D9D9] rounded-lg px-3 py-2">
             <span>소요시간</span>
-            <span>00:00</span>
+            <span>{timeSpent.text}</span>
           </div>
         </div>
         <div className="flex justify-between">
-          <button>5분</button>
-          <button>10분</button>
-          <button>30분</button>
-          <button>1시간</button>
+          {time.map((value, index) => (
+            <button key={index} onClick={() => handleClick(value.minute)}>
+              {value.text}
+            </button>
+          ))}
         </div>
       </div>
 

@@ -1,44 +1,59 @@
 import { LeftArrow } from "../assets/Icon";
 import Layout from "../components/common/Layout";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import "../calendar.css";
 import Calendar from "react-calendar";
 import moment from "moment";
 import { useState } from "react";
+import { scheduleState } from "../store/atom";
+import { useRecoilState } from "recoil";
+import { createPost } from "../api";
 
 export default function SchedulesDatePage() {
   const navigate = useNavigate();
-  const [startDateFormat, setStartDate] = useState("");
-  const [endDateFormat, setEndDate] = useState("");
-  const [duDate, setDuDate] = useState("");
-  const post = useLocation().state;
+  const [tripDateRange, setTripDateRange] = useState("");
+  const [schedule, setSchedule] = useRecoilState(scheduleState);
+
+  console.log(schedule);
 
   const getDateRange = (startDate, endDate) => {
     let dateArray = [];
     let currentDate = new Date(startDate);
 
     while (currentDate <= new Date(endDate)) {
-      dateArray.push(
-        currentDate.toLocaleDateString("ko-KR", {
+      const formattedDate = currentDate
+        .toLocaleDateString("en-CA", {
           year: "numeric",
           month: "2-digit",
           day: "2-digit",
         })
-      );
+        .replace(/\//g, "-");
+
+      dateArray.push(formattedDate);
 
       currentDate.setDate(currentDate.getDate() + 1);
     }
 
-    setDuDate(dateArray);
+    setTripDateRange(dateArray);
   };
 
   const changeDate = (e) => {
-    const startDateFormat = moment(e[0]).format("YYYY/MM/DD");
-    const endDateFormat = moment(e[1]).format("YYYY/MM/DD");
+    const startDate = moment(e[0]).format("YYYY/MM/DD");
+    const endDate = moment(e[1]).format("YYYY/MM/DD");
+    getDateRange(startDate, endDate);
+  };
 
-    setStartDate(startDateFormat);
-    setEndDate(endDateFormat);
-    getDateRange(startDateFormat, endDateFormat);
+  const handleSubmitClick = async () => {
+    const tripDateList = tripDateRange.map((date) => ({
+      chosenDate: date,
+      subTitle: schedule.tripDateList[0].subTitle,
+    }));
+
+    setSchedule({ ...schedule, tripDateList });
+    console.log(schedule);
+    const response = await createPost(schedule);
+    console.log(response);
+    navigate("/myschedules/details");
   };
 
   return (
@@ -55,14 +70,13 @@ export default function SchedulesDatePage() {
         onChange={changeDate}
         selectRange={true}
       />
-      <div>시작일자 : {startDateFormat}</div>
-      <div>끝일자 : {endDateFormat}</div>
-      <button>초기화</button>
+      <div>시작일자 : {tripDateRange[0]}</div>
+      <div>끝일자 : {tripDateRange[tripDateRange.length - 1]}</div>
 
       <div className="max-w-3xl	flex fixed bottom-0">
         <button
           className="w-screen h-14 bg-gray-300 text-white"
-          onClick={() => navigate("/myschedules/details", { state: duDate })}
+          onClick={handleSubmitClick}
         >
           다음 단계로
         </button>
