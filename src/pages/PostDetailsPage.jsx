@@ -2,9 +2,39 @@ import Layout from "../components/common/Layout";
 import PostLine from "../components/post/PostLine";
 import DetailsHeader from "../components/postDetailsPage/DetailsHeader";
 import Image from "../components/postDetailsPage/Image";
-import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "../api/axiosInstance";
+import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 export default function PostDetailsPage() {
+  const [postDetails, setPostDetails] = useState({
+    title: "",
+    tagsList: [],
+    nickName: "",
+    likeNum: "",
+    viewNum: "",
+    createdAt: "",
+    modifiedAt: "",
+
+    // 다른 속성들 초기값 설정
+  });
+  const { postId } = useParams(); // useParams 훅을 사용하여 postId 라우팅 파라미터 읽기
+
+  const getPostDetails = async () => {
+    try {
+      const response = await axiosInstance.get(`/api/posts/${postId}`);
+
+      console.log(response);
+      setPostDetails(response.data);
+    } catch (error) {
+      console.error("데이터 가져오기 오류:", error);
+    }
+  };
+
+  useEffect(() => {
+    getPostDetails();
+  }, []);
+
   const navigate = useNavigate();
 
   const handleTagClick = (tag) => {
@@ -12,77 +42,6 @@ export default function PostDetailsPage() {
     navigate(`/search?keyword=${tag}`);
   };
   //TODO : 사진 제목 카테고리 태그 내용 (일정) 댓글 좋아요
-
-  const feedData = [
-    {
-      postId: "1",
-      postCategory: "나홀로",
-      title: "달팽이랑 제주도로!",
-      contents:
-        "🐌...잠시....만요....🐌...지나가겠...🐌.......읍니다....🐌..정말...🐌죄송.......합니..🐌.....다....🐌...지나......가겠..🐌...읍니다...🐌....면목...🐌..........없읍이다...🐌......뚜뚜.....🐌..............🐌......빵빵......🐌......잠시..🐌......만요.........🐌... ...🐌...잠시....만요....🐌...지나가겠...🐌.......읍니다....🐌..정말...🐌죄송.......합니..🐌.....다....🐌...지나......가겠..🐌...읍니다...🐌.... ...🐌...잠시....만요....🐌...지나가겠...🐌.......읍니다....🐌..정말...🐌죄송.......합니..🐌.....다....🐌...지나......가겠..🐌..🐌...잠시....만요....🐌...지나가겠...🐌.......읍니다....🐌..정말...🐌죄송.......합니..🐌.....다....🐌...지나......가겠..🐌...읍니다...🐌....면목...🐌..........없읍이다...🐌......뚜뚜.....🐌..............🐌......빵빵......🐌🐌...잠시....만요....🐌...지나가겠...🐌.......읍니다....🐌..정말...🐌죄송.......합니..🐌.....다....🐌...지나......가겠..🐌...읍니다...🐌....면목...🐌..........없읍이다...🐌......뚜뚜.....🐌..............🐌......빵빵......🐌......잠시..🐌......만요",
-      tagList: ["힐링", "추억", "레저"],
-      nickName: "허원",
-      likeNum: "4",
-      viewNum: "3",
-      commentNum: "5",
-      createdAt: "8분전",
-      commentList: [
-        {
-          nickName: "robie",
-          comments: "좋았어요.",
-          createdAt: "2023-09-02",
-          modifiedAt: "2023-09-03",
-          replyList: [
-            {
-              nickName: "rebere",
-              contents: "저도 좋았어요.",
-              createdAt: "2023-09-02",
-              modifiedAt: "2023-09-03",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      postId: "2",
-      postCategory: "친구",
-      title: "ENFP들의 여행",
-      contents:
-        "👤👥👥👤👥웅성웅성..👤👥 👤👥👤👥👤👥👤👥👥👤👥 👤👥👤👥👥👤👥👤👥👤👥 👥👤👥👤뭐야..👥👥👤👥",
-      tagList: ["스포츠", "레저"],
-      nickName: "허투",
-      likeNum: "2",
-      viewNum: "5",
-      commentNum: "1",
-      createdAt: "1분전",
-    },
-    {
-      postId: "3",
-      postCategory: "커플",
-      title: "초호화 여행 가보자",
-      contents:
-        "끆ㄱ끄얶흒끕..끆껑껑..끆끆흡끅..흡꾺꾺꾹ㄱ끄엉..헝헝헝ㅇ..흡끄륵ㄱ끅끅ㄱ끄엉엉..흡끄윽..끄헝헝..흐우앙흡끅끆ㄱ끄얶흒끕..끆껑껑..끆끆흡끅..흡끄윽..끄헝 끆ㄱ끄얶흒끕..끆껑껑..끆끆흡끅..흡꾺꾺꾹ㄱ끄엉..헝헝헝ㅇ..흡끄륵ㄱ끅끅ㄱ끄엉엉..흡끄윽..끄헝헝..흐우앙흡끅끆ㄱ끄얶흒끕..끆껑껑..끆끆흡끅..흡끄윽..끄헝",
-      tagList: ["프리미엄"],
-      nickName: "허쓰리",
-      likeNum: "8",
-      viewNum: "1",
-      commentNum: "8",
-      createdAt: "2분전",
-    },
-    {
-      postId: "4",
-      postCategory: "가족",
-      title: "효도.. 여행으로 대신한다!",
-      contents:
-        "얼ᕕ( ᐛ )ᕗ렁ᕕ( ᐛ )ᕗ뚱ᕕ( ᐛ )ᕗ땅ᕕ( ᐛ )ᕗ 얼ᕕ( ᐛ )ᕗ렁ᕕ( ᐛ )ᕗ뚱ᕕ( ᐛ )ᕗ땅ᕕ( ᐛ )ᕗ 얼ᕕ( ᐛ )ᕗ렁ᕕ( ᐛ )ᕗ뚱ᕕ( ᐛ )ᕗ땅ᕕ( ᐛ )ᕗ 얼ᕕ( ᐛ )ᕗ렁ᕕ( ᐛ )ᕗ뚱ᕕ( ᐛ )ᕗ땅ᕕ( ᐛ )ᕗ 얼ᕕ( ᐛ )ᕗ렁ᕕ( ᐛ )ᕗ뚱ᕕ( ᐛ )ᕗ땅ᕕ( ᐛ )ᕗ 얼ᕕ( ᐛ )ᕗ렁ᕕ( ᐛ )ᕗ뚱ᕕ( ᐛ )ᕗ땅ᕕ( ᐛ )ᕗ",
-      tagList: ["힐링", "자연경관", "명소", "프리미엄"],
-      nickName: "허포",
-      likeNum: "10",
-      viewNum: "9",
-      commentNum: "1",
-      createdAt: "1시간전",
-    },
-  ];
 
   return (
     <Layout>
@@ -94,38 +53,46 @@ export default function PostDetailsPage() {
             <div className="flex items-center">
               <div className="w-12 h-12 bg-gray-300 rounded-full ml-4  cursor-pointer"></div>
               <div className="flex flex-col ml-[13px]">
-                <p className="text-[18px] font-semibold  cursor-pointer">
-                  {feedData[0].title}
-                </p>
+                {postDetails ? (
+                  <p className="text-[18px] font-semibold cursor-pointer">
+                    {postDetails.title}
+                  </p>
+                ) : (
+                  <p>Loading...</p>
+                )}
                 <div className="">
-                  {feedData[0].tagList.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="text-gray-500 text-sm m-[2px] cursor-pointer"
-                      onClick={() => handleTagClick(tag)}
-                    >
-                      #{tag}
-                    </span>
-                  ))}
+                  {postDetails && postDetails.tagsList ? (
+                    postDetails.tagsList.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="text-gray-500 text-sm m-[2px] cursor-pointer"
+                        onClick={() => handleTagClick(tag)}
+                      >
+                        #{tag}
+                      </span>
+                    ))
+                  ) : (
+                    <p>Loading tags...</p>
+                  )}
                 </div>
               </div>
             </div>
           </div>
           <p className="text-3 mt-4 mx-5  cursor-pointer">
-            {feedData[0].contents}
+            {postDetails.contents}
           </p>
           <p className="text-3 mt-4 mx-5  cursor-pointer"></p>
           <div className="flex items-center text-xs text-gray-500 mb-6 mt-6 ml-4"></div>
           <div className="flex items-center justify-between text-sm text-gray-500 h-[40px] bordertop-solid border-t-2">
             <div className="flex items-center space-x-2 flex-1 justify-center ">
               <div className=" cursor-pointer w-4 h-4 bg-gray-400 rounded-full"></div>
-              <p className="cursor-pointer">좋아요 {feedData[0].likeNum}</p>
+              <p className="cursor-pointer">좋아요 {postDetails.likeNum}</p>
             </div>
 
             <div className="border border-gray-500 "></div>
             <div className="flex items-center space-x-2 flex-1 justify-center">
               <div className="w-4 h-4 bg-gray-400 rounded-full cursor-pointer"></div>
-              <p className="cursor-pointer">댓글달기 {feedData[0].likeNum}</p>
+              <p className="cursor-pointer">댓글달기 {postDetails.likeNum}</p>
             </div>
           </div>
           <PostLine />

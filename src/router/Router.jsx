@@ -4,12 +4,15 @@ import Page from "../pages";
 export const router = createBrowserRouter([
   { path: "/", element: <Page.MySchedulesPage /> },
   { path: "/posts", element: <Page.PostListPage /> },
-  { path: "/posts/search", element: <Page.PostSearchPage /> },
+  { path: "/search", element: <Page.PostSearchPage /> },
   { path: "/signup", element: <Page.SignUpPage /> },
   { path: "/signup/admin", element: <Page.SignUpAdminPage /> },
   { path: "/signup/complete", element: <Page.SignUpCompletePage /> },
   { path: "/login", element: <Page.LoginPage /> },
-  { path: "/post/:id", element: <Page.PostDetailsPage /> },
+  {
+    path: "/posts/:postId",
+    element: <Page.PostDetailsPage />,
+  },
   { path: "/post/create", element: <Page.PostCreatePage /> },
   { path: "/post/edit", element: <Page.PostEditPage /> },
   { path: "/myschedules/create/info", element: <Page.SchedulesInfoPage /> },
