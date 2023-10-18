@@ -1,16 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import PostHeader from "../components/post/PostHeader";
 import Layout from "../components/common/Layout";
-import PostRanking from "../components/post/PostRanking";
 import PostCategory from "../components/post/PostCategory";
 import PostLine from "../components/post/PostLine";
-import PostWrite from "../components/post/PostWrite";
+
 import { axiosInstance } from "../api/axiosInstance";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import PostRanking from "../components/post/PostRanking";
 
 export default function PostListPage() {
-  const [postList, setPostList] = useState([]);
-
+  const [postList, setPostList] = useState([]); // 초기값을 빈 배열로 설정
+  const [selectedCategory, setSelectedCategory] = useState("전체");
+  const navigate = useNavigate();
   const params = {
     page: "1",
     size: "3",
@@ -28,38 +29,46 @@ export default function PostListPage() {
   };
 
   useEffect(() => {
-    getPostList(); // 1) 게시글 목록 조회 함수 호출
+    getPostList();
   }, []);
 
-  const navigate = useNavigate();
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+  };
 
   const handlePostClick = (postId) => {
     navigate(`/posts/${postId}`);
   };
 
+  const filteredPostList = postList
+    ? postList.filter((item) =>
+        selectedCategory === "전체"
+          ? true
+          : item.postCategory === selectedCategory
+      )
+    : [];
+
   return (
     <Layout>
       <div>
         <PostHeader />
-        <PostCategory />
+        <PostCategory onCategorySelect={handleCategorySelect} />
         <div className="border-b-2 border-gray-100"></div>
-        <PostRanking />
+        <PostRanking postList={postList} />
         <PostLine />
-
-        {postList && postList.length > 0 ? (
-          postList.map((item, index) => (
+        {filteredPostList && filteredPostList.length > 0 ? (
+          filteredPostList.map((item, index) => (
             <div
               key={index}
-              onClick={() => handlePostClick(item.postId.toString())}
               className="w-393 h-275 bg-white flex flex-col relative"
             >
-              <div className="flex items-center justify-between mb-2 mt-5">
+              <div className="flex items-center justify-between mb-2 mt-5 ">
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gray-300 rounded-full ml-4 cursor-pointer"></div>
                   <div className="flex flex-col ml-[13px]">
                     <p
                       className="text-[18px] font-semibold cursor-pointer"
-                      onClick={() => navigate(`/post/:${item.postId}`)}
+                      onClick={() => handlePostClick(item.postId.toString())}
                     >
                       {item.title}
                     </p>
@@ -73,9 +82,12 @@ export default function PostListPage() {
                   <p className="w-2 h-2 ml-[11px] mr-[15px] bg-gray-400 rounded-full inline-block"></p>
                 </p>
               </div>
-              <p className="text-3 mt-4 mx-5 cursor-pointer">
-                {item.contents.length > 100
-                  ? item.contents.slice(0, 100) + "..."
+              <p
+                className="text-3 mt-4 mx-5 cursor-pointer"
+                onClick={() => handlePostClick(item.postId.toString())}
+              >
+                {item.contents && item.contents.length > 200
+                  ? item.contents.slice(0, 200) + "..."
                   : item.contents}
               </p>
               <div className="flex items-center text-xs text-gray-500 mb-6 mt-6 ml-4">
@@ -89,13 +101,12 @@ export default function PostListPage() {
                   <p className="ml-1">조회수 {item.viewNum}</p>
                 </div>
               </div>
-              <div className="flex items-center justify-between text-sm text-gray-500 h-[40px] bordertop-solid border-y-2">
-                <div className="flex items-center space-x-2 flex-1 justify-center ">
+              <div className="flex items-center justify-between text-sm text-gray-500 h-[40px] bordertop-solid border-t-2 ">
+                <div className="flex items-center space-x-2 flex-1 justify-center border-r-2 h-[40px]">
                   <div className="cursor-pointer w-4 h-4 bg-gray-400 rounded-full"></div>
                   <p className="cursor-pointer">좋아요</p>
                 </div>
 
-                <div className="border border-gray-500 "></div>
                 <div className="flex items-center space-x-2 flex-1 justify-center">
                   <div className="w-4 h-4 bg-gray-400 rounded-full cursor-pointer"></div>
                   <p className="cursor-pointer">댓글달기</p>

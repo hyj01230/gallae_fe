@@ -1,41 +1,65 @@
-import React from "react";
+// PostRanking.js
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
-export default function PostRanking() {
-  const [expanded, setExpanded] = React.useState(false);
+export default function PostRanking({ postList }) {
+  const [expanded, setExpanded] = useState(false);
 
-  //TODO : 순위, 카테고리, 타이틀, 좋아요
-
-  const rankings = ["1", "2", "3", "4", "5", "6", "7"];
+  const sortedPostList = [...postList].sort((a, b) => b.likeNum - a.likeNum);
+  const topRankedPosts = sortedPostList.slice(0, 3);
 
   return (
-    <div className=" bg-white mto mt-4">
+    <div className="bg-white mt-4">
       <div className="h-10 mb-3 flex justify-between items-center rounded border-3">
-        <div className="ml-4  text-lg font-semibold leading-4 ">
-          이번주 순위
-        </div>
-
+        <div className="ml-4 text-lg font-semibold leading-4">이번주 순위</div>
         <button
           onClick={() => setExpanded(!expanded)}
-          className="mr-4 px-2 py-1 bg-purple-300 text-white rounded hover:bg-yellow-400 transition duration-300"
+          className="mr-4 px-2 py-1 bg-white border-2 text-[#a8a1a1] rounded-lg hover-bg-yellow-400 transition duration-300"
         >
-          {expanded ? "업뽀튼" : "따운뽀튼"}
+          {expanded ? "업" : "따"}
         </button>
       </div>
-
-      <div className=" mx-4 mb-7 rounded-xl p-2 border-2 border-gray-100">
-        <div className="mt-4 mx-5">
-          <div className="mb-7 ">{rankings[0]}</div>
-          <div className="mb-7">{rankings[1]}</div>
-          <div className="mb-7  overflow-y-auto">{rankings[2]}</div>
-
+      <div className="mx-4 mb-7 rounded-[10px] p-2 border-2 border-gray-100">
+        <div className="mt-4 ml-5">
+          {topRankedPosts.map((post, index) => (
+            <Link
+              to={`/posts/${post.postId}`}
+              key={post.postId}
+              className="mb-4 mr-4 flex items-center h-[44px]"
+            >
+              <div className="mb-4 mr-4 text-4 font-bold">{index + 1}</div>
+              <div className="mb-4 mr-4 text-[14px] ">{post.postCategory}</div>
+              <div className="mb-4 mr-4 text-4 ">{post.title}</div>
+              <div
+                className="mb-4 mr-4 text-3 ml-auto"
+                style={{ color: "#666666" }}
+              >
+                {post.likeNum}
+              </div>
+            </Link>
+          ))}
           <div
             className={`h-222 overflow-y-auto ${expanded ? "block" : "hidden"}`}
           >
-            <div className="mb-7">{rankings[3]}</div>
-            <div className="mb-7">{rankings[4]}</div>
-            <div className="mb-7">{rankings[5]}</div>
-            <div className="mb-7">{rankings[6]}</div>
-            <div className="">{rankings[7]}</div>
+            {sortedPostList.slice(3).map((post, index) => (
+              <Link
+                to={`/posts/${post.postId}`}
+                key={post.postId}
+                className="mb-4 mr-4 flex items-center h-[44px]"
+              >
+                <div className="mb-4 mr-4 text-4 font-bold">{index + 4}</div>
+                <div className="mb-4 mr-4 text-[14px] ">
+                  {post.postCategory}
+                </div>
+                <div className="mb-4 mr-4 text-4 ">{post.title}</div>
+                <div
+                  className="mb-4 mr-4 text-3 ml-auto"
+                  style={{ color: "#666666" }}
+                >
+                  {post.likeNum}
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </div>
