@@ -9,12 +9,13 @@ export default function SignUpPage() {
   const navigate = useNavigate();
 
   // state
-  const [nickName, setNickName] = useState("");
-  const [email, setEmail] = useState("");
-  const [emailCord, setEmailCord] = useState("");
-  const [emailCordInput, setEmailCordInput] = useState(false);
-  const [password, setPassword] = useState("");
-  const [checkPassword, setCheckPassword] = useState("");
+  const [nickName, setNickName] = useState(""); // 닉네임
+  const [email, setEmail] = useState(""); // 이메일
+  const [emailCord, setEmailCord] = useState(""); // 이메일 인증코드
+  const [emailCordInput, setEmailCordInput] = useState(false); // 이메일 인증코드 input
+  const [password, setPassword] = useState(""); // 비밀번호
+  const [checkPassword, setCheckPassword] = useState(""); // 비밀번호 확인
+  const [emailAuthCompleted, setEmailAuthCompleted] = useState(false); // 이메일 인증 완료 확인
 
   // onChange
   const onchangeNickNameHandler = (e) => {
@@ -32,19 +33,20 @@ export default function SignUpPage() {
   const onchangeCheckPasswordHandler = (e) => {
     setCheckPassword(e.target.value);
   };
-  // // 닉네임 유효성검사 및 안내메시지
-  // const [nickNameMessage, setNickNameMessage] = useState("");
-  // useEffect(() => {
-  //   if (nickName.length === 1) {
-  //     setNickNameMessage("닉네임은 2자 이상 입력해야합니다.");
-  //   } else if (!/^[A-Za-z0-9가-힣]*$/.test(nickName)) {
-  //     setNickNameMessage("영어, 숫자, 한글만 입력 가능합니다");
-  //   } else {
-  //     setNickNameMessage(true);
-  //   }
-  // }, [nickName]);
 
-  // 이메일 유효성검사 및 안내메시지
+  // 유효성검사 및 안내메시지_닉네임
+  const [nickNameMessage, setNickNameMessage] = useState("");
+  useEffect(() => {
+    if (nickName.length === 1) {
+      setNickNameMessage("닉네임은 2자 이상 입력해야합니다.");
+    } else if (!/^[A-Za-z0-9가-힣]*$/.test(nickName)) {
+      setNickNameMessage("영어, 숫자, 한글만 입력 가능합니다");
+    } else {
+      setNickNameMessage(true);
+    }
+  }, [nickName]);
+
+  // 유효성검사 및 안내메시지_이메일
   const [emailMessage, setEmailMessage] = useState("");
   useEffect(() => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -57,33 +59,37 @@ export default function SignUpPage() {
     }
   }, [email]);
 
-  // // 비밀번호 유효성검사 및 안내메시지
-  // const [passwordMessage, setPasswordMessage] = useState("");
-  // useEffect(() => {
-  //   if (password.length === 0) {
-  //     setPasswordMessage("");
-  //   } else if (password.length < 8) {
-  //     setPasswordMessage("비밀번호는 8글자 이상이어야 합니다.");
-  //   } else if (!/^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])/.test(password)) {
-  //     setPasswordMessage("영어 소문자, 숫자, 특수문자를 모두 포함해야 합니다.");
-  //   } else {
-  //     setPasswordMessage(true);
-  //   }
-  // }, [password, checkPassword]);
+  // 유효성검사 및 안내메시지_비밀번호
+  const [passwordMessage, setPasswordMessage] = useState("");
+  useEffect(() => {
+    if (password.length === 0) {
+      setPasswordMessage("");
+    } else if (password.length < 8) {
+      setPasswordMessage("비밀번호는 8글자 이상이어야 합니다.");
+    } else if (!/^[a-zA-Z0-9!@#$%^&*]*$/.test(password)) {
+      setPasswordMessage(
+        "대/소문자, 숫자, 특수문자(!@#$%^&*)만 사용 가능합니다."
+      );
+      // } else if (!/^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])/.test(password)) {
+      //   setPasswordMessage("영어 소문자, 숫자, 특수문자를 모두 포함해야 합니다.");
+    } else {
+      setPasswordMessage(true);
+    }
+  }, [password, checkPassword]);
 
-  // //비밀번호 확인 유효성검사 및 안내메시
-  // const [checkPassWordMessage, setCheckPassWordMessage] = useState("");
-  // useEffect(() => {
-  //   if (checkPassword.length === 0) {
-  //     setCheckPassWordMessage("");
-  //   } else if (password !== checkPassword) {
-  //     setCheckPassWordMessage("비밀번호가 일치하지 않습니다.");
-  //   } else if (password === checkPassword) {
-  //     setCheckPassWordMessage(true);
-  //   }
-  // }, [password, checkPassword]);
+  // 유효성검사 및 안내메시지_비밀번호 확인
+  const [checkPassWordMessage, setCheckPassWordMessage] = useState("");
+  useEffect(() => {
+    if (checkPassword.length === 0) {
+      setCheckPassWordMessage("");
+    } else if (password !== checkPassword) {
+      setCheckPassWordMessage("비밀번호가 일치하지 않습니다.");
+    } else if (password === checkPassword) {
+      setCheckPassWordMessage(true);
+    }
+  }, [password, checkPassword]);
 
-  // 이메일 인증
+  // post_이메일 인증
   const onClickEmailAuthHandler = async () => {
     if (emailMessage !== true) {
       alert("이메일을 올바르게 입력해주세요.");
@@ -106,7 +112,7 @@ export default function SignUpPage() {
     }
   };
 
-  // 이메일 코드
+  // post_이메일 인증코드
   const onClickEmailCordPostHandler = async () => {
     try {
       const response = await axiosInstance.post(
@@ -120,6 +126,7 @@ export default function SignUpPage() {
 
       if (response.status === 200) {
         alert("인증완료!");
+        setEmailAuthCompleted(true);
       }
     } catch (error) {
       console.log("error", error);
@@ -127,21 +134,24 @@ export default function SignUpPage() {
     }
   };
 
+  // post_회원가입
   const onClickSignUpCompleteHandler = async () => {
-    // // 에러메시지 있는지 확인
-    // if (
-    //   emailMessage !== true ||
-    //   passwordMessage !== true ||
-    //   checkPassWordMessage !== true
-    // ) {
-    //   alert("필수 정보를 올바르게 입력하세요.");
-    //   return;
-    // }
+    // 에러메시지 있는지 확인
+    if (emailAuthCompleted !== true) {
+      alert("이메일 인증이 필요합니다.");
+      return;
+    } else if (
+      emailMessage !== true ||
+      passwordMessage !== true ||
+      checkPassWordMessage !== true
+    ) {
+      alert("필수 정보를 올바르게 입력하세요.");
+      return;
+    }
 
     try {
       const response = await axiosInstance.post("/api/users/signup", {
-        //닉네임이 비어있으면 null로 보내기
-        nickName: nickName || null,
+        nickName: nickName || null, //닉네임이 비어있으면 null로 보내기
         email,
         password,
         profileImg: null,
@@ -150,7 +160,7 @@ export default function SignUpPage() {
 
       if (response.data.statusCode === 201) {
         alert(response.data.msg);
-        navigate("/signup/complete");
+        navigate("/signup/complete", { state: { nickName } });
       }
     } catch (error) {
       console.log("error", error);
@@ -181,9 +191,9 @@ export default function SignUpPage() {
               onChange={onchangeNickNameHandler}
               className="mt-2 border border-[#D9D9D9] rounded-lg w-full h-[49px] px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium"
             />
-            {/* {nickNameMessage !== true && nickNameMessage && (
-            <div className="my-2 text-red-600">{nickNameMessage}</div>
-          )} */}
+            {nickNameMessage !== true && nickNameMessage && (
+              <div className="my-2 text-red-600">{nickNameMessage}</div>
+            )}
           </div>
 
           <div className="mt-5 flex flex-col">
@@ -221,24 +231,25 @@ export default function SignUpPage() {
               </div>
             )}
 
-            {/* {emailMessage !== true && emailMessage && (
-            <div className="my-2 text-red-600">{emailMessage}</div>
-          )} */}
+            {emailMessage !== true && emailMessage && (
+              <div className="my-2 text-red-600">{emailMessage}</div>
+            )}
           </div>
 
           <div className="mt-5 flex flex-col">
             <div className="text-sm/normal font-semibold">비밀번호</div>
             <input
               type="password"
-              placeholder="비밀번호 입력(문자, 숫자, 특수문자 포함 8~15자)"
+              placeholder="8~15자(대/소문자, 숫자, 특수문자(!@#$%^&*)만 사용 가능)"
+              // placeholder="비밀번호 입력(문자, 숫자, 특수문자 포함 8~15자)"
               maxLength={15}
               value={password}
               onChange={onchangePasswordHandler}
               className="border border-[#D9D9D9] rounded-lg w-full h-[49px] mt-2 px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium"
             />
-            {/* {passwordMessage !== true && passwordMessage && (
-            <div className="my-2 text-red-600">{passwordMessage}</div>
-          )} */}
+            {passwordMessage !== true && passwordMessage && (
+              <div className="my-2 text-red-600">{passwordMessage}</div>
+            )}
           </div>
 
           <div className="mt-5 flex flex-col">
@@ -251,9 +262,9 @@ export default function SignUpPage() {
               onChange={onchangeCheckPasswordHandler}
               className="border border-[#D9D9D9] rounded-lg w-full h-[49px] mt-2 px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium"
             />
-            {/* {checkPassWordMessage !== true && checkPassWordMessage && (
-            <div className="my-2 text-red-600">{checkPassWordMessage}</div>
-          )} */}
+            {checkPassWordMessage !== true && checkPassWordMessage && (
+              <div className="my-2 text-red-600">{checkPassWordMessage}</div>
+            )}
           </div>
 
           <div className="mt-5 flex flex-col">

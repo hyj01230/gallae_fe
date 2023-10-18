@@ -15,7 +15,13 @@ export default function MyPage() {
   const navigate = useNavigate();
 
   const onClickLogOutHandler = () => {
+    // 로그아웃 시 토큰 제거
+    localStorage.removeItem("accessToken");
     navigate("/");
+  };
+
+  const onClickModifyHandler = () => {
+    navigate("/mypage/modify");
   };
 
   const onclickLikeListHandler = () => {
@@ -60,7 +66,7 @@ export default function MyPage() {
           >
             로그아웃
           </div>
-          <div className="m-1">
+          <div onClick={onClickModifyHandler} className="m-1">
             <GearIcon />
           </div>
         </div>

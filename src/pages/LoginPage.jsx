@@ -36,6 +36,7 @@ export default function LoginPage() {
 
       if (response.data.statusCode === 200) {
         localStorage.setItem("accessToken", response.headers.authorization);
+        navigate("/");
       }
       alert(response.data.msg);
     } catch (error) {

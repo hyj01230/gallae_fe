@@ -1,4 +1,4 @@
-// import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Community,
   FillMypage,
@@ -7,50 +7,57 @@ import {
   WhiteDocument,
 } from "../assets/Icon";
 import Layout from "../components/common/Layout";
-// import { axiosInstance } from "../api/axiosInstance";
+import { axiosInstance } from "../api/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
 export default function MyPageLikeList() {
-  const likeListData = [
-    {
-      postId: "1",
-      title: "서울 근교 당일치기 대부도 BEST 여행지 추천",
-      contents: "제가 이번엔 하루동안 다녀온 대부도 여행지를 공유해볼까해요",
-      nickName: "유랑이",
-      createdAt: "2023-10-02",
-    },
-    {
-      postId: "2",
-      title: "국내 가족여행, 강원도 평창에서 축제와 함께 힐링해요",
-      contents:
-        "메밀꽃필무렵소설의 배경지 봉평 메밀꽃밭에서 열리는 봉평면 효석문화마을 축제입니다....",
-      nickName: "갈래애애애",
-      createdAt: "2023-07-21",
-    },
-    {
-      postId: "2",
-      title: "여행을 갑니다 비행기타고 기차타고 요트타고 자동차 타고~_~",
-      contents:
-        "야호~야호~이야호~야호~야호~이야호~야호~야호~이야호~야호~야호~이야호~야호~야호~이야호~",
-      nickName: "뚜벅이",
-      createdAt: "2023-09-12",
-    },
-  ];
+  // const likeListData = [
+  //   {
+  //     postId: "1",
+  //     title: "서울 근교 당일치기 대부도 BEST 여행지 추천",
+  //     contents: "제가 이번엔 하루동안 다녀온 대부도 여행지를 공유해볼까해요",
+  //     nickName: "유랑이",
+  //     createdAt: "2023-10-02",
+  //   },
+  //   {
+  //     postId: "2",
+  //     title: "국내 가족여행, 강원도 평창에서 축제와 함께 힐링해요",
+  //     contents:
+  //       "메밀꽃필무렵소설의 배경지 봉평 메밀꽃밭에서 열리는 봉평면 효석문화마을 축제입니다....",
+  //     nickName: "갈래애애애",
+  //     createdAt: "2023-07-21",
+  //   },
+  //   {
+  //     postId: "2",
+  //     title: "여행을 갑니다 비행기타고 기차타고 요트타고 자동차 타고~_~",
+  //     contents:
+  //       "야호~야호~이야호~야호~야호~이야호~야호~야호~이야호~야호~야호~이야호~야호~야호~이야호~",
+  //     nickName: "뚜벅이",
+  //     createdAt: "2023-09-12",
+  //   },
+  // ];
 
-  // const [likeList, setLikeList] = useState([]);
+  const [likeList, setLikeList] = useState([]);
 
-  // const getLikeList = async () => {
-  //   try {
-  //     const response = await axiosInstance.get("/api/posts/like");
-  //     console.log("response", response);
-  //     // setLikeList(response.data);
-  //   } catch (error) {
-  //     console.log("error", error);
-  //   }
-  // };
+  const getLikeList = async () => {
+    try {
+      const response = await axiosInstance.get("/api/posts/like");
+      console.log("response", response);
+      setLikeList(response.data);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
-  // useEffect(() => {
-  //   getLikeList();
-  // }, []);
+  useEffect(() => {
+    getLikeList();
+  }, []);
+
+  const navigate = useNavigate();
+
+  const oncilckLikePostHandler = () => {
+    navigate("/api/posts/${postId}");
+  };
 
   return (
     <Layout>
@@ -60,9 +67,13 @@ export default function MyPageLikeList() {
       </div>
       <hr className="mt-[11px] border-[#F2F2F2] border-t-[1px]"></hr>
 
-      {likeListData &&
-        likeListData.map((item) => (
-          <div key={item.postId} className="mx-4 scr">
+      {likeList &&
+        likeList.map((item) => (
+          <div
+            key={item.postId}
+            onClick={() => oncilckLikePostHandler(item.postId)}
+            className="mx-4 scr"
+          >
             <div className="mt-4 flex w-full">
               <div className="flex flex-col w-full mr-auto">
                 <div className="text-sm/[22px] font-semibold">{item.title}</div>
