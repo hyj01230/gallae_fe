@@ -19,8 +19,9 @@ export default function PostListPage() {
 
   const getPostList = async () => {
     try {
-      const response = await axiosInstance.get("/api/posts", { params });
-
+      const response = await axiosInstance.get(
+        `/api/posts?page=${params.page}&size=${params.size}`
+      );
       console.log(response);
       setPostList(response.data.content);
     } catch (error) {

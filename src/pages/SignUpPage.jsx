@@ -150,6 +150,7 @@ export default function SignUpPage() {
     }
 
     try {
+      console.log({ nickName }, { email }, { password });
       const response = await axiosInstance.post("/api/users/signup", {
         nickName: nickName || null, //닉네임이 비어있으면 null로 보내기
         email,

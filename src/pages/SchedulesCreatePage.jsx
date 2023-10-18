@@ -12,6 +12,7 @@ import {
 } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { useState } from "react";
+import { createScheduleDetail } from "../api";
 // 세부일정 옵션 선택 시  schedule에 값이 하나씩 저장
 // 일정 수정 완료 버튼을 클릭하면 recoil에 저장
 
@@ -40,6 +41,16 @@ export default function SchedulesCreatePage() {
   console.log(schedule);
 
   const value = useLocation().state;
+
+  console.log({ value });
+
+  const handleSubmitClick = async () => {
+    const response = await createScheduleDetail(value.tripDateId, {
+      schedulesList: [schedule],
+    });
+    console.log(response);
+    // navigate("/myschedules/details");
+  };
 
   const handleClick = (value) => {
     const number = timeSpent.time + value;
@@ -184,7 +195,7 @@ export default function SchedulesCreatePage() {
       <div className="max-w-3xl	flex fixed bottom-0">
         <button
           className="w-screen h-14 bg-gray-300 text-white"
-          onClick={() => navigate("/myschedules/details")}
+          onClick={handleSubmitClick}
         >
           일정 수정 완료
         </button>

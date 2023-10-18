@@ -10,6 +10,7 @@ import {
 import Layout from "../components/common/Layout";
 import { useQuery } from "react-query";
 import { getMySchedules } from "../api";
+import List from "../components/mySchedules/List";
 
 export default function MySchedulesPage() {
   const navigate = useNavigate();
@@ -18,8 +19,6 @@ export default function MySchedulesPage() {
   if (isLoading) {
     return <div>로딩중</div>;
   }
-
-  console.log(data);
 
   return (
     <Layout>
@@ -41,17 +40,22 @@ export default function MySchedulesPage() {
         </div>
       </div>
 
-      <div className="w-32 h-32 flex justify-center items-center mx-auto bg-[#EBEBEB]">
-        픽토그램
-      </div>
+      <>
+        <div className="w-32 h-32 flex justify-center items-center mx-auto bg-[#EBEBEB]">
+          픽토그램
+        </div>
 
-      <div className="flex flex-col justify-center mx-auto mt-10">
-        <p className="text-center">아직 나의 여행 갈래가 비어있어요.</p>
-        <p className="text-center	font-semibold">
-          + 버튼을 눌러 일정을 생성해보아요.
-        </p>
-      </div>
-
+        <div className="flex flex-col justify-center mx-auto mt-10">
+          <p className="text-center">아직 나의 여행 갈래가 비어있어요.</p>
+          <p className="text-center	font-semibold">
+            + 버튼을 눌러 일정을 생성해보아요.
+          </p>
+        </div>
+      </>
+      {data &&
+        data.map((schedule) => (
+          <List key={schedule.postId} schedule={schedule} />
+        ))}
       <div className="max-w-3xl flex justify-around bg-[#F2F2F2] p-4 fixed bottom-0">
         <div className="flex flex-col justify-center items-center">
           <Document />
