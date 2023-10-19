@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { scheduleState } from "../store/atom";
 
-const categorys = ["가족", "우정", "연인", "친척", "반려동물", "단체"];
+const categorys = ["가족", "친구", "연인", "친척", "반려동물", "단체"];
 
 const purposes = [
   "휴식",
