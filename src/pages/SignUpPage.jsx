@@ -6,35 +6,39 @@ import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../api/axiosInstance";
 
 export default function SignUpPage() {
+  // 페이지 이동
   const navigate = useNavigate();
+  const onClickLeftArrowHandler = () => {
+    navigate("/login");
+  };
 
-  // state
-  const [nickName, setNickName] = useState(""); // 닉네임
-  const [email, setEmail] = useState(""); // 이메일
-  const [emailCord, setEmailCord] = useState(""); // 이메일 인증코드
-  const [emailCordInput, setEmailCordInput] = useState(false); // 이메일 인증코드 input
-  const [password, setPassword] = useState(""); // 비밀번호
-  const [checkPassword, setCheckPassword] = useState(""); // 비밀번호 확인
-  const [emailAuthCompleted, setEmailAuthCompleted] = useState(false); // 이메일 인증 완료 확인
+  // useState : 닉네임, 이메일, 인증코드, 인증코드 input, 비번, 비번확인, 인증여부확인
+  const [nickName, setNickName] = useState("");
+  const [email, setEmail] = useState("");
+  const [emailCord, setEmailCord] = useState("");
+  const [emailCordInput, setEmailCordInput] = useState(false);
+  const [password, setPassword] = useState("");
+  const [checkPassword, setCheckPassword] = useState("");
+  const [emailAuthCompleted, setEmailAuthCompleted] = useState(false);
 
-  // onChange
-  const onchangeNickNameHandler = (e) => {
+  // onChange : 닉네임, 이메일, 인증코드, 비번, 비번확인
+  const onChangeNickNameHandler = (e) => {
     setNickName(e.target.value);
   };
-  const onchangeEmailHandler = (e) => {
+  const onChangeEmailHandler = (e) => {
     setEmail(e.target.value);
   };
-  const onchangeEmailCordHandler = (e) => {
+  const onChangeEmailCordHandler = (e) => {
     setEmailCord(e.target.value);
   };
-  const onchangePasswordHandler = (e) => {
+  const onChangePasswordHandler = (e) => {
     setPassword(e.target.value);
   };
-  const onchangeCheckPasswordHandler = (e) => {
+  const onChangeCheckPasswordHandler = (e) => {
     setCheckPassword(e.target.value);
   };
 
-  // 유효성검사 및 안내메시지_닉네임
+  // 유효성&안내메시지 : 닉네임
   const [nickNameMessage, setNickNameMessage] = useState("");
   useEffect(() => {
     if (nickName.length === 1) {
@@ -46,7 +50,7 @@ export default function SignUpPage() {
     }
   }, [nickName]);
 
-  // 유효성검사 및 안내메시지_이메일
+  // 유효성&안내메시지 : 이메일
   const [emailMessage, setEmailMessage] = useState("");
   useEffect(() => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -59,7 +63,7 @@ export default function SignUpPage() {
     }
   }, [email]);
 
-  // 유효성검사 및 안내메시지_비밀번호
+  // 유효성&안내메시지 : 비번
   const [passwordMessage, setPasswordMessage] = useState("");
   useEffect(() => {
     if (password.length === 0) {
@@ -77,7 +81,7 @@ export default function SignUpPage() {
     }
   }, [password, checkPassword]);
 
-  // 유효성검사 및 안내메시지_비밀번호 확인
+  // 유효성&안내메시지 : 비번 확인
   const [checkPassWordMessage, setCheckPassWordMessage] = useState("");
   useEffect(() => {
     if (checkPassword.length === 0) {
@@ -89,7 +93,7 @@ export default function SignUpPage() {
     }
   }, [password, checkPassword]);
 
-  // post_이메일 인증
+  // POST : 이메일 인증하기
   const onClickEmailAuthHandler = async () => {
     if (emailMessage !== true) {
       alert("이메일을 올바르게 입력해주세요.");
@@ -112,7 +116,7 @@ export default function SignUpPage() {
     }
   };
 
-  // post_이메일 인증코드
+  // POST : 이메일 인증코드 확인
   const onClickEmailCordPostHandler = async () => {
     try {
       const response = await axiosInstance.post(
@@ -134,18 +138,18 @@ export default function SignUpPage() {
     }
   };
 
-  // post_회원가입
+  // POST : 회원가입 하기
   const onClickSignUpCompleteHandler = async () => {
     // 에러메시지 있는지 확인
-    if (emailAuthCompleted !== true) {
-      alert("이메일 인증이 필요합니다.");
-      return;
-    } else if (
+    if (
       emailMessage !== true ||
       passwordMessage !== true ||
       checkPassWordMessage !== true
     ) {
       alert("필수 정보를 올바르게 입력하세요.");
+      return;
+    } else if (emailAuthCompleted !== true) {
+      alert("이메일 인증이 필요합니다.");
       return;
     }
 
@@ -161,7 +165,7 @@ export default function SignUpPage() {
 
       if (response.data.statusCode === 201) {
         alert(response.data.msg);
-        navigate("/signup/complete", { state: { nickName } });
+        navigate("/signup/complete", { state: { nickName } }); // 웰컴페이지로 닉네임 보내기!
       }
     } catch (error) {
       console.log("error", error);
@@ -171,164 +175,160 @@ export default function SignUpPage() {
 
   return (
     <Layout>
-      <div className="absolute w-full h-full">
-        <div className="mx-4">
-          <div className="flex items-center mt-16">
-            <div>
-              <LeftArrow />
-            </div>
-            <div className="mx-auto text-xl/normal font-semibold">회원가입</div>
+      <div className="mx-4">
+        <div className="flex items-center mt-16">
+          <div onClick={onClickLeftArrowHandler} className="cursor-pointer">
+            <LeftArrow />
           </div>
+          <div className="mx-auto text-xl/normal font-semibold">회원가입</div>
+        </div>
 
-          <div className="flex flex-col mt-10">
-            <div className="flex justify-between">
-              <div className="text-sm/normal font-semibold">닉네임</div>
-            </div>
-            <input
-              type="text"
-              placeholder="닉네임 입력(2~10자)"
-              maxLength={10}
-              value={nickName}
-              onChange={onchangeNickNameHandler}
-              className="mt-2 border border-[#D9D9D9] rounded-lg w-full h-[49px] px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium"
-            />
-            {nickNameMessage !== true && nickNameMessage && (
-              <div className="my-2 text-red-600">{nickNameMessage}</div>
-            )}
+        <div className="flex flex-col mt-10">
+          <div className="flex justify-between">
+            <div className="text-sm/normal font-semibold">닉네임</div>
           </div>
+          <input
+            type="text"
+            placeholder="닉네임 입력(2~10자)"
+            maxLength={10}
+            value={nickName}
+            onChange={onChangeNickNameHandler}
+            className="mt-2 border border-[#D9D9D9] rounded-lg w-full h-[49px] px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium"
+          />
+          {nickNameMessage !== true && nickNameMessage && (
+            <div className="my-2 text-red-600">{nickNameMessage}</div>
+          )}
+        </div>
 
-          <div className="mt-5 flex flex-col">
-            <div className="flex justify-between">
-              <div className="text-sm/normal font-semibold">이메일 주소</div>
+        <div className="mt-5 flex flex-col">
+          <div className="flex justify-between">
+            <div className="text-sm/normal font-semibold">이메일 주소</div>
+            <div
+              onClick={onClickEmailAuthHandler}
+              className="text-[#999999] underline cursor-pointer text-sm/normal font-medium"
+            >
+              이메일 인증
+            </div>
+          </div>
+          <input
+            type="text"
+            placeholder="이메일을 입력해주세요"
+            value={email}
+            onChange={onChangeEmailHandler}
+            className="border border-[#D9D9D9] rounded-lg w-full h-[49px] mt-2 px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium"
+          />
+          {emailCordInput && (
+            <div className="flex flex-row justify-center items-center">
+              <input
+                type="text"
+                placeholder="이메일로 전송된 인증코드를 입력해주세요"
+                value={emailCord}
+                onChange={onChangeEmailCordHandler}
+                className="border border-[#D9D9D9] rounded-lg w-full h-[49px] mt-2 px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium"
+              />
               <div
-                onClick={onClickEmailAuthHandler}
-                className="text-[#999999] underline cursor-pointer text-sm/normal font-medium"
+                onClick={onClickEmailCordPostHandler}
+                className="ml-3 mt-2 rounded-lg w-20 h-[49px] flex items-center justify-center bg-[#D9D9D9] text-white cursor-pointer text-sm/normal font-medium "
               >
-                이메일 인증
+                확인
               </div>
             </div>
-            <input
-              type="text"
-              placeholder="이메일을 입력해주세요"
-              value={email}
-              onChange={onchangeEmailHandler}
-              className="border border-[#D9D9D9] rounded-lg w-full h-[49px] mt-2 px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium"
-            />
-            {emailCordInput && (
-              <div className="flex flex-row justify-center items-center">
-                <input
-                  type="text"
-                  placeholder="이메일로 전송된 인증코드를 입력해주세요"
-                  value={emailCord}
-                  onChange={onchangeEmailCordHandler}
-                  className="border border-[#D9D9D9] rounded-lg w-full h-[49px] mt-2 px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium"
-                />
-                <div
-                  onClick={onClickEmailCordPostHandler}
-                  className="ml-3 mt-2 rounded-lg w-20 h-[49px] flex items-center justify-center bg-[#D9D9D9] text-white cursor-pointer text-sm/normal font-medium "
-                >
-                  확인
-                </div>
-              </div>
-            )}
+          )}
 
-            {emailMessage !== true && emailMessage && (
-              <div className="my-2 text-red-600">{emailMessage}</div>
-            )}
+          {emailMessage !== true && emailMessage && (
+            <div className="my-2 text-red-600">{emailMessage}</div>
+          )}
+        </div>
+
+        <div className="mt-5 flex flex-col">
+          <div className="text-sm/normal font-semibold">비밀번호</div>
+          <input
+            type="password"
+            placeholder="8~15자(대/소문자, 숫자, 특수문자(!@#$%^&*)만 사용 가능)"
+            // placeholder="비밀번호 입력(문자, 숫자, 특수문자 포함 8~15자)"
+            maxLength={15}
+            value={password}
+            onChange={onChangePasswordHandler}
+            className="border border-[#D9D9D9] rounded-lg w-full h-[49px] mt-2 px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium"
+          />
+          {passwordMessage !== true && passwordMessage && (
+            <div className="my-2 text-red-600">{passwordMessage}</div>
+          )}
+        </div>
+
+        <div className="mt-5 flex flex-col">
+          <div className="text-sm/normal font-semibold">비밀번호 확인</div>
+          <input
+            type="password"
+            placeholder="비밀번호 재입력"
+            maxLength={20}
+            value={checkPassword}
+            onChange={onChangeCheckPasswordHandler}
+            className="border border-[#D9D9D9] rounded-lg w-full h-[49px] mt-2 px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium"
+          />
+          {checkPassWordMessage !== true && checkPassWordMessage && (
+            <div className="my-2 text-red-600">{checkPassWordMessage}</div>
+          )}
+        </div>
+
+        <div className="mt-5 flex flex-col">
+          <div className="flex flex-row items-center">
+            <CheckBox />
+            <div className="ml-3 text-sm/normal font-bold ">전체 동의하기</div>
           </div>
-
-          <div className="mt-5 flex flex-col">
-            <div className="text-sm/normal font-semibold">비밀번호</div>
-            <input
-              type="password"
-              placeholder="8~15자(대/소문자, 숫자, 특수문자(!@#$%^&*)만 사용 가능)"
-              // placeholder="비밀번호 입력(문자, 숫자, 특수문자 포함 8~15자)"
-              maxLength={15}
-              value={password}
-              onChange={onchangePasswordHandler}
-              className="border border-[#D9D9D9] rounded-lg w-full h-[49px] mt-2 px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium"
-            />
-            {passwordMessage !== true && passwordMessage && (
-              <div className="my-2 text-red-600">{passwordMessage}</div>
-            )}
+          <div className="mt-2 ml-8 text-[#999999] text-sm/normal font-normal">
+            선택정보에 대한 동의를 포함합니다.
           </div>
+        </div>
 
-          <div className="mt-5 flex flex-col">
-            <div className="text-sm/normal font-semibold">비밀번호 확인</div>
-            <input
-              type="password"
-              placeholder="비밀번호 재입력"
-              maxLength={20}
-              value={checkPassword}
-              onChange={onchangeCheckPasswordHandler}
-              className="border border-[#D9D9D9] rounded-lg w-full h-[49px] mt-2 px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium"
-            />
-            {checkPassWordMessage !== true && checkPassWordMessage && (
-              <div className="my-2 text-red-600">{checkPassWordMessage}</div>
-            )}
-          </div>
-
-          <div className="mt-5 flex flex-col">
+        <div className="mt-4 flex mb-20">
+          <div className="border border-[#D9D9D9] rounded-lg w-full pt-[21px] pr-3 pb-[23px] pl-5">
             <div className="flex flex-row items-center">
               <CheckBox />
-              <div className="ml-3 text-sm/normal font-bold ">
-                전체 동의하기
+              <div className="ml-3 text-sm/normal font-normal">
+                [필수] 만 14세 이상입니다.
               </div>
             </div>
-            <div className="mt-2 ml-8 text-[#999999] text-sm/normal font-normal">
-              선택정보에 대한 동의를 포함합니다.
+
+            <div className="flex flex-row items-center mt-[10px]">
+              <CheckBox />
+              <div className="ml-3 mr-auto text-sm/normal font-normal">
+                [필수] 회원가입 및 운영약관 동의
+              </div>
+              <RightArrow />
             </div>
-          </div>
 
-          <div className="mt-4 flex">
-            <div className="border border-[#D9D9D9] rounded-lg w-full pt-[21px] pr-3 pb-[23px] pl-5">
-              <div className="flex flex-row items-center">
-                <CheckBox />
-                <div className="ml-3 text-sm/normal font-normal">
-                  [필수] 만 14세 이상입니다.
-                </div>
+            <div className="flex flex-row items-center mt-[10px]">
+              <CheckBox />
+              <div className="ml-3 mr-auto text-sm/normal font-normal">
+                [필수] 개인정보 수집 및 이용 동의
               </div>
+              <RightArrow />
+            </div>
 
-              <div className="flex flex-row items-center mt-[10px]">
-                <CheckBox />
-                <div className="ml-3 mr-auto text-sm/normal font-normal">
-                  [필수] 회원가입 및 운영약관 동의
-                </div>
-                <RightArrow />
+            <div className="flex flex-row items-center mt-[10px]">
+              <CheckBox />
+              <div className="ml-3 mr-auto text-sm/normal font-normal">
+                [필수] 위치정보 이용약관 동의
               </div>
+              <RightArrow />
+            </div>
 
-              <div className="flex flex-row items-center mt-[10px]">
-                <CheckBox />
-                <div className="ml-3 mr-auto text-sm/normal font-normal">
-                  [필수] 개인정보 수집 및 이용 동의
-                </div>
-                <RightArrow />
+            <div className="flex flex-row items-center mt-[10px]">
+              <CheckBox />
+              <div className="ml-3 mr-auto text-sm/normal font-normal">
+                [선택] 마케팅 수신 동의
               </div>
-
-              <div className="flex flex-row items-center mt-[10px]">
-                <CheckBox />
-                <div className="ml-3 mr-auto text-sm/normal font-normal">
-                  [필수] 위치정보 이용약관 동의
-                </div>
-                <RightArrow />
-              </div>
-
-              <div className="flex flex-row items-center mt-[10px]">
-                <CheckBox />
-                <div className="ml-3 mr-auto text-sm/normal font-normal">
-                  [선택] 마케팅 수신 동의
-                </div>
-                <RightArrow />
-              </div>
+              <RightArrow />
             </div>
           </div>
         </div>
-        <div
-          className="absolute bottom-0 w-full h-16 bg-[#D9D9D9] text-[#FFFFFF] text-xl/normal font-medium flex items-center justify-center cursor-pointer"
-          onClick={onClickSignUpCompleteHandler}
-        >
-          회원가입 완료
-        </div>
+      </div>
+      <div
+        className="z-20 fixed bottom-0 max-w-3xl w-full h-16 bg-[#D9D9D9] text-[#FFFFFF] text-xl/normal font-medium flex items-center justify-center cursor-pointer"
+        onClick={onClickSignUpCompleteHandler}
+      >
+        회원가입 완료
       </div>
     </Layout>
   );

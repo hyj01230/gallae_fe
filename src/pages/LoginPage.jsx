@@ -6,26 +6,26 @@ import { axiosInstance } from "../api/axiosInstance";
 export default function LoginPage() {
   // 페이지 이동
   const navigate = useNavigate();
-
   const onClickSkipHandler = () => {
     navigate("/");
   };
-
   const onClickSingUpHandler = () => {
     navigate("/signup");
   };
 
-  // 이메일, 비밀번호 state
+  // useState : 이메일, 비밀번호
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const onchangeEmailHandler = (e) => {
+  // onChange : 이메일, 비밀번호
+  const onChangeEmailHandler = (e) => {
     setEmail(e.target.value);
   };
-  const onchangePasswordHandler = (e) => {
+  const onChangePasswordHandler = (e) => {
     setPassword(e.target.value);
   };
 
+  // POST : 로그인 정보 보내기
   const onClickLoginHandler = async () => {
     try {
       const response = await axiosInstance.post("/api/users/login", {
@@ -35,7 +35,7 @@ export default function LoginPage() {
       console.log("response", response);
 
       if (response.data.statusCode === 200) {
-        localStorage.setItem("accessToken", response.headers.authorization);
+        localStorage.setItem("accessToken", response.headers.authorization); // 성공하면 토큰 저장!
         navigate("/");
       }
       alert(response.data.msg);
@@ -51,7 +51,7 @@ export default function LoginPage() {
 
   return (
     <Layout>
-      <div className="mx-4">
+      <div className="mx-4 mb-20">
         <div
           className="flex justify-end mt-[60px] text-[#999999] text-base/normal font-normal cursor-pointer"
           onClick={onClickSkipHandler}
@@ -76,14 +76,14 @@ export default function LoginPage() {
           <input
             type="text"
             value={email}
-            onChange={onchangeEmailHandler}
+            onChange={onChangeEmailHandler}
             placeholder="이메일을 입력해주세요."
             className="border border-[#D9D9D9] rounded-lg w-full h-[49px] px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium"
           />
           <input
             type="password"
             value={password}
-            onChange={onchangePasswordHandler}
+            onChange={onChangePasswordHandler}
             placeholder="비밀번호를 입력해주세요."
             className="mt-2 border border-[#D9D9D9] rounded-lg w-full h-[49px] px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium"
           />
