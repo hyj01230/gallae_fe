@@ -3,26 +3,27 @@ import PostHeader from "../components/post/PostHeader";
 import Layout from "../components/common/Layout";
 import PostCategory from "../components/post/PostCategory";
 import PostLine from "../components/post/PostLine";
-
-import { axiosInstance } from "../api/axiosInstance";
-import { useState, useEffect, useRef } from "react";
 import PostRanking from "../components/post/PostRanking";
+import { axiosInstance } from "../api/axiosInstance";
+import { useState, useEffect } from "react";
 
 export default function PostListPage() {
-  const [postList, setPostList] = useState([]); // 초기값을 빈 배열로 설정
+  const [postList, setPostList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("전체");
+
   const navigate = useNavigate();
   const params = {
-    page: "1",
-    size: "3",
+    page: "0",
+    size: "10",
   };
 
   const getPostList = async () => {
     try {
-      const response = await axiosInstance.get(
-        `/api/posts?page=${params.page}&size=${params.size}`
-      );
+
+      const response = await axiosInstance.get("/api/posts", { params });
+
       console.log(response);
+
       setPostList(response.data.content);
     } catch (error) {
       console.error("데이터 가져오기 오류:", error);
@@ -37,8 +38,32 @@ export default function PostListPage() {
     setSelectedCategory(category);
   };
 
-  const handlePostClick = (postId) => {
-    navigate(`/posts/${postId}`);
+  const handleLikeClick = async (postId) => {
+    try {
+      const post = postList.find((item) => item.postId === postId);
+
+      if (!post) {
+        console.error("게시물을 찾을 수 없음");
+        return;
+      }
+
+      const isLiked = post.liked;
+
+      await axiosInstance.get(
+        isLiked ? `/api/posts/like/${postId}` : `/api/posts/like/${postId}`
+      );
+
+      const updatedPostList = postList.map((item) => {
+        if (item.postId === postId) {
+          return { ...item, liked: !isLiked };
+        }
+        return item;
+      });
+
+      setPostList(updatedPostList);
+    } catch (error) {
+      console.error("좋아요 처리 중 오류 발생:", error);
+    }
   };
 
   const filteredPostList = postList
@@ -63,13 +88,13 @@ export default function PostListPage() {
               key={index}
               className="w-393 h-275 bg-white flex flex-col relative"
             >
-              <div className="flex items-center justify-between mb-2 mt-5 ">
+              <div className="flex items-center justify-between mb-2 mt-5">
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gray-300 rounded-full ml-4 cursor-pointer"></div>
                   <div className="flex flex-col ml-[13px]">
                     <p
                       className="text-[18px] font-semibold cursor-pointer"
-                      onClick={() => handlePostClick(item.postId.toString())}
+                      onClick={() => navigate(`/posts/${item.postId}`)}
                     >
                       {item.title}
                     </p>
@@ -85,7 +110,7 @@ export default function PostListPage() {
               </div>
               <p
                 className="text-3 mt-4 mx-5 cursor-pointer"
-                onClick={() => handlePostClick(item.postId.toString())}
+                onClick={() => navigate(`/posts/${item.postId}`)}
               >
                 {item.contents && item.contents.length > 200
                   ? item.contents.slice(0, 200) + "..."
@@ -102,9 +127,14 @@ export default function PostListPage() {
                   <p className="ml-1">조회수 {item.viewNum}</p>
                 </div>
               </div>
-              <div className="flex items-center justify-between text-sm text-gray-500 h-[40px] bordertop-solid border-t-2 ">
+              <div className="flex items-center justify-between text-sm text-gray-500 h-[40px] bordertop-solid border-t-2">
                 <div className="flex items-center space-x-2 flex-1 justify-center border-r-2 h-[40px]">
-                  <div className="cursor-pointer w-4 h-4 bg-gray-400 rounded-full"></div>
+                  <div
+                    className="cursor-pointer w-4 h-4 bg-gray-400 rounded-full"
+                    onClick={() => handleLikeClick(item.postId)}
+                  >
+                    {item.liked ? "❤️" : "🤍"}
+                  </div>
                   <p className="cursor-pointer">좋아요</p>
                 </div>
 
@@ -117,7 +147,6 @@ export default function PostListPage() {
             </div>
           ))
         ) : (
-          // 만약 postList가 빈 배열이나 null이면 여기에 렌더링할 내용을 추가하세요
           <p>게시물이 없습니다.</p>
         )}
       </div>
