@@ -18,7 +18,13 @@ import { createScheduleDetail } from "../api";
 
 // 버튼 클릭 시 소요시간에 추가추가
 
-const category = ["카테고리를 선택해주세요", "교통", "숙박", "컨텐츠", "식사"];
+const category = [
+  "카테고리를 선택해주세요",
+  "교통",
+  "숙박",
+  "즐길거리",
+  "음식",
+];
 const time = [
   { minute: 5, text: "5분" },
   { minute: 10, text: "10분" },
@@ -38,18 +44,14 @@ export default function SchedulesCreatePage() {
     referenceURL: "",
   });
 
-  console.log(schedule);
-
   const value = useLocation().state;
-
-  console.log({ value });
 
   const handleSubmitClick = async () => {
     const response = await createScheduleDetail(value.tripDateId, {
       schedulesList: [schedule],
     });
     console.log(response);
-    // navigate("/myschedules/details");
+    navigate("/myschedules/details", { state: postId });
   };
 
   const handleClick = (value) => {

@@ -1,12 +1,9 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { formatDateString } from "../../util/formatDate";
 
-export default function List({ schedule }) {
+export default function List({ schedule, handleClick }) {
   // 해당 컴포넌트를 클릭했을 때
-  // 1. 세부일정을 보여주는 페이지로 이동
-  // 2. postId(게시글 아이디), tripDateIdList(세부일정 아이디 리스트)도 같이 전달
-
-  const navigate = useNavigate();
+  // Modal 생성
 
   const renderDateRange = () => {
     if (schedule.chosenDateList.length === 1) {
@@ -32,10 +29,8 @@ export default function List({ schedule }) {
   };
   return (
     <div
-      className="border border-[#D9D9D9] mx-4 p-3 rounded-xl cursor-pointer"
-      onClick={() =>
-        navigate("/myschedules/details", { state: schedule.postId })
-      }
+      className="border border-[#D9D9D9] mx-4 mb-3 p-3 rounded-xl cursor-pointer"
+      onClick={handleClick}
     >
       <div className="text-xl	font-semibold">{schedule.subTitleList[0]}</div>
       {renderDateRange()}
