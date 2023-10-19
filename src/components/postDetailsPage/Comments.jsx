@@ -1,54 +1,76 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { axiosInstance } from "../../api/axiosInstance";
 
-export default function Comments({ comments, onReplySubmit }) {
+function formatDate(date) {
+  const options = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  };
+  return new Date(date)
+    .toLocaleDateString(undefined, options)
+    .replace(/(\d+)\D+(\d+)/, "$1 $2");
+}
+
+export default function Comments({ comments, setComments }) {
   const [selectedComment, setSelectedComment] = useState(null);
   const [editedContent, setEditedContent] = useState("");
-  const [replyContent, setReplyContent] = useState("");
 
   const handleEdit = (comment) => {
     setSelectedComment(comment);
     setEditedContent(comment.contents);
   };
 
-  const handleDelete = (comment) => {
-    // 삭제 처리 로직 추가
-    // 원본 comments 배열을 업데이트
+  const handleDelete = async (comment) => {
+    // 클라이언트 측에서 댓글 상태 업데이트
+    setSelectedComment(null); // 선택한 댓글 초기화
+
     const updatedComments = comments.filter(
       (c) => c.commentId !== comment.commentId
     );
-    setSelectedComment(null);
+    setComments(updatedComments); // 댓글 목록 업데이트
+
+    try {
+      // 서버로 DELETE 요청 보내기
+      await axiosInstance.delete(`/api/comments/${comment.commentId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
+    } catch (error) {
+      console.error("댓글 삭제 중 오류 발생:", error);
+    }
   };
 
-  const handleSave = (comment, editedContent) => {
-    // 수정 처리 로직 추가
-    // 원본 comments 배열을 업데이트
+  const handleSave = async (comment) => {
+    // 클라이언트 측에서 댓글 상태 업데이트
+    setSelectedComment(null); // 선택한 댓글 초기화
+    setEditedContent(""); // 수정된 내용 초기화
+
     const updatedComments = comments.map((c) => {
       if (c.commentId === comment.commentId) {
         return { ...c, contents: editedContent, modifiedAt: new Date() };
       }
       return c;
     });
-    setSelectedComment(null);
-  };
+    setComments(updatedComments); // 댓글 목록 업데이트
 
-  const handleEditContentChange = (value) => {
-    setEditedContent(value);
-  };
-
-  const handleAddReply = (comment) => {
-    // 대댓글 입력 필드를 표시하도록 선택된 댓글을 설정합니다.
-    setSelectedComment(comment);
-    // 대댓글 내용을 초기화합니다.
-    setReplyContent("");
-  };
-
-  const handleReplyContentChange = (value) => {
-    setReplyContent(value);
-  };
-
-  const handleSaveReply = (commentId, replyContent) => {
-    onReplySubmit(commentId, replyContent); // 부모 컴포넌트로부터 전달된 함수를 호출하여 대댓글을 저장
-    setSelectedComment(null); // 대댓글 입력 필드를 닫음
+    try {
+      // 서버로 PUT 요청 보내기
+      await axiosInstance.put(
+        `/api/comments/${comment.commentId}`,
+        { contents: editedContent },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.error("댓글 수정 중 오류 발생:", error);
+    }
   };
 
   return (
@@ -63,72 +85,53 @@ export default function Comments({ comments, onReplySubmit }) {
             {selectedComment === comment ? (
               <div>
                 <textarea
-                  value={replyContent}
-                  onChange={(e) => handleReplyContentChange(e.target.value)}
-                  placeholder="대댓글을 작성하세요..."
+                  value={editedContent}
+                  onChange={(e) => setEditedContent(e.target.value)}
+                  placeholder="댓글을 수정하세요..."
                   className="w-full border rounded p-2"
                 />
-                <button
-                  onClick={() =>
-                    handleSaveReply(comment.commentId, replyContent)
-                  }
-                  className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                >
-                  대댓글 작성
-                </button>
+                <div className="absolute right-4 top-4 flex space-x-2">
+                  <button
+                    onClick={() => handleSave(comment)}
+                    className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                  >
+                    저장
+                  </button>
+                  <button
+                    onClick={() => handleDelete(comment)}
+                    className="text-red-500"
+                  >
+                    삭제
+                  </button>
+                </div>
               </div>
             ) : (
-              <p className="text-lg mb-2">{comment.contents}</p>
+              <div className="flex justify-between items-center">
+                <p className="text-lg mb-2">{comment.contents}</p>
+                <div>
+                  <button
+                    onClick={() => handleEdit(comment)}
+                    className="text-blue-500"
+                  >
+                    수정
+                  </button>
+                  <button
+                    onClick={() => handleDelete(comment)}
+                    className="text-red-500"
+                  >
+                    삭제
+                  </button>
+                </div>
+              </div>
             )}
             <p className="text-gray-600 text-sm font-semibold">
               <span className="font-semibold">{comment.nickname}</span>
             </p>
-            {selectedComment === comment ? (
-              <div className="absolute right-4 top-4 flex space-x-2">
-                <button
-                  onClick={() => handleSave(comment, editedContent)}
-                  className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                >
-                  저장
-                </button>
-              </div>
-            ) : (
-              <div className="absolute right-4 top-4 flex space-x-2">
-                <button
-                  onClick={() => handleEdit(comment)}
-                  className="text-blue-500"
-                >
-                  수정
-                </button>
-                <button
-                  onClick={() => handleDelete(comment)}
-                  className="text-red-500"
-                >
-                  삭제
-                </button>
-              </div>
-            )}
-            <button
-              onClick={() => handleAddReply(comment)}
-              className="text-green-500 mt-2"
-            >
-              대댓글 작성
-            </button>
-            {comment.replies && comment.replies.length > 0 && (
-              <div className="ml-6">
-                {comment.replies.map((reply) => (
-                  <div
-                    key={reply.replyId}
-                    className="bg-gray-200 p-2 rounded-md mb-2 relative"
-                  >
-                    <p className="text-sm mb-1">{reply.contents}</p>
-                    <p className="text-gray-500 text-xs">
-                      <span className="font-semibold">{reply.nickname}</span>
-                    </p>
-                  </div>
-                ))}
-              </div>
-            )}
+            <p className="text-gray-600 text-sm font-semibold">
+              <span className="font-semibold">
+                {formatDate(comment.createAt)}
+              </span>
+            </p>
           </div>
         ))
       ) : (
