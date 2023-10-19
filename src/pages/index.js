@@ -2,7 +2,7 @@ import SchedulesDetailPage from "./SchedulesDetailPage";
 import LoginPage from "./LoginPage";
 import PostListPage from "./PostListPage";
 import MyPage from "./MyPage";
-import MypageModify from "./MypageModify";
+import MyPageModify from "./MyPageModify";
 import MyPageNickName from "./MyPageNickName";
 import MyPagePassWord from "./MyPagePassWord";
 import MyPageCommentList from "./MyPageCommentList";
@@ -22,7 +22,7 @@ import PostSearchPage from "./PostSearchPage";
 export default {
   LoginPage,
   MyPage,
-  MypageModify,
+  MyPageModify,
   MyPageNickName,
   MyPagePassWord,
   MyPageCommentList,
