@@ -12,12 +12,19 @@ import {
 } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { useState } from "react";
+import { createScheduleDetail } from "../api";
 // 세부일정 옵션 선택 시  schedule에 값이 하나씩 저장
 // 일정 수정 완료 버튼을 클릭하면 recoil에 저장
 
 // 버튼 클릭 시 소요시간에 추가추가
 
-const category = ["카테고리를 선택해주세요", "교통", "숙박", "컨텐츠", "식사"];
+const category = [
+  "카테고리를 선택해주세요",
+  "교통",
+  "숙박",
+  "즐길거리",
+  "음식",
+];
 const time = [
   { minute: 5, text: "5분" },
   { minute: 10, text: "10분" },
@@ -37,9 +44,15 @@ export default function SchedulesCreatePage() {
     referenceURL: "",
   });
 
-  console.log(schedule);
-
   const value = useLocation().state;
+
+  const handleSubmitClick = async () => {
+    const response = await createScheduleDetail(value.tripDateId, {
+      schedulesList: [schedule],
+    });
+    console.log(response);
+    navigate("/myschedules/details", { state: postId });
+  };
 
   const handleClick = (value) => {
     const number = timeSpent.time + value;
@@ -184,7 +197,7 @@ export default function SchedulesCreatePage() {
       <div className="max-w-3xl	flex fixed bottom-0">
         <button
           className="w-screen h-14 bg-gray-300 text-white"
-          onClick={() => navigate("/myschedules/details")}
+          onClick={handleSubmitClick}
         >
           일정 수정 완료
         </button>

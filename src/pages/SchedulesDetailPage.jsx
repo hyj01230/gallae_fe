@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   DownArrow,
   Hamburger,
@@ -6,18 +6,47 @@ import {
   Plus,
   Share,
   PlusWithCircle,
-  Document,
-  SpeechBubble,
-  Person,
 } from "../assets/Icon";
 import Layout from "../components/common/Layout";
-import { scheduleState } from "../store/atom";
-import { useRecoilState } from "recoil";
 import List from "../components/schedulesDetail/List";
+import { useQuery } from "react-query";
+import { getScheduleDetail, getTripDate } from "../api";
+import { useEffect, useState } from "react";
+import BottomNav from "../components/mySchedules/BottomNav";
 
 export default function SchedulesDetailPage() {
   const navigate = useNavigate();
-  const [schedule, setSchedule] = useRecoilState(scheduleState);
+  const postId = useLocation().state; // 새로 고침 해도 유지됨
+  const [selectedDate, setSelectedDate] = useState({
+    date: "",
+    tripDateId: "",
+  });
+  const [scheduleDetail, setScheduleDetail] = useState([]);
+  console.log(scheduleDetail);
+
+  // [API] 여행 날짜, 서브제목, 세부일정 Id 불러오기
+  const { isLoading, error, data } = useQuery("schedulesDetail", () =>
+    getTripDate(postId)
+  );
+
+  useEffect(() => {
+    if (selectedDate.date === "") return;
+
+    const getScheduleData = async () => {
+      const response = await getScheduleDetail(selectedDate.tripDateId);
+      setScheduleDetail(response.data.schedulesList);
+    };
+
+    getScheduleData();
+
+    // selectedDate.date가 빈 값이 아니라면
+    // selectedDate.tripDateId를 이용해 해당 날짜의 일정을 불러오는 api를 호출한다.
+    // api를 호출한 뒤 일정 데이터를 useState에 저장하고, 나열한다.
+  }, [selectedDate]);
+
+  if (isLoading) {
+    return <div>로딩중</div>;
+  }
 
   return (
     <Layout>
@@ -40,7 +69,7 @@ export default function SchedulesDetailPage() {
       </div>
 
       <div className="flex justify-between items-center h-10 mt-4 mx-4 p-4 border border-[#EBEBEB] rounded-lg">
-        <div>{schedule?.tripDateList[0]?.subTitle || "값이 없음"}</div>
+        <div>{data[0].subTitle}</div>
         <div>
           <DownArrow />
         </div>
@@ -48,46 +77,50 @@ export default function SchedulesDetailPage() {
 
       <div className="w-full h-36">{/* <Map /> */}</div>
 
-      <div className="flex justify-between mx-4 mt-4 border border-[#EBEBEB] rounded-3xl">
-        {schedule?.tripDateList.map((value, index) => (
+      <div className="flex justify-between mx-4 mt-4 border border-[#EBEBEB] rounded-xl">
+        {data.map((date, index) => (
           <div
-            className="p-1 cursor-pointer"
+            className={`px-4 py-1 rounded-xl cursor-pointer ${
+              selectedDate.date === date.chosenDate ? "bg-[#F2F2F2]" : ""
+            }`}
             key={index}
-            onClick={() =>
-              navigate("/myschedules/create/schedule", { state: value })
-            }
+            onClick={() => {
+              setSelectedDate({
+                date: date.chosenDate,
+                tripDateId: date.tripDateId,
+              });
+            }}
           >
-            {value.chosenDate}
+            {date.chosenDate}
           </div>
         ))}
       </div>
 
-      {/* <List /> */}
+      {/* 특정 날짜를 눌렀을 때, <List/>에 날짜에 해당하는 데이터가 보여야함 */}
+      {scheduleDetail.length >= 1 &&
+        scheduleDetail.map((schedule, index) => (
+          <List key={index} schedule={schedule} />
+        ))}
 
+      {/* 세부 일정을 생성하기 위한 데이터를 전달해야함 tripDateId, subTitle, chosenDate*/}
       <div
         className="flex justify-center items-center gap-3 mt-4 text-[#666] cursor-pointer"
-        onClick={() => navigate("/myschedules/create/schedule", { state: "" })}
+        onClick={() =>
+          navigate("/myschedules/create/schedule", {
+            state: {
+              subTitle: data[0].subTitle,
+              chosenDate: selectedDate.date,
+              tripDateId: selectedDate.tripDateId,
+              postId,
+            },
+          })
+        }
       >
         <PlusWithCircle />
         일정 추가하기
       </div>
 
-      <div className="max-w-3xl flex justify-around bg-[#F2F2F2] p-4 fixed bottom-0">
-        <div className="flex flex-col justify-center items-center">
-          <Document />
-          <span className="font-bold	text-[#888]">일정</span>
-        </div>
-
-        <div className="flex flex-col justify-center items-center">
-          <SpeechBubble />
-          <span className="font-bold	text-[#888]">커뮤니티</span>
-        </div>
-
-        <div className="flex flex-col justify-center items-center">
-          <Person />
-          <span className="font-bold	text-[#888]">마이페이지</span>
-        </div>
-      </div>
+      <BottomNav />
     </Layout>
   );
 }

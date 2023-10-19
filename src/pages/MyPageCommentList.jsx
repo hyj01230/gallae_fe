@@ -5,7 +5,7 @@ import {
   LeftArrow,
   WhiteDocument,
   CommentIcon,
-  XIcon,
+  // XIcon,
 } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
@@ -32,39 +32,44 @@ export default function MyPageCommentList() {
   //   },
   // ];
 
-  // 사용자별 댓글 조회
+  // useState : get으로 가져온 사용자별 댓글 조회 데이터(getMyCommentsList)
   const [myCommentsList, setMyCommentsList] = useState([]);
 
+  // GET : 사용자별 댓글 가져오기
   const getMyCommentsList = async () => {
     try {
       const response = await axiosInstance.get("/api/commentsme");
       console.log("댓글 response :", response);
-      setMyCommentsList(response.data);
+      setMyCommentsList(response.data.content);
     } catch (error) {
       console.log("댓글 error :", error);
     }
   };
 
+  // useEffect : 렌더링되면 실행!
   useEffect(() => {
     getMyCommentsList();
   }, []);
 
-  // 사용자별 대댓글 조회
-  const [myRepliesList, setMyRepliesList] = useState([]);
+  // // 사용자별 대댓글 조회
+  // // useState : get으로 가져온 사용자별 대댓글 조회 데이터(getMyRepliesList)
+  // const [myRepliesList, setMyRepliesList] = useState([]);
 
-  const getMyRepliesList = async () => {
-    try {
-      const response = await axiosInstance.get("/api/commentsme");
-      console.log("대댓글 response :", response);
-      setMyRepliesList(response.data);
-    } catch (error) {
-      console.log("대댓글 error :", error);
-    }
-  };
+  // // GET : 사용자별 대댓글 가져오기
+  // const getMyRepliesList = async () => {
+  //   try {
+  //     const response = await axiosInstance.get("/api/commentsme");
+  //     console.log("대댓글 response :", response);
+  //     setMyRepliesList(response.data);
+  //   } catch (error) {
+  //     console.log("대댓글 error :", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    getMyRepliesList();
-  }, []);
+  // // useEffect : 렌더링되면 실행!
+  // useEffect(() => {
+  //   getMyRepliesList();
+  // }, []);
 
   return (
     <Layout>
@@ -74,38 +79,42 @@ export default function MyPageCommentList() {
       </div>
       <hr className="mt-[11px] border-[#F2F2F2] border-t-[1px]"></hr>
 
-      {myCommentsList &&
-        myCommentsList.map((item) => (
-          <div key={item.commentId} className="ml-4 mt-4 flex flex-row">
-            <div className="flex justify-start">
-              <div className="w-6 flex flex-col justify-center items-center">
-                <CommentIcon />
-                <div className="text-xs/[18px] font-normal text-[#999999]">
-                  댓글
+      <div className="mb-24">
+        {myCommentsList &&
+          myCommentsList.map((item) => (
+            <div key={item.commentId} className="ml-4 mt-4 flex flex-row">
+              <div className="flex justify-start">
+                <div className="w-6 flex flex-col justify-center items-center">
+                  <CommentIcon />
+                  <div className="text-xs/[18px] font-normal text-[#999999]">
+                    댓글
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="ml-[23px] w-full border-[#F2F2F2] pl-[7px] flex flex-row border-b-[1px]">
-              <div className="w-full">
-                <div className="text-sm/[22px] font-semibold text-[#333333]">
-                  {item.title}
+              <div className="ml-[23px] w-full border-[#F2F2F2] pl-[7px] flex flex-row border-b-[1px]">
+                <div className="w-full">
+                  <div className="text-sm/[22px] font-semibold text-[#333333]">
+                    {item.title}
+                  </div>
+                  <div className="mt-1 text-sm/[18px] font-normal text-[#999999]">
+                    {item.contents}
+                  </div>
+                  <div className="mb-4 mt-1 text-xs/[18px] font-normal text-[#999999]">
+                    {item.createAt}
+                  </div>
                 </div>
-                <div className="mt-1 text-sm/[18px] font-normal text-[#999999]">
-                  {item.contents}
-                </div>
-                <div className="mb-4 mt-1 text-xs/[18px] font-normal text-[#999999]">
-                  {item.createdAt}
-                </div>
-              </div>
-              <div className="ml-2 mr-4">
-                <XIcon />
+                {/* <div className="ml-2 mr-4">
+                  <XIcon />
+                </div> */}
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+      </div>
 
       {/* 대댓글 */}
+      {/* 
+      <div className="mb-24">
       {myRepliesList &&
         myRepliesList.map((item) => (
           <div key={item.repliesId} className="ml-4 mt-4 flex flex-row">
@@ -136,8 +145,9 @@ export default function MyPageCommentList() {
             </div>
           </div>
         ))}
+        </div> */}
 
-      <div className="absolute bottom-0 w-full h-[84px] bg-[#F2F2F2] flex justify-center">
+      <div className="fixed bottom-0 max-w-3xl w-full h-[84px] bg-[#F2F2F2] flex justify-center">
         <div className="h-10 w-full mx-10 mt-[11.6px] flex">
           <div className="w-10 h-10 flex flex-col justify-center items-center">
             <WhiteDocument />

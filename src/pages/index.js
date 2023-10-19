@@ -3,6 +3,8 @@ import LoginPage from "./LoginPage";
 import PostListPage from "./PostListPage";
 import MyPage from "./MyPage";
 import MypageModify from "./MypageModify";
+import MyPageNickName from "./MyPageNickName";
+import MyPagePassWord from "./MyPagePassWord";
 import MyPageCommentList from "./MyPageCommentList";
 import MyPageLikeList from "./MyPageLikeList";
 import MySchedulesPage from "./MySchedulesPage";
@@ -21,6 +23,8 @@ export default {
   LoginPage,
   MyPage,
   MypageModify,
+  MyPageNickName,
+  MyPagePassWord,
   MyPageCommentList,
   MyPageLikeList,
   MySchedulesPage,

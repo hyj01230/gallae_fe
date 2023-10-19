@@ -1,7 +1,6 @@
 import Layout from "../components/common/Layout";
 import {
   GearIcon,
-  PlusCircle,
   Heart,
   MyWriting,
   Community,
@@ -9,52 +8,71 @@ import {
 } from "../assets/Icon";
 import { useNavigate } from "react-router-dom";
 import { WhiteDocument } from "../assets/Icon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import defaultProfile from "../../public/img/defaultProfile.png";
+import { axiosInstance } from "../api/axiosInstance";
 
 export default function MyPage() {
+  // 페이지 이동
   const navigate = useNavigate();
-
   const onClickLogOutHandler = () => {
-    // 로그아웃 시 토큰 제거
-    localStorage.removeItem("accessToken");
+    localStorage.removeItem("accessToken"); // 로그아웃 시 토큰 제거
     navigate("/");
   };
-
   const onClickModifyHandler = () => {
     navigate("/mypage/modify");
   };
-
-  const onclickLikeListHandler = () => {
+  const onClickLikeListHandler = () => {
     navigate("/mypage/like");
   };
-
-  const onclickCommentListHandler = () => {
+  const onClickCommentListHandler = () => {
     navigate("/mypage/comment");
   };
 
-  // 프로필 모달
-  // state
+  // useState : 프로필 모달(열기/닫기)
   const [profileModal, setProfileModal] = useState(false);
-  // 열기
   const onClickProfileOpenHandler = () => {
     setProfileModal(true);
   };
-  // 닫기
   const onClickProfileCloseHandler = () => {
     setProfileModal(false);
   };
 
-  // 소개글 모달
-  // state
+  // useState : 소개글 모달(열기/닫기)
   const [introModal, setIntroModal] = useState(false);
-  // 열기
   const onClickIntroOpenHandler = () => {
     setIntroModal(true);
   };
-  // 닫기
   const onClickIntroCloseHandler = () => {
     setIntroModal(false);
   };
+
+  // useState : 소개글
+  const [intro, setIntro] = useState("");
+
+  // onChange : 소개글
+  const onChangeIntroHandler = (e) => {
+    setIntro(e.target.value);
+  };
+
+  // useState : get으로 가져온 마이페이지 데이터(getMyPageInfo)
+  const [myPageInfo, setMyPageInfo] = useState({});
+
+  // GET : 마이페이지 데이터 가져오기
+  const getMyPageInfo = async () => {
+    try {
+      const response = await axiosInstance.get("/api/users/profile");
+      console.log("마이정보 response :", response.data);
+      setMyPageInfo(response.data);
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
+  // useEffect : 렌더링되면 실행!
+  useEffect(() => {
+    getMyPageInfo();
+  }, []);
 
   return (
     <Layout>
@@ -71,15 +89,15 @@ export default function MyPage() {
           </div>
         </div>
 
-        <div
-          onClick={onClickProfileOpenHandler}
-          className="bg-[#EBEBEB] mt-7 w-24 h-24 rounded-full mx-auto flex items-center justify-center cursor-pointer"
-        >
-          <PlusCircle />
+        <div onClick={onClickProfileOpenHandler}>
+          <img
+            className="mt-7 w-24 h-24 rounded-full mx-auto flex items-center justify-center cursor-pointer"
+            src={myPageInfo.profileImg ? myPageInfo.profileImg : defaultProfile}
+          />
         </div>
 
         <div className="flex justify-center mt-3 text-xl/normal font-semibold">
-          릴리
+          {myPageInfo.nickName}
         </div>
 
         <div
@@ -96,27 +114,26 @@ export default function MyPage() {
           </div>
         </div>
 
-        <div>
-          <div className="mt-10 font-semibold">나의 여행계획</div>
-          <div
-            onClick={onclickLikeListHandler}
-            className="mt-5 flex flex-row items-center cursor-pointer"
-          >
-            <Heart />
-            <div className="ml-3 font-medium text-base/normal">좋아요 목록</div>
-          </div>
-          <div
-            onClick={onclickCommentListHandler}
-            className="mt-4 flex flex-row items-center cursor-pointer"
-          >
-            <MyWriting />
-            <div className="ml-3 font-medium text-base/normal">
-              나의 글 쓴 내역
-            </div>
+        <div className="mt-10 font-semibold">나의 여행계획</div>
+        <div
+          onClick={onClickLikeListHandler}
+          className="mt-5 flex flex-row items-center cursor-pointer"
+        >
+          <Heart />
+          <div className="ml-3 font-medium text-base/normal">좋아요 목록</div>
+        </div>
+        <div
+          onClick={onClickCommentListHandler}
+          className="mt-4 mb-28 flex flex-row items-center cursor-pointer"
+        >
+          <MyWriting />
+          <div className="ml-3 font-medium text-base/normal">
+            나의 글 쓴 내역
           </div>
         </div>
       </div>
-      <div className="absolute bottom-0 w-full h-[84px] bg-[#F2F2F2] flex justify-center">
+
+      <div className="fixed bottom-0 max-w-3xl w-full h-[84px] bg-[#F2F2F2] flex justify-center">
         <div className="h-10 w-full mx-10 mt-[11.6px] flex">
           <div className="w-10 h-10 flex flex-col justify-center items-center">
             <WhiteDocument />
@@ -181,6 +198,8 @@ export default function MyPage() {
             <input
               type="text"
               placeholder="입력해 주세요."
+              value={intro}
+              onChange={onChangeIntroHandler}
               maxLength={80}
               className="pb-3 w-full bg-transparent text-center text-white placeholder:text-white border-b-[0.5px] border-[#D9D9D9] outline-none"
             />

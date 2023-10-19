@@ -19,7 +19,11 @@ export default function PostListPage() {
 
   const getPostList = async () => {
     try {
+
       const response = await axiosInstance.get("/api/posts", { params });
+
+      console.log(response);
+
       setPostList(response.data.content);
     } catch (error) {
       console.error("데이터 가져오기 오류:", error);
