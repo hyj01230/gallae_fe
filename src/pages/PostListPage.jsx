@@ -13,8 +13,8 @@ export default function PostListPage() {
   const [selectedCategory, setSelectedCategory] = useState("전체");
   const navigate = useNavigate();
   const params = {
-    page: "1",
-    size: "3",
+    page: "0",
+    size: "10",
   };
 
   const getPostList = async () => {
