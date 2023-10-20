@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { formatDateString } from "../../util/formatDate";
 
 export default function List({ schedule, handleClick }) {

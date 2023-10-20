@@ -1,7 +1,7 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { LeftArrow } from "../assets/Icon";
 import Layout from "../components/common/Layout";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { scheduleState } from "../store/atom";
 
@@ -19,9 +19,11 @@ const purposes = [
   "레저",
 ];
 
-export default function SchedulesInfoPage() {
+export default function EditInfo() {
   const navigate = useNavigate();
+
   const [schedule, setSchedule] = useRecoilState(scheduleState);
+
   const [post, setPost] = useState({
     title: null,
     contents: null,

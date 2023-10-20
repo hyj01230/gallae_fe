@@ -4,6 +4,12 @@ import { axiosInstance } from "./axiosInstance";
 // 게시글 상세 조회
 export const getDetailPost = async (postId) => {
   const response = await axiosInstance.get(`/api/posts/${postId}`);
+  return response.data;
+};
+
+// 게시글 수정
+export const updatePost = async (postId, data) => {
+  const response = await axiosInstance.put(`api/posts/${postId}`, data);
   return response;
 };
 
