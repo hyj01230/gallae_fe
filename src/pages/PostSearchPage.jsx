@@ -5,6 +5,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import SearchHeader from "../components/postSearch/SearchHeader";
 import SearchCategory from "../components/postSearch/SearchCategory";
 
+
+
 function highlightKeyword(text, keyword) {
   if (keyword && text) {
     const regex = new RegExp(`(${keyword})`, "gi");
@@ -39,16 +41,13 @@ function truncateText(text, maxLength) {
   return text;
 }
 
+
 export default function PostSearchPage() {
   const [keyword, setKeyword] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleCategorySelect = (selectedCategory) => {
-    setKeyword(selectedCategory);
-    handleSearch(selectedCategory);
-  };
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -59,6 +58,7 @@ export default function PostSearchPage() {
       handleSearch(searchKeyword);
     }
   }, [location.search]);
+
 
   const handleSearch = async (searchKeyword) => {
     try {
@@ -81,6 +81,45 @@ export default function PostSearchPage() {
       navigate(`/search?keyword=${encodeURIComponent(keyword)}`);
     }
   };
+
+  const handleCategorySelect = (selectedCategory) => {
+    setKeyword(selectedCategory);
+    navigate(`/search?keyword=${encodeURIComponent(selectedCategory)}`);
+  };
+
+  function highlightKeyword(text, keyword) {
+    if (keyword && text) {
+      const regex = new RegExp(`(${keyword})`, "gi");
+      const parts = text.split(regex);
+
+      return parts.map((part, index) =>
+        regex.test(part) ? (
+          <span key={index} style={{ color: "red" }}>
+            {part}
+          </span>
+        ) : (
+          <span key={index}>{part}</span>
+        )
+      );
+    } else {
+      return text;
+    }
+  }
+
+  function formatCreatedAt(createdAt) {
+    const date = new Date(createdAt);
+    const year = date.getFullYear().toString().slice(2);
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${year}.${month}.${day}`;
+  }
+
+  function truncateText(text, maxLength) {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + "...";
+    }
+    return text;
+  }
 
   return (
     <Layout>
@@ -127,6 +166,24 @@ export default function PostSearchPage() {
                       keyword
                     )}
                   </p>
+
+                  <div className="">
+                    {result && result.tagsList ? (
+                      result.tagsList.map((tag, index) => (
+                        <span
+                          key={index}
+                          className="inline-block bg-orange-100 text-gray-500 text-[10px] rounded-full px-2 py-1 m- cursor-pointer mb-2"
+                          onClick={() => handleTagClick(tag)}
+                        >
+                          {highlightKeyword(`#${tag}`, keyword)}
+                        </span>
+                      ))
+                    ) : (
+                      <p>Loading tags...</p>
+                    )}
+                  </div>
+
+
                 </div>
                 <div className="pb-4 px-4 flex justify-between">
                   <p className="text-[3px]">{result.nickName}</p>
