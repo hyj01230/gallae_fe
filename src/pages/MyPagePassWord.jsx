@@ -76,7 +76,6 @@ export default function MyPagePassWord() {
       const response = await axiosInstance.put(
         "/api/users/profile/update-password",
         {
-          updateProfileImg: null,
           currentPassword: currentPassword,
           updatePassword: checkUpdatePassword,
         }
@@ -91,6 +90,7 @@ export default function MyPagePassWord() {
       }
     } catch (error) {
       console.log("error :", error);
+      alert(error.response.data.msg);
     }
   };
 
@@ -148,7 +148,6 @@ export default function MyPagePassWord() {
             )}
         </div>
         <div>
-          <button className="bg-yellow-400">취소</button>
           <button onClick={onClickModifyHandler} className="bg-orange-400">
             저장
           </button>

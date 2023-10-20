@@ -13,6 +13,9 @@ import { useNavigate } from "react-router-dom";
 export default function MyPageLikeList() {
   // 페이지 이동
   const navigate = useNavigate();
+  const onClickLeftArrowHandler = () => {
+    navigate("/mypage");
+  };
   const oncilckLikePostHandler = () => {
     navigate("/api/posts/${postId}");
   };
@@ -64,7 +67,10 @@ export default function MyPageLikeList() {
 
   return (
     <Layout>
-      <div className="mt-[61px] ml-4  flex justify-start items-center">
+      <div
+        onClick={onClickLeftArrowHandler}
+        className="mt-[61px] ml-4  flex justify-start items-center cursor-pointer"
+      >
         <LeftArrow />
         <div className="ml-[18px] text-xl/8 font-semibold">좋아요 목록</div>
       </div>

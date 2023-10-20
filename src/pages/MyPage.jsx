@@ -8,7 +8,7 @@ import {
 } from "../assets/Icon";
 import { useNavigate } from "react-router-dom";
 import { WhiteDocument } from "../assets/Icon";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import defaultProfile from "../../public/img/defaultProfile.png";
 import { axiosInstance } from "../api/axiosInstance";
 
@@ -29,7 +29,7 @@ export default function MyPage() {
     navigate("/mypage/comment");
   };
 
-  // useState : 프로필 모달(열기/닫기)
+  // 프로필 모달 : 열기 / 닫기
   const [profileModal, setProfileModal] = useState(false);
   const onClickProfileOpenHandler = () => {
     setProfileModal(true);
@@ -38,21 +38,31 @@ export default function MyPage() {
     setProfileModal(false);
   };
 
-  // useState : 소개글 모달(열기/닫기)
-  const [introModal, setIntroModal] = useState(false);
-  const onClickIntroOpenHandler = () => {
-    setIntroModal(true);
+  // 소개글 모달 : 열기 / 닫기
+  const [aboutMeModal, setAboutMeModal] = useState(false);
+  const onClickAboutMeOpenHandler = () => {
+    setAboutMeModal(true);
+    console.log("aboutMe", aboutMe);
   };
-  const onClickIntroCloseHandler = () => {
-    setIntroModal(false);
+  const onClickAboutMeCloseHandler = () => {
+    setAboutMeModal(false);
   };
 
-  // useState : 소개글
-  const [intro, setIntro] = useState("");
+  // 소개글 : useState, onChange
+  const [aboutMe, setAboutMe] = useState({});
+  const onChangeAboutMeHandler = (e) => {
+    setAboutMe(e.target.value);
+  };
 
-  // onChange : 소개글
-  const onChangeIntroHandler = (e) => {
-    setIntro(e.target.value);
+  // 사진 업로드 : useRef, useState, uploadImageHandler
+  const inputRef = useRef(null);
+  const [uploadImage, setUploadImage] = useState(null); // 업로드할 이미지를 관리
+  const uploadImageHandler = (e) => {
+    const selectImage = e.target.files[0]; // 선택된 파일 가져오기
+    console.log(`선택된 파일 이름: ${selectImage.name}`);
+    console.log(`선택된 파일 크기: ${selectImage.size} bytes`);
+    setUploadImage(selectImage);
+    putUpdateProfileHandler(); // 사진 변경 PUT 시작!
   };
 
   // useState : get으로 가져온 마이페이지 데이터(getMyPageInfo)
@@ -64,6 +74,7 @@ export default function MyPage() {
       const response = await axiosInstance.get("/api/users/profile");
       console.log("마이정보 response :", response.data);
       setMyPageInfo(response.data);
+      setAboutMe(response.data.aboutMe);
     } catch (error) {
       console.log("error :", error);
     }
@@ -72,7 +83,67 @@ export default function MyPage() {
   // useEffect : 렌더링되면 실행!
   useEffect(() => {
     getMyPageInfo();
-  }, []);
+  }, [profileModal]); // 프로필 설정 후 모달이 닫히니까 사진이 바로 적용됨!
+
+  // PUT : 소개글 변경
+  const onClickSaveAboutMeHandler = async () => {
+    try {
+      const response = await axiosInstance.put(
+        "/api/users/profile/update-aboutMe",
+        {
+          aboutMe,
+        }
+      );
+      console.log("소개글", response);
+      alert(response.data.msg);
+      setAboutMeModal(false);
+      setMyPageInfo({ ...myPageInfo, aboutMe }); // 마이페이지 소개글에 바로 적용되게!
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
+  // PUT : 프로필 사진 - 기본으로 설정
+  const onClickDefaultProfileHandler = async () => {
+    try {
+      // 사진 업로드는 폼데이터로!!!!!!!!!
+      const formData = new FormData();
+      formData.append("file", defaultProfile);
+
+      const response = await axiosInstance.put(
+        "/api/users/profile/update-profileImg",
+        formData
+      );
+      console.log("기본프로필 설정", response);
+      alert(response.data.msg);
+      setProfileModal(false); // 모달닫기
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  // PUT : 프로필 사진 - 앨범에서 선택
+  const onClickSelectProfileHandler = () => {
+    inputRef.current.click();
+  };
+
+  const putUpdateProfileHandler = async () => {
+    try {
+      // 사진 업로드는 폼데이터로!!!!!!!!!
+      const formData = new FormData();
+      formData.append("file", uploadImage);
+
+      const response = await axiosInstance.put(
+        "/api/users/profile/update-profileImg",
+        formData
+      );
+      console.log("앨범사진으로 설정", response);
+      console.log("업로드된 사진", uploadImage);
+      setProfileModal(false); // 모달닫기
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   return (
     <Layout>
@@ -89,7 +160,17 @@ export default function MyPage() {
           </div>
         </div>
 
-        <div onClick={onClickProfileOpenHandler}>
+        <div
+          onClick={onClickProfileOpenHandler}
+          className="flex flex-col items-center"
+        >
+          <input
+            type="file"
+            accept="image/*"
+            onChange={uploadImageHandler} // 파일 선택 시 uploadImageHandler 함수가 실행
+            className="hidden"
+            ref={inputRef}
+          />
           <img
             className="mt-7 w-24 h-24 rounded-full mx-auto flex items-center justify-center cursor-pointer"
             src={myPageInfo.profileImg ? myPageInfo.profileImg : defaultProfile}
@@ -101,16 +182,22 @@ export default function MyPage() {
         </div>
 
         <div
-          onClick={onClickIntroOpenHandler}
+          onClick={onClickAboutMeOpenHandler}
           className="mt-5 w-full h-[94px] rounded-xl border border-[#F2F2F2] cursor-pointer"
         >
           <div className="mt-4 ml-4">
-            <div className="text-[14px] text-[#D9D9D9] font-medium leading-5">
-              아직 작성된 소개가 없어요.
-            </div>
-            <div className="text-[14px] text-[#D9D9D9] font-medium leading-5">
-              길게 눌러 자기소개를 입력해주세요.
-            </div>
+            {myPageInfo.aboutMe === null || myPageInfo.aboutMe === "" ? (
+              <div>
+                <div className="text-[14px] text-[#D9D9D9] font-medium leading-5">
+                  아직 작성된 소개가 없어요.
+                </div>
+                <div className="text-[14px] text-[#D9D9D9] font-medium leading-5">
+                  길게 눌러 자기소개를 입력해주세요.
+                </div>
+              </div>
+            ) : (
+              myPageInfo.aboutMe
+            )}
           </div>
         </div>
 
@@ -162,10 +249,16 @@ export default function MyPage() {
             <div className="mx-4 bg-[#F2F2F2] text-center h-[45px] flex items-center justify-center rounded-t-xl text-[#333333] text-[14px] leading-[100%] font-medium">
               프로필 사진 설정
             </div>
-            <div className="mx-4 bg-[#F2F2F2] border-[#666666] border-t-[0.5px] border-b-[0.5px] text-center h-14 flex items-center justify-center text-[#333333] text-[18px] leading-[100%] font-medium">
+            <div
+              onClick={onClickSelectProfileHandler}
+              className="mx-4 bg-[#F2F2F2] border-[#666666] border-t-[0.5px] border-b-[0.5px] text-center h-14 flex items-center justify-center text-[#333333] text-[18px] leading-[100%] font-medium cursor-pointer"
+            >
               앨범에서 사진 선택
             </div>
-            <div className="mx-4 bg-[#F2F2F2] text-center h-14 flex items-center justify-center rounded-b-xl text-[#333333] text-[18px] leading-[100%] font-medium">
+            <div
+              onClick={onClickDefaultProfileHandler}
+              className="mx-4 bg-[#F2F2F2] text-center h-14 flex items-center justify-center rounded-b-xl text-[#333333] text-[18px] leading-[100%] font-medium cursor-pointer"
+            >
               기본으로 설정
             </div>
             <div
@@ -178,11 +271,11 @@ export default function MyPage() {
         </div>
       )}
 
-      {introModal && (
+      {aboutMeModal && (
         <div className="bg-[#333333]/80 w-full h-full absolute top-0 left-0 flex flex-col items-center">
           <div className=" mt-[61px] w-full flex flex-row text-white">
             <div
-              onClick={onClickIntroCloseHandler}
+              onClick={onClickAboutMeCloseHandler}
               className="ml-4 text-base/normal font-normal flex items-center cursor-pointer"
             >
               취소
@@ -190,21 +283,22 @@ export default function MyPage() {
             <div className="mx-auto text-xl/5 font-medium flex items-center">
               소개글 수정
             </div>
-            <div className="mr-4 text-base/normal font-normal cursor-pointer">
+            <div
+              onClick={onClickSaveAboutMeHandler}
+              className="mr-4 text-base/normal font-normal cursor-pointer"
+            >
               확인
             </div>
           </div>
           <div className="w-full px-4 mt-[186px]">
-            <input
-              type="text"
-              placeholder="입력해 주세요."
-              value={intro}
-              onChange={onChangeIntroHandler}
+            <textarea
+              value={aboutMe}
+              onChange={onChangeAboutMeHandler}
               maxLength={80}
               className="pb-3 w-full bg-transparent text-center text-white placeholder:text-white border-b-[0.5px] border-[#D9D9D9] outline-none"
             />
           </div>
-          <div className="mt-2 text-[#D9D9D9] text-xs/5 font-normal">8/80</div>
+          <div className="mt-2 text-[#D9D9D9] text-xs/5 font-normal">0/80</div>
         </div>
       )}
     </Layout>

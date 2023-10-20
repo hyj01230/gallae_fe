@@ -36,11 +36,11 @@ export default function MyPageNickName() {
     }
   }, [nickName]);
 
-  // GET : 마이페이지 조회
+  // GET : 닉네임 가져오기
   const getMyPageInfo = async () => {
     try {
       const response = await axiosInstance.get("/api/users/profile");
-      console.log("마이정보 response :", response.data);
+      console.log("닉네임 response :", response.data);
       setNickName(response.data.nickName);
     } catch (error) {
       console.log("error :", error);
@@ -52,6 +52,20 @@ export default function MyPageNickName() {
   }, []);
 
   // PUT : 닉네임 변경
+  const onClickSaveNickNameHandler = async () => {
+    try {
+      const response = await axiosInstance.put(
+        "/api/users/profile/update-nickname",
+        {
+          updateNickName: nickName,
+        }
+      );
+      console.log("닉네임 변경", response);
+      alert(response.data.msg);
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
 
   return (
     <Layout>
@@ -75,30 +89,33 @@ export default function MyPageNickName() {
             <div className="my-2 text-red-600">{nickNameMessage}</div>
           )}
           <div>
-            <button className="bg-yellow-400">취소</button>
-            <button className="bg-orange-400">저장</button>
+            <button
+              onClick={onClickSaveNickNameHandler}
+              className="bg-orange-400"
+            >
+              저장
+            </button>
           </div>
         </div>
-
-        <div className="fixed bottom-0 max-w-3xl w-full h-[84px] bg-[#F2F2F2] flex justify-center">
-          <div className="h-10 w-full mx-10 mt-[11.6px] flex">
-            <div className="w-10 h-10 flex flex-col justify-center items-center">
-              <WhiteDocument />
-              <div className="mt-[5px] text-center text-[9px] text-[#888888] font-extrabold leading-[9px]">
-                일정
-              </div>
+      </div>
+      <div className="fixed bottom-0 max-w-3xl w-full h-[84px] bg-[#F2F2F2] flex justify-center">
+        <div className="h-10 w-full mx-10 mt-[11.6px] flex">
+          <div className="w-10 h-10 flex flex-col justify-center items-center">
+            <WhiteDocument />
+            <div className="mt-[5px] text-center text-[9px] text-[#888888] font-extrabold leading-[9px]">
+              일정
             </div>
-            <div className="mx-auto w-10 h-10 flex flex-col justify-center items-center">
-              <Community />
-              <div className="mt-[5px] text-center text-[9px] text-[#888888] font-extrabold leading-[9px]">
-                커뮤니티
-              </div>
+          </div>
+          <div className="mx-auto w-10 h-10 flex flex-col justify-center items-center">
+            <Community />
+            <div className="mt-[5px] text-center text-[9px] text-[#888888] font-extrabold leading-[9px]">
+              커뮤니티
             </div>
-            <div className="w-[45px] h-10 flex flex-col justify-center items-center">
-              <FillMypage />
-              <div className="mt-[5px] text-center text-[9px] text-[#888888] font-extrabold leading-[9px]">
-                마이페이지
-              </div>
+          </div>
+          <div className="w-[45px] h-10 flex flex-col justify-center items-center">
+            <FillMypage />
+            <div className="mt-[5px] text-center text-[9px] text-[#888888] font-extrabold leading-[9px]">
+              마이페이지
             </div>
           </div>
         </div>
