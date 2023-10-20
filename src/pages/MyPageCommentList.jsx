@@ -9,8 +9,15 @@ import {
 } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
 export default function MyPageCommentList() {
+  // 페이지 이동
+  const navigate = useNavigate();
+  const onClickLeftArrowHandler = () => {
+    navigate("/mypage");
+  };
+
   // const commentListData = [
   //   {
   //     commnetId: "1",
@@ -73,7 +80,10 @@ export default function MyPageCommentList() {
 
   return (
     <Layout>
-      <div className="mt-[61px] ml-4 flex justify-start items-center">
+      <div
+        onClick={onClickLeftArrowHandler}
+        className="mt-[61px] ml-4 flex justify-start items-center cursor-pointer"
+      >
         <LeftArrow />
         <div className="ml-[18px] text-xl/8 font-semibold">나의 댓글 내역</div>
       </div>
