@@ -78,7 +78,6 @@ export default function PostDetailsPage() {
       const commentsResponse = await axiosInstance.get(
         `/api/posts/${postId}/comments`
       );
-      setComments(commentsResponse.data.contents);
     };
     fetchComments();
   }, [postId]);
@@ -86,7 +85,7 @@ export default function PostDetailsPage() {
   const navigate = useNavigate();
 
   const handleTagClick = (tag) => {
-    // 선택한 태그를 URL의 쿼리 매개변수로 전달하고 검색 페이지로 이동
+    // 선택된 태그를 URL 파라미터로 전달하고 검색 페이지로 이동
     navigate(`/search?keyword=${tag}`);
   };
 
@@ -167,6 +166,7 @@ export default function PostDetailsPage() {
                 }))
               : []
           }
+          setComments={setComments}
         />
       </div>
     </Layout>

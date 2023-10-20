@@ -24,6 +24,8 @@ export const router = createBrowserRouter([
   { path: "/myschedules/details", element: <Page.SchedulesDetailPage /> },
   { path: "/mypage", element: <Page.MyPage /> },
   { path: "/mypage/modify", element: <Page.MypageModify /> },
+  { path: "/mypage/modify/nickname", element: <Page.MyPageNickName /> },
+  { path: "/mypage/modify/password", element: <Page.MyPagePassWord /> },
   { path: "/mypage/comment", element: <Page.MyPageCommentList /> },
   { path: "/mypage/like", element: <Page.MyPageLikeList /> },
 ]);

@@ -21,21 +21,27 @@ export default function SchedulesDetailPage() {
     date: "",
     tripDateId: "",
   });
+  const [scheduleDetail, setScheduleDetail] = useState([]);
+  console.log(scheduleDetail);
 
-  // API : 여행 날짜, 서브제목, 세부일정 Id 불러오기
+  // [API] 여행 날짜, 서브제목, 세부일정 Id 불러오기
   const { isLoading, error, data } = useQuery("schedulesDetail", () =>
     getTripDate(postId)
   );
 
   useEffect(() => {
     if (selectedDate.date === "") return;
-    const scheduleDetail = async () => {
+
+    const getScheduleData = async () => {
       const response = await getScheduleDetail(selectedDate.tripDateId);
-      return response;
+      setScheduleDetail(response.data.schedulesList);
     };
 
-    const res = scheduleDetail();
-    console.log(res);
+    getScheduleData();
+
+    // selectedDate.date가 빈 값이 아니라면
+    // selectedDate.tripDateId를 이용해 해당 날짜의 일정을 불러오는 api를 호출한다.
+    // api를 호출한 뒤 일정 데이터를 useState에 저장하고, 나열한다.
   }, [selectedDate]);
 
   if (isLoading) {
@@ -91,7 +97,10 @@ export default function SchedulesDetailPage() {
       </div>
 
       {/* 특정 날짜를 눌렀을 때, <List/>에 날짜에 해당하는 데이터가 보여야함 */}
-      {/* <List /> */}
+      {scheduleDetail.length >= 1 &&
+        scheduleDetail.map((schedule, index) => (
+          <List key={index} schedule={schedule} />
+        ))}
 
       {/* 세부 일정을 생성하기 위한 데이터를 전달해야함 tripDateId, subTitle, chosenDate*/}
       <div
@@ -102,6 +111,7 @@ export default function SchedulesDetailPage() {
               subTitle: data[0].subTitle,
               chosenDate: selectedDate.date,
               tripDateId: selectedDate.tripDateId,
+              postId,
             },
           })
         }

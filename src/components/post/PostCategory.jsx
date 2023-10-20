@@ -45,11 +45,11 @@ export default function PostCategory({ onCategorySelect }) {
         </div>
         <div
           className={`text-gray-500 ${
-            selectedCategory === "친구"
+            selectedCategory === "우정"
               ? "text-black cursor-pointer"
               : "cursor-pointer"
           }`}
-          onClick={() => handleCategoryClick("친구")}
+          onClick={() => handleCategoryClick("우정")}
         >
           친구
         </div>

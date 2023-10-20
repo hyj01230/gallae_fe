@@ -2,16 +2,16 @@ import Layout from "../components/common/Layout";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export default function SignUpCompletePage() {
+  // 페이지 이동
   const navigate = useNavigate();
-
   const onClickHomeBtnHandler = () => {
     navigate("/");
   };
-
   const onClickLoginHandler = () => {
     navigate("/login");
   };
 
+  // useLocation : 회원가입 페이지에서 닉네임 받아오기!
   const { state } = useLocation(); // useLocation() 함수에서 반환된 객체에서 구조 분해 할당을 사용하여 state 변수를 추출
   const nickName = state.nickName; // state 객체에서 nickName 속성을 변수 nickName에 할당
   console.log({ state });
@@ -39,7 +39,7 @@ export default function SignUpCompletePage() {
       </div>
 
       <div
-        className="absolute bottom-0 h-16 w-full bg-[#D9D9D9] text-white flex items-center justify-center cursor-pointer"
+        className="fixed bottom-0 max-w-3xl w-full h-16 bg-[#D9D9D9] text-white flex items-center justify-center cursor-pointer"
         onClick={onClickHomeBtnHandler}
       >
         홈화면 바로가기
