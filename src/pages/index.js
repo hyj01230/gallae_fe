@@ -14,6 +14,7 @@ import PostEditPage from "./PostEditPage";
 import SchedulesCreatePage from "./SchedulesCreatePage";
 import SchedulesDatePage from "./SchedulesDatePage";
 import SchedulesInfoPage from "./SchedulesInfoPage";
+import SchedulesEditInfoPage from "./SchedulesEditInfoPage";
 import SignUpAdminPage from "./SignUpAdminPage";
 import SignUpPage from "./SignUpPage";
 import SignUpCompletePage from "./SignUpCompletePage";
@@ -37,6 +38,7 @@ export default {
   SchedulesDatePage,
   SchedulesInfoPage,
   SchedulesDetailPage,
+  SchedulesEditInfoPage,
   SignUpAdminPage,
   SignUpCompletePage,
   SignUpPage,

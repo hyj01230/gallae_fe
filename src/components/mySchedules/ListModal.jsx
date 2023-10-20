@@ -5,28 +5,31 @@ import { deletePost } from "../../api";
 export default function ListModal({ scheduleData, handleClick }) {
   const navigate = useNavigate("");
   const queryClient = useQueryClient();
+  const {
+    chosenDateList,
+    postCategory,
+    postId,
+    subTitleList,
+    tagsList,
+    tripDateList,
+  } = scheduleData;
 
+  // 일정 더보기 클릭
   const handleScheduleClick = () => {
-    // 일정 더보기 클릭
-    // 더보기를 클릭하면 postId 전송
-    navigate("/myschedules/details", { state: scheduleData.postId });
+    navigate("/myschedules/details", { state: postId });
   };
 
   // 일정 삭제
-  const deletePostMutation = useMutation(
-    () => deletePost(scheduleData.postId),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("mySchedule");
-        handleClick();
-      },
-    }
-  );
+  const deletePostMutation = useMutation(() => deletePost(postId), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("mySchedule");
+      handleClick();
+    },
+  });
 
+  // 커뮤니티 공유 (글쓰기 페이지 이동)
   const handleShareClick = () => {
-    // 커뮤니티 공유
-    // 글쓰기 페이지 이동
-    navigate("/post/create", { state: scheduleData.postId });
+    navigate("/post/create", { state: scheduleData });
   };
 
   const handleShareKakaoClick = () => {
@@ -35,6 +38,10 @@ export default function ListModal({ scheduleData, handleClick }) {
 
   const handleEditClick = () => {
     // 이름 및 태그 수정하기
+    console.log(scheduleData);
+    navigate("/myschedule/edit/info", {
+      state: { postId, chosenDateList, subTitleList, tripDateList },
+    });
   };
 
   const handleEditDateClick = () => {
@@ -62,7 +69,7 @@ export default function ListModal({ scheduleData, handleClick }) {
           </button>
         </div>
         <div>
-          <button className="ml-8 my-[19px] text-lg">
+          <button className="ml-8 my-[19px] text-lg" onClick={handleEditClick}>
             이름 및 태그 수정하기
           </button>
         </div>

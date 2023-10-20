@@ -50,10 +50,9 @@ export default function SchedulesDatePage() {
     }));
 
     setSchedule({ ...schedule, tripDateList });
-    console.log(schedule);
     const response = await createPost(schedule);
     console.log(response);
-    navigate("/myschedules/details");
+    navigate("/myschedules/details", { state: response.data.postId });
   };
 
   return (
