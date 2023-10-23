@@ -78,6 +78,9 @@ export default function MyPageCommentList() {
   //   getMyRepliesList();
   // }, []);
 
+  //무한 스크롤
+  // const observer = new IntersectionObserver(callback { threshold: 0.7 });
+
   return (
     <Layout>
       <div

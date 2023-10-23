@@ -70,12 +70,12 @@ export default function SignUpPage() {
       setPasswordMessage("");
     } else if (password.length < 8) {
       setPasswordMessage("비밀번호는 8글자 이상이어야 합니다.");
-    } else if (!/^[a-zA-Z0-9!@#$%^&*]*$/.test(password)) {
-      setPasswordMessage(
-        "대/소문자, 숫자, 특수문자(!@#$%^&*)만 사용 가능합니다."
-      );
-      // } else if (!/^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])/.test(password)) {
-      //   setPasswordMessage("영어 소문자, 숫자, 특수문자를 모두 포함해야 합니다.");
+      // } else if (!/^[a-zA-Z0-9!@#$%^&*]*$/.test(password)) {
+      //   setPasswordMessage(
+      //     "대/소문자, 숫자, 특수문자(!@#$%^&*)만 사용 가능합니다."
+      //   );
+    } else if (!/^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])/.test(password)) {
+      setPasswordMessage("영어 소문자, 숫자, 특수문자를 모두 포함해야 합니다.");
     } else {
       setPasswordMessage(true);
     }
@@ -248,8 +248,8 @@ export default function SignUpPage() {
           <div className="text-sm/normal font-semibold">비밀번호</div>
           <input
             type="password"
-            placeholder="8~15자(대/소문자, 숫자, 특수문자(!@#$%^&*)만 사용 가능)"
-            // placeholder="비밀번호 입력(문자, 숫자, 특수문자 포함 8~15자)"
+            // placeholder="8~15자(대/소문자, 숫자, 특수문자(!@#$%^&*)만 사용 가능)"
+            placeholder="비밀번호 입력(문자, 숫자, 특수문자 포함 8~15자)"
             maxLength={15}
             value={password}
             onChange={onChangePasswordHandler}

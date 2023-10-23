@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
+import { Logo } from "../assets/Icon";
 
 export default function LoginPage() {
   // 페이지 이동
@@ -59,7 +60,11 @@ export default function LoginPage() {
           건너뛰기
         </div>
 
-        <div className="mt-[113px] flex justify-center items-center flex-col">
+        <div className="mt-[170px] w-[120px] h-[120px] mx-auto flex items-center justify-center">
+          <Logo />
+        </div>
+
+        <div className="mt-3 flex justify-center items-center flex-col">
           <div className="text-base/normal font-normal">
             우리 여행 갈래길잡이
           </div>
@@ -68,11 +73,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="mt-8 bg-[#EBEBEB] w-[120px] h-[120px] mx-auto flex items-center justify-center">
-          로고
-        </div>
-
-        <div className="mt-6">
+        <div className="mt-[65px]">
           <input
             type="text"
             value={email}
@@ -92,16 +93,16 @@ export default function LoginPage() {
         <div>
           <div
             onClick={onClickLoginHandler}
-            className="rounded-lg mt-4 w-full h-[50px] bg-[#EBEBEB] flex justify-center items-center text-[#666] text-base font-semibold cursor-pointer"
+            className="mt-4 rounded-lg w-full h-[50px] bg-[#FF9900] flex justify-center items-center text-[#FFFFFF] text-base/4 font-semibold cursor-pointer"
           >
-            로그인
+            로그인하기
           </div>
         </div>
 
         <div>
           <div
             onClick={onClickSingUpHandler}
-            className="mt-4 rounded-lg w-full h-[50px] bg-[#F8DF00] flex justify-center items-center text-[#333333] text-base/[30px] font-medium cursor-pointer"
+            className="mt-2 rounded-lg w-full h-[50px] bg-[#F8DF00] flex justify-center items-center text-[#333333] text-base/[30px] font-medium cursor-pointer"
           >
             <img className="w-12 h-12" src="public/img/kakao.png"></img>
             카카오톡으로 시작하기
