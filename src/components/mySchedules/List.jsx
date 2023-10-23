@@ -1,3 +1,4 @@
+import { ThreeDot_horizen } from "../../assets/Icon";
 import { formatDateString } from "../../util/formatDate";
 
 export default function List({ schedule, handleClick }) {
@@ -27,11 +28,13 @@ export default function List({ schedule, handleClick }) {
     }
   };
   return (
-    <div
-      className="border border-[#D9D9D9] mx-4 mb-3 p-3 rounded-xl cursor-pointer"
-      onClick={handleClick}
-    >
-      <div className="text-xl	font-semibold">{schedule.subTitleList[0]}</div>
+    <div className="border border-[#D9D9D9] mx-4 mb-3 p-3 rounded-xl">
+      <div className="flex justify-between items-center mr-[10px] text-xl	font-semibold">
+        {schedule.subTitle}
+        <button className="px-[6px] py-[14px]" onClick={handleClick}>
+          <ThreeDot_horizen />
+        </button>
+      </div>
       {renderDateRange()}
       <div className="flex gap-1 mt-6">
         {schedule.tagsList.map((tag, index) => (

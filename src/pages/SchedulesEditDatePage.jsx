@@ -3,18 +3,14 @@ import moment from "moment";
 import Calendar from "react-calendar";
 import Layout from "../components/common/Layout";
 import { LeftArrow } from "../assets/Icon";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { scheduleState } from "../store/atom";
-import { useRecoilState } from "recoil";
-import { createPost } from "../api";
-import { QueryClient, useMutation } from "react-query";
+import { useLocation, useNavigate } from "react-router-dom";
+import { updateTripDate } from "../api";
 
-export default function SchedulesDatePage() {
-  const queryClient = new QueryClient();
+export default function SchedulesEditDatePage() {
   const navigate = useNavigate();
-  const [tripDateRange, setTripDateRange] = useState(null);
-  const [schedule, setSchedule] = useRecoilState(scheduleState);
+  const { tripDateIdList, chosenDateList } = useLocation().state;
+  const [tripDateRange, setTripDateRange] = useState(chosenDateList);
 
   const getDateRange = (startDate, endDate) => {
     let dateArray = [];
@@ -33,7 +29,10 @@ export default function SchedulesDatePage() {
       currentDate.setDate(currentDate.getDate() + 1);
     }
 
-    setSchedule({ ...schedule, tripDateList: dateArray });
+    if (dateArray.length > tripDateIdList.length) {
+      alert("날짜 범위가 넘 큼");
+      return;
+    }
     setTripDateRange(dateArray);
   };
 
@@ -43,18 +42,12 @@ export default function SchedulesDatePage() {
     getDateRange(startDate, endDate);
   };
 
-  const createScheduleMutation = useMutation(() => createPost(schedule), {
-    onSuccess: (response) => {
-      queryClient.invalidateQueries("mySchedule");
-      navigate("/myschedules/details", {
-        state: {
-          postId: response.data.postId,
-          subTitle: schedule.subTitle,
-          location: schedule.location,
-        },
-      });
-    },
-  });
+  const handleSubmitClick = async () => {
+    for (let i = 0; i < tripDateIdList.length; i++) {
+      await updateTripDate(tripDateIdList[i], tripDateRange[i]);
+    }
+    navigate("/");
+  };
 
   return (
     <Layout>
@@ -70,24 +63,15 @@ export default function SchedulesDatePage() {
         onChange={changeDate}
         selectRange={true}
       />
-      <div className="mt-8">
-        <span
-          className={`px-4 py-2 rounded-[40px] border ${
-            tripDateRange
-              ? " border-[#FF9900] text-[#FF9900]"
-              : "border-[#D9D9D9] text-[#D9D9D9]"
-          }`}
-        >
-          아직 날짜가 정해지지 않았어요
-        </span>
-      </div>
+      <div>시작일자 : {tripDateRange[0].chosenDate}</div>
+      <div>끝일자 : {tripDateRange[tripDateRange.length - 1].chosenDate}</div>
 
       <div className="max-w-3xl	flex fixed bottom-0">
         <button
           className="w-screen h-14 bg-gray-300 text-white"
-          onClick={() => createScheduleMutation.mutate()}
+          onClick={handleSubmitClick}
         >
-          다음 단계로
+          날짜 변경하기
         </button>
       </div>
     </Layout>

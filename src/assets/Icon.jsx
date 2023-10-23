@@ -610,3 +610,51 @@ export const XIcon = () => {
     </svg>
   );
 };
+
+export const Move = () => {
+  return (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M13 22L13 10L10 13.2" stroke="#999999" strokeLinecap="round" />
+      <path d="M21 10V22L24 18.8" stroke="#999999" strokeLinecap="round" />
+    </svg>
+  );
+};
+
+export const Search = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+    >
+      <path
+        d="M7.80612 2.5C9.21339 2.5 10.563 3.05904 11.5581 4.05413C12.5532 5.04922 13.1122 6.39885 13.1122 7.80612C13.1122 9.12041 12.6306 10.3286 11.8388 11.2592L12.0592 11.4796H12.7041L16.7857 15.5612L15.5612 16.7857L11.4796 12.7041V12.0592L11.2592 11.8388C10.3286 12.6306 9.12041 13.1122 7.80612 13.1122C6.39885 13.1122 5.04922 12.5532 4.05413 11.5581C3.05904 10.563 2.5 9.21339 2.5 7.80612C2.5 6.39885 3.05904 5.04922 4.05413 4.05413C5.04922 3.05904 6.39885 2.5 7.80612 2.5ZM7.80612 4.13265C5.76531 4.13265 4.13265 5.76531 4.13265 7.80612C4.13265 9.84694 5.76531 11.4796 7.80612 11.4796C9.84694 11.4796 11.4796 9.84694 11.4796 7.80612C11.4796 5.76531 9.84694 4.13265 7.80612 4.13265Z"
+        fill="#999999"
+      />
+    </svg>
+  );
+};
+
+export const ThreeDot_horizen = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="4"
+      viewBox="0 0 20 4"
+      fill="none"
+    >
+      <circle cx="18" cy="2" r="2" transform="rotate(90 18 2)" fill="#999999" />
+      <circle cx="10" cy="2" r="2" transform="rotate(90 10 2)" fill="#999999" />
+      <circle cx="2" cy="2" r="2" transform="rotate(90 2 2)" fill="#999999" />
+    </svg>
+  );
+};

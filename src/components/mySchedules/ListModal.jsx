@@ -6,17 +6,19 @@ export default function ListModal({ scheduleData, handleClick }) {
   const navigate = useNavigate("");
   const queryClient = useQueryClient();
   const {
-    chosenDateList,
-    postCategory,
     postId,
-    subTitleList,
+    title,
+    contents,
+    postCategory,
     tagsList,
-    tripDateList,
+    subTitle,
+    chosenDateList,
+    tripDateIdList,
   } = scheduleData;
 
   // 일정 더보기 클릭
   const handleScheduleClick = () => {
-    navigate("/myschedules/details", { state: postId });
+    navigate("/myschedules/details", { state: { postId, subTitle } });
   };
 
   // 일정 삭제
@@ -38,14 +40,16 @@ export default function ListModal({ scheduleData, handleClick }) {
 
   const handleEditClick = () => {
     // 이름 및 태그 수정하기
-    console.log(scheduleData);
-    navigate("/myschedule/edit/info", {
-      state: { postId, chosenDateList, subTitleList, tripDateList },
+    navigate("/myschedules/edit/info", {
+      state: { postId, title, contents, postCategory, tagsList, subTitle },
     });
   };
 
   const handleEditDateClick = () => {
     // 날짜 수정하기
+    navigate("/myschedules/edit/date", {
+      state: { tripDateIdList, chosenDateList },
+    });
   };
 
   return (
@@ -60,7 +64,7 @@ export default function ListModal({ scheduleData, handleClick }) {
         </div>
         <div onClick={handleShareClick}>
           <button className="ml-8 my-[19px] text-lg">
-            커뮤니티에 공유하기
+            {title ? "게시글 수정하기" : "커뮤니티에 공유하기"}
           </button>
         </div>
         <div>
@@ -68,12 +72,12 @@ export default function ListModal({ scheduleData, handleClick }) {
             카카오톡으로 공유하기
           </button>
         </div>
-        <div>
-          <button className="ml-8 my-[19px] text-lg" onClick={handleEditClick}>
+        <div onClick={handleEditClick}>
+          <button className="ml-8 my-[19px] text-lg">
             이름 및 태그 수정하기
           </button>
         </div>
-        <div>
+        <div onClick={handleEditDateClick}>
           <button className="ml-8 my-[19px] text-lg">날짜 수정하기</button>
         </div>
       </div>

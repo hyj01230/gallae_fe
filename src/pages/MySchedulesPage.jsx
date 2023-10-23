@@ -7,11 +7,11 @@ import {
   Plus,
   SpeechBubble,
 } from "../assets/Icon";
-import Layout from "../components/common/Layout";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import { getMySchedules } from "../api";
+import Layout from "../components/common/Layout";
 import List from "../components/mySchedules/List";
-import { useState } from "react";
 import ListModal from "../components/mySchedules/ListModal";
 
 export default function MySchedulesPage() {
@@ -63,7 +63,7 @@ export default function MySchedulesPage() {
         <div className="flex flex-col justify-center mx-auto mt-10">
           <p className="text-center">아직 나의 여행 갈래가 비어있어요.</p>
           <p className="text-center	font-semibold">
-            + 버튼을 눌러 일정을 생성해보아요.
+            상단의 + 를 눌러 일정을 생성해보아요.
           </p>
         </div>
       </>

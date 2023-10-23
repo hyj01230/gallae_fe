@@ -18,6 +18,7 @@
     "react-calendar": "^4.6.0",
     "react-contenteditable": "^3.3.7",
     "react-dom": "^18.2.0",
+    "react-kakao-maps-sdk": "^1.1.21",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.16.0",
     "recoil": "^0.7.7",

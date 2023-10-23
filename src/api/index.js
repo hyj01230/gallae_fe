@@ -41,6 +41,14 @@ export const createScheduleDetail = async (tripDateId, data) => {
   return response;
 };
 
+export const updateScheduleDetail = async (schedulesId, data) => {
+  const response = await axiosInstance.put(
+    `/api/schedules/${schedulesId}`,
+    data
+  );
+  return response;
+};
+
 // <---------- 여행 날짜 관련 API ---------->
 // 게시글별 여행 날짜 조회
 export const getTripDate = async (postId) => {
@@ -51,5 +59,11 @@ export const getTripDate = async (postId) => {
 // 세부(단일)일정 여행 날짜 조회
 export const getScheduleDetail = async (tripDatedId) => {
   const response = await axiosInstance.get(`/api/tripDate/${tripDatedId}`);
+  return response;
+};
+
+// 여행날짜 수정
+export const updateTripDate = async (tripDateId, data) => {
+  const response = await axiosInstance.put(`/api/tripDate/${tripDateId}`, data);
   return response;
 };

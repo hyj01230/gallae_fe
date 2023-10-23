@@ -15,12 +15,18 @@ export const router = createBrowserRouter([
   },
   { path: "/post/create", element: <Page.PostCreatePage /> },
   { path: "/post/edit", element: <Page.PostEditPage /> },
+  { path: "/myschedules/account", element: <Page.MySchedulesAccountPage /> },
   { path: "/myschedules/create/info", element: <Page.SchedulesInfoPage /> },
   { path: "/myschedules/create/date", element: <Page.SchedulesDatePage /> },
   {
     path: "/myschedules/create/schedule",
     element: <Page.SchedulesCreatePage />,
   },
+  {
+    path: "/myschedules/edit/schedule",
+    element: <Page.SchedulesEditPage />,
+  },
+  { path: "/myschedules/edit/date", element: <Page.SchedulesEditDatePage /> },
   { path: "/myschedules/edit/info", element: <Page.SchedulesEditInfoPage /> },
   { path: "/myschedules/details", element: <Page.SchedulesDetailPage /> },
   { path: "/mypage", element: <Page.MyPage /> },

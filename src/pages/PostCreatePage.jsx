@@ -7,19 +7,7 @@ import { getDetailPost, updatePost } from "../api";
 import ContentEditable from "react-contenteditable";
 import List from "../components/mySchedules/List";
 import { useMutation } from "react-query";
-
-const categories = ["가족", "친구", "연인", "친척", "반려동물", "단체"];
-const purposes = [
-  "휴식",
-  "프리미엄",
-  "체험",
-  "식도락",
-  "자연경관",
-  "명소",
-  "스포츠",
-  "오락",
-  "레저",
-];
+import { CATEGORIES, TAGS } from "../constants/mySchedule";
 
 export default function PostCreatePage() {
   const ref = useRef();
@@ -31,11 +19,18 @@ export default function PostCreatePage() {
   const [selectedPostId, setSelectedPostId] = useState(data.postId);
   const [postData, setPostData] = useState({ contents: "", tagsList: [] });
   const [listData, setListData] = useState(data);
+  const [mode, setMode] = useState("");
 
   useEffect(() => {
     const getData = async () => {
       const response = await getDetailPost(selectedPostId);
-      setPostData({ ...response, contents: "" });
+
+      if (data.title.length > 0) {
+        setMode("edit");
+        setPostData({ ...response, contents: data.contents });
+      } else {
+        setPostData({ ...response, contents: "" });
+      }
     };
 
     getData();
@@ -76,6 +71,7 @@ export default function PostCreatePage() {
       updatePost(selectedPostId, {
         title: postData.title,
         contents: postData.contents,
+        subTitle: data.subTitle,
         postCategory: postData.postCategory,
         tagsList: postData.tagsList,
       }),
@@ -88,7 +84,9 @@ export default function PostCreatePage() {
         <div className="mr-2">
           <LeftArrow />
         </div>
-        <div className="h-14 flex items-center text-xl">글쓰기</div>
+        <div className="h-14 flex items-center text-xl">
+          {mode === "edit" ? "수정하기" : "글쓰기"}
+        </div>
       </div>
 
       <div
@@ -103,7 +101,7 @@ export default function PostCreatePage() {
       </div>
       {isCategoryDrop && (
         <div className="pl-10 cursor-pointer">
-          {categories.map((category, index) => (
+          {CATEGORIES.map((category, index) => (
             <div key={index} className="py-5" onClick={handleCategoryClick}>
               {category}
             </div>
@@ -126,13 +124,13 @@ export default function PostCreatePage() {
 
       {isPurposeDrop && (
         <div className="grid grid-cols-3 divide-x divide-y border-b">
-          {purposes.map((purpose, index) => (
+          {TAGS.map((tag, index) => (
             <div
               key={index}
               className="h-10 flex justify-center items-center cursor-pointer text-sm"
               onClick={handlePurposeClick}
             >
-              {purpose}
+              {tag}
             </div>
           ))}
         </div>
@@ -141,6 +139,7 @@ export default function PostCreatePage() {
       <div className="border-b border-gray-300 pl-10">
         <input
           className="w-full h-12 flex items-center gap-x-4 text-base text-black cursor-pointer select-none outline-none"
+          defaultValue={data.title && data.title}
           placeholder="제목을 입력하세요"
           onChange={(e) =>
             setPostData((data) => ({ ...data, title: e.target.value }))
@@ -165,6 +164,7 @@ export default function PostCreatePage() {
       <ContentEditable
         className="p-2 outline-none"
         innerRef={ref}
+        // html={data.title ? data.contents : postData.contents} // innerHTML of the editable div
         html={postData.contents} // innerHTML of the editable div
         disabled={false} // use true to disable editing
         onChange={(e) =>
@@ -179,7 +179,7 @@ export default function PostCreatePage() {
         onClick={() => createPostMutation.mutate()}
       >
         <button className="w-screen h-14 bg-gray-300 text-white">
-          게시하기
+          {mode === "edit" ? "수정하기" : "게시하기"}
         </button>
       </div>
 
