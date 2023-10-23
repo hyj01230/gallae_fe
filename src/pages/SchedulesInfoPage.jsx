@@ -1,36 +1,26 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { LeftArrow } from "../assets/Icon";
+import { useNavigate } from "react-router-dom";
+import { LeftArrow, Search } from "../assets/Icon";
 import Layout from "../components/common/Layout";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { scheduleState } from "../store/atom";
-
-const categorys = ["가족", "친구", "연인", "친척", "반려동물", "단체"];
-
-const purposes = [
-  "휴식",
-  "프리미엄",
-  "체험",
-  "식도락",
-  "자연경관",
-  "명소",
-  "스포츠",
-  "오락",
-  "레저",
-];
+import { CATEGORIES, TAGS } from "../constants/mySchedule";
+import PlaceList from "../components/schedulesInfo/PlaceList";
 
 export default function SchedulesInfoPage() {
   const navigate = useNavigate();
   const [schedule, setSchedule] = useRecoilState(scheduleState);
+  const [isModal, setisModal] = useState(false);
   const [post, setPost] = useState({
+    location: null,
     title: null,
     contents: null,
     postCategory: "",
+    subTitle: "",
     tagsList: [],
     tripDateList: [
       {
         chosenDate: "",
-        subTitle: "",
       },
     ],
   });
@@ -73,9 +63,28 @@ export default function SchedulesInfoPage() {
       </div>
 
       <div className="my-7 px-4">
+        <div className="font-semibold mb-4 select-none">
+          어디로 여행을 떠나시나요?
+        </div>
+        <div className="flex border border-[#d1d5db] rounded-lg divide-x">
+          <div className="text-sm px-12 py-3">국내</div>
+          <div className="flex flex-1 gap-2 items-center text-sm pl-[22px] cursor-pointer">
+            <Search />
+            <button onClick={() => setisModal(true)}>
+              {post.location ? post.location : "여행지 검색"}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {isModal && (
+        <PlaceList handleClick={() => setisModal(false)} setPost={setPost} />
+      )}
+
+      <div className="mb-7 px-4">
         <div className="font-semibold mb-4 select-none">누구와 떠나시나요?</div>
         <div className="grid grid-cols-3">
-          {categorys.map((category, index) => (
+          {CATEGORIES.map((category, index) => (
             <div
               key={index}
               className="h-10 flex justify-center items-center border border-[#d1d5db] cursor-pointer text-sm"
@@ -94,13 +103,13 @@ export default function SchedulesInfoPage() {
           여행의 목적은 어떻게 되시나요?(최대 3개 선택)
         </div>
         <div className="grid grid-cols-3">
-          {purposes.map((purpose, index) => (
+          {TAGS.map((tag, index) => (
             <div
               key={index}
               className="h-10 flex justify-center items-center border border-[#d1d5db] cursor-pointer text-sm"
               onClick={handleTagsClick}
             >
-              {purpose}
+              {tag}
             </div>
           ))}
         </div>
@@ -116,7 +125,7 @@ export default function SchedulesInfoPage() {
             onChange={(event) =>
               setPost((post) => ({
                 ...post,
-                tripDateList: [{ subTitle: event.target.value }],
+                subTitle: event.target.value,
               }))
             }
           />

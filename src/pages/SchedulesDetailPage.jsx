@@ -1,52 +1,51 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  DownArrow,
-  Hamburger,
-  LeftArrow,
-  Plus,
-  Share,
-  PlusWithCircle,
-} from "../assets/Icon";
+import { Card, LeftArrow, Plus, Share, PlusWithCircle } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import List from "../components/schedulesDetail/List";
 import { useQuery } from "react-query";
 import { getScheduleDetail, getTripDate } from "../api";
 import { useEffect, useState } from "react";
 import BottomNav from "../components/mySchedules/BottomNav";
+import KaKaoMap from "../components/schedulesDetail/KaKaoMap";
+import SearchMap from "../components/schedulesDetail/SearchMap";
+import TestKakaoMap from "../components/schedulesDetail/TestKakaoMap";
 
 export default function SchedulesDetailPage() {
   const navigate = useNavigate();
-  const postId = useLocation().state; // 새로 고침 해도 유지됨
+  const { postId, subTitle, location } = useLocation().state;
   const [selectedDate, setSelectedDate] = useState({
     date: "",
     tripDateId: "",
   });
   const [scheduleDetail, setScheduleDetail] = useState([]);
-  console.log(scheduleDetail);
 
-  // [API] 여행 날짜, 서브제목, 세부일정 Id 불러오기
   const { isLoading, error, data } = useQuery("schedulesDetail", () =>
     getTripDate(postId)
   );
 
   useEffect(() => {
     if (selectedDate.date === "") return;
-
     const getScheduleData = async () => {
       const response = await getScheduleDetail(selectedDate.tripDateId);
       setScheduleDetail(response.data.schedulesList);
     };
-
     getScheduleData();
-
-    // selectedDate.date가 빈 값이 아니라면
-    // selectedDate.tripDateId를 이용해 해당 날짜의 일정을 불러오는 api를 호출한다.
-    // api를 호출한 뒤 일정 데이터를 useState에 저장하고, 나열한다.
   }, [selectedDate]);
 
   if (isLoading) {
     return <div>로딩중</div>;
   }
+
+  const handleAccountClick = () => {
+    const accountList = data.map((value) => ({
+      chosenDate: value.chosenDate,
+      schedules: [...value.schedulesList],
+    }));
+
+    navigate("/myschedules/account", {
+      state: { accountList, postId, subTitle },
+    });
+  };
 
   return (
     <Layout>
@@ -62,20 +61,27 @@ export default function SchedulesDetailPage() {
         </div>
 
         <div className="flex items-center gap-1">
-          <Plus />
-          <Share />
-          <Hamburger />
+          <button>
+            <Plus />
+          </button>
+          <button>
+            <Share />
+          </button>
+          <button onClick={handleAccountClick}>
+            <Card />
+          </button>
         </div>
       </div>
 
       <div className="flex justify-between items-center h-10 mt-4 mx-4 p-4 border border-[#EBEBEB] rounded-lg">
-        <div>{data[0].subTitle}</div>
-        <div>
-          <DownArrow />
-        </div>
+        <div>{subTitle}</div>
       </div>
 
-      <div className="w-full h-36">{/* <Map /> */}</div>
+      <div className="w-full h-36">
+        {/* <KaKaoMap /> */}
+        <SearchMap keyword={location} />
+        {/* <TestKakaoMap /> */}
+      </div>
 
       <div className="flex justify-between mx-4 mt-4 border border-[#EBEBEB] rounded-xl">
         {data.map((date, index) => (
@@ -96,22 +102,34 @@ export default function SchedulesDetailPage() {
         ))}
       </div>
 
-      {/* 특정 날짜를 눌렀을 때, <List/>에 날짜에 해당하는 데이터가 보여야함 */}
       {scheduleDetail.length >= 1 &&
         scheduleDetail.map((schedule, index) => (
-          <List key={index} schedule={schedule} />
+          <List
+            key={index}
+            schedule={schedule}
+            handleClick={() =>
+              navigate("/myschedules/edit/schedule", {
+                state: {
+                  ...schedule,
+                  subTitle: data.subTitle,
+                  chosenDate: selectedDate.date,
+                  postId,
+                  subTitle,
+                },
+              })
+            }
+          />
         ))}
 
-      {/* 세부 일정을 생성하기 위한 데이터를 전달해야함 tripDateId, subTitle, chosenDate*/}
       <div
         className="flex justify-center items-center gap-3 mt-4 text-[#666] cursor-pointer"
         onClick={() =>
           navigate("/myschedules/create/schedule", {
             state: {
-              subTitle: data[0].subTitle,
+              postId,
+              subTitle: subTitle,
               chosenDate: selectedDate.date,
               tripDateId: selectedDate.tripDateId,
-              postId,
             },
           })
         }
