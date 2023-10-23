@@ -38,10 +38,10 @@ export default function MyPagePassWord() {
     if (updatePassword.length === 0) {
       setPasswordMessage("");
     } else if (updatePassword.length < 8) {
-      setPasswordMessage("비밀번호는 8글자 이상이어야 합니다.");
+      setPasswordMessage("• 비밀번호는 8글자 이상이어야 합니다.");
     } else if (!/^[a-zA-Z0-9!@#$%^&*]*$/.test(updatePassword)) {
       setPasswordMessage(
-        "대/소문자, 숫자, 특수문자(!@#$%^&*)만 사용 가능합니다."
+        "• 대/소문자, 숫자, 특수문자(!@#$%^&*)만 사용 가능합니다."
       );
       // } else if (!/^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])/.test(updatePassword)) {
       //   setPasswordMessage("영어 소문자, 숫자, 특수문자를 모두 포함해야 합니다.");
@@ -58,14 +58,14 @@ export default function MyPagePassWord() {
     if (checkUpdatePassword.length === 0) {
       setCheckPassWordMessage("");
     } else if (updatePassword !== checkUpdatePassword) {
-      setCheckPassWordMessage("비밀번호가 일치하지 않습니다.");
+      setCheckPassWordMessage("• 비밀번호가 일치하지 않습니다.");
     } else if (updatePassword === checkUpdatePassword) {
       setCheckPassWordMessage(true);
     }
   }, [updatePassword, checkUpdatePassword]);
 
   // PUT : 비번 변경
-  const onClickModifyHandler = async () => {
+  const onClickModifyNickNameHandler = async () => {
     // 에러메시지 있는지 확인
     if (updatePasswordMessage !== true || checkUpdatePassWordMessage !== true) {
       alert("필수 정보를 올바르게 입력하세요.");
@@ -102,55 +102,60 @@ export default function MyPagePassWord() {
             <LeftArrow />
           </div>
           <div className="ml-4 text-xl/normal font-semibold">비밀번호 변경</div>
+          <div
+            onClick={onClickModifyNickNameHandler}
+            className="ml-auto text-[#D9D9D9] text-xl/8 font-medium cursor-pointer"
+          >
+            변경
+          </div>
         </div>
 
-        <div className="mt-4 flex flex-col">
-          <div>비밀번호 변경</div>
-          <div>8~15자(대/소문자, 숫자, 특수문자(!@#$%^&*)만 사용 가능)</div>
+        <input
+          type="password"
+          placeholder="현재 비밀번호"
+          maxLength={15}
+          value={currentPassword}
+          onChange={onChangeCurrentPasswordHandler}
+          className="mt-[30px] pb-3 w-full outline-none flex items-center border-b border-b-[#D9D9D9] placeholder:text-lg/5 placeholder:font-medium"
+        />
+
+        <input
+          type="password"
+          placeholder="새 비밀번호"
+          maxLength={15}
+          value={updatePassword}
+          onChange={onChangeUpdatePasswordHandler}
+          className="mt-5 pb-3 w-full outline-none flex items-center border-b border-b-[#D9D9D9] placeholder:text-lg/5 placeholder:font-medium"
+        />
+
+        {updatePasswordMessage !== true && updatePasswordMessage && (
+          <div className="mt-1 text-[#FF9900] text-xs/5 font-medium">
+            {updatePasswordMessage}
+          </div>
+        )}
+
+        <input
+          type="password"
+          placeholder="새 비밀번호 확인"
+          maxLength={15}
+          value={checkUpdatePassword}
+          onChange={onChangeCheckUpdatePasswordHandler}
+          className="mt-5 pb-3 w-full outline-none flex items-center border-b border-b-[#D9D9D9] placeholder:text-lg/5 placeholder:font-medium"
+        />
+
+        {checkUpdatePassWordMessage !== true && checkUpdatePassWordMessage && (
+          <div className="mt-1 text-[#FF9900] text-xs/5 font-medium">
+            {checkUpdatePassWordMessage}
+          </div>
+        )}
+
+        <div className="mt-5 text-[#FF9900] text-xs/5 font-medium">
+          • 영문, 숫자, 특수문자(!@#$%^&*) 포함 8자~15자를 입력해주세요
         </div>
-        <div className="mt-4 flex flex-row">
-          <div>현재 비밀번호</div>
-          <input
-            type="password"
-            maxLength={15}
-            value={currentPassword}
-            onChange={onChangeCurrentPasswordHandler}
-            className="border border-black"
-          />
-        </div>
-        <div className="mt-4 flex flex-row">
-          <div>변경 비밀번호</div>
-          <input
-            type="password"
-            maxLength={15}
-            value={updatePassword}
-            onChange={onChangeUpdatePasswordHandler}
-            className="border border-black"
-          />
-          {updatePasswordMessage !== true && updatePasswordMessage && (
-            <div className="my-2 text-red-600">{updatePasswordMessage}</div>
-          )}
-        </div>
-        <div className="mt-4 flex flex-row">
-          <div>변경 비밀번호 확인</div>
-          <input
-            type="password"
-            maxLength={15}
-            value={checkUpdatePassword}
-            onChange={onChangeCheckUpdatePasswordHandler}
-            className="border border-black"
-          />
-          {checkUpdatePassWordMessage !== true &&
-            checkUpdatePassWordMessage && (
-              <div className="my-2 text-red-600">
-                {checkUpdatePassWordMessage}
-              </div>
-            )}
-        </div>
-        <div>
-          <button onClick={onClickModifyHandler} className="bg-orange-400">
-            저장
-          </button>
+
+        <div className="mt-1 text-[#999999] text-xs/5 font-medium">
+          • 개인정보(연락처,생일)와 관련된 숫자 등 다른 사람이 알아낼 수 있는
+          비밀번호를 사용하지 마세요.
         </div>
       </div>
 
