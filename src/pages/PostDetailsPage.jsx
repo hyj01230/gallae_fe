@@ -23,21 +23,18 @@ export default function PostDetailsPage() {
   const [postComments, setPostComments] = useState([{}]);
 
   const [newComment, setNewComment] = useState({ contents: "" });
-  const [comments, setComments] = useState([]); // 댓글 목록을 관리하는 상태 추가
 
-  const { postId } = useParams(); // useParams 훅을 사용하여 postId 라우팅 파라미터 읽기
+  const { postId } = useParams();
 
   const getPostDetails = async () => {
     try {
       const response = await axiosInstance.get(`/api/posts/${postId}`);
-      setPostDetails(response.data); // 게시물 데이터 업데이트
+      setPostDetails(response.data);
 
-      // 댓글 데이터 가져오기 (예: API 엔드포인트는 /api/posts/{postId}/comments/ 로 가정)
       const commentsResponse = await axiosInstance.get(
         `/api/posts/${postId}/comments`
       );
-      console.log(commentsResponse);
-      setPostComments(commentsResponse.data.content); // 댓글 데이터 업데이트
+      setPostComments(commentsResponse.data.content);
     } catch (error) {
       console.error("데이터 가져오기 오류:", error);
     }
@@ -47,30 +44,25 @@ export default function PostDetailsPage() {
     getPostDetails();
   }, []);
 
-  // 댓글 작성 핸들러
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     try {
-      // 새로운 댓글을 서버에 저장
       const response = await axiosInstance.post(
         `/api/posts/${postId}/comments`,
         newComment
       );
 
-      // 서버로부터 수정된 댓글 목록을 가져와서 클라이언트의 상태를 업데이트
       const commentsResponse = await axiosInstance.get(
         `/api/posts/${postId}/comments`
       );
       setPostComments(commentsResponse.data.content);
 
-      // 새로운 댓글 입력 필드를 초기화
       setNewComment({ contents: "" });
     } catch (error) {
       console.error("댓글 작성 오류:", error);
     }
   };
 
-  // 페이지가 로드될 때 댓글 목록을 가져와서 초기화
   useEffect(() => {
     getPostDetails();
 
@@ -78,16 +70,39 @@ export default function PostDetailsPage() {
       const commentsResponse = await axiosInstance.get(
         `/api/posts/${postId}/comments`
       );
+      setPostComments(commentsResponse.data.content);
     };
+
+    console.log(postComments);
     fetchComments();
   }, [postId]);
 
   const navigate = useNavigate();
 
   const handleTagClick = (tag) => {
-    // 선택된 태그를 URL 파라미터로 전달하고 검색 페이지로 이동
     navigate(`/search?keyword=${tag}`);
   };
+
+  // const handleDelete = async (comment) => {
+  //   try {
+  //     await axiosInstance.delete(
+  //       `/api/posts/${postId}/comments/${comment.commentId}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+  //         },
+  //       }
+  //     );
+
+  //     const commentsResponse = await axiosInstance.get(
+  //       `/api/posts/${postId}/comments`
+  //     );
+
+  //     setPostComments(commentsResponse.data.content);
+  //   } catch (error) {
+  //     console.error("댓글 삭제 중 오류 발생:", error);
+  //   }
+  // };
 
   return (
     <Layout>
@@ -111,7 +126,7 @@ export default function PostDetailsPage() {
                     postDetails.tagsList.map((tag, index) => (
                       <span
                         key={index}
-                        className="text-gray-500 text-sm m-[2px] cursor-pointer"
+                        className="text-gray-500 text-sm  cursor-pointer"
                         onClick={() => handleTagClick(tag)}
                       >
                         #{tag}
@@ -158,15 +173,10 @@ export default function PostDetailsPage() {
           </div>
         </div>
         <Comments
-          comments={
-            postComments
-              ? postComments.map((comment, index) => ({
-                  ...comment,
-                  key: index,
-                }))
-              : []
-          }
-          setComments={setComments}
+          comments={postComments}
+          setComments={setPostComments}
+
+          // handleDelete={handleDelete}
         />
       </div>
     </Layout>

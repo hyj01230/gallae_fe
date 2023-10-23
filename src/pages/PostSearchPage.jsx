@@ -5,8 +5,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import SearchHeader from "../components/postSearch/SearchHeader";
 import SearchCategory from "../components/postSearch/SearchCategory";
 
-
-
 function highlightKeyword(text, keyword) {
   if (keyword && text) {
     const regex = new RegExp(`(${keyword})`, "gi");
@@ -41,13 +39,11 @@ function truncateText(text, maxLength) {
   return text;
 }
 
-
 export default function PostSearchPage() {
   const [keyword, setKeyword] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
-
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -58,7 +54,6 @@ export default function PostSearchPage() {
       handleSearch(searchKeyword);
     }
   }, [location.search]);
-
 
   const handleSearch = async (searchKeyword) => {
     try {
@@ -172,7 +167,7 @@ export default function PostSearchPage() {
                       result.tagsList.map((tag, index) => (
                         <span
                           key={index}
-                          className="inline-block bg-orange-100 text-gray-500 text-[10px] rounded-full px-2 py-1 m- cursor-pointer mb-2"
+                          className="inline-block bg-orange-100 text-gray-500 text-[10px] rounded-full px-2 py-1 mr-1 cursor-pointer mb-2"
                           onClick={() => handleTagClick(tag)}
                         >
                           {highlightKeyword(`#${tag}`, keyword)}
@@ -182,8 +177,6 @@ export default function PostSearchPage() {
                       <p>Loading tags...</p>
                     )}
                   </div>
-
-
                 </div>
                 <div className="pb-4 px-4 flex justify-between">
                   <p className="text-[3px]">{result.nickName}</p>

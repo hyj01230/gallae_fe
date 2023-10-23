@@ -10,29 +10,35 @@ import { useState, useEffect } from "react";
 export default function PostListPage() {
   const [postList, setPostList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("전체");
-
+  const [likedStatus, setLikedStatus] = useState({});
   const navigate = useNavigate();
   const params = {
     page: "0",
     size: "10",
   };
 
+  const getLikeStatusFromServer = async (postId) => {
+    try {
+      const response = await axiosInstance.get(`/api/posts/like/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
+      return response.data.liked;
+    } catch (error) {
+      console.error("좋아요 상태 가져오기 오류:", error);
+      return false;
+    }
+  };
+
   const getPostList = async () => {
     try {
-
       const response = await axiosInstance.get("/api/posts", { params });
-
-      console.log(response);
-
       setPostList(response.data.content);
     } catch (error) {
       console.error("데이터 가져오기 오류:", error);
     }
   };
-
-  useEffect(() => {
-    getPostList();
-  }, []);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -40,31 +46,53 @@ export default function PostListPage() {
 
   const handleLikeClick = async (postId) => {
     try {
-      const post = postList.find((item) => item.postId === postId);
+      const liked = likedStatus[postId]; // 현재 상태를 가져옵니다.
 
-      if (!post) {
-        console.error("게시물을 찾을 수 없음");
-        return;
-      }
-
-      const isLiked = post.liked;
-
-      await axiosInstance.get(
-        isLiked ? `/api/posts/like/${postId}` : `/api/posts/like/${postId}`
-      );
-
-      const updatedPostList = postList.map((item) => {
-        if (item.postId === postId) {
-          return { ...item, liked: !isLiked };
-        }
-        return item;
+      // 서버에 좋아요 상태를 업데이트하는 요청을 보냅니다.
+      await axiosInstance.get(`/api/posts/like/${postId}`, null, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       });
 
-      setPostList(updatedPostList);
+      // 클라이언트에서 좋아요 상태를 업데이트한 후,
+      // liked 변수를 토글하여 클라이언트에서 좋아요를 누른 것처럼 가정합니다.
+      const newLiked = !liked;
+
+      // 상태를 업데이트하여 클라이언트에서 좋아요 상태를 갱신합니다.
+      setLikedStatus((prevLikedStatus) => ({
+        ...prevLikedStatus,
+        [postId]: newLiked,
+      }));
+
+      // 좋아요 수를 업데이트합니다.
+      setPostList((prevPostList) => {
+        return prevPostList.map((item) => {
+          if (item.postId === postId) {
+            // 만약 좋아요를 취소한다면 likeNum을 1 감소시킵니다.
+            if (liked) {
+              return {
+                ...item,
+                likeNum: item.likeNum - 1,
+              };
+            }
+            // 아니라면 likeNum을 1 증가시킵니다.
+            return {
+              ...item,
+              likeNum: item.likeNum + 1,
+            };
+          }
+          return item;
+        });
+      });
     } catch (error) {
-      console.error("좋아요 처리 중 오류 발생:", error);
+      console.error("좋아요 클릭 오류:", error);
     }
   };
+
+  useEffect(() => {
+    getPostList();
+  }, []);
 
   const filteredPostList = postList
     ? postList.filter((item) =>
@@ -133,7 +161,7 @@ export default function PostListPage() {
                     className="cursor-pointer w-4 h-4 bg-gray-400 rounded-full"
                     onClick={() => handleLikeClick(item.postId)}
                   >
-                    {item.liked ? "❤️" : "🤍"}
+                    {likedStatus[item.postId] ? "❤️" : "🤍"}
                   </div>
                   <p className="cursor-pointer">좋아요</p>
                 </div>

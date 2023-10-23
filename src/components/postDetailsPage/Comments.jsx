@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { axiosInstance } from "../../api/axiosInstance";
+import { useParams } from "react-router-dom";
 
 function formatDate(date) {
   const options = {
@@ -16,10 +17,24 @@ function formatDate(date) {
 
 export default function Comments({ comments, setComments }) {
   const [selectedComment, setSelectedComment] = useState(null);
+  const [selectedCommentForEdit, setSelectedCommentForEdit] = useState(null);
+  const [selectedCommentForReply, setSelectedCommentForReply] = useState(null);
   const [editedContent, setEditedContent] = useState("");
+  const [editedCommentIds, setEditedCommentIds] = useState([]);
+  const [replyContent, setReplyContent] = useState("");
+  const [isReplying, setIsReplying] = useState(false);
+
+  useEffect(() => {
+    // editedContent가 변경될 때 컴포넌트를 다시 렌더링
+    // 이후에 수정 내용이 화면에 즉시 보이게 됩니다.
+  }, [editedContent]);
+
+  // 댓글이 수정되었는지 여부를 판단하는 함수
+  const isCommentEdited = (comment) =>
+    editedCommentIds.includes(comment.commentId);
 
   const handleEdit = (comment) => {
-    setSelectedComment(comment);
+    setSelectedCommentForEdit(comment);
     setEditedContent(comment.contents);
   };
 
@@ -30,7 +45,6 @@ export default function Comments({ comments, setComments }) {
     const updatedComments = comments.filter(
       (c) => c.commentId !== comment.commentId
     );
-    setComments(updatedComments); // 댓글 목록 업데이트
 
     try {
       // 서버로 DELETE 요청 보내기
@@ -39,24 +53,15 @@ export default function Comments({ comments, setComments }) {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
+
+      // 서버 요청이 성공한 후에 댓글 목록 업데이트
+      setComments(updatedComments);
     } catch (error) {
       console.error("댓글 삭제 중 오류 발생:", error);
     }
   };
 
   const handleSave = async (comment) => {
-    // 클라이언트 측에서 댓글 상태 업데이트
-    setSelectedComment(null); // 선택한 댓글 초기화
-    setEditedContent(""); // 수정된 내용 초기화
-
-    const updatedComments = comments.map((c) => {
-      if (c.commentId === comment.commentId) {
-        return { ...c, contents: editedContent, modifiedAt: new Date() };
-      }
-      return c;
-    });
-    setComments(updatedComments); // 댓글 목록 업데이트
-
     try {
       // 서버로 PUT 요청 보내기
       await axiosInstance.put(
@@ -68,8 +73,61 @@ export default function Comments({ comments, setComments }) {
           },
         }
       );
+
+      // 서버 요청이 성공한 후에 댓글 목록 업데이트
+      const updatedComments = comments.map((c) => {
+        if (c.commentId === comment.commentId) {
+          // 수정된 댓글 ID 목록에 추가
+          setEditedCommentIds((prevIds) => [...prevIds, comment.commentId]);
+          return { ...c, contents: editedContent, modifiedAt: new Date() };
+        }
+        return c;
+      });
+
+      // 댓글 목록 업데이트 이후에 editedContent를 초기화
+      setComments(updatedComments);
+      setEditedContent(""); // 수정된 내용 초기화
     } catch (error) {
       console.error("댓글 수정 중 오류 발생:", error);
+    }
+  };
+
+  const handleAddReply = async (comment) => {
+    try {
+      const response = await axiosInstance.post(
+        `/api/comments/${comment.commentId}/replies`,
+        { contents: replyContent }
+      );
+
+      if (selectedCommentForReply === comment) {
+        setIsReplying(false);
+        setSelectedCommentForReply(null); // 클릭할 때 isReplying 상태를 토글합니다.
+      } else {
+        setSelectedCommentForReply(comment);
+        setIsReplying(true);
+      }
+      setReplyContent(""); // 답글 내용을 초기화합니다.
+    } catch (error) {
+      console.error("답글 생성 중 오류 발생:", error);
+    }
+  };
+
+  const fetchReplies = async (commentId) => {
+    try {
+      const response = await axiosInstance.get(
+        `/api/comments/${comments.commentId}/replies`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+
+      const replies = response.data.content; // 서버에서 반환한 답글 데이터
+      console.log("replies:", replies);
+      // 받아온 답글 데이터를 사용하거나 상태에 업데이트할 수 있습니다.
+    } catch (error) {
+      console.error("답글 조회 중 오류 발생:", error);
     }
   };
 
@@ -82,7 +140,7 @@ export default function Comments({ comments, setComments }) {
             key={comment.commentId}
             className="bg-white p-4 rounded-md mb-4 relative"
           >
-            {selectedComment === comment ? (
+            {selectedCommentForEdit === comment ? (
               <div>
                 <textarea
                   value={editedContent}
@@ -121,6 +179,14 @@ export default function Comments({ comments, setComments }) {
                   >
                     삭제
                   </button>
+                  <button
+                    onClick={() => handleAddReply(comment)}
+                    className="text-green-500"
+                  >
+                    {isReplying && selectedCommentForReply === comment
+                      ? "취소"
+                      : "답글"}
+                  </button>
                 </div>
               </div>
             )}
@@ -129,9 +195,30 @@ export default function Comments({ comments, setComments }) {
             </p>
             <p className="text-gray-600 text-sm font-semibold">
               <span className="font-semibold">
-                {formatDate(comment.createAt)}
+                {formatDate(comment.createAt)}{" "}
+                {isCommentEdited(comment) && (
+                  <span className="text-gray-600 text-sm font-semibold">
+                    (수정됨)
+                  </span>
+                )}
               </span>
             </p>
+            {isReplying && selectedCommentForReply === comment && (
+              <div>
+                <textarea
+                  value={replyContent}
+                  onChange={(e) => setReplyContent(e.target.value)}
+                  placeholder="답글을 작성하세요..."
+                  className="w-full border rounded p-2"
+                />
+                <button
+                  onClick={() => handleAddReply(comment)}
+                  className="bg-green-500 text-white px-4 py-2 rounded mt-2"
+                >
+                  답글 작성
+                </button>
+              </div>
+            )}
           </div>
         ))
       ) : (
