@@ -77,11 +77,11 @@ export default function SchedulesDetailPage() {
         <div>{subTitle}</div>
       </div>
 
-      <div className="w-full h-36">
-        {/* <KaKaoMap /> */}
-        <SearchMap keyword={location} />
-        {/* <TestKakaoMap /> */}
-      </div>
+      {/* <div className="w-full h-36"> *ㄴ/}
+      {/* <KaKaoMap /> */}
+      <SearchMap keyword={location} />
+      {/* <TestKakaoMap /> */}
+      {/* </div>   */}
 
       <div className="flex justify-between mx-4 mt-4 border border-[#EBEBEB] rounded-xl">
         {data.map((date, index) => (
@@ -142,3 +142,6 @@ export default function SchedulesDetailPage() {
     </Layout>
   );
 }
+
+// https://react-kakao-maps-sdk.jaeseokim.dev/docs/sample/library/keywordBasic/
+// https://apis.map.kakao.com/web/sample/keywordList/

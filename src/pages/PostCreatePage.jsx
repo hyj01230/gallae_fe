@@ -25,7 +25,7 @@ export default function PostCreatePage() {
     const getData = async () => {
       const response = await getDetailPost(selectedPostId);
 
-      if (data.title.length > 0) {
+      if (data.title) {
         setMode("edit");
         setPostData({ ...response, contents: data.contents });
       } else {

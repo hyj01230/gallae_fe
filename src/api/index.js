@@ -67,3 +67,16 @@ export const updateTripDate = async (tripDateId, data) => {
   const response = await axiosInstance.put(`/api/tripDate/${tripDateId}`, data);
   return response;
 };
+
+// <---------- 이미지 관련 API ---------->
+// 세부여행 이미지 업로드
+export const uploadScheduleImage = async (schedulesId, file) => {
+  const response = await axiosInstance.post(
+    `/api/schedules/${schedulesId}/pictures`,
+    file,
+    {
+      headers: { "Content-Type": "multipart/form-data" },
+    }
+  );
+  return response;
+};

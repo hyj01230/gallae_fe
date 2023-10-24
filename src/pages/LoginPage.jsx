@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
-// import { Logo } from "../assets/Icon";
+
 
 export default function LoginPage() {
   // 페이지 이동
@@ -60,9 +60,8 @@ export default function LoginPage() {
           건너뛰기
         </div>
 
-        <div className="mt-[170px] w-[120px] h-[120px] mx-auto flex items-center justify-center">
-          {/* <Logo /> */}
-        </div>
+
+        <div className="mt-[170px] w-[120px] h-[120px] mx-auto flex items-center justify-center"></div>
 
         <div className="mt-3 flex justify-center items-center flex-col">
           <div className="text-base/normal font-normal">

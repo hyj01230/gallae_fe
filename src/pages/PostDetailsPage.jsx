@@ -6,6 +6,7 @@ import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Comments from "../components/postDetailsPage/Comments";
+import DetailSchedules from "../components/postDetailsPage/DetailSchedules";
 
 export default function PostDetailsPage() {
   const [postDetails, setPostDetails] = useState({
@@ -141,6 +142,7 @@ export default function PostDetailsPage() {
           </div>
           <p className="text-3 mt-4 mx-5">{postDetails.contents}</p>
           <p className="text-3 mt-4 mx-5  cursor-pointer"></p>
+          <DetailSchedules postId={postId} />
           <div className="mt-5">
             <PostLine />
             <div className="flex items-center justify-between  text-sm text-gray-500 h-[40px] border-b-2  ">
@@ -155,21 +157,19 @@ export default function PostDetailsPage() {
               </div>
             </div>
           </div>
-          <div className="mt-5">
-            <div className="flex items-center">
-              <textarea
-                value={newComment.contents}
-                onChange={(e) => setNewComment({ contents: e.target.value })}
-                placeholder="댓글을 작성하세요..."
-                className="w-full border rounded p-2"
-              />
-              <button
-                onClick={handleCommentSubmit}
-                className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
-              >
-                작성
-              </button>
-            </div>
+          <div className="relative">
+            <textarea
+              value={newComment.contents}
+              onChange={(e) => setNewComment({ contents: e.target.value })}
+              placeholder="  댓글을 입력하세요."
+              className="w-full  p-4 h-[57px] "
+            />
+            <button
+              onClick={handleCommentSubmit}
+              className="bg-white font-[14px] absolute w-20  top-4 right-5 mx-0 rounded-md "
+            >
+              작성
+            </button>
           </div>
         </div>
         <Comments

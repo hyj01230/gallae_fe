@@ -10,58 +10,60 @@ export default function PostCategory({ onCategorySelect }) {
     onCategorySelect(category);
   };
 
+  // 스타일을 업데이트하여 선택된 카테고리에 밑줄을 추가합니다.
+  const getCategoryStyle = (category) => {
+    return {
+      cursor: "pointer",
+      color: selectedCategory === category ? "#F90" : "gray",
+      borderBottom:
+        selectedCategory === category ? "2px solid #FF9900" : "none",
+    };
+  };
+
   return (
     <div className="bg-white mx-10 mb-2">
       <div className="flex justify-between">
         <div
-          className={`text-gray-500 ${
-            selectedCategory === "전체"
-              ? "text-black cursor-pointer"
-              : "cursor-pointer"
-          }`}
+          style={getCategoryStyle("전체")}
           onClick={() => handleCategoryClick("전체")}
         >
           전체
         </div>
         <div
-          className={`text-gray-500 ${
-            selectedCategory === "나홀로"
-              ? "text-black cursor-pointer"
-              : "cursor-pointer"
-          }`}
-          onClick={() => handleCategoryClick("나홀로")}
+          style={getCategoryStyle("가족")}
+          onClick={() => handleCategoryClick("가족")}
         >
-          나홀로
+          가족
         </div>
         <div
-          className={`text-gray-500 ${
-            selectedCategory === "커플"
-              ? "text-black cursor-pointer"
-              : "cursor-pointer"
-          }`}
-          onClick={() => handleCategoryClick("커플")}
-        >
-          커플
-        </div>
-        <div
-          className={`text-gray-500 ${
-            selectedCategory === "우정"
-              ? "text-black cursor-pointer"
-              : "cursor-pointer"
-          }`}
-          onClick={() => handleCategoryClick("우정")}
+          style={getCategoryStyle("친구")}
+          onClick={() => handleCategoryClick("친구")}
         >
           친구
         </div>
         <div
-          className={`text-gray-500 ${
-            selectedCategory === "가족"
-              ? "text-black cursor-pointer"
-              : "cursor-pointer"
-          }`}
-          onClick={() => handleCategoryClick("가족")}
+          style={getCategoryStyle("연인")}
+          onClick={() => handleCategoryClick("연인")}
         >
-          가족
+          연인
+        </div>
+        <div
+          style={getCategoryStyle("혼자")}
+          onClick={() => handleCategoryClick("혼자")}
+        >
+          혼자
+        </div>
+        <div
+          style={getCategoryStyle("반려동물")}
+          onClick={() => handleCategoryClick("반려동물")}
+        >
+          반려동물
+        </div>
+        <div
+          style={getCategoryStyle("지인")}
+          onClick={() => handleCategoryClick("지인")}
+        >
+          지인
         </div>
       </div>
     </div>

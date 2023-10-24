@@ -20,6 +20,7 @@ import {
   DETAIL_SCHEDULES_CATEGORIES,
   SPENT_TIME_LIST,
 } from "../constants/mySchedule";
+import useImage from "../hooks/useImage";
 
 export default function SchedulesEditPage() {
   const queryClient = useQueryClient();
@@ -49,6 +50,8 @@ export default function SchedulesEditPage() {
     schedulesCategory,
     timeSpent,
   });
+  const imageHandler = useImage();
+  console.log("image : ", imageHandler.uploadImage);
 
   const updateScheduleMutation = useMutation(
     () => updateScheduleDetail(schedulesId, schedule),
@@ -139,11 +142,21 @@ export default function SchedulesEditPage() {
           <DownArrow />
         </div>
       </div>
-
-      <div className="mt-3 mx-4">
-        <div className="w-36 h-36 flex justify-center items-center bg-[#F2F2F2]">
+      <div
+        className="mt-3 mx-4"
+        onClick={imageHandler.onClickSelectProfileHandler}
+      >
+        <input
+          type="file"
+          className="hidden"
+          onChange={imageHandler.uploadImageHandler}
+          accept="image/*"
+          ref={imageHandler.inputRef}
+        />
+        <div className="w-36 h-36 flex justify-center items-center bg-[#F2F2F2] rounded-lg cursor-pointer">
           <Plus />
         </div>
+        <img src={imageHandler.uploadImage} />
       </div>
 
       <div className="flex flex-col mt-7 mx-7">
