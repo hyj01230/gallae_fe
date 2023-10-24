@@ -6,6 +6,7 @@ import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Comments from "../components/postDetailsPage/Comments";
+import DetailSchedules from "../components/postDetailsPage/DetailSchedules";
 
 export default function PostDetailsPage() {
   const [postDetails, setPostDetails] = useState({
@@ -141,6 +142,7 @@ export default function PostDetailsPage() {
           </div>
           <p className="text-3 mt-4 mx-5">{postDetails.contents}</p>
           <p className="text-3 mt-4 mx-5  cursor-pointer"></p>
+          <DetailSchedules postId={postId} />
           <div className="mt-5">
             <PostLine />
             <div className="flex items-center justify-between  text-sm text-gray-500 h-[40px] border-b-2  ">

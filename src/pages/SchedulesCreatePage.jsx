@@ -18,6 +18,7 @@ import {
   DETAIL_SCHEDULES_CATEGORIES,
   SPENT_TIME_LIST,
 } from "../constants/mySchedule";
+import useImage from "../hooks/useImage";
 
 export default function SchedulesCreatePage() {
   const navigate = useNavigate();
@@ -30,11 +31,12 @@ export default function SchedulesCreatePage() {
     timeSpent: "",
     referenceURL: "",
   });
-
   const { subTitle, chosenDate, tripDateId, postId } = useLocation().state;
+  const imageHandler = useImage();
+  console.log("image : ", imageHandler.uploadImage);
 
   const handleSubmitClick = async () => {
-    const response = await createScheduleDetail(tripDateId, {
+    await createScheduleDetail(tripDateId, {
       schedulesList: [schedule],
     });
     navigate("/myschedules/details", { state: { postId, tripDateId } });
@@ -109,14 +111,23 @@ export default function SchedulesCreatePage() {
                 setSchedule((prev) => ({ ...prev, placeName: e.target.value }))
               }
             />
-            {/* {schedule.placeName ? schedule.placeName : "장소를 검색하세요"}  */}
           </div>
           <DownArrow />
         </div>
       </div>
 
-      <div className="mt-3 mx-4">
-        <div className="w-36 h-36 flex justify-center items-center bg-[#F2F2F2]">
+      <div
+        className="mt-3 mx-4"
+        onClick={imageHandler.onClickSelectProfileHandler}
+      >
+        <input
+          type="file"
+          className="hidden"
+          onChange={imageHandler.uploadImageHandler}
+          accept="image/*"
+          ref={imageHandler.inputRef}
+        />
+        <div className="w-36 h-36 flex justify-center items-center bg-[#F2F2F2] rounded-lg cursor-pointer">
           <Plus />
         </div>
       </div>

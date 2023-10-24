@@ -1,9 +1,11 @@
 import { Move } from "../../assets/Icon";
 
-export default function List({ schedule, handleClick }) {
+export default function List({ schedule, handleClick, move = true }) {
   return (
     <div
-      className="flex border border-[#F2F2F2] rounded-lg mx-4 mt-4 px-4 pt-1 pb-3 cursor-pointer"
+      className={`flex border border-[#F2F2F2] rounded-lg ${
+        move && "mx-4 cursor-pointer"
+      } mt-4 px-4 pt-1 pb-3`}
       onClick={handleClick}
     >
       <div className="flex flex-col w-1/4">
@@ -26,9 +28,7 @@ export default function List({ schedule, handleClick }) {
         </div>
       </div>
 
-      <div className="h-8">
-        <Move />
-      </div>
+      <div className="h-8">{move && <Move />}</div>
     </div>
   );
 }
