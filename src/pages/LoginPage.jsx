@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
-import { Logo } from "../assets/Icon";
+// import { Logo } from "../assets/Icon";
 
 export default function LoginPage() {
   // 페이지 이동
@@ -61,7 +61,7 @@ export default function LoginPage() {
         </div>
 
         <div className="mt-[170px] w-[120px] h-[120px] mx-auto flex items-center justify-center">
-          <Logo />
+          {/* <Logo /> */}
         </div>
 
         <div className="mt-3 flex justify-center items-center flex-col">
@@ -79,30 +79,28 @@ export default function LoginPage() {
             value={email}
             onChange={onChangeEmailHandler}
             placeholder="이메일을 입력해주세요."
-            className="border border-[#D9D9D9] rounded-lg w-full h-[49px] px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium"
+            className="border border-[#D9D9D9] rounded-lg w-full h-[49px] px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium outline-none"
           />
           <input
             type="password"
             value={password}
             onChange={onChangePasswordHandler}
             placeholder="비밀번호를 입력해주세요."
-            className="mt-2 border border-[#D9D9D9] rounded-lg w-full h-[49px] px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium"
+            className="mt-2 border border-[#D9D9D9] rounded-lg w-full h-[49px] px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium outline-none"
           />
         </div>
 
-        <div>
-          <div
-            onClick={onClickLoginHandler}
-            className="mt-4 rounded-lg w-full h-[50px] bg-[#FF9900] flex justify-center items-center text-[#FFFFFF] text-base/4 font-semibold cursor-pointer"
-          >
-            로그인하기
-          </div>
+        <div
+          onClick={onClickLoginHandler}
+          className="mt-4 rounded-lg w-full h-[50px] border-[#FF9900] border bg-[#FFFFFF] flex justify-center items-center text-[#FF9900] text-base/4 font-semibold cursor-pointer"
+        >
+          로그인하기
         </div>
 
         <div>
           <div
             onClick={onClickSingUpHandler}
-            className="mt-2 rounded-lg w-full h-[50px] bg-[#F8DF00] flex justify-center items-center text-[#333333] text-base/[30px] font-medium cursor-pointer"
+            className="mt-3 rounded-lg w-full h-[50px] bg-[#F8DF00] flex justify-center items-center text-[#333333] text-base/[30px] font-medium cursor-pointer"
           >
             <img className="w-12 h-12" src="public/img/kakao.png"></img>
             카카오톡으로 시작하기

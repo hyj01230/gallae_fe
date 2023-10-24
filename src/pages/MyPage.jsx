@@ -118,13 +118,10 @@ export default function MyPage() {
       formData.append("file", null); // null로 보내면 기본사진으로 변경됨!
 
       const response = await axiosInstance.put(
-        "/api/users/profile/update-profileImg",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data", // 필수: FormData를 보낼 때 content type 설정
-          },
-        }
+        "/api/users/profile/update-profileImg"
+        // {
+        //   file : null
+        // }
       );
       console.log("기본 프로필 put 성공 :", response);
       alert(response.data.messageResponseDto.msg);
@@ -142,12 +139,7 @@ export default function MyPage() {
 
       const response = await axiosInstance.put(
         "/api/users/profile/update-profileImg",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data", // 필수: FormData를 보낼 때 content type 설정
-          },
-        }
+        formData
       );
       console.log("앨범사진 put 성공 :", response);
       setProfileModal(false); // 모달닫기
