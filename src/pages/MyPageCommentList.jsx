@@ -5,7 +5,7 @@ import {
   LeftArrow,
   WhiteDocument,
   CommentIcon,
-  // XIcon,
+  ReplyIcon,
 } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
@@ -18,29 +18,13 @@ export default function MyPageCommentList() {
     navigate("/mypage");
   };
 
-  // const commentListData = [
-  //   {
-  //     commnetId: "1",
-  //     title: "서울 근교 당일치기 대부도 BEST 여행지 추천",
-  //     contents: "재밌더라고여 ㅎㅎ 추천합니당~_~",
-  //     createdAt: "2023-10-02",
-  //   },
-  //   {
-  //     commnetId: "2",
-  //     title: "국내 가족여행, 강원도 평창에서 축제와 함께 힐링해요",
-  //     contents: "ㅍㅕㅇㅊㅏㅇ 최고~~~~~ 또 갈래여",
-  //     createdAt: "2023-07-21",
-  //   },
-  //   {
-  //     commnetId: "2",
-  //     title: "여행을 갑니다 비행기타고 기차타고 요트타고 자동차 타고~_~",
-  //     contents: "비행기랑 요트도 나오는데, 기차랑 자동차만 탑니다 ㅎㅁㅎ",
-  //     createdAt: "2023-09-12",
-  //   },
-  // ];
-
-  // useState : get으로 가져온 사용자별 댓글 조회 데이터(getMyCommentsList)
-  const [myCommentsList, setMyCommentsList] = useState([]);
+  // useState
+  const [myCommentsList, setMyCommentsList] = useState([]); // get : 사용자별 댓글 조회
+  const [myRepliesList, setMyRepliesList] = useState([]); // get : 사용자별 대댓글 조회
+  const myCommentsRepliesList = [...myCommentsList, ...myRepliesList];
+  const sortedLists = myCommentsRepliesList.sort(
+    (a, b) => new Date(b.createAt) - new Date(a.createAt)
+  );
 
   // GET : 사용자별 댓글 가져오기
   const getMyCommentsList = async () => {
@@ -58,25 +42,63 @@ export default function MyPageCommentList() {
     getMyCommentsList();
   }, []);
 
-  // // 사용자별 대댓글 조회
-  // // useState : get으로 가져온 사용자별 대댓글 조회 데이터(getMyRepliesList)
-  // const [myRepliesList, setMyRepliesList] = useState([]);
+  // GET : 사용자별 대댓글 가져오기
+  const getMyRepliesList = async () => {
+    try {
+      const response = await axiosInstance.get("/api/repliesme");
+      console.log("대댓글 response :", response);
+      setMyRepliesList(response.data.content);
+    } catch (error) {
+      console.log("대댓글 error :", error);
+    }
+  };
 
-  // // GET : 사용자별 대댓글 가져오기
-  // const getMyRepliesList = async () => {
-  //   try {
-  //     const response = await axiosInstance.get("/api/commentsme");
-  //     console.log("대댓글 response :", response);
-  //     setMyRepliesList(response.data);
-  //   } catch (error) {
-  //     console.log("대댓글 error :", error);
-  //   }
-  // };
+  // useEffect : 렌더링되면 실행!
+  useEffect(() => {
+    getMyRepliesList();
+  }, []);
 
-  // // useEffect : 렌더링되면 실행!
-  // useEffect(() => {
-  //   getMyRepliesList();
-  // }, []);
+  // 댓글/대댓글 클릭해서 이동
+  // const onClickCommentReplyHandler = () => {
+  //   navigate("/mypage");
+  // }
+
+  // 입력 시간 표시
+  const getTimeAgo = (timestamp) => {
+    const now = new Date();
+    const createAt = new Date(timestamp);
+    const timeDiff = now - createAt;
+    const hoursAgo = Math.floor(timeDiff / (1000 * 60 * 60));
+
+    if (hoursAgo < 1) {
+      const minutesAgo = Math.floor(timeDiff / (1000 * 60));
+      if (minutesAgo < 1) {
+        return "방금 전";
+      }
+      return `${minutesAgo}분 전`;
+    }
+
+    if (hoursAgo < 24) {
+      return `${hoursAgo}시간 전`;
+    }
+
+    const daysAgo = Math.floor(hoursAgo / 24);
+    if (daysAgo === 1) {
+      return "어제";
+    }
+
+    // 년-월-일 시간:분 형식으로 날짜 및 시간 표시
+    const formattedDate = `${createAt.getFullYear()}-${(createAt.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${createAt
+      .getDate()
+      .toString()
+      .padStart(2, "0")} ${createAt
+      .getHours()
+      .toString()
+      .padStart(2, "0")}:${createAt.getMinutes().toString().padStart(2, "0")}`;
+    return formattedDate;
+  };
 
   //무한 스크롤
   // const observer = new IntersectionObserver(callback { threshold: 0.7 });
@@ -92,45 +114,61 @@ export default function MyPageCommentList() {
       </div>
       <hr className="mt-[11px] border-[#F2F2F2] border-t-[1px]"></hr>
 
-      <div className="mb-24">
-        {myCommentsList &&
-          myCommentsList.map((item) => (
-            <div key={item.commentId} className="ml-4 mt-4 flex flex-row">
-              <div className="flex justify-start">
-                <div className="w-6 flex flex-col justify-center items-center">
-                  <CommentIcon />
-                  <div className="text-xs/[18px] font-normal text-[#999999]">
-                    댓글
-                  </div>
+      {sortedLists.length &&
+        sortedLists.map((item) => (
+          <div
+            key={
+              item.commentId
+                ? `comment_${item.commentId}`
+                : `replies_${item.repliesId}`
+            }
+            // onClick={onClickCommentReplyHandler}
+            className="ml-4 mt-4 flex flex-row"
+          >
+            <div className="flex justify-start">
+              <div className="w-6 flex flex-col justify-center items-center">
+                {item.commentId ? <CommentIcon /> : <ReplyIcon />}
+                <div className="text-xs/[18px] font-normal text-[#999999]">
+                  {item.commentId ? "댓글" : "답글"}
                 </div>
-              </div>
-
-              <div className="ml-[23px] w-full border-[#F2F2F2] pl-[7px] flex flex-row border-b-[1px]">
-                <div className="w-full">
-                  <div className="text-sm/[22px] font-semibold text-[#333333]">
-                    {item.title}
-                  </div>
-                  <div className="mt-1 text-sm/[18px] font-normal text-[#999999]">
-                    {item.contents}
-                  </div>
-                  <div className="mb-4 mt-1 text-xs/[18px] font-normal text-[#999999]">
-                    {item.createAt}
-                  </div>
-                </div>
-                {/* <div className="ml-2 mr-4">
-                  <XIcon />
-                </div> */}
               </div>
             </div>
-          ))}
-      </div>
 
-      {/* 대댓글 */}
-      {/* 
-      <div className="mb-24">
-      {myRepliesList &&
-        myRepliesList.map((item) => (
-          <div key={item.repliesId} className="ml-4 mt-4 flex flex-row">
+            <div className="ml-[23px] w-full border-[#F2F2F2] pl-[7px] flex flex-row border-b-[1px]">
+              <div className="w-full">
+                <div className="text-sm/[22px] font-semibold text-[#333333]">
+                  {item.title}
+                </div>
+                <div className="mt-1 text-sm/[18px] font-normal text-[#999999]">
+                  {item.contents}
+                </div>
+                <div className="mb-4 mt-1 text-xs/[18px] font-normal text-[#999999]">
+                  {getTimeAgo(item.createAt)}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+
+      {/* {Lists.length > 0 &&
+        Lists.map((item) => (
+          <div key={item.Id}> map으로 생성할 내용 작성하기 </div>
+        ))}
+
+      {Lists.length &&
+        Lists.map((item) => (
+          <div key={item.Id}> map으로 생성할 내용 작성하기 </div>
+        ))}
+      
+      {Lists &&
+        Lists.map((item) => (
+          <div key={item.Id}> map으로 생성할 내용 작성하기 </div>
+        ))} */}
+
+      {/* 댓글 */}
+      {/* {myCommentsList.length > 0 &&
+        myCommentsList.map((item) => (
+          <div key={item.commentId} className="ml-4 mt-4 flex flex-row">
             <div className="flex justify-start">
               <div className="w-6 flex flex-col justify-center items-center">
                 <CommentIcon />
@@ -149,16 +187,43 @@ export default function MyPageCommentList() {
                   {item.contents}
                 </div>
                 <div className="mb-4 mt-1 text-xs/[18px] font-normal text-[#999999]">
-                  {item.createdAt}
+                  {item.createAt}
                 </div>
-              </div>
-              <div className="ml-2 mr-4">
-                <XIcon />
               </div>
             </div>
           </div>
-        ))}
-        </div> */}
+        ))} */}
+
+      {/* 대댓글 */}
+      {/* {myRepliesList.length > 0 &&
+        myRepliesList.map((item) => (
+          <div key={item.repliesId} className="ml-4 mt-4 flex flex-row">
+            <div className="flex justify-start">
+              <div className="w-6 flex flex-col justify-center items-center">
+                <ReplyIcon />
+                <div className="text-xs/[18px] font-normal text-[#999999]">
+                  답글
+                </div>
+              </div>
+            </div>
+
+            <div className="ml-[23px] w-full border-[#F2F2F2] pl-[7px] flex flex-row border-b-[1px]">
+              <div className="w-full">
+                <div className="text-sm/[22px] font-semibold text-[#333333]">
+                  {item.title}
+                </div>
+                <div className="mt-1 text-sm/[18px] font-normal text-[#999999]">
+                  {item.contents}
+                </div>
+                <div className="mb-4 mt-1 text-xs/[18px] font-normal text-[#999999]">
+                  {item.createAt}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))} */}
+
+      <div className="mb-24"></div>
 
       <div className="fixed bottom-0 max-w-3xl w-full h-[84px] bg-[#F2F2F2] flex justify-center">
         <div className="h-10 w-full mx-10 mt-[11.6px] flex">

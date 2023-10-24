@@ -20,31 +20,55 @@ export default function MyPageLikeList() {
     navigate("/api/posts/${postId}");
   };
 
-  // const likeListData = [
-  //   {
-  //     postId: "1",
-  //     title: "서울 근교 당일치기 대부도 BEST 여행지 추천",
-  //     contents: "제가 이번엔 하루동안 다녀온 대부도 여행지를 공유해볼까해요",
-  //     nickName: "유랑이",
-  //     createdAt: "2023-10-02",
-  //   },
-  //   {
-  //     postId: "2",
-  //     title: "국내 가족여행, 강원도 평창에서 축제와 함께 힐링해요",
-  //     contents:
-  //       "메밀꽃필무렵소설의 배경지 봉평 메밀꽃밭에서 열리는 봉평면 효석문화마을 축제입니다....",
-  //     nickName: "갈래애애애",
-  //     createdAt: "2023-07-21",
-  //   },
-  //   {
-  //     postId: "2",
-  //     title: "여행을 갑니다 비행기타고 기차타고 요트타고 자동차 타고~_~",
-  //     contents:
-  //       "야호~야호~이야호~야호~야호~이야호~야호~야호~이야호~야호~야호~이야호~야호~야호~이야호~",
-  //     nickName: "뚜벅이",
-  //     createdAt: "2023-09-12",
-  //   },
-  // ];
+  const likeListData = [
+    {
+      postId: "1",
+      title: "서울 근교 당일치기 대부도 BEST 여행지 추천",
+      contents: "제가 이번엔 하루동안 다녀온 대부도 여행지를 공유해볼까해요",
+      nickName: "유랑이",
+      createdAt: "2023-10-02",
+    },
+    {
+      postId: "2",
+      title: "국내 가족여행, 강원도 평창에서 축제와 함께 힐링해요",
+      contents:
+        "메밀꽃필무렵소설의 배경지 봉평 메밀꽃밭에서 열리는 봉평면 효석문화마을 축제입니다....",
+      nickName: "갈래애애애",
+      createdAt: "2023-07-21",
+    },
+    {
+      postId: "3",
+      title: "여행을 갑니다 비행기타고 기차타고 요트타고 자동차 타고~_~",
+      contents:
+        "야호~야호~이야호~야호~야호~이야호~야호~야호~이야호~야호~야호~이야호~야호~야호~이야호~",
+      nickName: "뚜벅이",
+      createdAt: "2023-09-12",
+    },
+    {
+      postId: "4",
+      title: "맛집 탐방 여행",
+      contents:
+        "맛집 탐방 여행 맛집 탐방 여행 맛집 탐방 여행 맛집 탐방 여행 맛집 탐방 여행 맛집 탐방 여행",
+      nickName: "맛집 탐방 여행",
+      createdAt: "2023-07-21",
+    },
+    {
+      postId: "5",
+      title: "호캉스 일주일",
+      contents:
+        "호캉스 일주일 호캉스 일주일 호캉스 일주일 호캉스 일주일 호캉스 일주일 호캉스 일주일 호캉스 일주일",
+      nickName: "호캉스 일주일",
+      createdAt: "2023-05-20",
+    },
+    {
+      postId: "6",
+      title: "시골에서 한 달 살기",
+      contents:
+        "시골에서 한 달 살기 시골에서 한 달 살기 시골에서 한 달 살기 시골에서 한 달 살기 시골에서 한 달 살기",
+      nickName: "시골에서 한 달 살기",
+      createdAt: "2023-03-02",
+    },
+  ];
 
   // useState : get으로 가져온 사용자별 좋아요 게시글 데이터(getLikeList)
   const [likeList, setLikeList] = useState([]);
@@ -77,8 +101,8 @@ export default function MyPageLikeList() {
       <hr className="mt-[11px] border-[#F2F2F2] border-t-[1px]"></hr>
 
       <div className="mb-24">
-        {likeList &&
-          likeList.map((item) => (
+        {likeListData.length > 0 &&
+          likeListData.map((item) => (
             <div
               key={item.postId}
               onClick={() => oncilckLikePostHandler(item.postId)}
