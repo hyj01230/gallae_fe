@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { axiosInstance } from "../../api/axiosInstance";
 import { useParams } from "react-router-dom";
+import CommentModal from "./commentModal";
 
 function formatDate(date) {
   const options = {
@@ -23,6 +24,15 @@ export default function Comments({ comments, setComments }) {
   const [editedCommentIds, setEditedCommentIds] = useState([]);
   const [replyContent, setReplyContent] = useState("");
   const [isReplying, setIsReplying] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     // editedContent가 변경될 때 컴포넌트를 다시 렌더링
@@ -34,8 +44,10 @@ export default function Comments({ comments, setComments }) {
     editedCommentIds.includes(comment.commentId);
 
   const handleEdit = (comment) => {
-    setSelectedCommentForEdit(comment);
-    setEditedContent(comment.contents);
+    if (comment) {
+      setSelectedCommentForEdit(comment);
+      setEditedContent(comment.contents);
+    }
   };
 
   const handleDelete = async (comment) => {
@@ -132,13 +144,13 @@ export default function Comments({ comments, setComments }) {
   };
 
   return (
-    <div className="bg-gray-100 p-4 rounded-lg">
-      <h2 className="text-2xl font-semibold mb-4">댓글</h2>
+    <div className="bg-gray-100">
+      <h2 className="text-2xl font-[14px]"></h2>
       {Array.isArray(comments) ? (
         comments.map((comment) => (
           <div
             key={comment.commentId}
-            className="bg-white p-4 rounded-md mb-4 relative"
+            className="bg-white p-4 border relative font-[14px] h-[127px]"
           >
             {selectedCommentForEdit === comment ? (
               <div>
@@ -146,7 +158,7 @@ export default function Comments({ comments, setComments }) {
                   value={editedContent}
                   onChange={(e) => setEditedContent(e.target.value)}
                   placeholder="댓글을 수정하세요..."
-                  className="w-full border rounded p-2"
+                  className="w-full border rounded p-2 "
                 />
                 <div className="absolute right-4 top-4 flex space-x-2">
                   <button
@@ -164,8 +176,33 @@ export default function Comments({ comments, setComments }) {
                 </div>
               </div>
             ) : (
-              <div className="flex justify-between items-center">
-                <p className="text-lg mb-2">{comment.contents}</p>
+              <div className="h-auto">
+                <div className="flex justify-between">
+                  <p className="text-[16px] font-semibold">
+                    <span className="hfont-semibold">{comment.nickname}</span>
+                  </p>
+                  <p className="text-[16px] font-semibold">
+                    <span className="inline-block w-4 h-4 rounded-full bg-gray-200 ml-2">
+                      <button
+                        onClick={handleOpenModal}
+                        className="w-full h-full bg-gray-200 rounded-full"
+                      ></button>
+                    </span>
+                  </p>
+                </div>
+                <p className="text-[14px] font-nomal w-[360px]">
+                  <span>{comment.contents}</span>
+                </p>
+                <p className="text-[12px] font-normal text-[#999]">
+                  <span>
+                    {formatDate(comment.createAt)}{" "}
+                    {isCommentEdited(comment) && (
+                      <span className="text-gray-600 text-[12px] font-semibold">
+                        (수정됨)
+                      </span>
+                    )}
+                  </span>
+                </p>
                 <div>
                   <button
                     onClick={() => handleEdit(comment)}
@@ -190,19 +227,6 @@ export default function Comments({ comments, setComments }) {
                 </div>
               </div>
             )}
-            <p className="text-gray-600 text-sm font-semibold">
-              <span className="font-semibold">{comment.nickname}</span>
-            </p>
-            <p className="text-gray-600 text-sm font-semibold">
-              <span className="font-semibold">
-                {formatDate(comment.createAt)}{" "}
-                {isCommentEdited(comment) && (
-                  <span className="text-gray-600 text-sm font-semibold">
-                    (수정됨)
-                  </span>
-                )}
-              </span>
-            </p>
             {isReplying && selectedCommentForReply === comment && (
               <div>
                 <textarea
@@ -219,6 +243,13 @@ export default function Comments({ comments, setComments }) {
                 </button>
               </div>
             )}
+            <CommentModal
+              isOpen={isModalOpen}
+              handleCloseModal={handleCloseModal}
+              handleEditClick={() => handleEdit(comment)} // 댓글 수정을 위한 함수
+              handleDeleteClick={() => handleDelete(comment.commentId)} // 댓글 삭제를 위한 함수에 댓글 ID를 전달
+              comment={comment} // CommentModal 컴포넌트에 댓글을 전달
+            />
           </div>
         ))
       ) : (
