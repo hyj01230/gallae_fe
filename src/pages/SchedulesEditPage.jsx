@@ -8,11 +8,12 @@ import {
   Memo,
   Plus,
   Url,
+  XIcon,
 } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { updateScheduleDetail } from "../api";
+import { deleteScheduleDetail, updateScheduleDetail } from "../api";
 import { timeStringToMinutes } from "../util/formatDate";
 import { useMutation, useQueryClient } from "react-query";
 import { formatDateString } from "../util/formatDate";
@@ -25,7 +26,7 @@ import useImage from "../hooks/useImage";
 export default function SchedulesEditPage() {
   const queryClient = useQueryClient();
   const {
-    postId,
+    postId, // 이거
     contents,
     costs,
     placeName,
@@ -50,6 +51,7 @@ export default function SchedulesEditPage() {
     schedulesCategory,
     timeSpent,
   });
+
   const imageHandler = useImage();
   console.log("image : ", imageHandler.uploadImage);
 
@@ -57,7 +59,17 @@ export default function SchedulesEditPage() {
     () => updateScheduleDetail(schedulesId, schedule),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("mySchedule");
+        queryClient.invalidateQueries("schedulesDetail");
+        navigate("/myschedules/details", { state: { postId, subTitle } });
+      },
+    }
+  );
+
+  const deleteScheduleMutation = useMutation(
+    () => deleteScheduleDetail(schedulesId),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("schedulesDetail");
         navigate("/myschedules/details", { state: { postId, subTitle } });
       },
     }
@@ -88,21 +100,28 @@ export default function SchedulesEditPage() {
   return (
     <Layout>
       <div
-        className="flex items-center gap-x-1 p-2"
+        className="flex items-center justify-between gap-x-1 p-2"
         onClick={() =>
           navigate("/myschedules/details", { state: { postId, subTitle } })
         }
       >
-        <div className="mr-2">
+        <div className="flex items-center mr-2">
           <LeftArrow />
+          <div className="h-14 flex items-center text-xl">{subTitle}</div>
         </div>
-        <div className="h-14 flex items-center text-xl">나의 일정</div>
+
+        <button
+          className="cursor-pointer"
+          onClick={() => deleteScheduleMutation.mutate()}
+        >
+          <XIcon />
+        </button>
       </div>
 
       <div className="flex border border-[#EBEBEB] rounded-lg mx-4">
         <div className="flex items-center w-full h-10 p-4">{subTitle}</div>
         <div className="flex items-center w-full h-10 p-4">
-          {formatDateString(chosenDate)}
+          {formatDateString(chosenDate, false)}
         </div>
       </div>
 
@@ -221,7 +240,7 @@ export default function SchedulesEditPage() {
         />
       </div>
 
-      <div className="max-w-3xl	flex fixed bottom-0">
+      <div className="fixed bottom-0 max-w-3xl flex">
         <button
           className="w-screen h-14 bg-gray-300 text-white"
           onClick={() => updateScheduleMutation.mutate()}

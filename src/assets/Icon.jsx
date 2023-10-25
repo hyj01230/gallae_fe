@@ -658,3 +658,32 @@ export const ThreeDot_horizen = () => {
     </svg>
   );
 };
+
+// 생김새 : 돈
+export const Money = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+    >
+      <circle
+        cx="16"
+        cy="16"
+        r="11"
+        fill="white"
+        stroke="#333333"
+        strokeWidth="2"
+      />
+      <path
+        d="M12 12L13.4737 21L16 12L18.5263 21L20 12"
+        stroke="#333333"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M22 16H10" stroke="#333333" strokeLinecap="round" />
+    </svg>
+  );
+};

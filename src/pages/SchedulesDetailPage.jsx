@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Card, LeftArrow, Plus, Share, PlusWithCircle } from "../assets/Icon";
+import { Money, LeftArrow, Share, PlusWithCircle, XIcon } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import List from "../components/schedulesDetail/List";
 import { useQuery } from "react-query";
@@ -9,33 +9,53 @@ import BottomNav from "../components/mySchedules/BottomNav";
 import KaKaoMap from "../components/schedulesDetail/KaKaoMap";
 import SearchMap from "../components/schedulesDetail/SearchMap";
 import TestKakaoMap from "../components/schedulesDetail/TestKakaoMap";
+import DateDropbox from "../components/schedulesDetail/DateDropbox";
+import DateSelectModal from "../components/schedulesDetail/DateSelectModal";
+import useModal from "../hooks/useModal";
 
 export default function SchedulesDetailPage() {
   const navigate = useNavigate();
   const { postId, subTitle, location } = useLocation().state;
-  const [selectedDate, setSelectedDate] = useState({
-    date: "",
+  // const [selectedDate, setSelectedDate] = useState({
+  //   // **기존 State
+  //   date: "",
+  //   tripDateId: "",
+  // });
+  // const [scheduleDetail, setScheduleDetail] = useState([]); // **기존 State
+  const modal = useModal();
+  const [tripSchedule, setTripSchedule] = useState({
+    day: "",
+    chosenDate: "",
+    schedulesList: [],
     tripDateId: "",
   });
-  const [scheduleDetail, setScheduleDetail] = useState([]);
 
-  const { isLoading, error, data } = useQuery("schedulesDetail", () =>
-    getTripDate(postId)
-  );
+  const { isLoading, error, data } = useQuery("schedulesDetail", async () => {
+    const response = await getTripDate(postId);
+    setTripSchedule({ ...response[0], day: 1 });
+    return response;
+  });
 
-  useEffect(() => {
-    if (selectedDate.date === "") return;
-    const getScheduleData = async () => {
-      const response = await getScheduleDetail(selectedDate.tripDateId);
-      setScheduleDetail(response.data.schedulesList);
-    };
-    getScheduleData();
-  }, [selectedDate]);
+  // useEffect(() => {
+  //   if (selectedDate.date === "") return;
+  //   const getScheduleData = async () => {
+  //     const response = await getScheduleDetail(selectedDate.tripDateId);
+  //     setScheduleDetail(response.data.schedulesList);
+  //   };
+  //   getScheduleData();
+  // }, [selectedDate]);
 
   if (isLoading) {
     return <div>로딩중</div>;
   }
 
+  // 모달에 나열된 '날짜' 클릭 시 날짜 정보를 토대로 세부일정 업데이트
+  const handleUpdateScheduleClick = (date) => {
+    setTripSchedule(date);
+    modal.handleCloseModal();
+  };
+
+  // 가계부로 이동
   const handleAccountClick = () => {
     const accountList = data.map((value) => ({
       chosenDate: value.chosenDate,
@@ -46,6 +66,8 @@ export default function SchedulesDetailPage() {
       state: { accountList, postId, subTitle },
     });
   };
+
+  console.log(tripSchedule);
 
   return (
     <Layout>
@@ -62,13 +84,13 @@ export default function SchedulesDetailPage() {
 
         <div className="flex items-center gap-1">
           <button>
-            <Plus />
-          </button>
-          <button>
             <Share />
           </button>
           <button onClick={handleAccountClick}>
-            <Card />
+            <Money />
+          </button>
+          <button>
+            <XIcon />
           </button>
         </div>
       </div>
@@ -79,31 +101,20 @@ export default function SchedulesDetailPage() {
 
       {/* <div className="w-full h-36"> *ㄴ/}
       {/* <KaKaoMap /> */}
-      <SearchMap keyword={location} />
+      {/* <SearchMap keyword={location} /> */}
       {/* <TestKakaoMap /> */}
       {/* </div>   */}
 
-      <div className="flex justify-between mx-4 mt-4 border border-[#EBEBEB] rounded-xl">
-        {data.map((date, index) => (
-          <div
-            className={`px-4 py-1 rounded-xl cursor-pointer ${
-              selectedDate.date === date.chosenDate ? "bg-[#F2F2F2]" : ""
-            }`}
-            key={index}
-            onClick={() => {
-              setSelectedDate({
-                date: date.chosenDate,
-                tripDateId: date.tripDateId,
-              });
-            }}
-          >
-            {date.chosenDate}
-          </div>
-        ))}
-      </div>
+      {/* 여행 날짜 드롭다운 */}
+      <DateDropbox
+        day={tripSchedule.day}
+        date={tripSchedule.chosenDate}
+        handleClick={modal.handleOpenModal}
+      />
 
-      {scheduleDetail.length >= 1 &&
-        scheduleDetail.map((schedule, index) => (
+      {/* 날짜별 여행계획 리스트 */}
+      {tripSchedule.schedulesList.length >= 1 &&
+        tripSchedule.schedulesList.map((schedule, index) => (
           <List
             key={index}
             schedule={schedule}
@@ -111,10 +122,9 @@ export default function SchedulesDetailPage() {
               navigate("/myschedules/edit/schedule", {
                 state: {
                   ...schedule,
-                  subTitle: data.subTitle,
-                  chosenDate: selectedDate.date,
-                  postId,
                   subTitle,
+                  chosenDate: tripSchedule.chosenDate,
+                  postId,
                 },
               })
             }
@@ -128,8 +138,8 @@ export default function SchedulesDetailPage() {
             state: {
               postId,
               subTitle: subTitle,
-              chosenDate: selectedDate.date,
-              tripDateId: selectedDate.tripDateId,
+              chosenDate: tripSchedule.chosenDate,
+              tripDateId: tripSchedule.tripDateId,
             },
           })
         }
@@ -138,7 +148,16 @@ export default function SchedulesDetailPage() {
         일정 추가하기
       </div>
 
-      <BottomNav />
+      {modal.isModal && (
+        <DateSelectModal
+          data={data}
+          selectedDate={tripSchedule.chosenDate}
+          handleCloseModal={modal.handleCloseModal}
+          handleUpdateScheduleClick={handleUpdateScheduleClick}
+        />
+      )}
+
+      {/* <BottomNav />  */}
     </Layout>
   );
 }

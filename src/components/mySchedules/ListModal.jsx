@@ -16,11 +16,6 @@ export default function ListModal({ scheduleData, handleClick }) {
     tripDateIdList,
   } = scheduleData;
 
-  // 일정 더보기 클릭
-  const handleScheduleClick = () => {
-    navigate("/myschedules/details", { state: { postId, subTitle } });
-  };
-
   // 일정 삭제
   const deletePostMutation = useMutation(() => deletePost(postId), {
     onSuccess: () => {
@@ -54,39 +49,45 @@ export default function ListModal({ scheduleData, handleClick }) {
 
   return (
     <div className="cursor-pointer">
-      <div className="fixed w-full h-full top-0 left-0 bg-[#666] opacity-30"></div>
-      <div className="relative bg-[#F2F2F2] mx-4 rounded-xl divide-y divide-[#666]">
-        <div onClick={handleScheduleClick}>
-          <button className="ml-8 my-[19px] text-lg">일정 더보기</button>
-        </div>
-        <div onClick={() => deletePostMutation.mutate()}>
-          <button className="ml-8 my-[19px] text-lg">삭제하기</button>
-        </div>
-        <div onClick={handleShareClick}>
-          <button className="ml-8 my-[19px] text-lg">
-            {title ? "게시글 수정하기" : "커뮤니티에 공유하기"}
-          </button>
-        </div>
-        <div>
-          <button className="ml-8 my-[19px] text-lg">
-            카카오톡으로 공유하기
-          </button>
-        </div>
-        <div onClick={handleEditClick}>
-          <button className="ml-8 my-[19px] text-lg">
-            이름 및 태그 수정하기
-          </button>
-        </div>
-        <div onClick={handleEditDateClick}>
-          <button className="ml-8 my-[19px] text-lg">날짜 수정하기</button>
-        </div>
-      </div>
-
       <div
-        className="relative bg-[#F2F2F2] mx-4 mt-3 mb-[22px] rounded-xl flex justify-center"
+        className="w-full h-screen fixed top-0 left-0 bg-black/50"
         onClick={handleClick}
-      >
-        <button className="my-5">취소</button>
+      ></div>
+
+      <div className="absolute bottom-0 w-full">
+        <div className="bg-[#F2F2F2] rounded-xl divide-y divide-[#666] mx-4">
+          <div className="flex justify-center">
+            <button className="my-[19px] text-sm">일정 더보기</button>
+          </div>
+          <div onClick={() => deletePostMutation.mutate()}>
+            <button className="ml-8 my-[19px] text-lg">삭제하기</button>
+          </div>
+          <div onClick={handleShareClick}>
+            <button className="ml-8 my-[19px] text-lg">
+              {title ? "게시글 수정하기" : "커뮤니티에 공유하기"}
+            </button>
+          </div>
+          <div>
+            <button className="ml-8 my-[19px] text-lg">
+              카카오톡으로 공유하기
+            </button>
+          </div>
+          <div onClick={handleEditClick}>
+            <button className="ml-8 my-[19px] text-lg">
+              이름 및 태그 수정하기
+            </button>
+          </div>
+          <div onClick={handleEditDateClick}>
+            <button className="ml-8 my-[19px] text-lg">날짜 수정하기</button>
+          </div>
+        </div>
+
+        <div
+          className="bg-[#F2F2F2] mx-4 mt-3 mb-[22px] rounded-xl flex justify-center"
+          onClick={handleClick}
+        >
+          <button className="my-5">취소</button>
+        </div>
       </div>
     </div>
   );

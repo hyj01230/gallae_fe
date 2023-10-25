@@ -1,9 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import { ThreeDot_horizen } from "../../assets/Icon";
 import { formatDateString } from "../../util/formatDate";
 
 export default function List({ schedule, handleClick }) {
   // 해당 컴포넌트를 클릭했을 때
   // Modal 생성
+
+  const navigate = useNavigate();
 
   const renderDateRange = () => {
     if (schedule.chosenDateList.length === 1) {
@@ -27,8 +30,19 @@ export default function List({ schedule, handleClick }) {
       return null;
     }
   };
+
+  const handleNavigateClick = (event) => {
+    event.preventDefault();
+    navigate("/myschedules/details", {
+      state: { postId: schedule.postId, subTitle: schedule.subTitle },
+    });
+  };
+
   return (
-    <div className="border border-[#D9D9D9] mx-4 mb-3 p-3 rounded-xl">
+    <div
+      className="border border-[#D9D9D9] mx-4 mb-3 p-3 rounded-xl cursor-pointer"
+      onClick={handleNavigateClick}
+    >
       <div className="flex justify-between items-center mr-[10px] text-xl	font-semibold">
         {schedule.subTitle}
         <button className="px-[6px] py-[14px]" onClick={handleClick}>
