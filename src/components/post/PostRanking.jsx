@@ -58,7 +58,9 @@ export default function PostRanking({ postList }) {
               >
                 <Like_Small_Heart />
               </div>
-              <div className="mb-4 mr-4 text-3">{post.likeNum}</div>
+              <div className="mb-4 mr-4 text-3 " style={{ color: "#666666" }}>
+                {post.likeNum}
+              </div>
             </Link>
           ))}
           <div
