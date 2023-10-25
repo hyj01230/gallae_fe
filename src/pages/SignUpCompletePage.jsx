@@ -39,7 +39,7 @@ export default function SignUpCompletePage() {
       </div>
 
       <div
-        className="fixed bottom-0 max-w-3xl w-full h-16 bg-[#D9D9D9] text-white flex items-center justify-center cursor-pointer"
+        className="fixed bottom-0 max-w-3xl w-full h-16 bg-[#FF9900] text-white flex items-center justify-center cursor-pointer"
         onClick={onClickHomeBtnHandler}
       >
         홈화면 바로가기
