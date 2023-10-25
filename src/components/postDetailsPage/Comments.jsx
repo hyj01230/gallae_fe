@@ -246,9 +246,9 @@ export default function Comments({ comments, setComments }) {
             <CommentModal
               isOpen={isModalOpen}
               handleCloseModal={handleCloseModal}
-              handleEditClick={() => handleEdit(comment)} // 댓글 수정을 위한 함수
-              handleDeleteClick={() => handleDelete(comment.commentId)} // 댓글 삭제를 위한 함수에 댓글 ID를 전달
-              comment={comment} // CommentModal 컴포넌트에 댓글을 전달
+              handleEditClick={() => handleEdit(comment)}
+              handleDeleteClick={() => handleDelete(comment.commentId)} // comment.commentId를 전달
+              comment={comment}
             />
           </div>
         ))
