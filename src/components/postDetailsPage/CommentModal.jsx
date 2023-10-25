@@ -1,6 +1,6 @@
 import React from "react";
 
-function CommentModal({
+export default function CommentModal({
   isOpen,
   handleCloseModal,
   handleEditClick,
@@ -28,7 +28,7 @@ function CommentModal({
 
           <button
             className="block w-full text-red-500 hover:text-red-700 p-2"
-            onClick={() => handleDeleteClick(comment)} // Use the comment prop
+            onClick={handleDeleteClick} // 이 부분 수정
           >
             댓글 삭제
           </button>
@@ -44,5 +44,3 @@ function CommentModal({
     </div>
   );
 }
-
-export default CommentModal;
