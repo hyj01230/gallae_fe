@@ -1,4 +1,4 @@
-export const formatDateString = (inputDate, isYear = true) => {
+export const formatDateString = (inputDate, isYear = true, simple = false) => {
   const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
 
   // 주어진 날짜 문자열을 Date 객체로 변환
@@ -14,7 +14,11 @@ export const formatDateString = (inputDate, isYear = true) => {
   const formattedDate = `${year}년 ${month}월 ${day}일 ${dayOfWeek}`;
 
   if (isYear === false) {
-    return `${month}월 ${day}일 ${dayOfWeek}`;
+    return `${month}월 ${day}일 ${dayOfWeek}요일`;
+  }
+
+  if (simple) {
+    return `${String(year).slice(2)}. ${month}. ${day}. ${dayOfWeek}`;
   }
 
   return formattedDate;

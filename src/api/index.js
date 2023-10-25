@@ -49,6 +49,12 @@ export const updateScheduleDetail = async (schedulesId, data) => {
   return response;
 };
 
+// 세부일정 삭제
+export const deleteScheduleDetail = async (schedulesId) => {
+  const response = await axiosInstance.delete(`/api/schedules/${schedulesId}`);
+  return response;
+};
+
 // <---------- 여행 날짜 관련 API ---------->
 // 게시글별 여행 날짜 조회
 export const getTripDate = async (postId) => {
