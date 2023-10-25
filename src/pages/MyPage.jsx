@@ -14,65 +14,46 @@ import { axiosInstance } from "../api/axiosInstance";
 
 export default function MyPage() {
   // 페이지 이동
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // navigate 할당
   const onClickLogOutHandler = () => {
-    localStorage.removeItem("accessToken"); // 로그아웃 시 토큰 제거
-    navigate("/");
+    localStorage.removeItem("accessToken");
+    navigate("/"); // 로그아웃(ㄴ토큰 제거!)
   };
   const onClickModifyHandler = () => {
-    navigate("/mypage/modify");
+    navigate("/mypage/modify"); // 톱니바퀴
   };
   const onClickLikeListHandler = () => {
-    navigate("/mypage/like");
+    navigate("/mypage/like"); // 좋아요 목록
   };
   const onClickCommentListHandler = () => {
-    navigate("/mypage/comment");
+    navigate("/mypage/comment"); // 나의 댓글 내역
   };
 
-  // 프로필 모달 : 열기 / 닫기
-  const [profileModal, setProfileModal] = useState(false);
+  // useState
+  const [profileModal, setProfileModal] = useState(false); // 모달 : 프로필 사진
+  const [aboutMeModal, setAboutMeModal] = useState(false); // 모달 : 소개글
+  const [myPageInfo, setMyPageInfo] = useState({}); // 전체 데이터
+  const [uploadImage, setUploadImage] = useState(null); // 프로필 사진 데이터
+  const [aboutMe, setAboutMe] = useState({}); // 소개글 데이터
+
+  // 모달
   const onClickProfileOpenHandler = () => {
-    setProfileModal(true);
+    setProfileModal(true); // 프로필 사진(열기)
   };
   const onClickProfileCloseHandler = () => {
-    setProfileModal(false);
+    setProfileModal(false); // 프로필 사진(닫기)
   };
-
-  // 프로필 사진 : inputRef, useState
-  const inputRef = useRef(null); // 사진선택 input - 앨범에서 선택 연결
-  const onClickSelectProfileHandler = () => {
-    // 사진선택 input - 앨범에서 선택 연결
-    inputRef.current.click();
-  };
-  const [uploadImage, setUploadImage] = useState(null); // 업로드할 이미지를 관리
-
-  // 프로필 사진 선택창
-  const uploadImageHandler = (e) => {
-    const selectImage = e.target.files[0]; // 선택된 파일 가져오기
-    console.log(`선택된 파일 이름: ${selectImage.name}`);
-    console.log(`선택된 파일 크기: ${selectImage.size} bytes`);
-    setUploadImage(selectImage);
-    putUpdateProfileHandler(); // 사진 변경 PUT 시작!
-  };
-
-  // 소개글 모달 : 열기 / 닫기
-  const [aboutMeModal, setAboutMeModal] = useState(false);
   const onClickAboutMeOpenHandler = () => {
-    setAboutMeModal(true);
-    console.log("aboutMe", aboutMe);
+    setAboutMeModal(true); // 소개글(열기)
   };
   const onClickAboutMeCloseHandler = () => {
-    setAboutMeModal(false);
+    setAboutMeModal(false); // 소개글(닫기)
   };
 
-  // 소개글 : useState, onChange
-  const [aboutMe, setAboutMe] = useState({});
+  // 소개글 : onChange
   const onChangeAboutMeHandler = (e) => {
     setAboutMe(e.target.value);
   };
-
-  // useState : GET(마이페이지 전체 데이터)
-  const [myPageInfo, setMyPageInfo] = useState({});
 
   // GET : 마이페이지 전체 데이터 가져오기
   const getMyPageInfo = async () => {
@@ -91,7 +72,61 @@ export default function MyPage() {
   // useEffect : 렌더링되면 실행!
   useEffect(() => {
     getMyPageInfo();
-  }, [profileModal]); // 프로필 설정 후 모달이 닫히니까 사진이 바로 적용됨!
+  }, [profileModal]); // 프로필 사진 모달이 닫히면, getMyPageInfo 실행되고, 변경된 사진이 바로 적용됨!
+
+  // PUT : 프로필 사진 - 기본으로 설정
+  const onClickDefaultProfileHandler = async () => {
+    try {
+      const formData = new FormData(); // 사진 업로드는 폼데이터로!
+      formData.append("file", null); // null로 보내면 기본사진으로 변경됨!
+
+      const response = await axiosInstance.put(
+        "/api/users/profile/update-profileImg",
+        formData
+      );
+      console.log("기본 프로필 put 성공 :", response);
+      alert(response.data.messageResponseDto.msg);
+      setProfileModal(false); // 모달 닫기
+    } catch (error) {
+      console.log("error", error);
+      setProfileModal(false); // 모달 닫기
+    }
+  };
+
+  // 프로필 사진 : useRef(input-div 연결)
+  const inputRef = useRef(null); // 사진선택 input - 앨범에서 선택 연결
+  const onClickSelectProfileHandler = () => {
+    inputRef.current.click(); // 사진선택 input - 앨범에서 선택 연결
+  };
+
+  // 프로필 사진 : 이미지 선택창 나옴
+  const uploadImageHandler = (e) => {
+    const selectImage = e.target.files[0]; // 선택된 파일 가져오기
+    console.log(`선택된 파일 이름: ${selectImage.name}`);
+    console.log(`선택된 파일 크기: ${selectImage.size} bytes`);
+    setUploadImage(selectImage); // 선택한 사진은 프로필 사진 state에 저장
+    putUpdateProfileHandler(); // 사진 변경 PUT 시작!
+  };
+
+  // PUT : 프로필 사진 - 앨범에서 선택
+  const putUpdateProfileHandler = async () => {
+    try {
+      const formData = new FormData(); // 사진 업로드는 폼데이터로!!!!!!!!!
+      formData.append("file", uploadImage);
+
+      const response = await axiosInstance.put(
+        "/api/users/profile/update-profileImg",
+        formData
+      );
+      console.log("성공 : put으로 넘어온 사진이 뭔가?", response);
+      // setProfileModal(false); // 모달닫기
+      // setUploadImage(null);
+    } catch (error) {
+      console.log("error", error);
+      console.log("실패 : put으로 넘어온 사진이 뭔가?", uploadImage);
+      // setProfileModal(false); // 모달닫기
+    }
+  };
 
   // PUT : 소개글 변경
   const onClickSaveAboutMeHandler = async () => {
@@ -104,56 +139,10 @@ export default function MyPage() {
       );
       console.log("소개글 put 성공 :", response);
       alert(response.data.msg);
-      setAboutMeModal(false);
+      setAboutMeModal(false); // 모달창 닫기
       setMyPageInfo({ ...myPageInfo, aboutMe }); // 마이페이지 소개글에 바로 적용되게!
     } catch (error) {
       console.log("error :", error);
-    }
-  };
-
-  // PUT : 프로필 사진 - 기본으로 설정
-  const onClickDefaultProfileHandler = async () => {
-    try {
-      const formData = new FormData(); // 사진 업로드는 폼데이터로!!!!!!!!!
-      formData.append("file", null); // null로 보내면 기본사진으로 변경됨!
-
-      const response = await axiosInstance.put(
-        "/api/users/profile/update-profileImg",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data", // 필수: FormData를 보낼 때 content type 설정
-          },
-        }
-      );
-      console.log("기본 프로필 put 성공 :", response);
-      alert(response.data.messageResponseDto.msg);
-      setProfileModal(false); // 모달 닫기
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  // PUT : 프로필 사진 - 앨범에서 선택
-  const putUpdateProfileHandler = async () => {
-    try {
-      const formData = new FormData(); // 사진 업로드는 폼데이터로!!!!!!!!!
-      formData.append("file", uploadImage);
-
-      const response = await axiosInstance.put(
-        "/api/users/profile/update-profileImg",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data", // 필수: FormData를 보낼 때 content type 설정
-          },
-        }
-      );
-      console.log("앨범사진 put 성공 :", response);
-      setProfileModal(false); // 모달닫기
-    } catch (error) {
-      console.log("error", error);
-      console.log("uploadImage", uploadImage);
     }
   };
 
@@ -206,7 +195,7 @@ export default function MyPage() {
                   아직 작성된 소개가 없어요.
                 </div>
                 <div className="text-[14px] text-[#D9D9D9] font-medium leading-5">
-                  길게 눌러 자기소개를 입력해주세요.
+                  클릭해서 자기소개를 입력해주세요.
                 </div>
               </div>
             ) : (
@@ -215,21 +204,25 @@ export default function MyPage() {
           </div>
         </div>
 
-        <div className="mt-10 font-semibold">나의 여행계획</div>
+        <div className="mt-10 font-semibold text-base/normal text-[#333333">
+          나의 여행계획
+        </div>
         <div
           onClick={onClickLikeListHandler}
           className="mt-5 flex flex-row items-center cursor-pointer"
         >
           <Heart />
-          <div className="ml-3 font-medium text-base/normal">좋아요 목록</div>
+          <div className="ml-3 font-medium text-base/normal text-[#666666]">
+            좋아요 목록
+          </div>
         </div>
         <div
           onClick={onClickCommentListHandler}
           className="mt-4 mb-28 flex flex-row items-center cursor-pointer"
         >
           <MyWriting />
-          <div className="ml-3 font-medium text-base/normal">
-            나의 글 쓴 내역
+          <div className="ml-3 font-medium text-base/normal  text-[#666666]">
+            나의 댓글 내역
           </div>
         </div>
       </div>
@@ -257,6 +250,7 @@ export default function MyPage() {
         </div>
       </div>
 
+      {/* 프로필 모달 */}
       {profileModal && (
         <div className="bg-[#666666]/50 w-full h-full absolute top-0 left-0 flex justify-center items-center">
           <div className=" w-full flex flex-col mt-auto mb-[21px]">
@@ -285,6 +279,7 @@ export default function MyPage() {
         </div>
       )}
 
+      {/* 소개글 모달 */}
       {aboutMeModal && (
         <div className="bg-[#333333]/80 w-full h-full absolute top-0 left-0 flex flex-col items-center">
           <div className=" mt-[61px] w-full flex flex-row text-white">
@@ -309,7 +304,8 @@ export default function MyPage() {
               value={aboutMe}
               onChange={onChangeAboutMeHandler}
               maxLength={80}
-              className="pb-3 w-full bg-transparent text-center text-white placeholder:text-white border-b-[0.5px] border-[#D9D9D9] outline-none"
+              rows={2}
+              className="w-full bg-transparent text-center text-white placeholder:text-white border-b-[0.5px] border-[#D9D9D9] outline-none resize-none"
             />
           </div>
           <div className="mt-2 text-[#D9D9D9] text-xs/5 font-normal">0/80</div>

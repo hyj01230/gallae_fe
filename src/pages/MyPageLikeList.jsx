@@ -16,8 +16,8 @@ export default function MyPageLikeList() {
   const onClickLeftArrowHandler = () => {
     navigate("/mypage");
   };
-  const oncilckLikePostHandler = () => {
-    navigate("/api/posts/${postId}");
+  const oncilckLikePostHandler = (postId) => {
+    navigate(`/posts/${postId}`);
   };
 
   // const likeListData = [
@@ -37,12 +37,36 @@ export default function MyPageLikeList() {
   //     createdAt: "2023-07-21",
   //   },
   //   {
-  //     postId: "2",
+  //     postId: "3",
   //     title: "여행을 갑니다 비행기타고 기차타고 요트타고 자동차 타고~_~",
   //     contents:
   //       "야호~야호~이야호~야호~야호~이야호~야호~야호~이야호~야호~야호~이야호~야호~야호~이야호~",
   //     nickName: "뚜벅이",
   //     createdAt: "2023-09-12",
+  //   },
+  //   {
+  //     postId: "4",
+  //     title: "맛집 탐방 여행",
+  //     contents:
+  //       "맛집 탐방 여행 맛집 탐방 여행 맛집 탐방 여행 맛집 탐방 여행 맛집 탐방 여행 맛집 탐방 여행",
+  //     nickName: "맛집 탐방 여행",
+  //     createdAt: "2023-07-21",
+  //   },
+  //   {
+  //     postId: "5",
+  //     title: "호캉스 일주일",
+  //     contents:
+  //       "호캉스 일주일 호캉스 일주일 호캉스 일주일 호캉스 일주일 호캉스 일주일 호캉스 일주일 호캉스 일주일",
+  //     nickName: "호캉스 일주일",
+  //     createdAt: "2023-05-20",
+  //   },
+  //   {
+  //     postId: "6",
+  //     title: "시골에서 한 달 살기",
+  //     contents:
+  //       "시골에서 한 달 살기 시골에서 한 달 살기 시골에서 한 달 살기 시골에서 한 달 살기 시골에서 한 달 살기",
+  //     nickName: "시골에서 한 달 살기",
+  //     createdAt: "2023-03-02",
   //   },
   // ];
 
@@ -52,9 +76,14 @@ export default function MyPageLikeList() {
   // GET : 사용자별 좋아요 게시글 가져오기
   const getLikeList = async () => {
     try {
-      const response = await axiosInstance.get("/api/posts/like");
+      const response = await axiosInstance.get("/api/posts/like", {
+        params: {
+          page: 0, // 원하는 페이지 번호
+          size: 5, // 원하는 페이지 크기
+        },
+      });
       console.log("response", response);
-      setLikeList(response.data);
+      setLikeList(response.data.content);
     } catch (error) {
       console.log("error", error);
     }
@@ -77,12 +106,12 @@ export default function MyPageLikeList() {
       <hr className="mt-[11px] border-[#F2F2F2] border-t-[1px]"></hr>
 
       <div className="mb-24">
-        {likeList &&
+        {likeList.length > 0 &&
           likeList.map((item) => (
             <div
               key={item.postId}
               onClick={() => oncilckLikePostHandler(item.postId)}
-              className="mx-4 scr"
+              className="mx-4 cursor-pointer"
             >
               <div className="mt-4 flex w-full">
                 <div className="flex flex-col w-full mr-auto">

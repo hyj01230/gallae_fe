@@ -67,7 +67,11 @@ export default function PostSearchPage() {
       }
       console.log(response);
     } catch (error) {
-      console.error("API 요청 중 오류 발생:", error);
+      if (error.response && error.response.status === 400) {
+        setSearchResults([]);
+      } else {
+        console.error("API 요청 중 오류 발생:", error);
+      }
     }
   };
 
@@ -81,40 +85,6 @@ export default function PostSearchPage() {
     setKeyword(selectedCategory);
     navigate(`/search?keyword=${encodeURIComponent(selectedCategory)}`);
   };
-
-  function highlightKeyword(text, keyword) {
-    if (keyword && text) {
-      const regex = new RegExp(`(${keyword})`, "gi");
-      const parts = text.split(regex);
-
-      return parts.map((part, index) =>
-        regex.test(part) ? (
-          <span key={index} style={{ color: "red" }}>
-            {part}
-          </span>
-        ) : (
-          <span key={index}>{part}</span>
-        )
-      );
-    } else {
-      return text;
-    }
-  }
-
-  function formatCreatedAt(createdAt) {
-    const date = new Date(createdAt);
-    const year = date.getFullYear().toString().slice(2);
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    return `${year}.${month}.${day}`;
-  }
-
-  function truncateText(text, maxLength) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + "...";
-    }
-    return text;
-  }
 
   return (
     <Layout>
@@ -144,6 +114,12 @@ export default function PostSearchPage() {
         />
 
         <div className="flex flex-wrap -mx-4 mt-[52px]">
+          {searchResults.length === 0 && keyword && (
+            <p className="text-xl text-gray-600 mt-4 text-center p-4 bg-gray-100 border border-gray-300 rounded my-8 w-full">
+              <span className="text-yellow-500">{keyword}</span> 에 대한 검색
+              결과가 없습니다.
+            </p>
+          )}
           {searchResults.map((result) => (
             <div
               key={result.postId}
