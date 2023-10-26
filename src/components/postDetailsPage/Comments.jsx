@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { axiosInstance } from "../../api/axiosInstance";
 import { useParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { nickNameState } from "../../store/atom";
 
 function formatDate(date) {
-  if (date) {
-    const options = {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    };
-    return new Date(date)
-      .toLocaleDateString(undefined, options)
-      .replace(/(\d+)\D+(\d+)/, "$1 $2");
-  }
-  return ""; // 날짜가 유효하지 않을 경우 빈 문자열을 반환합니다.
+  const options = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  };
+  return new Date(date)
+    .toLocaleDateString(undefined, options)
+    .replace(/(\d+)\D+(\d+)/, "$1 $2");
 }
-
+// 29, 186, 216
 export default function Comments({ comments, setComments }) {
   const [selectedComment, setSelectedComment] = useState(null);
   const [selectedCommentForEdit, setSelectedCommentForEdit] = useState(null);
@@ -27,6 +26,8 @@ export default function Comments({ comments, setComments }) {
   const [replyContent, setReplyContent] = useState("");
   const [isReplying, setIsReplying] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // 리코일 state에 저장된 값을 useRecoilValue를 이용해 가져온다.
+  const nickName = useRecoilValue(nickNameState);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -54,7 +55,7 @@ export default function Comments({ comments, setComments }) {
 
   const handleDelete = async (comment) => {
     // 클라이언트 측에서 댓글 상태 업데이트
-    setSelectedCommentForEdit(null); // 수정 상태 초기화
+    setSelectedComment(null); // 선택한 댓글 초기화
 
     const updatedComments = comments.filter(
       (c) => c.commentId !== comment.commentId
@@ -78,16 +79,21 @@ export default function Comments({ comments, setComments }) {
   const handleSave = async (comment) => {
     try {
       // 서버로 PUT 요청 보내기
-      await axiosInstance.put(`/api/comments/${comment.commentId}`, {
-        contents: editedContent,
-      });
+      await axiosInstance.put(
+        `/api/comments/${comment.commentId}`,
+        { contents: editedContent },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
 
       // 서버 요청이 성공한 후에 댓글 목록 업데이트
       const updatedComments = comments.map((c) => {
         if (c.commentId === comment.commentId) {
           // 수정된 댓글 ID 목록에 추가
           setEditedCommentIds((prevIds) => [...prevIds, comment.commentId]);
-          // 수정된 시간을 설정
           return { ...c, contents: editedContent, modifiedAt: new Date() };
         }
         return c;
@@ -122,10 +128,29 @@ export default function Comments({ comments, setComments }) {
     }
   };
 
+  const fetchReplies = async (commentId) => {
+    try {
+      const response = await axiosInstance.get(
+        `/api/comments/${comments.commentId}/replies`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+
+      const replies = response.data.content; // 서버에서 반환한 답글 데이터
+      console.log("replies:", replies);
+      // 받아온 답글 데이터를 사용하거나 상태에 업데이트할 수 있습니다.
+    } catch (error) {
+      console.error("답글 조회 중 오류 발생:", error);
+    }
+  };
+
   return (
     <div className="bg-gray-100">
       <h2 className="text-2xl font-[14px]"></h2>
-      {comments && comments.length > 0 ? (
+      {Array.isArray(comments) ? (
         comments.map((comment) => (
           <div
             key={comment.commentId}
@@ -158,7 +183,13 @@ export default function Comments({ comments, setComments }) {
               <div className="h-auto">
                 <div className="flex justify-between">
                   <p className="text-[16px] font-semibold">
+                    {/* comment의 nickName과 리코일 state의 닉네임이 일치하면 <span>글쓴이</span>을 보이게 한다 */}
                     <span className="hfont-semibold">{comment.nickname}</span>
+                    {comment.nickname === nickName ? (
+                      <span>글쓴이</span>
+                    ) : (
+                      <></>
+                    )}
                   </p>
                   <p className="text-[16px] font-semibold">
                     {/* <span className="inline-block w-4 h-4 rounded-full bg-gray-200 ml-2">
@@ -174,7 +205,7 @@ export default function Comments({ comments, setComments }) {
                 </p>
                 <p className="text-[12px] font-normal text-[#999]">
                   <span>
-                    {formatDate(comment.modifiedAt || comment.createAt)}{" "}
+                    {formatDate(comment.createAt)}{" "}
                     {isCommentEdited(comment) && (
                       <span className="text-gray-600 text-[12px] font-semibold">
                         (수정됨)
@@ -182,26 +213,31 @@ export default function Comments({ comments, setComments }) {
                     )}
                   </span>
                 </p>
-                <div>
-                  <button
-                    onClick={() => handleEdit(comment)}
-                    className="text-[#999] border-[#FF9900] text-sm mr-1"
-                  >
-                    수정
-                  </button>
-                  {comments.length > 0 && (
+                {/* comment 정보에 있는 nickName과 리코일 state의 값이 일치하면 수정 삭제 버튼을 보이게한다. */}
+                {comment.nickname === nickName && (
+                  <div>
+                    <button
+                      onClick={() => handleEdit(comment)}
+                      className="text-[#999] border-[#FF9900] text-sm mr-1"
+                    >
+                      수정
+                    </button>
                     <button
                       onClick={() => handleDelete(comment)}
                       className="text-[#999] border-[#FF9900] text-sm"
                     >
                       삭제
                     </button>
-                  )}
-                  <button
-                    onClick={() => handleAddReply(comment)}
-                    className="text-green-500"
-                  ></button>
-                </div>
+                    <button
+                      onClick={() => handleAddReply(comment)}
+                      className="text-green-500"
+                    >
+                      {/* {isReplying && selectedCommentForReply === comment
+                      ? "취소"
+                      : "답글"} */}
+                    </button>
+                  </div>
+                )}
               </div>
             )}
             {isReplying && selectedCommentForReply === comment && (
@@ -220,6 +256,13 @@ export default function Comments({ comments, setComments }) {
                 </button>
               </div>
             )}
+            {/* <CommentModal
+              isOpen={isModalOpen}
+              handleCloseModal={handleCloseModal}
+              handleEditClick={() => handleEdit(comment)}
+              handleDeleteClick={() => handleDelete(comment.commentId)} // comment.commentId를 전달
+              comment={comment}
+            /> */}
           </div>
         ))
       ) : (
