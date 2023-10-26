@@ -1,10 +1,10 @@
 import BottomNav from "./BottomNav";
 
-export default function Layout(prop, { isBottomNav = true }) {
+export default function Layout(prop) {
   return (
     <div className="relative overflow-auto h-screen max-w-3xl mx-auto border-2 border-black">
       {prop.children}
-      {isBottomNav && <BottomNav />}
+      {prop.isBottomNav && <BottomNav />}
     </div>
   );
 }
