@@ -677,7 +677,8 @@ export const ThreeDot_horizen = () => {
   );
 };
 
-//랭킹 드롭다운
+
+// 드롭 다
 export const DropDown = () => {
   return (
     <svg
@@ -697,20 +698,20 @@ export const DropDown = () => {
   );
 };
 
-// 랭킹 올리기
+// 드롭 업
 export const DropUp = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="18"
-      height="10"
-      viewBox="0 0 18 10"
+      width="16"
+      height="9"
+      viewBox="0 0 16 9"
       fill="none"
     >
       <path
-        d="M16 8L9 2L2 8"
+        d="M15 8L8 2L0.999999 8"
         stroke="#C9C9C9"
-        stroke-width="3"
+        stroke-width="2"
         stroke-linecap="round"
       />
     </svg>
