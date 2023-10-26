@@ -73,29 +73,34 @@ export default function PostRanking({ postList }) {
                 className="mb-4 mr-4 flex items-center h-[44px]"
               >
                 <div
-                  className="mb-4 mr-4 text-4 font-bold"
-                  style={{ width: "30px" }}
+                  className="mb-4 mr-3 text-4 font-bold"
+                  style={{ width: "30px", color: "#FF9900" }}
                 >
                   {index + 4}
                 </div>
                 <div
-                  className="mb-4 mr-4 text-[14px]"
-                  style={{ width: "100px" }}
+                  className="mb-4 mr-3 text-[14px]  font-medium w-[50px]"
+                  style={{ width: "130px", color: "#999" }}
                 >
                   {post.postCategory}
                 </div>
-                <div className="mb-4 mr-4 text-4" style={{ width: "150px" }}>
-                  {post.title.length > 10
-                    ? `${post.title.slice(0, 10)}...`
+                <div
+                  className="mb-4 mr-4 text-4 font-medium"
+                  style={{ width: "400px" }}
+                >
+                  {post.title.length > 11
+                    ? `${post.title.slice(0, 11)}...`
                     : post.title}
                 </div>
                 <div
                   className="mb-4 mr-2 text-3 ml-2"
                   style={{ color: "#666666" }}
                 >
-                  <Like_Heart />
+                  <Like_Small_Heart />
                 </div>
-                <div className="mb-4 mr-4 text-3">{post.likeNum}</div>
+                <div className="mb-4 mr-4 text-3 " style={{ color: "#666666" }}>
+                  {post.likeNum}
+                </div>
               </Link>
             ))}
           </div>

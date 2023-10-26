@@ -84,27 +84,6 @@ export default function PostDetailsPage() {
     navigate(`/search?keyword=${tag}`);
   };
 
-  // const handleDelete = async (comment) => {
-  //   try {
-  //     await axiosInstance.delete(
-  //       `/api/posts/${postId}/comments/${comment.commentId}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-  //         },
-  //       }
-  //     );
-
-  //     const commentsResponse = await axiosInstance.get(
-  //       `/api/posts/${postId}/comments`
-  //     );
-
-  //     setPostComments(commentsResponse.data.content);
-  //   } catch (error) {
-  //     console.error("댓글 삭제 중 오류 발생:", error);
-  //   }
-  // };
-
   return (
     <Layout>
       <div>

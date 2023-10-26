@@ -20,7 +20,33 @@ export default function PostListPage() {
 
   useEffect(() => {
     getPostList();
+    fetchLikedPosts(); // 컴포넌트가 마운트될 때 사용자의 좋아요 상태를 가져옵니다.
   }, []);
+
+  const getaccessToken = () => {
+    return localStorage.getItem("accessToken"); // 로그인 후 토큰을 저장한 방식에 따라 가져옵니다.
+  };
+
+  const fetchLikedPosts = async () => {
+    const accessToken = getaccessToken();
+
+    if (accessToken) {
+      try {
+        const response = await axiosInstance.get("/api/postlike/id");
+        const likedPosts = response.data;
+
+        // 서버에서 가져온 정보를 likedStatus 상태로 설정합니다.
+        const likedStatusMap = {};
+        likedPosts.forEach((postId) => {
+          likedStatusMap[postId] = true;
+        });
+
+        setLikedStatus(likedStatusMap);
+      } catch (error) {
+        console.error("좋아요 정보 가져오기 오류:", error);
+      }
+    }
+  };
 
   const getPostList = async () => {
     try {
@@ -80,21 +106,26 @@ export default function PostListPage() {
   function formatDateDifference(createdAt) {
     const createdAtDate = new Date(createdAt);
     const now = new Date();
-
     const timeDifference = now - createdAtDate;
-    const minutesDifference = Math.floor(timeDifference / (1000 * 60)); // 차이를 분으로 변환
+    const minutesDifference = Math.floor(timeDifference / (1000 * 60)); // 분 단위
+    const hoursDifference = Math.floor(minutesDifference / 60); // 시간 단위
+    const daysDifference = Math.floor(hoursDifference / 24); // 일 단위
+    const weeksDifference = Math.floor(daysDifference / 7); // 주 단위
+    const monthsDifference = Math.floor(daysDifference / 30); // 월 단위
+    const yearsDifference = Math.floor(monthsDifference / 12); // 년 단위
 
     if (minutesDifference < 60) {
-      // 1시간 미만일 경우
       return `${minutesDifference}분 전`;
-    } else if (minutesDifference < 24 * 60) {
-      // 1일 미만일 경우
-      const hoursDifference = Math.floor(minutesDifference / 60);
+    } else if (hoursDifference < 24) {
       return `${hoursDifference}시간 전`;
-    } else {
-      // 1일 이상일 경우
-      const daysDifference = Math.floor(minutesDifference / (60 * 24));
+    } else if (daysDifference < 7) {
       return `${daysDifference}일 전`;
+    } else if (weeksDifference < 4) {
+      return `${weeksDifference}주 전`;
+    } else if (monthsDifference < 12) {
+      return `${monthsDifference}달 전`;
+    } else {
+      return `${yearsDifference}년 전`;
     }
   }
 
