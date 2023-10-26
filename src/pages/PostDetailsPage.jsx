@@ -1,3 +1,4 @@
+import { Like_Heart, Like_Full_Heart, CommentIcon } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import PostLine from "../components/post/PostLine";
 import DetailsHeader from "../components/postDetailsPage/DetailsHeader";
@@ -20,12 +21,11 @@ export default function PostDetailsPage() {
     commentNum: "",
     // 다른 속성들 초기값 설정
   });
-
   const [postComments, setPostComments] = useState([{}]);
-
   const [newComment, setNewComment] = useState({ contents: "" });
-
   const { postId } = useParams();
+  const [isLiked, setIsLiked] = useState(false);
+  const [areCommentsVisible, setCommentsVisible] = useState(false);
 
   const getPostDetails = async () => {
     try {
@@ -64,19 +64,33 @@ export default function PostDetailsPage() {
     }
   };
 
-  useEffect(() => {
-    getPostDetails();
+  const handleLikeClick = async () => {
+    try {
+      const response = await axiosInstance.post(`/api/posts/like/${postId}`);
 
-    const fetchComments = async () => {
-      const commentsResponse = await axiosInstance.get(
-        `/api/posts/${postId}/comments`
-      );
-      setPostComments(commentsResponse.data.content);
-    };
+      if (response.data.check) {
+        // 게시물이 좋아요된 상태
+        setIsLiked(true);
 
-    console.log(postComments);
-    fetchComments();
-  }, [postId]);
+        // postDetails 상태에서 좋아요 수를 업데이트합니다.
+        setPostDetails((prevDetails) => ({
+          ...prevDetails,
+          likeNum: prevDetails.likeNum + 1,
+        }));
+      } else {
+        // 게시물이 좋아요가 취소된 상태
+        setIsLiked(false);
+
+        // postDetails 상태에서 좋아요 수를 업데이트합니다.
+        setPostDetails((prevDetails) => ({
+          ...prevDetails,
+          likeNum: prevDetails.likeNum - 1,
+        }));
+      }
+    } catch (error) {
+      console.error("좋아요 토글 오류:", error);
+    }
+  };
 
   const navigate = useNavigate();
 
@@ -92,7 +106,7 @@ export default function PostDetailsPage() {
         <div className="w-393 h-275 bg-white flex flex-col ">
           <div className="flex items-center justify-between mb-2 mt-5">
             <div className="flex items-center">
-              <div className="w-12 h-12 bg-gray-300 rounded-full ml-4  cursor-pointer"></div>
+              <div className="w-12 h-12 bg-gray-300 rounded-full ml-4 cursor-pointer"></div>
               <div className="flex flex-col ml-[13px]">
                 {postDetails ? (
                   <p className="text-[18px] font-semibold">
@@ -106,7 +120,7 @@ export default function PostDetailsPage() {
                     postDetails.tagsList.map((tag, index) => (
                       <span
                         key={index}
-                        className="text-gray-500 text-sm  cursor-pointer"
+                        className="text-gray-500 text-sm cursor-pointer mr-1"
                         onClick={() => handleTagClick(tag)}
                       >
                         #{tag}
@@ -119,44 +133,51 @@ export default function PostDetailsPage() {
               </div>
             </div>
           </div>
-          <p className="text-3 mt-4 mx-5">{postDetails.contents}</p>
-          <p className="text-3 mt-4 mx-5  cursor-pointer"></p>
-          <DetailSchedules postId={postId} />
-          <div className="mt-5">
-            <PostLine />
-            <div className="flex items-center justify-between  text-sm text-gray-500 h-[40px] border-b-2  ">
-              <div className="flex items-center space-x-2 flex-1 justify-center ">
-                <div className=" cursor-pointer w-4 h-4 bg-gray-400 rounded-full"></div>
-                <p className="cursor-pointer">댓글 {postDetails.commentNum}</p>
+
+          <p className="text-3 mt-4 mx-5 mb-3">{postDetails.contents}</p>
+          <div className="flex items-center justify-between text-sm text-gray-500 h-[50px] border-b-2">
+            <div
+              className="flex items-center space-x-2 flex-1 justify-center p-3"
+              onClick={() => setCommentsVisible(!areCommentsVisible)}
+            >
+              <div className="cursor-pointer ">
+                {areCommentsVisible ? <CommentIcon /> : <CommentIcon />}
               </div>
-              <div className="border border-gray-500 "></div>
-              <div className="flex items-center space-x-2 flex-1 justify-center">
-                <div className="w-4 h-4 bg-gray-400 rounded-full cursor-pointer"></div>
-                <p className="cursor-pointer">좋아요 {postDetails.likeNum}</p>
+              <p className="cursor-pointer">댓글 {postDetails.commentNum}</p>
+            </div>
+            <div className="border border-gray-500"></div>
+            <div
+              className="flex items-center space-x-2 flex-1 justify-center"
+              onClick={handleLikeClick}
+            >
+              <div className="">
+                {isLiked ? <Like_Full_Heart /> : <Like_Heart />}
               </div>
+              <p className="cursor-pointer">좋아요 {postDetails.likeNum}</p>
             </div>
           </div>
-          <div className="relative">
-            <textarea
-              value={newComment.contents}
-              onChange={(e) => setNewComment({ contents: e.target.value })}
-              placeholder="  댓글을 입력하세요."
-              className="w-full  p-4 h-[57px] "
-            />
-            <button
-              onClick={handleCommentSubmit}
-              className="bg-white font-[14px] absolute w-20  top-4 right-5 mx-0 rounded-md "
-            >
-              작성
-            </button>
-          </div>
+          {areCommentsVisible && (
+            <div className="relative transition-all duration-5000 ease-in-out">
+              <textarea
+                value={newComment.contents}
+                onChange={(e) => setNewComment({ contents: e.target.value })}
+                placeholder="댓글을 입력하세요."
+                className="w-full p-4 h-[57px]"
+              />
+              <button
+                onClick={handleCommentSubmit}
+                className="bg-white font-[14px] absolute w-20 top-4 right-5 mx-0 rounded-md"
+              >
+                작성
+              </button>
+            </div>
+          )}
+          {areCommentsVisible && (
+            <div className="transition-all duration-5000 ease-in-out">
+              <Comments comments={postComments} setComments={setPostComments} />
+            </div>
+          )}
         </div>
-        <Comments
-          comments={postComments}
-          setComments={setPostComments}
-
-          // handleDelete={handleDelete}
-        />
       </div>
     </Layout>
   );

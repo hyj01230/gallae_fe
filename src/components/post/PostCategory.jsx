@@ -1,5 +1,3 @@
-// PostCategory.js
-
 import { useState } from "react";
 
 export default function PostCategory({ onCategorySelect }) {
@@ -21,7 +19,7 @@ export default function PostCategory({ onCategorySelect }) {
   };
 
   return (
-    <div className="bg-white mx-10 mb-2">
+    <div className="bg-white mx-10 mb-2 sticky top-0 z-10 overflow-y-auto">
       <div className="flex justify-between">
         <div
           style={getCategoryStyle("전체")}

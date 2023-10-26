@@ -104,39 +104,38 @@ export default function PostListPage() {
     : [];
 
   function formatDateDifference(createdAt) {
-    const createdAtDate = new Date(createdAt);
+    const createdAtDate = new Date(createdAt); // createdAt는 ISO 8601 형식의 문자열이어야 합니다.
     const now = new Date();
     const timeDifference = now - createdAtDate;
     const minutesDifference = Math.floor(timeDifference / (1000 * 60)); // 분 단위
     const hoursDifference = Math.floor(minutesDifference / 60); // 시간 단위
     const daysDifference = Math.floor(hoursDifference / 24); // 일 단위
-    const weeksDifference = Math.floor(daysDifference / 7); // 주 단위
-    const monthsDifference = Math.floor(daysDifference / 30); // 월 단위
-    const yearsDifference = Math.floor(monthsDifference / 12); // 년 단위
 
-    if (minutesDifference < 60) {
+    if (minutesDifference === 0) {
+      return "방금";
+    } else if (daysDifference === 1) {
+      return "어제";
+    } else if (minutesDifference < 60) {
       return `${minutesDifference}분 전`;
     } else if (hoursDifference < 24) {
       return `${hoursDifference}시간 전`;
     } else if (daysDifference < 7) {
       return `${daysDifference}일 전`;
-    } else if (weeksDifference < 4) {
-      return `${weeksDifference}주 전`;
-    } else if (monthsDifference < 12) {
-      return `${monthsDifference}달 전`;
     } else {
-      return `${yearsDifference}년 전`;
+      const weeksDifference = Math.floor(daysDifference / 7); // 주 단위
+      return `${weeksDifference}주 전`;
     }
   }
-
   return (
     <Layout>
-      <div>
+      <div className="sticky top-0 bg-white z-10">
         <PostHeader />
         <PostCategory onCategorySelect={handleCategorySelect} />
-        <div className="border-b-2 border-gray-100"></div>
-        <PostRanking postList={postList} />
-        <PostLine />
+      </div>
+      <div className="border-b-2 border-gray-100"></div>
+      <PostRanking postList={postList} />
+      <PostLine />
+      <div className="overflow-y-auto">
         {filteredPostList && filteredPostList.length > 0 ? (
           filteredPostList.map((item, index) => (
             <div
@@ -203,7 +202,7 @@ export default function PostListPage() {
             </div>
           ))
         ) : (
-          <div className="text-center p-4 bg-gray-100 border  border-gray-300 rounded my-8">
+          <div className="text-center p-4 bg-gray-100 border border-gray-300 rounded my-8">
             <p className="text-lg text-gray-600">게시물이 없습니다.</p>
           </div>
         )}
