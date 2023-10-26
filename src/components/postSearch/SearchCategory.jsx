@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { DropDown, DropUp } from "../../assets/Icon";
 
 export default function SearchCategory({ onCategorySelect }) {
   const categories = [
@@ -27,24 +28,22 @@ export default function SearchCategory({ onCategorySelect }) {
     <div>
       <div className="flex justify-center items-center mt-4">
         <div className="flex justify-end">
-          {showCategories ? (
-            <div onClick={toggleCategories} className=" mb-3 h-8 ">
-              카테고리 <p className="cursor-pointer inline-block">△</p>
-            </div>
-          ) : (
-            <div onClick={toggleCategories} className=" mb-3 h-8">
-              카테고리 <p className="cursor-pointer inline-block">▽</p>
-            </div>
-          )}
+          <div
+            onClick={toggleCategories}
+            className="mb-3 h-8 cursor-pointer flex items-center"
+          >
+            <span className="mr-2 text-[18px] font-medium">추천키워드</span>
+            {showCategories ? <DropUp /> : <DropDown />}
+          </div>
         </div>
       </div>
       {showCategories && (
         <div>
-          <div className="flex flex-wrap justify-center items-center mb-5 ">
+          <div className="flex flex-wrap justify-center items-center mb-5">
             {categories.map((category, index) => (
               <div
                 key={index}
-                className="border rounded-[20px] px-4 py-2 flex justify-center items-center space-x-1 mr-4 mb-2  cursor-pointer"
+                className="border rounded-[20px] px-4 py-2 flex justify-center items-center space-x-1 mr-1 mb-2 cursor-pointer"
                 onClick={() => handleCategoryClick(category)}
               >
                 {category}

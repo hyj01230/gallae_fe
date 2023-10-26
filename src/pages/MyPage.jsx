@@ -17,7 +17,7 @@ export default function MyPage() {
   const navigate = useNavigate(); // navigate 할당
   const onClickLogOutHandler = () => {
     localStorage.removeItem("accessToken");
-    navigate("/"); // 로그아웃(ㄴ토큰 제거!)
+    navigate("/posts"); // 로그아웃(ㄴ토큰 제거!)
   };
   const onClickModifyHandler = () => {
     navigate("/mypage/modify"); // 톱니바퀴
@@ -76,27 +76,32 @@ export default function MyPage() {
 
   // PUT : 프로필 사진 - 기본으로 설정
   const onClickDefaultProfileHandler = async () => {
+    // setMyPageInfo({ ...myPageInfo, profileImg: null });
+    setUploadImage(null);
+
     try {
       const formData = new FormData(); // 사진 업로드는 폼데이터로!
-      formData.append("file", null); // null로 보내면 기본사진으로 변경됨!
+      formData.append("file", uploadImage); // null로 보내면 기본사진으로 변경됨!
 
       const response = await axiosInstance.put(
         "/api/users/profile/update-profileImg",
         formData
       );
-      console.log("기본 프로필 put 성공 :", response);
       alert(response.data.messageResponseDto.msg);
       setProfileModal(false); // 모달 닫기
+      console.log("기본 프로필 put 성공 :", response);
+      console.log("uploadImage 성공 :", uploadImage);
     } catch (error) {
-      console.log("error", error);
       setProfileModal(false); // 모달 닫기
+      console.log("error", error);
+      console.log("uploadImage 실패 :", uploadImage);
     }
   };
 
   // 프로필 사진 : useRef(input-div 연결)
   const inputRef = useRef(null); // 사진선택 input - 앨범에서 선택 연결
   const onClickSelectProfileHandler = () => {
-    inputRef.current.click(); // 사진선택 input - 앨범에서 선택 연결
+    inputRef.current.click(); // 앨범에서 선택 - 사진선택 input 연결
   };
 
   // 프로필 사진 : 이미지 선택창 나옴
@@ -107,6 +112,11 @@ export default function MyPage() {
     setUploadImage(selectImage); // 선택한 사진은 프로필 사진 state에 저장
     putUpdateProfileHandler(); // 사진 변경 PUT 시작!
   };
+
+  // useEffect : 렌더링되면 실행!
+  // useEffect(() => {
+  //   putUpdateProfileHandler();
+  // }, [uploadImage]);
 
   // PUT : 프로필 사진 - 앨범에서 선택
   const putUpdateProfileHandler = async () => {
@@ -120,7 +130,7 @@ export default function MyPage() {
       );
       console.log("성공 : put으로 넘어온 사진이 뭔가?", response);
       // setProfileModal(false); // 모달닫기
-      // setUploadImage(null);
+      // getMyPageInfo();
     } catch (error) {
       console.log("error", error);
       console.log("실패 : put으로 넘어온 사진이 뭔가?", uploadImage);

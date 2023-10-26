@@ -101,10 +101,16 @@ export default function MyPagePassWord() {
           <div onClick={onClickLeftArrowHandler} className="cursor-pointer">
             <LeftArrow />
           </div>
-          <div className="ml-4 text-xl/normal font-semibold">비밀번호 변경</div>
+          <div className="ml-4 text-xl/normal font-semibold text-[#333333]">
+            비밀번호 변경
+          </div>
           <div
             onClick={onClickModifyNickNameHandler}
-            className="ml-auto text-[#D9D9D9] text-xl/8 font-medium cursor-pointer"
+            className={`${
+              currentPassword && updatePassword && checkUpdatePassword
+                ? "text-[#FF9900]"
+                : "text-[#D9D9D9]"
+            } ml-auto  text-xl/8 font-medium cursor-pointer`}
           >
             변경
           </div>
@@ -129,7 +135,7 @@ export default function MyPagePassWord() {
         />
 
         {updatePasswordMessage !== true && updatePasswordMessage && (
-          <div className="mt-1 text-[#FF9900] text-xs/5 font-medium">
+          <div className="mt-1 text-[#FF3737] text-xs/5 font-medium">
             {updatePasswordMessage}
           </div>
         )}
@@ -144,7 +150,7 @@ export default function MyPagePassWord() {
         />
 
         {checkUpdatePassWordMessage !== true && checkUpdatePassWordMessage && (
-          <div className="mt-1 text-[#FF9900] text-xs/5 font-medium">
+          <div className="mt-1 text-[#FF3737] text-xs/5 font-medium">
             {checkUpdatePassWordMessage}
           </div>
         )}

@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate, useLocation } from "react-router-dom";
 import SearchHeader from "../components/postSearch/SearchHeader";
 import SearchCategory from "../components/postSearch/SearchCategory";
+import { LeftArrow, Post_Search } from "../assets/Icon";
 
 function highlightKeyword(text, keyword) {
   if (keyword && text) {
@@ -12,7 +13,7 @@ function highlightKeyword(text, keyword) {
 
     return parts.map((part, index) =>
       regex.test(part) ? (
-        <span key={index} style={{ color: "red" }}>
+        <span key={index} style={{ color: "#ff9900", fontWeight: "bold" }}>
           {part}
         </span>
       ) : (
@@ -42,8 +43,10 @@ function truncateText(text, maxLength) {
 export default function PostSearchPage() {
   const [keyword, setKeyword] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [inputFocused, setInputFocused] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const inputRef = useRef(null); // Ref를 생성하여 입력 필드에 접근
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -77,73 +80,53 @@ export default function PostSearchPage() {
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
-      navigate(`/search?keyword=${encodeURIComponent(keyword)}`);
+      if (inputFocused) {
+        navigate(`/search?keyword=${encodeURIComponent(keyword)}`);
+        setSearchResults([]);
+        inputRef.current.blur(); // Enter 키를 누른 후 입력 필드의 포커스를 해제
+      }
     }
   };
 
   const handleCategorySelect = (selectedCategory) => {
     setKeyword(selectedCategory);
     navigate(`/search?keyword=${encodeURIComponent(selectedCategory)}`);
+    inputRef.current.blur(); // 카테고리 선택 시 입력 필드의 포커스를 해제
   };
 
-  return (
-    <Layout>
-      <SearchHeader />
-      <div className="mx-4 my-5">
-        <div className="flex justify-center">
-          <div className="relative flex items-center">
-            <input
-              type="text"
-              placeholder="검색어를 입력하세요"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-              onKeyPress={handleKeyPress}
-              className="w-[321px] h-[40px] px-4 rounded-l-full border border-gray-400"
-            />
-            <button
-              onClick={() => handleSearch(keyword)}
-              className="bg-blue-500 text-white text-[14px] px-4 rounded-r-full ml-1"
-            >
-              검색
-            </button>
-          </div>
-        </div>
-        <SearchCategory
-          onCategorySelect={handleCategorySelect}
-          keyword={keyword}
-        />
-
-        <div className="flex flex-wrap -mx-4 mt-[52px]">
-          {searchResults.length === 0 && keyword && (
-            <p className="text-xl text-gray-600 mt-4 text-center p-4 bg-gray-100 border border-gray-300 rounded my-8 w-full">
-              <span className="text-yellow-500">{keyword}</span> 에 대한 검색
-              결과가 없습니다.
-            </p>
-          )}
-          {searchResults.map((result) => (
-            <div
-              key={result.postId}
-              className="w-full px-4 mb-4 cursor-pointer"
-              onClick={() => navigate(`/posts/${result.postId}`)}
-            >
-              <div className="bg-white rounded-lg border-2">
-                <div className="px-4 pt-4">
-                  <h3 className="text-[18px] font-semibold mb-[9px]">
-                    {highlightKeyword(truncateText(result.title, 18), keyword)}
-                  </h3>
-                  <p className="text-[14px] mb-[9px]">
-                    {highlightKeyword(
-                      truncateText(result.contents, 25),
-                      keyword
-                    )}
-                  </p>
-
-                  <div className="">
+  // 입력 필드가 포커스 상태인지 여부에 따라 컨텐츠를 조건부로 렌더링합니다.
+  const renderContent = inputFocused ? null : (
+    <div className="flex flex-wrap -mx-4 mt-[52px]">
+      {searchResults.length === 0 && keyword && (
+        <p className="text-xl text-gray-600 mt-4 text-center p-4 bg-gray-100 border border-gray-300 rounded my-8 w-full">
+          <span className="text-yellow-500">{keyword}</span> 에 대한 검색 결과가
+          없습니다.
+        </p>
+      )}
+      {searchResults.map((result) => (
+        <div
+          className="w-full px-4 mb-4 cursor-pointer"
+          onClick={() => navigate(`/posts/${result.postId}`)}
+        >
+          <div className="bg-white rounded-lg border-2">
+            <div className="px-4 pt-4">
+              <h3 className="text-[18px] font-semibold mb-[9px] ">
+                {highlightKeyword(truncateText(result.title, 18), keyword)}
+              </h3>
+              <p className="font-[14px]">
+                {highlightKeyword(truncateText(result.contents, 25), keyword)}
+              </p>
+              <div className="text-3 text-[#999] mr-2 text-right font-normal">
+                {result.nickName}
+              </div>
+              <div className="flex justify-between items-end">
+                <div>
+                  <div className="mb-2">
                     {result && result.tagsList ? (
                       result.tagsList.map((tag, index) => (
                         <span
                           key={index}
-                          className="inline-block bg-orange-100 text-gray-500 text-[10px] rounded-full px-2 py-1 mr-1 cursor-pointer mb-2"
+                          className="inline-block text-[#999] border border-solid border-gray-300 rounded-full text-[11px] px-2 py-1 mr-1 cursor-pointer"
                           onClick={() => handleTagClick(tag)}
                         >
                           {highlightKeyword(`#${tag}`, keyword)}
@@ -154,16 +137,46 @@ export default function PostSearchPage() {
                     )}
                   </div>
                 </div>
-                <div className="pb-4 px-4 flex justify-between">
-                  <p className="text-[3px]">{result.nickName}</p>
-                  <p className="text-[3px]">
-                    {formatCreatedAt(result.createdAt)}
-                  </p>
+                <div className="text-3 text-[#D9D9D9] p-2">
+                  {formatCreatedAt(result.createdAt)}
                 </div>
               </div>
             </div>
-          ))}
+            <div className="pb-4 px-4"></div>
+          </div>
         </div>
+      ))}
+    </div>
+  );
+
+  return (
+    <Layout>
+      <div className="mx-4 my-5">
+        <div className="flex justify-center ">
+          <div className="relative flex items-center cursor-pointer ">
+            <LeftArrow onClick={() => navigate(`/posts/`)} />
+            <input
+              type="text"
+              placeholder="검색어를 입력하세요"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              onFocus={() => setInputFocused(true)}
+              onBlur={() => setInputFocused(false)}
+              onKeyPress={handleKeyPress}
+              ref={inputRef}
+              className="w-[300px] h-[40px] px-4 rounded-r-full focus:border-yellow-500 bg-[#F2F2F2] ml-2"
+            />
+            <button
+              onClick={() => handleSearch(keyword)}
+              className="bg-blue-500 text-white text-[14px] px-4 rounded-r-full ml-1"
+            ></button>
+          </div>
+        </div>
+        <SearchCategory
+          onCategorySelect={handleCategorySelect}
+          keyword={keyword}
+        />
+        {renderContent}
       </div>
     </Layout>
   );
