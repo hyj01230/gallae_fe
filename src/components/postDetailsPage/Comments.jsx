@@ -3,16 +3,19 @@ import { axiosInstance } from "../../api/axiosInstance";
 import { useParams } from "react-router-dom";
 
 function formatDate(date) {
-  const options = {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  };
-  return new Date(date)
-    .toLocaleDateString(undefined, options)
-    .replace(/(\d+)\D+(\d+)/, "$1 $2");
+  if (date) {
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Date(date)
+      .toLocaleDateString(undefined, options)
+      .replace(/(\d+)\D+(\d+)/, "$1 $2");
+  }
+  return ""; // 날짜가 유효하지 않을 경우 빈 문자열을 반환합니다.
 }
 
 export default function Comments({ comments, setComments }) {
@@ -51,7 +54,7 @@ export default function Comments({ comments, setComments }) {
 
   const handleDelete = async (comment) => {
     // 클라이언트 측에서 댓글 상태 업데이트
-    setSelectedComment(null); // 선택한 댓글 초기화
+    setSelectedCommentForEdit(null); // 수정 상태 초기화
 
     const updatedComments = comments.filter(
       (c) => c.commentId !== comment.commentId
@@ -75,21 +78,16 @@ export default function Comments({ comments, setComments }) {
   const handleSave = async (comment) => {
     try {
       // 서버로 PUT 요청 보내기
-      await axiosInstance.put(
-        `/api/comments/${comment.commentId}`,
-        { contents: editedContent },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
+      await axiosInstance.put(`/api/comments/${comment.commentId}`, {
+        contents: editedContent,
+      });
 
       // 서버 요청이 성공한 후에 댓글 목록 업데이트
       const updatedComments = comments.map((c) => {
         if (c.commentId === comment.commentId) {
           // 수정된 댓글 ID 목록에 추가
           setEditedCommentIds((prevIds) => [...prevIds, comment.commentId]);
+          // 수정된 시간을 설정
           return { ...c, contents: editedContent, modifiedAt: new Date() };
         }
         return c;
@@ -124,29 +122,10 @@ export default function Comments({ comments, setComments }) {
     }
   };
 
-  const fetchReplies = async (commentId) => {
-    try {
-      const response = await axiosInstance.get(
-        `/api/comments/${comments.commentId}/replies`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
-
-      const replies = response.data.content; // 서버에서 반환한 답글 데이터
-      console.log("replies:", replies);
-      // 받아온 답글 데이터를 사용하거나 상태에 업데이트할 수 있습니다.
-    } catch (error) {
-      console.error("답글 조회 중 오류 발생:", error);
-    }
-  };
-
   return (
     <div className="bg-gray-100">
       <h2 className="text-2xl font-[14px]"></h2>
-      {Array.isArray(comments) ? (
+      {comments && comments.length > 0 ? (
         comments.map((comment) => (
           <div
             key={comment.commentId}
@@ -195,7 +174,7 @@ export default function Comments({ comments, setComments }) {
                 </p>
                 <p className="text-[12px] font-normal text-[#999]">
                   <span>
-                    {formatDate(comment.createAt)}{" "}
+                    {formatDate(comment.modifiedAt || comment.createAt)}{" "}
                     {isCommentEdited(comment) && (
                       <span className="text-gray-600 text-[12px] font-semibold">
                         (수정됨)
@@ -210,20 +189,18 @@ export default function Comments({ comments, setComments }) {
                   >
                     수정
                   </button>
-                  <button
-                    onClick={() => handleDelete(comment)}
-                    className="text-[#999] border-[#FF9900] text-sm"
-                  >
-                    삭제
-                  </button>
+                  {comments.length > 0 && (
+                    <button
+                      onClick={() => handleDelete(comment)}
+                      className="text-[#999] border-[#FF9900] text-sm"
+                    >
+                      삭제
+                    </button>
+                  )}
                   <button
                     onClick={() => handleAddReply(comment)}
                     className="text-green-500"
-                  >
-                    {/* {isReplying && selectedCommentForReply === comment
-                      ? "취소"
-                      : "답글"} */}
-                  </button>
+                  ></button>
                 </div>
               </div>
             )}
@@ -243,13 +220,6 @@ export default function Comments({ comments, setComments }) {
                 </button>
               </div>
             )}
-            {/* <CommentModal
-              isOpen={isModalOpen}
-              handleCloseModal={handleCloseModal}
-              handleEditClick={() => handleEdit(comment)}
-              handleDeleteClick={() => handleDelete(comment.commentId)} // comment.commentId를 전달
-              comment={comment}
-            /> */}
           </div>
         ))
       ) : (
