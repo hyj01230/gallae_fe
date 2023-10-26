@@ -75,6 +75,18 @@ export const updateTripDate = async (tripDateId, data) => {
 };
 
 // <---------- 이미지 관련 API ---------->
+// 게시글 이미지 업로드
+export const uploadPostImage = async (postId, file) => {
+  const response = await axiosInstance.put(
+    `/api/posts/${postId}/postPictures`,
+    file,
+    {
+      headers: { "Content-Type": "multipart/form-data" },
+    }
+  );
+  return response;
+};
+
 // 세부여행 이미지 업로드
 export const uploadScheduleImage = async (schedulesId, file) => {
   const response = await axiosInstance.post(

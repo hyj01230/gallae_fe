@@ -7,9 +7,8 @@ import {
   Plus,
   SpeechBubble,
 } from "../assets/Icon";
-// import defaultSchedule from "img/woman_writing_with_a_big_pencil.png";
 import { useState } from "react";
-import { isError, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { getMySchedules } from "../api";
 import Layout from "../components/common/Layout";
 import List from "../components/mySchedules/List";
@@ -38,12 +37,9 @@ export default function MySchedulesPage() {
 
   return (
     <Layout>
-      <div className="flex items-center justify-between gap-x-1 mb-1 p-2">
-        <div className="flex items-center">
-          <div className="mr-2">
-            <LeftArrow />
-          </div>
-          <div className="h-14 flex items-center text-xl">나의 일정</div>
+      <div className="flex items-center justify-between gap-x-1 mx-4">
+        <div className="py-3 flex items-center text-[20px] font-bold">
+          나의 일정
         </div>
 
         <div className="flex items-center gap-1">
