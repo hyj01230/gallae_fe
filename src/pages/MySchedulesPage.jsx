@@ -7,6 +7,7 @@ import {
   Plus,
   SpeechBubble,
 } from "../assets/Icon";
+// import defaultSchedule from "img/woman_writing_with_a_big_pencil.png";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { getMySchedules } from "../api";
@@ -29,6 +30,7 @@ export default function MySchedulesPage() {
   if (isLoading) {
     return <div>로딩중</div>;
   }
+  console.log(data);
 
   return (
     <Layout>

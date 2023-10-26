@@ -51,43 +51,44 @@ export default function SchedulesInfoPage() {
   return (
     <Layout>
       <div
-        className="flex items-center gap-x-1 p-2 border-b border-gray-300"
+        className="flex items-center gap-x-1 mx-4"
         onClick={() => navigate("/")}
       >
         <div className="mr-2">
           <LeftArrow />
         </div>
-        <div className="h-14 flex items-center text-xl font-bold">
+        <div className="py-3 flex items-center text-xl font-bold">
           여행 만들기
         </div>
       </div>
-
-      <div className="my-7 px-4">
+      <div className="px-4 mx-4 mt-3 mb-7">
         <div className="font-semibold mb-4 select-none">
           어디로 여행을 떠나시나요?
         </div>
-        <div className="flex border border-[#d1d5db] rounded-lg divide-x">
+        <div className="flex border border-[#D9D9D9] rounded-lg divide-x">
           <div className="text-sm px-12 py-3">국내</div>
           <div className="flex flex-1 gap-2 items-center text-sm pl-[22px] cursor-pointer">
             <Search />
-            <button onClick={() => setisModal(true)}>
+            <button className="text-[#999]" onClick={() => setisModal(true)}>
               {post.location ? post.location : "여행지 검색"}
             </button>
           </div>
         </div>
       </div>
-
       {isModal && (
         <PlaceList handleClick={() => setisModal(false)} setPost={setPost} />
       )}
-
-      <div className="mb-7 px-4">
+      <div className="mb-7 mx-4 px-4">
         <div className="font-semibold mb-4 select-none">누구와 떠나시나요?</div>
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-3 divide-x divide-y border border-[#d1d5db] rounded-xl">
           {CATEGORIES.map((category, index) => (
             <div
               key={index}
-              className="h-10 flex justify-center items-center border border-[#d1d5db] cursor-pointer text-sm"
+              className={`h-10 flex justify-center items-center cursor-pointer text-sm ${
+                post.postCategory === category
+                  ? "text-[#F90]"
+                  : "text-[#D9D9D9]"
+              }`}
               onClick={() =>
                 setPost((post) => ({ ...post, postCategory: category }))
               }
@@ -97,16 +98,17 @@ export default function SchedulesInfoPage() {
           ))}
         </div>
       </div>
-
-      <div className="mb-7 px-4">
+      <div className="mb-7 mx-4 px-4">
         <div className="font-semibold mb-4 select-none">
           여행의 목적은 어떻게 되시나요?(최대 3개 선택)
         </div>
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-3 divide-x divide-y border border-[#d1d5db] rounded-xl">
           {TAGS.map((tag, index) => (
             <div
               key={index}
-              className="h-10 flex justify-center items-center border border-[#d1d5db] cursor-pointer text-sm"
+              className={`h-10 flex justify-center items-center cursor-pointer text-sm ${
+                post.tagsList.includes(tag) ? "text-[#F90]" : "text-[#D9D9D9]"
+              }`}
               onClick={handleTagsClick}
             >
               {tag}
@@ -114,8 +116,7 @@ export default function SchedulesInfoPage() {
           ))}
         </div>
       </div>
-
-      <div className="mb-7 px-4">
+      <div className="mb-7 mx-4 px-4">
         <div className="font-semibold mb-4 select-none">여행의 이름은?</div>
         <div>
           <input
@@ -131,13 +132,16 @@ export default function SchedulesInfoPage() {
           />
         </div>
       </div>
-
       <div className="max-w-3xl	flex fixed bottom-0">
         <button
+          style={{
+            background:
+              "linear-gradient(95deg, #F90 -39.5%, #FFB800 5.63%, #FF912C 109.35%, #FF912C 109.35%)",
+          }}
           className="w-screen h-14 bg-gray-300 text-white"
           onClick={handleSubmitClick}
         >
-          다음 단계로
+          날짜 입력하기
         </button>
       </div>
     </Layout>

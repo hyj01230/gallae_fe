@@ -13,7 +13,11 @@ import {
 import Layout from "../components/common/Layout";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { deleteScheduleDetail, updateScheduleDetail } from "../api";
+import {
+  deleteScheduleDetail,
+  updateScheduleDetail,
+  uploadScheduleImage,
+} from "../api";
 import { timeStringToMinutes } from "../util/formatDate";
 import { useMutation, useQueryClient } from "react-query";
 import { formatDateString } from "../util/formatDate";
@@ -56,9 +60,16 @@ export default function SchedulesEditPage() {
   console.log("image : ", imageHandler.uploadImage);
 
   const updateScheduleMutation = useMutation(
-    () => updateScheduleDetail(schedulesId, schedule),
+    async () => {
+      await updateScheduleDetail(schedulesId, schedule);
+      await uploadScheduleImage(schedulesId);
+    },
     {
-      onSuccess: () => {
+      onSuccess: async () => {
+        // await imageHandler.handleSubmitClick(
+        //   schedulesId,
+        //   imageHandler.uploadImage
+        // );
         queryClient.invalidateQueries("schedulesDetail");
         navigate("/myschedules/details", { state: { postId, subTitle } });
       },
@@ -161,6 +172,7 @@ export default function SchedulesEditPage() {
           <DownArrow />
         </div>
       </div>
+
       <div
         className="mt-3 mx-4"
         onClick={imageHandler.onClickSelectProfileHandler}
@@ -175,10 +187,20 @@ export default function SchedulesEditPage() {
         <div className="w-36 h-36 flex justify-center items-center bg-[#F2F2F2] rounded-lg cursor-pointer">
           <Plus />
         </div>
-        <img src={imageHandler.uploadImage} />
+
+        <div className="flex">
+          {imageHandler.previewImage.length > 0 &&
+            imageHandler.previewImage.map((value, index) => (
+              <img key={index} src={value} className="w-36 h-36" />
+            ))}
+        </div>
       </div>
 
-      <div className="flex flex-col mt-7 mx-7">
+      <div className="text-xs text-[#999] mx-4 mt-3">
+        사진 업로드는 개당 1MB내외로 업로드 가능합니다.
+      </div>
+
+      {/* <div className="flex flex-col mt-7 mx-7">
         <div className="flex gap-4">
           <Clock />
           <div className="w-full flex items-center gap-8 border border-[#D9D9D9] rounded-lg px-3 py-2">
@@ -192,6 +214,33 @@ export default function SchedulesEditPage() {
               {value.text}
             </button>
           ))}
+        </div>
+      </div> */}
+
+      <div className="flex flex-col mt-7 mx-7">
+        <div className="flex gap-4">
+          <div className="flex justify-center">
+            <Clock />
+          </div>
+
+          <div className="w-full">
+            <div className="w-full flex items-center gap-8 border border-[#D9D9D9] rounded-lg px-3 py-2">
+              <span className="text-sm">소요시간</span>
+              <span className="text-sm">{timeSpentState.text}</span>
+            </div>
+
+            <div className="flex justify-between">
+              {SPENT_TIME_LIST.map((value, index) => (
+                <button
+                  key={index}
+                  className="text-sm text=[#D9D9D9] mx-2 mt-3"
+                  onClick={() => handleClick(value.minute)}
+                >
+                  {value.text}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 

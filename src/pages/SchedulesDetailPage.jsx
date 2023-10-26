@@ -49,6 +49,8 @@ export default function SchedulesDetailPage() {
     return <div>로딩중</div>;
   }
 
+  console.log(data);
+
   // 모달에 나열된 '날짜' 클릭 시 날짜 정보를 토대로 세부일정 업데이트
   const handleUpdateScheduleClick = (date) => {
     setTripSchedule(date);

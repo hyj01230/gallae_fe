@@ -159,10 +159,12 @@ export default function PostCreatePage() {
         </div>
       </div>
 
-      <div className="p-2 text-gray-200">내용을 입력하세요(최대 20,000자)</div>
+      {/* <div className="mx-4 py-2 text-gray-200">
+        내용을 입력하세요(최대 20,000자)
+      </div> */}
 
       <ContentEditable
-        className="p-2 outline-none"
+        className="mx-4 py-2 mt-4 mb-14 outline-none"
         innerRef={ref}
         // html={data.title ? data.contents : postData.contents} // innerHTML of the editable div
         html={postData.contents} // innerHTML of the editable div
@@ -172,7 +174,7 @@ export default function PostCreatePage() {
         }
       />
 
-      {listData && <List schedule={listData} />}
+      {listData && <List schedule={listData} isPointer={false} />}
 
       <div
         className="max-w-3xl	flex fixed bottom-0"

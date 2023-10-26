@@ -376,10 +376,10 @@ export const Clock = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <circle cx="16" cy="16" r="9" stroke="#888888" strokeWidth="2" />
+      <circle cx="16" cy="16" r="9" stroke="#F90" strokeWidth="2" />
       <path
         d="M16 11V17H11"
-        stroke="#888888"
+        stroke="#F89"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -399,14 +399,14 @@ export const Url = () => {
     >
       <path
         d="M10.4667 13H5.70968L3 17.5714L5.70968 21H14.2903L17 17.5714"
-        stroke="#888888"
+        stroke="#F90"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M20.5 19L26.0968 19L29 14.4286L26.0968 11L16.9032 11L14 14.4286"
-        stroke="#888888"
+        stroke="#F90"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -430,17 +430,10 @@ export const Card = () => {
         width="22"
         height="14"
         rx="3"
-        stroke="#888888"
+        stroke="#F90"
         strokeWidth="2"
       />
-      <rect
-        x="5"
-        y="14"
-        width="22"
-        height="2"
-        stroke="#888888"
-        strokeWidth="2"
-      />
+      <rect x="5" y="14" width="22" height="2" stroke="#F90" strokeWidth="2" />
     </svg>
   );
 };
@@ -461,20 +454,20 @@ export const Memo = () => {
         height="17"
         rx="1"
         fill="white"
-        stroke="#888888"
+        stroke="#F90"
         strokeWidth="2"
         strokeLinejoin="round"
       />
       <path
         d="M12 12H20"
-        stroke="#888888"
+        stroke="#F90"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M12 18H20"
-        stroke="#888888"
+        stroke="#F90"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -677,8 +670,7 @@ export const ThreeDot_horizen = () => {
   );
 };
 
-
-  //랭킹 드롭다운
+//랭킹 드롭다운
 export const DropDown = () => {
   return (
     <svg
@@ -754,7 +746,6 @@ export const Like_Heart = () => {
   );
 };
 
-
 // 좋아요 채운 하트
 export const Like_Full_Heart = () => {
   return (
@@ -772,8 +763,6 @@ export const Like_Full_Heart = () => {
     </svg>
   );
 };
-
-
 
 // 생김새 : 돈
 export const Money = () => {
@@ -804,8 +793,6 @@ export const Money = () => {
   );
 };
 
-
- 
 //게시글 검색
 export const Post_Search = () => {
   return (
@@ -823,7 +810,6 @@ export const Post_Search = () => {
     </svg>
   );
 };
-
 
 // 포스트리스트 댓글
 

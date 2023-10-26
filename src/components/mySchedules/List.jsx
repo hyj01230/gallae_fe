@@ -2,9 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { ThreeDot_horizen } from "../../assets/Icon";
 import { formatDateString } from "../../util/formatDate";
 
-export default function List({ schedule, handleClick }) {
+export default function List({ schedule, handleClick, isPointer = true }) {
   // 해당 컴포넌트를 클릭했을 때
   // Modal 생성
+
+  console.log({ isPointer });
 
   const navigate = useNavigate();
 
@@ -32,6 +34,8 @@ export default function List({ schedule, handleClick }) {
   };
 
   const handleNavigateClick = (event) => {
+    if (!isPointer) return;
+
     event.preventDefault();
     navigate("/myschedules/details", {
       state: { postId: schedule.postId, subTitle: schedule.subTitle },
@@ -40,7 +44,9 @@ export default function List({ schedule, handleClick }) {
 
   return (
     <div
-      className="border border-[#D9D9D9] mx-4 mb-3 p-3 rounded-xl cursor-pointer"
+      className={`border border-[#D9D9D9] mx-4 mb-3 p-3 rounded-xl ${
+        isPointer ? "cursor-pointer" : ""
+      }`}
       onClick={handleNavigateClick}
     >
       <div className="flex justify-between items-center mr-[10px] text-xl	font-semibold">
