@@ -9,7 +9,7 @@ import {
 } from "../assets/Icon";
 // import defaultSchedule from "img/woman_writing_with_a_big_pencil.png";
 import { useState } from "react";
-import { useQuery } from "react-query";
+import { isError, useQuery } from "react-query";
 import { getMySchedules } from "../api";
 import Layout from "../components/common/Layout";
 import List from "../components/mySchedules/List";
@@ -29,6 +29,10 @@ export default function MySchedulesPage() {
 
   if (isLoading) {
     return <div>로딩중</div>;
+  }
+
+  if (error) {
+    navigate("/posts");
   }
   console.log(data);
 
