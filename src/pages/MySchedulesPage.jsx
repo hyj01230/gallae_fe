@@ -36,7 +36,7 @@ export default function MySchedulesPage() {
   console.log(data);
 
   return (
-    <Layout>
+    <Layout isBottomNav={true}>
       <div className="flex items-center justify-between gap-x-1 mx-4">
         <div className="py-3 flex items-center text-[20px] font-bold">
           나의 일정

@@ -72,7 +72,7 @@ export default function SchedulesDetailPage() {
   console.log(tripSchedule);
 
   return (
-    <Layout>
+    <Layout isBottomNav={true}>
       <div className="flex items-center justify-between gap-x-1 p-2 border-b border-gray-300">
         <div
           className="flex items-center cursor-pointer"
