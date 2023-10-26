@@ -31,12 +31,12 @@ export default function SignUpPage() {
   };
   const onChangeEmailHandler = (e) => {
     setEmail(e.target.value);
-    emailAuthCompleted(false); // 이메일주소 변경되면, 인증 다시 받기
+    setEmailAuthCompleted(false); // 이메일주소 변경되면, 인증 다시 받기
     // 이메일
   };
   const onChangeEmailCordHandler = (e) => {
     setEmailCord(e.target.value);
-    emailAuthCompleted(false); // 인증번호 변경되면, 인증 다시 받기
+    setEmailAuthCompleted(false); // 인증번호 변경되면, 인증 다시 받기
     // 인증번호
   };
   const onChangePasswordHandler = (e) => {
@@ -169,7 +169,7 @@ export default function SignUpPage() {
   // 회원가입 Bar 색상변경
   useEffect(() => {
     if (
-      nickName !== "" && // 닉네임 input에 겂이 있음
+      nickName !== "" && // 닉네임 input에 값이 있음
       checkNickName === true && // 닉네임 중복확인이 true = 사용가능 닉네임
       email !== "" && // 이메일 input에 겂이 있음
       emailMessage === true && // 이메일 유효성 문제없음
