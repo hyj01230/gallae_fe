@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { axiosInstance } from "../../api/axiosInstance";
 import { useParams } from "react-router-dom";
-import CommentModal from "./commentModal";
+// import CommentModal from "./commentModal";
 
 function formatDate(date) {
   const options = {
@@ -110,6 +110,7 @@ export default function Comments({ comments, setComments }) {
         `/api/comments/${comment.commentId}/replies`,
         { contents: replyContent }
       );
+      console.log(comment.commentId);
 
       if (selectedCommentForReply === comment) {
         setIsReplying(false);
@@ -182,12 +183,12 @@ export default function Comments({ comments, setComments }) {
                     <span className="hfont-semibold">{comment.nickname}</span>
                   </p>
                   <p className="text-[16px] font-semibold">
-                    <span className="inline-block w-4 h-4 rounded-full bg-gray-200 ml-2">
+                    {/* <span className="inline-block w-4 h-4 rounded-full bg-gray-200 ml-2">
                       <button
                         onClick={handleOpenModal}
                         className="w-full h-full bg-gray-200 rounded-full"
                       ></button>
-                    </span>
+                    </span> */}
                   </p>
                 </div>
                 <p className="text-[14px] font-nomal w-[360px]">
@@ -206,13 +207,13 @@ export default function Comments({ comments, setComments }) {
                 <div>
                   <button
                     onClick={() => handleEdit(comment)}
-                    className="text-blue-500"
+                    className="text-[#999] border-[#FF9900] text-sm mr-1"
                   >
                     수정
                   </button>
                   <button
                     onClick={() => handleDelete(comment)}
-                    className="text-red-500"
+                    className="text-[#999] border-[#FF9900] text-sm"
                   >
                     삭제
                   </button>
@@ -220,9 +221,9 @@ export default function Comments({ comments, setComments }) {
                     onClick={() => handleAddReply(comment)}
                     className="text-green-500"
                   >
-                    {isReplying && selectedCommentForReply === comment
+                    {/* {isReplying && selectedCommentForReply === comment
                       ? "취소"
-                      : "답글"}
+                      : "답글"} */}
                   </button>
                 </div>
               </div>
@@ -243,13 +244,13 @@ export default function Comments({ comments, setComments }) {
                 </button>
               </div>
             )}
-            <CommentModal
+            {/* <CommentModal
               isOpen={isModalOpen}
               handleCloseModal={handleCloseModal}
               handleEditClick={() => handleEdit(comment)}
               handleDeleteClick={() => handleDelete(comment.commentId)} // comment.commentId를 전달
               comment={comment}
-            />
+            /> */}
           </div>
         ))
       ) : (
