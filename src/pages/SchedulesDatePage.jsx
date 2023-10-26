@@ -58,19 +58,22 @@ export default function SchedulesDatePage() {
 
   return (
     <Layout>
-      <div className="flex items-center gap-x-1 p-2 border-b border-gray-300">
+      <div className="flex items-center gap-x-1 p-2">
         <div className="mr-2">
           <LeftArrow />
         </div>
         <div className="h-14 flex items-center text-xl">여행 일정</div>
       </div>
 
-      <Calendar
-        formatDay={(locale, date) => moment(date).format("DD")}
-        onChange={changeDate}
-        selectRange={true}
-      />
-      <div className="mt-8">
+      <div className="mx-auto">
+        <Calendar
+          formatDay={(locale, date) => moment(date).format("DD")}
+          onChange={changeDate}
+          selectRange={true}
+        />
+      </div>
+
+      <div className="mt-8 mx-4">
         <span
           className={`px-4 py-2 rounded-[40px] border ${
             tripDateRange

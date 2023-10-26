@@ -54,11 +54,13 @@ export default function SchedulesInfoPage() {
         className="flex items-center gap-x-1 mx-4"
         onClick={() => navigate("/")}
       >
-        <div className="mr-2">
-          <LeftArrow />
-        </div>
-        <div className="py-3 flex items-center text-xl font-bold">
-          여행 만들기
+        <div className="flex gap-1 justify-center items-center">
+          <div className="mr-2">
+            <LeftArrow />
+          </div>
+          <div className="py-3 flex items-center text-xl font-bold">
+            여행 만들기
+          </div>
         </div>
       </div>
       <div className="px-4 mx-4 mt-3 mb-7">

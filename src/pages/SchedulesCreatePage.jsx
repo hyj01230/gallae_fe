@@ -167,23 +167,6 @@ export default function SchedulesCreatePage() {
         사진 업로드는 개당 1MB내외로 업로드 가능합니다.
       </div>
 
-      {/* <div className="flex flex-col mt-7 mx-7">
-        <div className="flex gap-4">
-          <Clock />
-          <div className="w-full flex items-center gap-8 border border-[#D9D9D9] rounded-lg px-3 py-2">
-            <span>소요시간</span>
-            <span>{timeSpent.text}</span>
-          </div>
-        </div>
-        <div className="flex justify-between">
-          {SPENT_TIME_LIST.map((value, index) => (
-            <button key={index} onClick={() => handleClick(value.minute)}>
-              {value.text}
-            </button>
-          ))}
-        </div>
-      </div> */}
-
       <div className="flex flex-col mt-7 mx-7">
         <div className="flex gap-4">
           <div className="flex justify-center">
