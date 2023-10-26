@@ -73,6 +73,7 @@ export default function MyPageNickName() {
       setMyPageInfo({ ...myPageInfo, nickName });
     } catch (error) {
       console.log("error :", error);
+      alert(error.response.data.msg);
     }
   };
 
@@ -86,7 +87,9 @@ export default function MyPageNickName() {
           <div className="ml-4 text-xl/normal font-semibold">닉네임 수정</div>
           <div
             onClick={onClickModifyNickNameHandler}
-            className="ml-auto text-[#D9D9D9] text-xl/8 font-medium cursor-pointer"
+            className={`${
+              nickName ? "text-[#FF9900]" : "text-[#D9D9D9]"
+            } ml-auto text-xl/8 font-medium cursor-pointer`}
           >
             변경
           </div>
