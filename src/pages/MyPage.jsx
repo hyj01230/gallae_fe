@@ -1,13 +1,6 @@
 import Layout from "../components/common/Layout";
-import {
-  GearIcon,
-  Heart,
-  MyWriting,
-  Community,
-  FillMypage,
-} from "../assets/Icon";
+import { GearIcon, Heart, MyWriting } from "../assets/Icon";
 import { useNavigate } from "react-router-dom";
-import { WhiteDocument } from "../assets/Icon";
 import { useEffect, useRef, useState } from "react";
 // import defaultProfile from "../../public/img/defaultProfile.png";
 import { axiosInstance } from "../api/axiosInstance";
@@ -109,9 +102,15 @@ export default function MyPage() {
     const selectImage = e.target.files[0]; // 선택된 파일 가져오기
     console.log(`선택된 파일 이름: ${selectImage.name}`);
     console.log(`선택된 파일 크기: ${selectImage.size} bytes`);
+
     setUploadImage(selectImage); // 선택한 사진은 프로필 사진 state에 저장
-    putUpdateProfileHandler(); // 사진 변경 PUT 시작!
+    console.log("이미지 확인", uploadImage);
+    // putUpdateProfileHandler(); // 사진 변경 PUT 시작!
   };
+
+  useEffect(() => {
+    putUpdateProfileHandler();
+  }, [uploadImage]);
 
   // useEffect : 렌더링되면 실행!
   // useEffect(() => {
@@ -129,12 +128,12 @@ export default function MyPage() {
         formData
       );
       console.log("성공 : put으로 넘어온 사진이 뭔가?", response);
-      // setProfileModal(false); // 모달닫기
+      setProfileModal(false); // 모달닫기
       // getMyPageInfo();
     } catch (error) {
       console.log("error", error);
       console.log("실패 : put으로 넘어온 사진이 뭔가?", uploadImage);
-      // setProfileModal(false); // 모달닫기
+      setProfileModal(false); // 모달닫기
     }
   };
 
@@ -157,7 +156,7 @@ export default function MyPage() {
   };
 
   return (
-    <Layout>
+    <Layout isBottomNav={true}>
       <div className="mx-4">
         <div className="mt-[60px] flex flex-row justify-end items-center">
           <div
@@ -233,29 +232,6 @@ export default function MyPage() {
           <MyWriting />
           <div className="ml-3 font-medium text-base/normal  text-[#666666]">
             나의 댓글 내역
-          </div>
-        </div>
-      </div>
-
-      <div className="fixed bottom-0 max-w-3xl w-full h-[84px] bg-[#F2F2F2] flex justify-center">
-        <div className="h-10 w-full mx-10 mt-[11.6px] flex">
-          <div className="w-10 h-10 flex flex-col justify-center items-center">
-            <WhiteDocument />
-            <div className="mt-[5px] text-center text-[9px] text-[#888888] font-extrabold leading-[9px]">
-              일정
-            </div>
-          </div>
-          <div className="mx-auto w-10 h-10 flex flex-col justify-center items-center">
-            <Community />
-            <div className="mt-[5px] text-center text-[9px] text-[#888888] font-extrabold leading-[9px]">
-              커뮤니티
-            </div>
-          </div>
-          <div className="w-[45px] h-10 flex flex-col justify-center items-center">
-            <FillMypage />
-            <div className="mt-[5px] text-center text-[9px] text-[#888888] font-extrabold leading-[9px]">
-              마이페이지
-            </div>
           </div>
         </div>
       </div>
