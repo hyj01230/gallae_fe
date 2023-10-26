@@ -113,9 +113,9 @@ export default function MyPage() {
   }, [uploadImage]);
 
   // useEffect : 렌더링되면 실행!
-  // useEffect(() => {
-  //   putUpdateProfileHandler();
-  // }, [uploadImage]);
+  useEffect(() => {
+    putUpdateProfileHandler();
+  }, [uploadImage]);
 
   // PUT : 프로필 사진 - 앨범에서 선택
   const putUpdateProfileHandler = async () => {

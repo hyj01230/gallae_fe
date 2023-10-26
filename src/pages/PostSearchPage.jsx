@@ -58,6 +58,7 @@ export default function PostSearchPage() {
     }
   }, [location.search]);
 
+  // 파라미터로 보내기
   const handleSearch = async (searchKeyword) => {
     try {
       const response = await axiosInstance.get(
@@ -88,13 +89,14 @@ export default function PostSearchPage() {
     }
   };
 
+  // 키워드 선택하면 검색창으로!
   const handleCategorySelect = (selectedCategory) => {
     setKeyword(selectedCategory);
     navigate(`/search?keyword=${encodeURIComponent(selectedCategory)}`);
     inputRef.current.blur(); // 카테고리 선택 시 입력 필드의 포커스를 해제
   };
 
-  // 입력 필드가 포커스 상태인지 여부에 따라 컨텐츠를 조건부로 렌더링합니다.
+  // 입력 필드가 포커스 상태인지 여부에 따라 컨텐츠를 조건부로 렌더링
   const renderContent = inputFocused ? null : (
     <div className="flex flex-wrap -mx-4 mt-[52px]">
       {searchResults.length === 0 && keyword && (
@@ -149,12 +151,15 @@ export default function PostSearchPage() {
     </div>
   );
 
+  // input창에 포커즈되면 보이는 부분
   return (
     <Layout>
       <div className="mx-4 my-5">
         <div className="flex justify-center ">
-          <div className="relative flex items-center cursor-pointer ">
-            <LeftArrow onClick={() => navigate(`/posts/`)} />
+          <div className="relative flex items-center  ">
+            <div className="cursor-pointer" onClick={() => navigate(`/posts`)}>
+              <LeftArrow />
+            </div>
             <input
               type="text"
               placeholder="검색어를 입력하세요"
@@ -164,7 +169,7 @@ export default function PostSearchPage() {
               onBlur={() => setInputFocused(false)}
               onKeyPress={handleKeyPress}
               ref={inputRef}
-              className="w-[300px] h-[40px] px-4 rounded-r-full focus:border-yellow-500 bg-[#F2F2F2] ml-2"
+              className="w-[300px] h-[40px] px-4 rounded-full focus:border-[#ff9900] bg-[#F2F2F2] ml-2"
             />
             <button
               onClick={() => handleSearch(keyword)}

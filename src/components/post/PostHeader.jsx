@@ -8,7 +8,7 @@ export default function PostHeader() {
   };
 
   return (
-    <div className="bg-[#ffffff] p-4 flex justify-between items-center">
+    <div className="bg-[#ffffff] p-4 flex justify-between items-center sticky top-0 z-10 overflow-y-auto">
       <div
         className="text-black text-2xl font-bold cursor-pointer"
         onClick={scrollToTop}
