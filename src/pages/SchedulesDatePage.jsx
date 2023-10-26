@@ -84,10 +84,14 @@ export default function SchedulesDatePage() {
 
       <div className="max-w-3xl	flex fixed bottom-0">
         <button
+          style={{
+            background:
+              "linear-gradient(95deg, #F90 -39.5%, #FFB800 5.63%, #FF912C 109.35%, #FF912C 109.35%)",
+          }}
           className="w-screen h-14 bg-gray-300 text-white"
           onClick={() => createScheduleMutation.mutate()}
         >
-          다음 단계로
+          일정 만들기
         </button>
       </div>
     </Layout>
