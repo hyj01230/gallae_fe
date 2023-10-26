@@ -28,12 +28,12 @@ export default function MySchedulesPage() {
   };
 
   if (isLoading) {
+    if (!localStorage.getItem("accessToken")) {
+      navigate("/posts");
+    }
     return <div>로딩중</div>;
   }
 
-  if (error) {
-    navigate("/posts");
-  }
   console.log(data);
 
   return (
