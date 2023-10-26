@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { axiosInstance } from "../../api/axiosInstance";
 import { useParams } from "react-router-dom";
-// import CommentModal from "./commentModal";
 
 function formatDate(date) {
   const options = {
