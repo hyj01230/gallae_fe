@@ -108,10 +108,6 @@ export default function MyPage() {
     // putUpdateProfileHandler(); // 사진 변경 PUT 시작!
   };
 
-  useEffect(() => {
-    putUpdateProfileHandler();
-  }, [uploadImage]);
-
   // useEffect : 렌더링되면 실행!
   useEffect(() => {
     putUpdateProfileHandler();
