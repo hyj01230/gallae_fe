@@ -127,7 +127,7 @@ export default function PostListPage() {
     }
   }
   return (
-    <Layout>
+    <Layout isBottomNav={true}>
       <div className="sticky top-0 bg-white z-10">
         <PostHeader />
         <PostCategory onCategorySelect={handleCategorySelect} />

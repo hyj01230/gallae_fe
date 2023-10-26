@@ -1,7 +1,10 @@
+
 import React, { useEffect } from "react";
 import { axiosInstance } from "../../api/axiosInstance";
 import { nickNameState } from "../../store/atom";
 import { useRecoilState } from "recoil";
+import BottomNav from "./BottomNav";
+
 
 export default function Layout(prop) {
   // 리코일 state에 닉네임을 변경시키기 위해 useRecoilState를 사용할 수 있다.
@@ -30,6 +33,7 @@ export default function Layout(prop) {
   return (
     <div className="relative overflow-auto h-screen max-w-3xl mx-auto border-2 border-black">
       {prop.children}
+      {prop.isBottomNav && <BottomNav />}
     </div>
   );
 }

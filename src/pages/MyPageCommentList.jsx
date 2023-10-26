@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Community,
-  FillMypage,
-  LeftArrow,
-  WhiteDocument,
-  CommentIcon,
-  ReplyIcon,
-} from "../assets/Icon";
+import { LeftArrow, CommentIcon, ReplyIcon } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
@@ -224,29 +217,6 @@ export default function MyPageCommentList() {
         ))} */}
 
       <div className="mb-24"></div>
-
-      <div className="fixed bottom-0 max-w-3xl w-full h-[84px] bg-[#F2F2F2] flex justify-center">
-        <div className="h-10 w-full mx-10 mt-[11.6px] flex">
-          <div className="w-10 h-10 flex flex-col justify-center items-center">
-            <WhiteDocument />
-            <div className="mt-[5px] text-center text-[9px] text-[#888888] font-extrabold leading-[9px]">
-              일정
-            </div>
-          </div>
-          <div className="mx-auto w-10 h-10 flex flex-col justify-center items-center">
-            <Community />
-            <div className="mt-[5px] text-center text-[9px] text-[#888888] font-extrabold leading-[9px]">
-              커뮤니티
-            </div>
-          </div>
-          <div className="w-[45px] h-10 flex flex-col justify-center items-center">
-            <FillMypage />
-            <div className="mt-[5px] text-center text-[9px] text-[#888888] font-extrabold leading-[9px]">
-              마이페이지
-            </div>
-          </div>
-        </div>
-      </div>
     </Layout>
   );
 }

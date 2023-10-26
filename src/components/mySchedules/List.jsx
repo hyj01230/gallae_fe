@@ -6,8 +6,6 @@ export default function List({ schedule, handleClick, isPointer = true }) {
   // 해당 컴포넌트를 클릭했을 때
   // Modal 생성
 
-  console.log({ isPointer });
-
   const navigate = useNavigate();
 
   const renderDateRange = () => {
@@ -49,18 +47,18 @@ export default function List({ schedule, handleClick, isPointer = true }) {
       }`}
       onClick={handleNavigateClick}
     >
-      <div className="flex justify-between items-center mr-[10px] text-xl	font-semibold">
+      <div className="flex justify-between items-center mr-[10px] text-[18px]	font-semibold">
         {schedule.subTitle}
         <button className="px-[6px] py-[14px]" onClick={handleClick}>
           <ThreeDot_horizen />
         </button>
       </div>
-      {renderDateRange()}
+      <div className="text-[14px]">{renderDateRange()}</div>
       <div className="flex gap-1 mt-6">
         {schedule.tagsList.map((tag, index) => (
           <span
             key={index}
-            className="text-xs px-2 py-1 border border-[#D9D9D9] text-[#888] rounded-xl"
+            className="text-[12px] px-2 py-1 border border-[#D9D9D9] text-[#888] rounded-xl"
           >
             {tag}
           </span>

@@ -1,13 +1,14 @@
-import { useEffect, useRef, useState } from "react";
-import { DownArrow, LeftArrow } from "../assets/Icon";
+import List from "../components/mySchedules/List";
 import Layout from "../components/common/Layout";
+import ContentEditable from "react-contenteditable";
 import SelectScheduleModal from "../components/postCreate/SelectScheduleModal";
+import { DownArrow, LeftArrow } from "../assets/Icon";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getDetailPost, updatePost } from "../api";
-import ContentEditable from "react-contenteditable";
-import List from "../components/mySchedules/List";
 import { useMutation } from "react-query";
 import { CATEGORIES, TAGS } from "../constants/mySchedule";
+import useImage from "../hooks/useImage";
 
 export default function PostCreatePage() {
   const ref = useRef();
@@ -20,6 +21,7 @@ export default function PostCreatePage() {
   const [postData, setPostData] = useState({ contents: "", tagsList: [] });
   const [listData, setListData] = useState(data);
   const [mode, setMode] = useState("");
+  const imageHandler = useImage();
 
   useEffect(() => {
     const getData = async () => {
@@ -75,8 +77,35 @@ export default function PostCreatePage() {
         postCategory: postData.postCategory,
         tagsList: postData.tagsList,
       }),
-    { onSuccess: () => navigate("/posts") }
+    {
+      onSuccess: async () => {
+        // await imageHandler.handleSubmitClick(selectedPostId);
+        navigate("/posts");
+      },
+    }
   );
+
+  // const createPostMutation = useMutation(
+  //   "schedule",
+  //   () => imageHandler.handleSubmitClick(selectedPostId),
+
+  //   {
+  //     onSuccess: async () => {
+  //       await updatePost(selectedPostId, {
+  //         title: postData.title,
+  //         contents: postData.contents,
+  //         subTitle: data.subTitle,
+  //         postCategory: postData.postCategory,
+  //         tagsList: postData.tagsList,
+  //       }),
+  //         navigate("/posts");
+  //     },
+  //   }
+  // );
+
+  const handleTestClick = async (id) => {
+    imageHandler.handleSubmitClick(id);
+  };
 
   return (
     <Layout>
@@ -154,9 +183,27 @@ export default function PostCreatePage() {
         >
           여행 일정 불러오기
         </div>
-        <div className="flex-1 flex items-center justify-center text-sm text-gray-600">
+        <div
+          className="flex-1 flex items-center justify-center text-sm text-gray-600"
+          onClick={imageHandler.onClickSelectProfileHandler}
+        >
+          <input
+            type="file"
+            className="hidden"
+            onChange={imageHandler.uploadImageHandler}
+            accept="image/*"
+            ref={imageHandler.inputRef}
+          />
           사진 첨부
         </div>
+      </div>
+      {/* <button onClick={() => handleTestClick(selectedPostId)}>test</button> */}
+
+      <div className="flex">
+        {imageHandler.previewImage.length > 0 &&
+          imageHandler.previewImage.map((value, index) => (
+            <img key={index} src={value} className="w-36 h-36" />
+          ))}
       </div>
 
       {/* <div className="mx-4 py-2 text-gray-200">

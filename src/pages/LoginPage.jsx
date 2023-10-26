@@ -51,7 +51,7 @@ export default function LoginPage() {
   };
 
   return (
-    <Layout>
+    <Layout isBottomNav={false}>
       <div className="mx-4 mb-20">
         <div
           className="flex justify-end mt-[60px] text-[#999999] text-base/normal font-normal cursor-pointer"
@@ -102,7 +102,7 @@ export default function LoginPage() {
             onClick={onClickSingUpHandler}
             className="mt-3 rounded-lg w-full h-[50px] bg-[#F8DF00] flex justify-center items-center text-[#333333] text-base/[30px] font-medium cursor-pointer"
           >
-            <img className="w-12 h-12" src="public/img/kakao.png"></img>
+            {/* <img className="w-12 h-12" src="public/img/kakao.png"></img> */}
             카카오톡으로 시작하기
           </div>
         </div>
