@@ -1,15 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  DropDown,
-  DropUp,
-  Like_Heart,
-  Like_Small_Heart,
-} from "../../assets/Icon";
+import { DropDown, DropUp, LikeSmallHeart } from "../../assets/Icon";
 
+// eslint-disable-next-line react/prop-types
 export default function PostRanking({ postList }) {
   const [expanded, setExpanded] = useState(false);
-
   const sortedPostList = [...postList].sort((a, b) => b.likeNum - a.likeNum);
   const topRankedPosts = sortedPostList.slice(0, 3);
 
@@ -56,7 +51,7 @@ export default function PostRanking({ postList }) {
                 className="mb-4 mr-2 text-3 ml-2"
                 style={{ color: "#666666" }}
               >
-                <Like_Small_Heart />
+                <LikeSmallHeart />
               </div>
               <div className="mb-4 mr-4 text-3 " style={{ color: "#666666" }}>
                 {post.likeNum}
@@ -96,7 +91,7 @@ export default function PostRanking({ postList }) {
                   className="mb-4 mr-2 text-3 ml-2"
                   style={{ color: "#666666" }}
                 >
-                  <Like_Small_Heart />
+                  <LikeSmallHeart />
                 </div>
                 <div className="mb-4 mr-4 text-3 " style={{ color: "#666666" }}>
                   {post.likeNum}

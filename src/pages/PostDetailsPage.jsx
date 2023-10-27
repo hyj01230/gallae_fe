@@ -1,11 +1,10 @@
-import { Like_Heart, Like_Full_Heart, CommentIcon } from "../assets/Icon";
+import { LikeHeart, LikeFullHeart, CommentIcon } from "../assets/Icon";
 import Layout from "../components/common/Layout";
-import PostLine from "../components/post/PostLine";
 import DetailsHeader from "../components/postDetailsPage/DetailsHeader";
 import Image from "../components/postDetailsPage/Image";
 import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Comments from "../components/postDetailsPage/Comments";
 import DetailSchedules from "../components/postDetailsPage/DetailSchedules";
 
@@ -24,26 +23,26 @@ export default function PostDetailsPage() {
   const [postComments, setPostComments] = useState([{}]);
   const [newComment, setNewComment] = useState({ contents: "" });
   const { postId } = useParams();
-  const [isLiked, setIsLiked] = useState(false);
+  const [likedStatus, setLikedStatus] = useState({});
   const [areCommentsVisible, setCommentsVisible] = useState(false);
 
-  const getPostDetails = async () => {
-    try {
-      const response = await axiosInstance.get(`/api/posts/${postId}`);
-      setPostDetails(response.data);
-
-      const commentsResponse = await axiosInstance.get(
-        `/api/posts/${postId}/comments`
-      );
-      setPostComments(commentsResponse.data.content);
-    } catch (error) {
-      console.error("데이터 가져오기 오류:", error);
-    }
-  };
-
   useEffect(() => {
-    getPostDetails();
-  }, []);
+    const getPostDetails = async () => {
+      try {
+        const response = await axiosInstance.get(`/api/posts/${postId}`);
+        setPostDetails(response.data);
+
+        const commentsResponse = await axiosInstance.get(
+          `/api/posts/${postId}/comments`
+        );
+        setPostComments(commentsResponse.data.content);
+      } catch (error) {
+        console.error("데이터 가져오기 오류:", error);
+      }
+    };
+
+    getPostDetails(); // 함수를 여기서 호출
+  }, [postId]);
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -64,38 +63,74 @@ export default function PostDetailsPage() {
     }
   };
 
-  const handleLikeClick = async () => {
-    try {
-      const response = await axiosInstance.post(`/api/posts/like/${postId}`);
-
-      if (response.data.check) {
-        // 게시물이 좋아요된 상태
-        setIsLiked(true);
-
-        // postDetails 상태에서 좋아요 수를 업데이트합니다.
-        setPostDetails((prevDetails) => ({
-          ...prevDetails,
-          likeNum: prevDetails.likeNum + 1,
-        }));
-      } else {
-        // 게시물이 좋아요가 취소된 상태
-        setIsLiked(false);
-
-        // postDetails 상태에서 좋아요 수를 업데이트합니다.
-        setPostDetails((prevDetails) => ({
-          ...prevDetails,
-          likeNum: prevDetails.likeNum - 1,
-        }));
-      }
-    } catch (error) {
-      console.error("좋아요 토글 오류:", error);
-    }
+  const getaccessToken = () => {
+    return localStorage.getItem("accessToken"); // 로그인 후 토큰을 저장한 방식에 따라 가져옵니다.
   };
+
+  const fetchLikedPosts = useCallback(async () => {
+    const accessToken = getaccessToken();
+
+    if (accessToken) {
+      try {
+        const response = await axiosInstance.get("/api/postlike/id");
+        const likedPosts = response.data;
+
+        // 서버에서 가져온 정보를 likedStatus 상태로 설정합니다.
+        const likedStatusMap = {};
+        likedPosts.forEach((postId) => {
+          likedStatusMap[postId] = true;
+        });
+
+        setLikedStatus(likedStatusMap);
+      } catch (error) {
+        console.error("좋아요 정보 가져오기 오류:", error);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 사용자의 좋아요 상태를 가져옵니다.
+    fetchLikedPosts();
+  }, [fetchLikedPosts]);
 
   const navigate = useNavigate();
 
   const handleTagClick = (tag) => {
     navigate(`/search?keyword=${tag}`);
+  };
+
+  const handleLikeClick = async (postId) => {
+    try {
+      const response = await axiosInstance.get(`/api/posts/like/${postId}`);
+
+      if (response.data.check) {
+        // 게시물에 좋아요 추가
+        setLikedStatus({ ...likedStatus, [postId]: true });
+
+        // likeNum 증가
+        setPostDetails((prevList) =>
+          prevList.map((post) =>
+            post.postId === postId
+              ? { ...post, likeNum: post.likeNum + 1 }
+              : post
+          )
+        );
+      } else {
+        // 게시물의 좋아요 취소
+        setLikedStatus({ ...likedStatus, [postId]: false });
+
+        // likeNum 감소
+        setPostDetails((prevList) =>
+          prevList.map((post) =>
+            post.postId === postId
+              ? { ...post, likeNum: post.likeNum - 1 }
+              : post
+          )
+        );
+      }
+    } catch (error) {
+      console.error("좋아요 토글 오류:", error);
+    }
   };
 
   return (
@@ -109,9 +144,9 @@ export default function PostDetailsPage() {
               <div className="w-12 h-12 bg-gray-300 rounded-full ml-4 cursor-pointer"></div>
               <div className="flex flex-col ml-[13px]">
                 {postDetails ? (
-                  <p className="text-[18px] font-semibold">
+                  <span className="text-[18px] font-semibold">
                     {postDetails.title}
-                  </p>
+                  </span>
                 ) : (
                   <p>Loading...</p>
                 )}
@@ -134,7 +169,8 @@ export default function PostDetailsPage() {
             </div>
           </div>
 
-          <p className="text-3 mt-4 mx-5 mb-3">{postDetails.contents}</p>
+          <span className="text-3 mt-4 mx-5 mb-3">{postDetails.contents}</span>
+
           <div className="flex items-center justify-between text-sm text-gray-500 h-[50px] border-b-2">
             <div
               className="flex items-center space-x-2 flex-1 justify-center p-3"
@@ -151,7 +187,11 @@ export default function PostDetailsPage() {
               onClick={handleLikeClick}
             >
               <div className="">
-                {isLiked ? <Like_Full_Heart /> : <Like_Heart />}
+                {likedStatus[postDetails.postId] ? (
+                  <LikeFullHeart />
+                ) : (
+                  <LikeHeart />
+                )}
               </div>
               <p className="cursor-pointer">좋아요 {postDetails.likeNum}</p>
             </div>
