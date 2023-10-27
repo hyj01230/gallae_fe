@@ -29,8 +29,6 @@ export default function SchedulesDetailPage() {
     tripDateId: "",
   });
 
-  console.log("세부페이지 : ", tripDateId);
-
   const { isLoading, error, data } = useQuery("schedulesDetail", async () => {
     const response = await getTripDate(postId);
     const foundElement = response.find(
@@ -71,7 +69,7 @@ export default function SchedulesDetailPage() {
     }));
 
     navigate("/myschedules/account", {
-      state: { accountList, postId, subTitle },
+      state: { accountList, postId, subTitle, tripDateId },
     });
   };
 

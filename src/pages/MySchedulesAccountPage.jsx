@@ -5,7 +5,7 @@ import List from "../components/mySchedulesAccount/List";
 
 export default function MySchedulesAccountPage() {
   const navigate = useNavigate();
-  const { postId, subTitle, accountList } = useLocation().state;
+  const { postId, tripDateId, subTitle, accountList } = useLocation().state;
   const totalCosts = accountList.reduce((acc, day) => {
     const dayCosts = day.schedules.reduce((dayAcc, schedule) => {
       return dayAcc + (schedule.costs || 0); // costs 속성이 없을 경우를 대비하여 0으로 기본값 설정
@@ -14,12 +14,16 @@ export default function MySchedulesAccountPage() {
     return acc + dayCosts;
   }, 0);
 
+  console.log({ tripDateId });
+
   return (
     <Layout>
       <div
         className="flex items-center gap-x-1 p-2"
         onClick={() =>
-          navigate("/myschedules/details", { state: { postId, subTitle } })
+          navigate("/myschedules/details", {
+            state: { postId, subTitle, tripDateId },
+          })
         }
       >
         <div className="mr-2">
