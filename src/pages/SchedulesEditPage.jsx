@@ -57,12 +57,13 @@ export default function SchedulesEditPage() {
   });
 
   const imageHandler = useImage();
-  console.log("image : ", imageHandler.uploadImage);
+  // console.log("image : ", imageHandler.uploadImage);
 
+  console.log({ schedulesId }, { schedule });
   const updateScheduleMutation = useMutation(
     async () => {
       await updateScheduleDetail(schedulesId, schedule);
-      await uploadScheduleImage(schedulesId);
+      // await uploadScheduleImage(schedulesId);
     },
     {
       onSuccess: async () => {
@@ -173,9 +174,10 @@ export default function SchedulesEditPage() {
         </div>
       </div>
 
+      {/* 이미지 업로드 */}
       <div
         className="mt-3 mx-4"
-        onClick={imageHandler.onClickSelectProfileHandler}
+        // onClick={imageHandler.onClickSelectProfileHandler}
       >
         <input
           type="file"
@@ -197,7 +199,10 @@ export default function SchedulesEditPage() {
       </div>
 
       <div className="text-xs text-[#999] mx-4 mt-3">
-        사진 업로드는 개당 1MB내외로 업로드 가능합니다.
+        <p className="text-[#d05454]">
+          (사진 업로드 기능은 MVP 이후 개발 예정입니다)
+        </p>
+        {/* 사진 업로드는 개당 1MB내외로 업로드 가능합니다. */}
       </div>
 
       {/* <div className="flex flex-col mt-7 mx-7">

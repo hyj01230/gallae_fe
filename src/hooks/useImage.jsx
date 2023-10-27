@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { uploadScheduleImage } from "../api";
+import { uploadPostImage, uploadScheduleImage } from "../api";
 
 export default function useImage() {
   const inputRef = useRef(null); // 사진선택 input - 앨범에서 선택 연결
@@ -23,13 +23,16 @@ export default function useImage() {
       setPreviewImage((prev) => [...prev, reader.result]);
     };
 
-    setUploadImage((prev) => [...prev, selectImage]);
+    const formData = new FormData();
+    formData.append("file", uploadImage);
+    setUploadImage((prev) => [...prev, { file: formData }]);
   };
 
-  const handleSubmitClick = async (schedulesId, file) => {
-    const formData = new FormData(); // 사진 업로드는 폼데이터로!!!!!!!!!
-    formData.append("file", uploadImage);
-    const response = await uploadScheduleImage(schedulesId, file);
+  const handleSubmitClick = async (postId) => {
+    // const formData = new FormData(); // 사진 업로드는 폼데이터로!!!!!!!!!
+    // formData.append(uploadImage);
+    console.log({ uploadImage });
+    const response = await uploadPostImage(postId, uploadImage);
     return response;
   };
 

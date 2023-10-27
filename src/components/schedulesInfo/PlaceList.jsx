@@ -15,7 +15,7 @@ export default function PlaceList({ handleClick, setPost }) {
   };
 
   return (
-    <div className="grid grid-cols-3 divide-x divide-y mx-4 border border-[#D9D9D9] rounded-xl">
+    <div className="grid grid-cols-3 divide-x divide-y mt-3 border border-[#D9D9D9] rounded-xl">
       {ALL_LOCATIONS.map((location, index) => (
         <div
           key={index}

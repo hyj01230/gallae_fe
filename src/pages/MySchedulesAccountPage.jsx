@@ -13,7 +13,7 @@ export default function MySchedulesAccountPage() {
 
     return acc + dayCosts;
   }, 0);
-  console.log(accountList);
+
   return (
     <Layout>
       <div
@@ -25,7 +25,7 @@ export default function MySchedulesAccountPage() {
         <div className="mr-2">
           <XIcon />
         </div>
-        <div className="h-14 flex items-center text-xl">가계부</div>
+        <div className="py-3 flex items-center text-xl font-bold">가계부</div>
       </div>
 
       <div className="pl-[14px] py-1 mx-4 mb-[23px] border border-[#F2F2F2] rounded-md	">

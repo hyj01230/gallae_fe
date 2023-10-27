@@ -67,41 +67,41 @@ export default function PostCreatePage() {
   };
 
   // 게시글 생성
-  const createPostMutation = useMutation(
-    "schedule",
-    () =>
-      updatePost(selectedPostId, {
-        title: postData.title,
-        contents: postData.contents,
-        subTitle: data.subTitle,
-        postCategory: postData.postCategory,
-        tagsList: postData.tagsList,
-      }),
-    {
-      onSuccess: async () => {
-        // await imageHandler.handleSubmitClick(selectedPostId);
-        navigate("/posts");
-      },
-    }
-  );
-
   // const createPostMutation = useMutation(
   //   "schedule",
-  //   () => imageHandler.handleSubmitClick(selectedPostId),
-
+  //   () =>
+  //     updatePost(selectedPostId, {
+  //       title: postData.title,
+  //       contents: postData.contents,
+  //       subTitle: data.subTitle,
+  //       postCategory: postData.postCategory,
+  //       tagsList: postData.tagsList,
+  //     }),
   //   {
   //     onSuccess: async () => {
-  //       await updatePost(selectedPostId, {
-  //         title: postData.title,
-  //         contents: postData.contents,
-  //         subTitle: data.subTitle,
-  //         postCategory: postData.postCategory,
-  //         tagsList: postData.tagsList,
-  //       }),
-  //         navigate("/posts");
+  //       // await imageHandler.handleSubmitClick(selectedPostId);
+  //       navigate("/posts");
   //     },
   //   }
   // );
+
+  const createPostMutation = useMutation(
+    "schedule",
+    () => imageHandler.handleSubmitClick(selectedPostId),
+
+    {
+      onSuccess: async () => {
+        await updatePost(selectedPostId, {
+          title: postData.title,
+          contents: postData.contents,
+          subTitle: data.subTitle,
+          postCategory: postData.postCategory,
+          tagsList: postData.tagsList,
+        }),
+          navigate("/posts");
+      },
+    }
+  );
 
   const handleTestClick = async (id) => {
     imageHandler.handleSubmitClick(id);
@@ -224,7 +224,7 @@ export default function PostCreatePage() {
       {listData && <List schedule={listData} isPointer={false} />}
 
       <div
-        className="max-w-3xl	flex fixed bottom-0"
+        className="max-w-3xl flex fixed bottom-0 z-10"
         onClick={() => createPostMutation.mutate()}
       >
         <button className="w-screen h-14 bg-gray-300 text-white">
