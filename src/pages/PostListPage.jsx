@@ -49,7 +49,7 @@ export default function PostListPage() {
 
   const params = {
     page: `${page}`, // 백틱으로 변수를 문자열로 변환
-    size: "3",
+    size: "10",
   };
 
   const getPostList = async () => {
