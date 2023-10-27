@@ -4,7 +4,7 @@ import DetailsHeader from "../components/postDetailsPage/DetailsHeader";
 import Image from "../components/postDetailsPage/Image";
 import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Comments from "../components/postDetailsPage/Comments";
 import DetailSchedules from "../components/postDetailsPage/DetailSchedules";
 
@@ -25,6 +25,7 @@ export default function PostDetailsPage() {
   const { postId } = useParams();
   const [likedStatus, setLikedStatus] = useState({});
   const [areCommentsVisible, setCommentsVisible] = useState(false);
+  const commentInputRef = useRef(null);
 
   useEffect(() => {
     const getPostDetails = async () => {
@@ -141,7 +142,11 @@ export default function PostDetailsPage() {
         <div className="w-393 h-275 bg-white flex flex-col ">
           <div className="flex items-center justify-between mb-2 mt-5">
             <div className="flex items-center">
-              <div className="w-12 h-12 bg-gray-300 rounded-full ml-4 cursor-pointer"></div>
+              <img
+                className="w-12 h-12 bg-gray-300 rounded-full ml-4 cursor-pointer"
+                src={postDetails.profileImage}
+              />
+
               <div className="flex flex-col ml-[13px]">
                 {postDetails ? (
                   <span className="text-[18px] font-semibold">
@@ -201,6 +206,7 @@ export default function PostDetailsPage() {
           {areCommentsVisible && (
             <div className="relative transition-all duration-5000 ease-in-out">
               <textarea
+                ref={commentInputRef} // ref 연결
                 value={newComment.contents}
                 onChange={(e) => setNewComment({ contents: e.target.value })}
                 placeholder="댓글을 입력하세요."

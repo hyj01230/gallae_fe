@@ -5,7 +5,7 @@ import PostCategory from "../components/post/PostCategory";
 import PostLine from "../components/post/PostLine";
 import PostRanking from "../components/post/PostRanking";
 import { axiosInstance } from "../api/axiosInstance";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { LikeHeart, LikeFullHeart, PostListComment } from "../assets/Icon";
 import { useInView } from "react-intersection-observer";
 
@@ -16,7 +16,7 @@ export default function PostListPage() {
   const navigate = useNavigate();
   const [page, setPage] = useState(0); // 현재 페이지 번호 (페이지네이션)
   const [ref, inView] = useInView();
-
+  const commentInputRef = useRef(null);
   const getaccessToken = () => {
     return localStorage.getItem("accessToken"); // 로그인 후 토큰을 저장한 방식에 따라 가져옵니다.
   };
@@ -49,11 +49,11 @@ export default function PostListPage() {
 
   const params = {
     page: `${page}`, // 백틱으로 변수를 문자열로 변환
-    size: "10",
+    size: "3",
   };
 
   const getPostList = async () => {
-    // console.log("getPostList 함수 호출"); // 함수가 호출되는지 확인
+    console.log("getPostList 함수 호출"); // 함수가 호출되는지 확인
     const response = await axiosInstance.get("/api/posts", { params });
 
     try {
@@ -63,7 +63,7 @@ export default function PostListPage() {
       setPostList([...postList, ...response.data.content]);
 
       // 응답에서 페이지 번호를 확인
-      // console.log("페이지 번호 (응답):", response.data.pageable.pageNumber);
+      console.log("페이지 번호 (응답):", response.data.pageable.pageNumber);
 
       // 요청 성공 시에 페이지에 1 카운트 해주기
       // 라스트불린값이 트루면 끝 아니면 +1
@@ -76,7 +76,7 @@ export default function PostListPage() {
   useEffect(() => {
     // inView가 true 일때만 실행한다.
     if (inView) {
-      // console.log(inView, "무한 스크롤 요청 🎃");
+      console.log(inView, "무한 스크롤 요청 🎃");
       getPostList();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -157,7 +157,7 @@ export default function PostListPage() {
         <PostHeader />
         <PostCategory onCategorySelect={handleCategorySelect} />
       </div>
-      <div ref={ref} className="overflow-y-auto">
+      <div ref={ref} className="overflow-y-auto mb-20">
         <div className="border-b-2 border-gray-100"></div>
         <PostRanking postList={postList} />
         <PostLine />
@@ -170,7 +170,10 @@ export default function PostListPage() {
               >
                 <div className="flex items-center justify-between mb-2 mt-5">
                   <div className="flex items-center">
-                    <div className="w-12 h-12 bg-gray-300 rounded-full ml-4 cursor-pointer"></div>
+                    <img
+                      className="w-12 h-12 bg-gray-300 rounded-full ml-4 cursor-pointer"
+                      src={item.profileImage}
+                    />
                     <div className="flex flex-col ml-[13px]">
                       <span
                         className="text-[18px] font-semibold cursor-pointer"
@@ -220,8 +223,30 @@ export default function PostListPage() {
                   </div>
 
                   <div className="flex items-center space-x-2 flex-1 justify-center">
-                    <PostListComment />
-                    <p className="cursor-pointer"> 댓글달기</p>
+                    <PostListComment
+                      onClick={() => {
+                        navigate(`/posts/${item.postId}`);
+                        if (commentInputRef.current) {
+                          commentInputRef.current.focus();
+                        } else {
+                          console.log("commentInputRef is not connected");
+                        }
+                      }}
+                    />
+                    <p
+                      className="cursor-pointer"
+                      onClick={() => {
+                        navigate(`/posts/${item.postId}`);
+                        if (commentInputRef.current) {
+                          commentInputRef.current.focus();
+                        } else {
+                          console.log("commentInputRef is not connected");
+                        }
+                      }}
+                    >
+                      {" "}
+                      댓글달기
+                    </p>
                   </div>
                 </div>
                 <PostLine />
