@@ -5,11 +5,10 @@ import List from "../mySchedules/List";
 
 export default function SelectScheduleModal({ handleClick }) {
   const { data, isLoading, error } = useQuery("mySchedule", getMySchedules);
-  console.log("modal : ", data);
 
   return (
-    <div>
-      <div className="flex items-center justify-between gap-x-1 p-2 border-b border-gray-300">
+    <div className="w-full h-screen fixed top-0 left-0 bg-white z-50">
+      <div className="flex items-center justify-between gap-x-1 p-2 ">
         <div className="flex items-center">
           <div className="mr-2">
             <LeftArrow />
@@ -22,8 +21,8 @@ export default function SelectScheduleModal({ handleClick }) {
           <List
             key={schedule.postId}
             schedule={schedule}
-            // handleClick={() => handleClick(schedule.postId)}
-            handleClick={() => handleClick(schedule)}
+            isPointer={false}
+            handlePostClick={() => handleClick(schedule)}
           />
         ))}
     </div>

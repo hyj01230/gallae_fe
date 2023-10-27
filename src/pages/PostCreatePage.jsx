@@ -125,7 +125,7 @@ export default function PostCreatePage() {
         <div className="h-12 flex items-center gap-x-4 text-base text-gray-300 cursor-pointer select-none">
           카테고리
           <DownArrow />
-          {postData.postCategory}
+          <span className="text-[black]">{postData.postCategory}</span>
         </div>
       </div>
       {isCategoryDrop && (
@@ -146,7 +146,9 @@ export default function PostCreatePage() {
           목적
           <DownArrow />
           {postData.tagsList.map((value, index) => (
-            <div key={index}>{value}</div>
+            <div key={index} className="text-[black]">
+              {value}
+            </div>
           ))}
         </div>
       </div>
