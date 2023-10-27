@@ -52,7 +52,7 @@ export default function SchedulesEditDatePage() {
   return (
     <Layout>
       <div className="flex items-center gap-x-1 p-2 border-b border-gray-300">
-        <div className="mr-2">
+        <div className="mr-2" onClick={() => navigate("/")}>
           <LeftArrow />
         </div>
         <div className="h-14 flex items-center text-xl">여행 일정</div>
