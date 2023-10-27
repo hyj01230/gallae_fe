@@ -45,12 +45,14 @@ export default function SchedulesDatePage() {
 
   const createScheduleMutation = useMutation(() => createPost(schedule), {
     onSuccess: (response) => {
+      console.log(response);
       queryClient.invalidateQueries("mySchedule");
       navigate("/myschedules/details", {
         state: {
           postId: response.data.postId,
           subTitle: schedule.subTitle,
           location: schedule.location,
+          tripDateId: response.data.tripDateId[0],
         },
       });
     },

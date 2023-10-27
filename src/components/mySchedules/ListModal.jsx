@@ -50,12 +50,12 @@ export default function ListModal({ scheduleData, handleClick }) {
   return (
     <div className="cursor-pointer">
       <div
-        className="w-full h-screen fixed top-0 left-0 bg-black/50"
+        className="w-full h-screen fixed top-0 left-0 bg-black/50 z-50"
         onClick={handleClick}
       ></div>
 
-      <div className="absolute bottom-0 w-full">
-        <div className="bg-[#F2F2F2] rounded-xl divide-y divide-[#666] mx-4">
+      <div className="absolute bottom-0 w-full z-50">
+        <div className="bg-[#F2F2F2] rounded-xl divide-y divide-[#666] mx-4 z-50">
           <div className="flex justify-center">
             <button className="my-[19px] text-sm">일정 더보기</button>
           </div>
