@@ -70,17 +70,22 @@ export default function SchedulesDatePage() {
         onChange={changeDate}
         selectRange={true}
       />
-      <div className="mt-8 ml-[17px]">
-        <span
-          className={`px-4 py-2 rounded-[40px] border ${
-            tripDateRange
-              ? " border-[#FF9900] text-[#FF9900]"
-              : "border-[#D9D9D9] text-[#D9D9D9]"
-          }`}
-        >
-          아직 날짜가 정해지지 않았어요
-        </span>
-      </div>
+
+      {tripDateRange ? (
+        <></>
+      ) : (
+        <div className="mt-8 ml-[17px]">
+          <span
+            className={`px-4 py-2 rounded-[40px] border ${
+              tripDateRange
+                ? " border-[#FF9900] text-[#FF9900]"
+                : "border-[#D9D9D9] text-[#D9D9D9]"
+            }`}
+          >
+            아직 날짜가 정해지지 않았어요
+          </span>
+        </div>
+      )}
 
       <div className="max-w-3xl	flex fixed bottom-0">
         <button

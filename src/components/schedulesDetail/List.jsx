@@ -9,7 +9,7 @@ export default function List({ schedule, handleClick, move = true }) {
       onClick={handleClick}
     >
       <div className="flex flex-col w-1/4">
-        <div className="flex items-center h-8 text-sm font-medium ">
+        <div className="flex items-center h-8 text-sm">
           <div className="w-full h-4 border-r border-[#D9D9D9]">
             {schedule.schedulesCategory}
           </div>
@@ -18,10 +18,10 @@ export default function List({ schedule, handleClick, move = true }) {
       </div>
 
       <div className="flex flex-col w-3/4">
-        <div className="flex items-center h-8 pl-5 text-sm font-medium">
+        <div className="flex items-center h-8 pl-5 text-sm">
           {schedule.placeName}
         </div>
-        <div className="mt-2 pl-3 text-xs">
+        <div className="flex flex-col gap-1 mt-2 pl-3 text-xs text-[#666]">
           <li>{schedule.timeSpent} 소요</li>
           <li>{schedule.costs}원</li>
           <li>{schedule.contents}</li>

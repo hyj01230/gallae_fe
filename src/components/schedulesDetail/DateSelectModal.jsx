@@ -17,11 +17,11 @@ export default function DateSelectModal({
   return (
     <div className="cursor-pointer">
       <div
-        className="w-full h-screen fixed top-0 left-0 bg-black/50"
+        className="w-full h-screen fixed top-0 left-0 bg-black/50 z-50"
         onClick={handleCloseModal}
       ></div>
 
-      <div className="absolute bottom-0 bg-white w-full rounded-t-3xl">
+      <div className="absolute bottom-0 bg-white w-full rounded-t-3xl z-50">
         <div className="mt-8 mx-7">
           <div className="text-[#999]">날짜선택</div>
           {data.map((value, index) => {

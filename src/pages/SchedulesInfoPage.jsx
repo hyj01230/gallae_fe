@@ -28,7 +28,6 @@ export default function SchedulesInfoPage() {
   const handleTagsClick = (event) => {
     const { textContent } = event.currentTarget;
     const tagsList = post.tagsList;
-
     const index = tagsList.indexOf(textContent);
 
     if (index === -1) {
@@ -43,9 +42,18 @@ export default function SchedulesInfoPage() {
     setPost((post) => ({ ...post, tagsList }));
   };
 
-  const handleSubmitClick = async () => {
-    setSchedule(post);
-    navigate("/myschedules/create/date");
+  const handleSubmitClick = () => {
+    // 필요한 정보를 클릭 또는 입력하지 않는다면 다음 단계로 넘어가지 못한다.
+    if (
+      post.postCategory !== "" &&
+      post.subTitle.trim() !== "" &&
+      post.tagsList.length !== 0
+    ) {
+      setSchedule(post);
+      navigate("/myschedules/create/date");
+    }
+
+    return;
   };
 
   return (
@@ -63,7 +71,7 @@ export default function SchedulesInfoPage() {
           </div>
         </div>
       </div>
-      <div className="px-4 mx-4 mt-3 mb-7">
+      <div className="mx-4 mt-3 mb-7">
         <div className="font-semibold mb-4 select-none">
           어디로 여행을 떠나시나요?
         </div>
@@ -71,16 +79,20 @@ export default function SchedulesInfoPage() {
           <div className="text-sm px-12 py-3">국내</div>
           <div className="flex flex-1 gap-2 items-center text-sm pl-[22px] cursor-pointer">
             <Search />
-            <button className="text-[#999]" onClick={() => setisModal(true)}>
+            <button
+              className="text-[#999] w-full text-left"
+              onClick={() => setisModal(!isModal)}
+            >
               {post.location ? post.location : "여행지 검색"}
             </button>
           </div>
         </div>
+        {isModal && (
+          <PlaceList handleClick={() => setisModal(false)} setPost={setPost} />
+        )}
       </div>
-      {isModal && (
-        <PlaceList handleClick={() => setisModal(false)} setPost={setPost} />
-      )}
-      <div className="mb-7 mx-4 px-4">
+
+      <div className="mb-7 mx-4">
         <div className="font-semibold mb-4 select-none">누구와 떠나시나요?</div>
         <div className="grid grid-cols-3 divide-x divide-y border border-[#d1d5db] rounded-xl">
           {CATEGORIES.map((category, index) => (
@@ -88,7 +100,7 @@ export default function SchedulesInfoPage() {
               key={index}
               className={`h-10 flex justify-center items-center cursor-pointer text-sm ${
                 post.postCategory === category
-                  ? "text-[#F90]"
+                  ? "text-[#F90] font-bold"
                   : "text-[#D9D9D9]"
               }`}
               onClick={() =>
@@ -100,7 +112,7 @@ export default function SchedulesInfoPage() {
           ))}
         </div>
       </div>
-      <div className="mb-7 mx-4 px-4">
+      <div className="mb-7 mx-4">
         <div className="font-semibold mb-4 select-none">
           여행의 목적은 어떻게 되시나요?(최대 3개 선택)
         </div>
@@ -109,7 +121,9 @@ export default function SchedulesInfoPage() {
             <div
               key={index}
               className={`h-10 flex justify-center items-center cursor-pointer text-sm ${
-                post.tagsList.includes(tag) ? "text-[#F90]" : "text-[#D9D9D9]"
+                post.tagsList.includes(tag)
+                  ? "text-[#F90] font-bold"
+                  : "text-[#D9D9D9]"
               }`}
               onClick={handleTagsClick}
             >
@@ -118,13 +132,14 @@ export default function SchedulesInfoPage() {
           ))}
         </div>
       </div>
-      <div className="mb-7 mx-4 px-4">
+
+      <div className="mx-4">
         <div className="font-semibold mb-4 select-none">여행의 이름은?</div>
         <div>
           <input
             type="text"
             placeholder="여행의 이름을 입력해주세요."
-            className="w-full p-4 border border-[#C9C9C9] rounded-lg text-sm"
+            className="w-full p-4 border border-[#C9C9C9] rounded-lg text-sm text-[#999] outline-[#F90]"
             onChange={(event) =>
               setPost((post) => ({
                 ...post,

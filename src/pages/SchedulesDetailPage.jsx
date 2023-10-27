@@ -5,7 +5,6 @@ import List from "../components/schedulesDetail/List";
 import { useQuery } from "react-query";
 import { getScheduleDetail, getTripDate } from "../api";
 import { useEffect, useState } from "react";
-import BottomNav from "../components/mySchedules/BottomNav";
 import KaKaoMap from "../components/schedulesDetail/KaKaoMap";
 import SearchMap from "../components/schedulesDetail/SearchMap";
 import TestKakaoMap from "../components/schedulesDetail/TestKakaoMap";
@@ -49,8 +48,6 @@ export default function SchedulesDetailPage() {
     return <div>로딩중</div>;
   }
 
-  console.log(data);
-
   // 모달에 나열된 '날짜' 클릭 시 날짜 정보를 토대로 세부일정 업데이트
   const handleUpdateScheduleClick = (date) => {
     setTripSchedule(date);
@@ -69,11 +66,9 @@ export default function SchedulesDetailPage() {
     });
   };
 
-  console.log(tripSchedule);
-
   return (
     <Layout isBottomNav={true}>
-      <div className="flex items-center justify-between gap-x-1 p-2 border-b border-gray-300">
+      <div className="flex items-center justify-between gap-x-1 p-2   ">
         <div
           className="flex items-center cursor-pointer"
           onClick={() => navigate("/")}
@@ -81,23 +76,22 @@ export default function SchedulesDetailPage() {
           <div className="mr-2">
             <LeftArrow />
           </div>
-          <div className="h-14 flex items-center text-xl">나의 일정</div>
+          <div className="py-3 flex items-center text-xl font-bold">
+            나의 일정
+          </div>
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 mr-3">
           <button>
             <Share />
           </button>
           <button onClick={handleAccountClick}>
             <Money />
           </button>
-          <button>
-            <XIcon />
-          </button>
         </div>
       </div>
 
-      <div className="flex justify-between items-center h-10 mt-4 mx-4 p-4 border border-[#EBEBEB] rounded-lg">
+      <div className="flex justify-between items-center h-10 mt-1 mx-4 p-4 border border-[#EBEBEB] rounded-lg">
         <div>{subTitle}</div>
       </div>
 

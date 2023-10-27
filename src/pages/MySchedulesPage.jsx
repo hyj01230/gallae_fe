@@ -1,12 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import {
-  Document,
-  Hamburger,
-  LeftArrow,
-  Person,
-  Plus,
-  SpeechBubble,
-} from "../assets/Icon";
+import { Hamburger, Plus } from "../assets/Icon";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { getMySchedules } from "../api";
@@ -38,7 +31,7 @@ export default function MySchedulesPage() {
   return (
     <Layout isBottomNav={true}>
       <div className="flex items-center justify-between gap-x-1 mx-4">
-        <div className="py-3 flex items-center text-[20px] font-bold">
+        <div className="py-3 flex items-center text-[20px] font-bold select-none">
           나의 일정
         </div>
 
@@ -53,18 +46,20 @@ export default function MySchedulesPage() {
       </div>
 
       {data.length === 0 && (
-        <>
-          <div className="w-32 h-32 flex justify-center items-center mx-auto bg-[#EBEBEB]">
-            픽토그램
-          </div>
+        <div className="mx-auto mt-[100px]">
+          <img
+            src={"/img/woman_writing_with_a_big_pencil.png"}
+            className="mx-auto"
+          />
 
-          <div className="flex flex-col justify-center mx-auto mt-10">
+          <div className="flex flex-col justify-center mx-auto mt-10 select-none">
             <p className="text-center">아직 나의 여행 갈래가 비어있어요.</p>
             <p className="text-center	font-semibold">
-              상단의 + 를 눌러 일정을 생성해보아요.
+              <span className="text-[#F90]">상단의 +</span> 를 눌러 일정을
+              생성해보세요.
             </p>
           </div>
-        </>
+        </div>
       )}
 
       {data &&
@@ -78,22 +73,6 @@ export default function MySchedulesPage() {
             }}
           />
         ))}
-      {/* <div className="max-w-3xl flex justify-around bg-[#F2F2F2] p-4 fixed bottom-0">
-        <div className="flex flex-col justify-center items-center">
-          <Document />
-          <span className="font-bold	text-[#888]">일정</span>
-        </div>
-
-        <div className="flex flex-col justify-center items-center">
-          <SpeechBubble />
-          <span className="font-bold	text-[#888]">커뮤니티</span>
-        </div>
-
-        <div className="flex flex-col justify-center items-center">
-          <Person />
-          <span className="font-bold	text-[#888]">마이페이지</span>
-        </div>
-      </div> */}
 
       {modal.isModal && (
         <ListModal
