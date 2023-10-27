@@ -7,8 +7,8 @@ import {
   Marker,
   Memo,
   Plus,
+  Trash,
   Url,
-  XIcon,
 } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -59,7 +59,6 @@ export default function SchedulesEditPage() {
   const imageHandler = useImage();
   // console.log("image : ", imageHandler.uploadImage);
 
-  console.log({ schedulesId }, { schedule });
   const updateScheduleMutation = useMutation(
     async () => {
       await updateScheduleDetail(schedulesId, schedule);
@@ -117,21 +116,23 @@ export default function SchedulesEditPage() {
   return (
     <Layout>
       <div
-        className="flex items-center justify-between gap-x-1 p-2"
+        className="flex items-center justify-between mx-4 py-3"
         onClick={() =>
           navigate("/myschedules/details", { state: { postId, subTitle } })
         }
       >
-        <div className="flex items-center mr-2">
+        <div className="flex items-center gap-4">
           <LeftArrow />
-          <div className="h-14 flex items-center text-xl">{subTitle}</div>
+          <div className="flex items-center text-[20px] font-bold">
+            {subTitle}
+          </div>
         </div>
 
         <button
-          className="cursor-pointer"
+          className="cursor-pointer mr-2"
           onClick={() => deleteScheduleMutation.mutate()}
         >
-          <XIcon />
+          <Trash />
         </button>
       </div>
 
@@ -235,7 +236,7 @@ export default function SchedulesEditPage() {
 
           <div className="w-full">
             <div className="w-full flex items-center gap-8 border border-[#D9D9D9] rounded-lg px-3 py-2">
-              <span className="text-sm">소요시간</span>
+              <span className="text-sm text-[#999]">소요시간</span>
               <span className="text-sm">{timeSpentState.text}</span>
             </div>
 
@@ -243,7 +244,7 @@ export default function SchedulesEditPage() {
               {SPENT_TIME_LIST.map((value, index) => (
                 <button
                   key={index}
-                  className="text-sm text=[#D9D9D9] mx-2 mt-3"
+                  className="text-sm text-[#999] mx-2 mt-3"
                   onClick={() => handleClick(value.minute)}
                 >
                   {value.text}

@@ -14,7 +14,7 @@ import useModal from "../hooks/useModal";
 
 export default function SchedulesDetailPage() {
   const navigate = useNavigate();
-  const { postId, subTitle, location } = useLocation().state;
+  const { postId, subTitle, location, tripDateId } = useLocation().state;
   // const [selectedDate, setSelectedDate] = useState({
   //   // **기존 State
   //   date: "",
@@ -31,7 +31,14 @@ export default function SchedulesDetailPage() {
 
   const { isLoading, error, data } = useQuery("schedulesDetail", async () => {
     const response = await getTripDate(postId);
-    setTripSchedule({ ...response[0], day: 1 });
+    const foundElement = response.find(
+      (value) => value.tripDateId === tripDateId
+    );
+    const index = response.findIndex(
+      (value) => value.tripDateId === tripDateId
+    );
+    // setTripSchedule({ ...response[0], day: 1 });
+    setTripSchedule({ ...foundElement, day: index + 1 });
     return response;
   });
 

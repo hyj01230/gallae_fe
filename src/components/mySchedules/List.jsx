@@ -36,7 +36,11 @@ export default function List({ schedule, handleClick, isPointer = true }) {
 
     event.preventDefault();
     navigate("/myschedules/details", {
-      state: { postId: schedule.postId, subTitle: schedule.subTitle },
+      state: {
+        postId: schedule.postId,
+        subTitle: schedule.subTitle,
+        tripDateId: schedule.tripDateIdList[0],
+      },
     });
   };
 
