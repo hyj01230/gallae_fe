@@ -88,6 +88,11 @@ export default function SchedulesEditPage() {
   );
 
   const handleClick = (value) => {
+    if (value === 0) {
+      setTimeSpent({ time: 0, text: "" });
+      return;
+    }
+
     const number = timeSpentState.time + value;
 
     if (number >= 60) {

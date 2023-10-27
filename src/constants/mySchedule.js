@@ -11,6 +11,7 @@ export const SPENT_TIME_LIST = [
   { minute: 10, text: "10분" },
   { minute: 30, text: "30분" },
   { minute: 60, text: "1시간" },
+  { minute: 0, text: "초기화" },
 ];
 
 export const CATEGORIES = ["가족", "친구", "연인", "혼자", "반려동물", "지인"];

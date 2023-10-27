@@ -37,6 +37,12 @@ export default function SchedulesCreatePage() {
   const imageHandler = useImage();
 
   const handleClick = (value) => {
+    if (value === 0) {
+      setTimeSpent({ time: 0, text: "" });
+      setSchedule((prev) => ({ ...prev, timeSpent: timeSpent.text }));
+      return;
+    }
+
     const number = timeSpent.time + value;
     if (number >= 60) {
       setTimeSpent({
