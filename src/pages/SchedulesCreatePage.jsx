@@ -34,6 +34,7 @@ export default function SchedulesCreatePage() {
     referenceURL: "",
   });
   const { subTitle, chosenDate, tripDateId, postId } = useLocation().state;
+  console.log("게시글 생성 : ", { tripDateId });
   const imageHandler = useImage();
 
   const handleClick = (value) => {
@@ -82,7 +83,9 @@ export default function SchedulesCreatePage() {
       <div
         className="flex items-center gap-x-1 p-2"
         onClick={() =>
-          navigate("/myschedules/details", { state: { postId, subTitle } })
+          navigate("/myschedules/details", {
+            state: { postId, subTitle, tripDateId },
+          })
         }
       >
         <div className="mr-2">

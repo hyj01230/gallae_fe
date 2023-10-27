@@ -40,12 +40,15 @@ export default function SchedulesEditPage() {
     timeSpent,
     subTitle,
     chosenDate,
+    tripDateId,
   } = useLocation().state;
   const navigate = useNavigate();
   const [timeSpentState, setTimeSpent] = useState({
     time: timeStringToMinutes(timeSpent),
     text: timeSpent,
   });
+
+  console.log("수정 : ", { tripDateId });
 
   const [schedule, setSchedule] = useState({
     contents,
@@ -71,7 +74,9 @@ export default function SchedulesEditPage() {
         //   imageHandler.uploadImage
         // );
         queryClient.invalidateQueries("schedulesDetail");
-        navigate("/myschedules/details", { state: { postId, subTitle } });
+        navigate("/myschedules/details", {
+          state: { postId, subTitle, tripDateId },
+        });
       },
     }
   );
@@ -118,7 +123,9 @@ export default function SchedulesEditPage() {
       <div
         className="flex items-center justify-between mx-4 py-3"
         onClick={() =>
-          navigate("/myschedules/details", { state: { postId, subTitle } })
+          navigate("/myschedules/details", {
+            state: { postId, subTitle, tripDateId },
+          })
         }
       >
         <div className="flex items-center gap-4">
