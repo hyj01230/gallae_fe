@@ -97,7 +97,7 @@ export default function MyPageCommentList() {
   // const observer = new IntersectionObserver(callback { threshold: 0.7 });
 
   return (
-    <Layout>
+    <Layout isBottomNav={true}>
       <div
         onClick={onClickLeftArrowHandler}
         className="mt-[61px] ml-4 flex justify-start items-center cursor-pointer"
@@ -107,43 +107,44 @@ export default function MyPageCommentList() {
       </div>
       <hr className="mt-[11px] border-[#F2F2F2] border-t-[1px]"></hr>
 
-      {sortedLists.length &&
-        sortedLists.map((item) => (
-          <div
-            key={
-              item.commentId
-                ? `comment_${item.commentId}`
-                : `replies_${item.repliesId}`
-            }
-            // onClick={onClickCommentReplyHandler}
-            className="ml-4 mt-4 flex flex-row"
-          >
-            <div className="flex justify-start">
-              <div className="w-6 flex flex-col justify-center items-center">
-                {item.commentId ? <CommentIcon /> : <ReplyIcon />}
-                <div className="text-xs/[18px] font-normal text-[#999999]">
-                  {item.commentId ? "댓글" : "답글"}
+      <div className="mb-24">
+        {sortedLists.length > 0 &&
+          sortedLists.map((item) => (
+            <div
+              key={
+                item.commentId
+                  ? `comment_${item.commentId}`
+                  : `replies_${item.repliesId}`
+              }
+              // onClick={onClickCommentReplyHandler}
+              className="ml-4 mt-4 flex flex-row"
+            >
+              <div className="flex justify-start">
+                <div className="w-6 flex flex-col justify-center items-center">
+                  {item.commentId ? <CommentIcon /> : <ReplyIcon />}
+                  <div className="text-xs/[18px] font-normal text-[#999999]">
+                    {item.commentId ? "댓글" : "답글"}
+                  </div>
+                </div>
+              </div>
+
+              <div className="ml-[23px] w-full border-[#F2F2F2] pl-[7px] flex flex-row border-b-[1px]">
+                <div className="w-full">
+                  <div className="text-sm/[22px] font-semibold text-[#333333]">
+                    {item.title}
+                  </div>
+                  <div className="mt-1 text-sm/[18px] font-normal text-[#999999]">
+                    {item.contents}
+                  </div>
+                  <div className="mb-4 mt-1 text-xs/[18px] font-normal text-[#999999]">
+                    {getTimeAgo(item.createAt)}
+                  </div>
                 </div>
               </div>
             </div>
+          ))}
 
-            <div className="ml-[23px] w-full border-[#F2F2F2] pl-[7px] flex flex-row border-b-[1px]">
-              <div className="w-full">
-                <div className="text-sm/[22px] font-semibold text-[#333333]">
-                  {item.title}
-                </div>
-                <div className="mt-1 text-sm/[18px] font-normal text-[#999999]">
-                  {item.contents}
-                </div>
-                <div className="mb-4 mt-1 text-xs/[18px] font-normal text-[#999999]">
-                  {getTimeAgo(item.createAt)}
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-
-      {/* {Lists.length > 0 &&
+        {/* {Lists.length > 0 &&
         Lists.map((item) => (
           <div key={item.Id}> map으로 생성할 내용 작성하기 </div>
         ))}
@@ -158,8 +159,8 @@ export default function MyPageCommentList() {
           <div key={item.Id}> map으로 생성할 내용 작성하기 </div>
         ))} */}
 
-      {/* 댓글 */}
-      {/* {myCommentsList.length > 0 &&
+        {/* 댓글 */}
+        {/* {myCommentsList.length > 0 &&
         myCommentsList.map((item) => (
           <div key={item.commentId} className="ml-4 mt-4 flex flex-row">
             <div className="flex justify-start">
@@ -187,8 +188,8 @@ export default function MyPageCommentList() {
           </div>
         ))} */}
 
-      {/* 대댓글 */}
-      {/* {myRepliesList.length > 0 &&
+        {/* 대댓글 */}
+        {/* {myRepliesList.length > 0 &&
         myRepliesList.map((item) => (
           <div key={item.repliesId} className="ml-4 mt-4 flex flex-row">
             <div className="flex justify-start">
@@ -215,8 +216,7 @@ export default function MyPageCommentList() {
             </div>
           </div>
         ))} */}
-
-      <div className="mb-24"></div>
+      </div>
     </Layout>
   );
 }

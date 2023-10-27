@@ -235,7 +235,7 @@ export default function MyPage() {
       {/* 프로필 모달 */}
       {profileModal && (
         <div className="bg-[#666666]/50 w-full h-full absolute top-0 left-0 flex justify-center items-center">
-          <div className=" w-full flex flex-col mt-auto mb-[21px]">
+          <div className=" w-full flex flex-col mt-auto mb-24">
             <div className="mx-4 bg-[#F2F2F2] text-center h-[45px] flex items-center justify-center rounded-t-xl text-[#333333] text-[14px] leading-[100%] font-medium">
               프로필 사진 설정
             </div>
