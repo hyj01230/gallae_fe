@@ -13,7 +13,7 @@ export default function DetailSchedules({ postId }) {
   }
 
   return (
-    <div className="mx-4">
+    <div className="mx-4 mt-4">
       {data.map((value, index) => {
         return (
           <div key={index} className="mb-4">

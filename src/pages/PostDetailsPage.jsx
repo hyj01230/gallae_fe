@@ -171,6 +171,8 @@ export default function PostDetailsPage() {
 
           <span className="text-3 mt-4 mx-5 mb-3">{postDetails.contents}</span>
 
+          <DetailSchedules postId={postId} />
+
           <div className="flex items-center justify-between text-sm text-gray-500 h-[50px] border-b-2">
             <div
               className="flex items-center space-x-2 flex-1 justify-center p-3"
