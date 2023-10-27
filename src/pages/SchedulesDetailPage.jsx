@@ -1,10 +1,10 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Money, LeftArrow, Share, PlusWithCircle, XIcon } from "../assets/Icon";
+import { Money, LeftArrow, Share, PlusWithCircle } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import List from "../components/schedulesDetail/List";
 import { useQuery } from "react-query";
-import { getScheduleDetail, getTripDate } from "../api";
-import { useEffect, useState } from "react";
+import { getTripDate } from "../api";
+import { useState } from "react";
 import KaKaoMap from "../components/schedulesDetail/KaKaoMap";
 import SearchMap from "../components/schedulesDetail/SearchMap";
 import TestKakaoMap from "../components/schedulesDetail/TestKakaoMap";
@@ -15,12 +15,6 @@ import useModal from "../hooks/useModal";
 export default function SchedulesDetailPage() {
   const navigate = useNavigate();
   const { postId, subTitle, location, tripDateId } = useLocation().state;
-  // const [selectedDate, setSelectedDate] = useState({
-  //   // **기존 State
-  //   date: "",
-  //   tripDateId: "",
-  // });
-  // const [scheduleDetail, setScheduleDetail] = useState([]); // **기존 State
   const modal = useModal();
   const [tripSchedule, setTripSchedule] = useState({
     day: "",
@@ -37,19 +31,9 @@ export default function SchedulesDetailPage() {
     const index = response.findIndex(
       (value) => value.tripDateId === tripDateId
     );
-    // setTripSchedule({ ...response[0], day: 1 });
     setTripSchedule({ ...foundElement, day: index + 1 });
     return response;
   });
-
-  // useEffect(() => {
-  //   if (selectedDate.date === "") return;
-  //   const getScheduleData = async () => {
-  //     const response = await getScheduleDetail(selectedDate.tripDateId);
-  //     setScheduleDetail(response.data.schedulesList);
-  //   };
-  //   getScheduleData();
-  // }, [selectedDate]);
 
   if (isLoading) {
     return <div>로딩중</div>;
@@ -104,7 +88,7 @@ export default function SchedulesDetailPage() {
 
       {/* <div className="w-full h-36"> *ㄴ/}
       {/* <KaKaoMap /> */}
-      {/* <SearchMap keyword={location} /> */}
+      <SearchMap keyword={location} />
       {/* <TestKakaoMap /> */}
       {/* </div>   */}
 

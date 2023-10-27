@@ -14,8 +14,6 @@ export default function MySchedulesAccountPage() {
     return acc + dayCosts;
   }, 0);
 
-  console.log({ tripDateId });
-
   return (
     <Layout>
       <div
