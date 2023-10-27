@@ -16,7 +16,7 @@ export default function MyPageModify() {
   };
 
   return (
-    <Layout>
+    <Layout isBottomNav={true}>
       <div className="mx-4">
         <div className="flex items-center mt-16">
           <div onClick={onClickLeftArrowHandler} className="cursor-pointer">
