@@ -2,9 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate, useLocation } from "react-router-dom";
-import SearchHeader from "../components/postSearch/SearchHeader";
 import SearchCategory from "../components/postSearch/SearchCategory";
-import { LeftArrow, Post_Search } from "../assets/Icon";
+import { LeftArrow } from "../assets/Icon";
 
 function highlightKeyword(text, keyword) {
   if (keyword && text) {
@@ -107,6 +106,7 @@ export default function PostSearchPage() {
       )}
       {searchResults.map((result) => (
         <div
+          key={result.postId}
           className="w-full px-4 mb-4 cursor-pointer"
           onClick={() => navigate(`/posts/${result.postId}`)}
         >
@@ -129,7 +129,6 @@ export default function PostSearchPage() {
                         <span
                           key={index}
                           className="inline-block text-[#999] border border-solid border-gray-300 rounded-full text-[11px] px-2 py-1 mr-1 cursor-pointer"
-                          onClick={() => handleTagClick(tag)}
                         >
                           {highlightKeyword(`#${tag}`, keyword)}
                         </span>

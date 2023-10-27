@@ -12,10 +12,17 @@ function formatDate(date) {
     hour: "2-digit",
     minute: "2-digit",
   };
+
+  // 'createAt'이 유효한 날짜 형식이 아닌 경우를 처리합니다.
+  if (!date || isNaN(new Date(date).getTime())) {
+    return ""; // 또는 다른 기본 값을 사용할 수 있습니다.
+  }
+
   return new Date(date)
     .toLocaleDateString(undefined, options)
     .replace(/(\d+)\D+(\d+)/, "$1 $2");
 }
+
 // 29, 186, 216
 export default function Comments({ comments, setComments }) {
   const [selectedComment, setSelectedComment] = useState(null);
@@ -150,7 +157,7 @@ export default function Comments({ comments, setComments }) {
   return (
     <div className="bg-gray-100">
       <h2 className="text-2xl font-[14px]"></h2>
-      {Array.isArray(comments) ? (
+      {Array.isArray(comments) && comments.length > 0 ? (
         comments.map((comment) => (
           <div
             key={comment.commentId}
@@ -183,13 +190,7 @@ export default function Comments({ comments, setComments }) {
               <div className="h-auto">
                 <div className="flex justify-between">
                   <p className="text-[16px] font-semibold">
-                    {/* comment의 nickName과 리코일 state의 닉네임이 일치하면 <span>글쓴이</span>을 보이게 한다 */}
                     <span className="hfont-semibold">{comment.nickname}</span>
-                    {comment.nickname === nickName ? (
-                      <span>글쓴이</span>
-                    ) : (
-                      <></>
-                    )}
                   </p>
                   <p className="text-[16px] font-semibold">
                     {/* <span className="inline-block w-4 h-4 rounded-full bg-gray-200 ml-2">

@@ -1,6 +1,5 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Post_Search } from "../../assets/Icon";
+import { PostSearch } from "../../assets/Icon";
 
 export default function PostHeader() {
   const scrollToTop = () => {
@@ -8,9 +7,9 @@ export default function PostHeader() {
   };
 
   return (
-    <div className="bg-[#ffffff] p-4 flex justify-between items-center sticky top-0 z-10 overflow-y-auto">
+    <div className="bg-[#ffffff] p-3 flex justify-between items-center sticky top-0 z-10 overflow-y-auto">
       <div
-        className="text-black text-2xl font-bold cursor-pointer"
+        className="text-black text-[20px] font-bold cursor-pointer"
         onClick={scrollToTop}
       >
         커뮤니티
@@ -18,7 +17,7 @@ export default function PostHeader() {
       <div className="flex items-center">
         <div className="ml-4 text-gray-400 cursor-pointer"></div>
         <Link to="/search?keyword=" className="ml-4 text-black cursor-pointer">
-          <Post_Search />
+          <PostSearch />
         </Link>
       </div>
     </div>

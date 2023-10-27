@@ -627,8 +627,8 @@ export const DropDown = () => {
       <path
         d="M1 1L8 7L15 1"
         stroke="#C9C9C9"
-        stroke-width="2"
-        stroke-linecap="round"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
     </svg>
   );
@@ -647,15 +647,15 @@ export const DropUp = () => {
       <path
         d="M15 8L8 2L0.999999 8"
         stroke="#C9C9C9"
-        stroke-width="2"
-        stroke-linecap="round"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
     </svg>
   );
 };
 
 // 좋아요 작은 빈하트
-export const Like_Small_Heart = () => {
+export const LikeSmallHeart = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -673,7 +673,7 @@ export const Like_Small_Heart = () => {
 };
 
 // 좋아요 빈하트
-export const Like_Heart = () => {
+export const LikeHeart = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -691,7 +691,7 @@ export const Like_Heart = () => {
 };
 
 // 좋아요 채운 하트
-export const Like_Full_Heart = () => {
+export const LikeFullHeart = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -738,7 +738,7 @@ export const Money = () => {
 };
 
 //게시글 검색
-export const Post_Search = () => {
+export const PostSearch = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -757,7 +757,7 @@ export const Post_Search = () => {
 
 // 포스트리스트 댓글
 
-export const PostList_Comment = () => {
+export const PostListComment = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
