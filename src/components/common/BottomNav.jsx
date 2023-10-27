@@ -17,13 +17,23 @@ export default function BottomNav() {
   // 페이지 이동
   const navigate = useNavigate(); // navigate 할당
   const onClickMySchedules = () => {
-    navigate("/"); // 일정
+    if (!localStorage.getItem("accessToken")) {
+      alert("로그인이 필요한 서비스입니다.");
+      navigate("/login");
+    } else {
+      navigate("/");
+    } // 일정
   };
   const onClickPosts = () => {
     navigate("/posts"); // 커뮤니티
   };
   const onClickMypage = () => {
-    navigate("/mypage"); // 마이페이지
+    if (!localStorage.getItem("accessToken")) {
+      alert("로그인이 필요한 서비스입니다.");
+      navigate("/login");
+    } else {
+      navigate("/mypage");
+    } // 마이페이지
   };
 
   return (

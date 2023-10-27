@@ -88,7 +88,7 @@ export default function MyPageLikeList() {
                 <div onClick={onClickThreeDotsHandler}>
                   <ThreeDots />
                   {/* 케밥 모달 */}
-                  <div className="absolute right-4 mt-">
+                  {/* <div className="absolute right-4 mt-">
                     <div className="w-[136px] h-[80px] bg-white shadow-[0_0_4px_4px_rgba(0,0,0,0.05)]">
                       <div
                         // onClick={ddd}
@@ -103,7 +103,7 @@ export default function MyPageLikeList() {
                         공유하기
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
