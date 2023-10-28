@@ -78,7 +78,7 @@ export const updateTripDate = async (tripDateId, data) => {
 // 게시글 이미지 업로드
 export const uploadPostImage = async (postId, file) => {
   const response = await axiosInstance.post(
-    `/api/posts/${postId}/postPictures`,
+    `/api/posts/${postId}/postsPictures`,
     file,
     {
       headers: { "Content-Type": "multipart/form-data" },

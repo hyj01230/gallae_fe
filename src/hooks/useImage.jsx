@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { uploadPostImage, uploadScheduleImage } from "../api";
+import axios from "axios";
 
 export default function useImage() {
   const inputRef = useRef(null); // 사진선택 input - 앨범에서 선택 연결
@@ -15,7 +16,7 @@ export default function useImage() {
   const uploadImageHandler = (e) => {
     const selectImage = e.target.files[0]; // 선택된 파일 가져오기
     // console.log(`선택된 파일 이름: ${selectImage.name}`);
-    console.log(`선택된 파일 크기: ${selectImage.size} bytes`);
+    // console.log(`선택된 파일 크기: ${selectImage.size} bytes`);
 
     const reader = new FileReader();
     reader.readAsDataURL(selectImage);
@@ -24,16 +25,29 @@ export default function useImage() {
     };
 
     const formData = new FormData();
-    formData.append("file", uploadImage);
-    setUploadImage((prev) => [...prev, { file: formData }]);
+    formData.append("file", selectImage);
+    setUploadImage((prev) => [...prev, { formData }]);
   };
 
   const handleSubmitClick = async (postId) => {
     // const formData = new FormData(); // 사진 업로드는 폼데이터로!!!!!!!!!
     // formData.append(uploadImage);
-    console.log({ uploadImage });
-    const response = await uploadPostImage(postId, uploadImage);
-    return response;
+    // const response = await uploadPostImage(postId, { file: uploadImage });
+    // return response;
+
+    const res = await axios.post(
+      `${import.meta.env.VITE_REACT_APP_URL}/api/posts/${postId}/postsPictures`,
+      { file: uploadImage },
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Authorization": localStorage.getItem("accessToken"),
+        },
+        withCredentials: true,
+      }
+    );
+
+    return res;
   };
 
   return {
