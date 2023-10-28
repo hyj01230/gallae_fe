@@ -26,6 +26,14 @@ export default function LoginPage() {
     setPassword(e.target.value);
   };
 
+  // 사용자가 Enter 키를 눌렀을 때 로그인 실행하는 함수
+  // const handleEnterKey = (event) => {
+  //   if (event.key === "Enter") {
+  //     // Enter 키가 눌렸을 때, "로그인하기" 버튼을 클릭하도록 시뮬레이트
+  //     onClickLoginHandler();
+  //   }
+  // };
+
   // POST : 로그인 정보 보내기
   const onClickLoginHandler = async () => {
     try {
@@ -52,15 +60,15 @@ export default function LoginPage() {
 
   return (
     <Layout isBottomNav={false}>
-      <div className="mx-4 mb-20">
+      <div className="mx-4 mb-10">
         <div
-          className="flex justify-end mt-[60px] text-[#999999] text-base/normal font-normal cursor-pointer"
+          className="flex justify-end mt-4 text-[#999999] text-base/normal font-normal cursor-pointer"
           onClick={onClickSkipHandler}
         >
           건너뛰기
         </div>
 
-        <div className="mt-[170px] w-[120px] h-[120px] mx-auto flex items-center justify-center">
+        <div className="mt-[91px] w-[120px] h-[120px] mx-auto flex items-center justify-center">
           <Logo />
         </div>
 
@@ -102,7 +110,7 @@ export default function LoginPage() {
             onClick={onClickSingUpHandler}
             className="mt-3 rounded-lg w-full h-[50px] bg-[#F8DF00] flex justify-center items-center text-[#333333] text-base/[30px] font-medium cursor-pointer"
           >
-            {/* <img className="w-12 h-12" src="public/img/kakao.png"></img> */}
+            <img className="w-12 h-12" src={"public/img/kakao.png"} />
             카카오톡으로 시작하기
           </div>
         </div>

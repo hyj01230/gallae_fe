@@ -238,11 +238,13 @@ export default function SignUpPage() {
   return (
     <Layout>
       <div className="mx-4">
-        <div className="flex items-center mt-16">
+        <div className="flex items-center mt-4">
           <div onClick={onClickLeftArrowHandler} className="cursor-pointer">
             <LeftArrow />
           </div>
           <div className="mx-auto text-xl/normal font-medium">회원가입</div>
+          {/* 우측도 <LeftArrow />만큼 들어가게! */}
+          <div className="w-8"></div>
         </div>
 
         <div className="mt-10 flex flex-col">
@@ -283,7 +285,7 @@ export default function SignUpPage() {
           {/* 닉네임 유효성 메시지가 없을 때(=== true) 그리고, checkNickName에 false일 때만 표시됨! */}
           {nickNameMessage === true && checkNickName === false && (
             <div className="mt-2 text-[#FF3737] text-sm/normal font-normal">
-              사용 불가능한 닉네임입니다.
+              중복된 닉네임입니다.
             </div>
           )}
         </div>
@@ -319,11 +321,16 @@ export default function SignUpPage() {
               <div className="text-sm/normal font-medium">이메일 인증번호</div>
               <div className="flex flex-row justify-center items-center">
                 <input
-                  type="number"
+                  type="text"
+                  // 숫자만 입력 가능하게!
+                  onInput={(e) => {
+                    e.target.value = e.target.value.replace(/\D/g, "");
+                  }}
                   placeholder="123456"
+                  maxLength={6}
                   value={emailCord}
                   onChange={onChangeEmailCordHandler}
-                  className="mt-2 border border-[#D9D9D9] rounded-lg w-full h-[43px] px-[17px] placeholder:text-sm/normal placeholder:text-[#D9D9D9] placeholder:font-light outline-none"
+                  className="mt-2 appearance-none border border-[#D9D9D9] rounded-lg w-full h-[43px] px-[17px] placeholder:text-sm/normal placeholder:text-[#D9D9D9] placeholder:font-light outline-none"
                 />
                 <div>
                   <div
