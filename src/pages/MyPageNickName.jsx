@@ -83,7 +83,7 @@ export default function MyPageNickName() {
           <div
             onClick={onClickModifyNickNameHandler}
             className={`${
-              nickName ? "text-[#FF9900]" : "text-[#D9D9D9]"
+              nickName.length > 1 ? "text-[#FF9900]" : "text-[#D9D9D9]"
             } ml-auto text-xl/8 font-medium cursor-pointer`}
           >
             변경

@@ -8,15 +8,43 @@ export default function MyPageLikeList() {
   // 페이지 이동
   const navigate = useNavigate();
   const onClickLeftArrowHandler = () => {
-    navigate("/mypage");
+    if (!openModal) {
+      navigate("/mypage");
+    }
   };
-  const oncilckLikePostHandler = (postId) => {
-    navigate(`/posts/${postId}`);
+  const onCilckLikePostHandler = (postId) => {
+    if (!openModal) {
+      navigate(`/posts/${postId}`);
+    }
   };
 
-  // const [showThreeDots, setShowThreeDots] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [modalPostId, setModalPostId] = useState("");
+  const onClickThreeDotsHandler = (e, postId) => {
+    e.stopPropagation();
+    if (modalPostId === postId && openModal) {
+      // 모달이 이미 열려 있을 때 누르면 모달 닫기
+      setOpenModal(false);
+    } else {
+      setModalPostId(postId);
+      setOpenModal(true);
+    }
+  };
 
-  const onClickThreeDotsHandler = () => {};
+  const closeAllModals = () => {
+    setModalPostId(""); // 모달 상태 초기화
+    setOpenModal(false); // 모달 닫기
+  };
+
+  useEffect(() => {
+    // 모달이 열려 있을 때, 외부 영역 클릭 시 모달 닫기
+    window.addEventListener("click", closeAllModals);
+
+    return () => {
+      // 컴포넌트 언마운트 시에 리스너 제거
+      window.removeEventListener("click", closeAllModals);
+    };
+  }, []);
 
   // useState : get으로 가져온 사용자별 좋아요 게시글 데이터(getLikeList)
   const [likeList, setLikeList] = useState([]);
@@ -44,21 +72,21 @@ export default function MyPageLikeList() {
 
   return (
     <Layout isBottomNav={true}>
-      <div
-        onClick={onClickLeftArrowHandler}
-        className="mt-[61px] ml-4  flex justify-start items-center cursor-pointer"
-      >
-        <LeftArrow />
+      <div className="mt-3 ml-4 flex justify-start items-center">
+        <div onClick={onClickLeftArrowHandler} className="cursor-pointer">
+          <LeftArrow />
+        </div>
+
         <div className="ml-[18px] text-xl/8 font-semibold">좋아요 목록</div>
       </div>
-      <hr className="mt-[11px] border-[#F2F2F2] border-t-[1px]"></hr>
+      <hr className="mt-3 border-[#F2F2F2] border-t-[1px]"></hr>
 
-      <div className="mb-24">
+      <div className="mb-44">
         {likeList.length > 0 &&
           likeList.map((item) => (
             <div
               key={item.postId}
-              onClick={() => oncilckLikePostHandler(item.postId)}
+              onClick={() => onCilckLikePostHandler(item.postId)}
               className="mx-4 cursor-pointer"
             >
               <div className="mt-4 flex w-full">
@@ -85,25 +113,31 @@ export default function MyPageLikeList() {
                 <div className="mr-auto text-[#999999] text-sm/6 font-normal">
                   {item.createdAt}
                 </div>
-                <div onClick={onClickThreeDotsHandler}>
+                <div
+                  onClick={(e) => {
+                    onClickThreeDotsHandler(e, item.postId);
+                  }}
+                >
                   <ThreeDots />
                   {/* 케밥 모달 */}
-                  {/* <div className="absolute right-4 mt-">
-                    <div className="w-[136px] h-[80px] bg-white shadow-[0_0_4px_4px_rgba(0,0,0,0.05)]">
-                      <div
-                        // onClick={ddd}
-                        className="pl-3 w-full h-10 border-b border-[#F2F2F2] flex justify-start items-center cursor-pointer"
-                      >
-                        좋아요 취소
-                      </div>
-                      <div
-                        // onClick={ddd}
-                        className="pl-3 w-full h-10 flex justify-start items-center cursor-pointer"
-                      >
-                        공유하기
+                  {modalPostId === item.postId && openModal && (
+                    <div className="absolute right-4">
+                      <div className="w-[136px] h-[80px] bg-white shadow-[0_0_4px_4px_rgba(0,0,0,0.05)]">
+                        <div
+                          // onClick={ddd}
+                          className="pl-3 w-full h-10 border-b border-[#F2F2F2] flex justify-start items-center cursor-pointer"
+                        >
+                          좋아요 취소
+                        </div>
+                        <div
+                          // onClick={ddd}
+                          className="pl-3 w-full h-10 flex justify-start items-center cursor-pointer"
+                        >
+                          공유하기
+                        </div>
                       </div>
                     </div>
-                  </div> */}
+                  )}
                 </div>
               </div>
             </div>
