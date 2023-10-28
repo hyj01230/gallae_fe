@@ -21,7 +21,7 @@ export default function PostCategory({ onCategorySelect }) {
   };
 
   return (
-    <div className="bg-white mx-10 mb-2 sticky top-0 z-10 overflow-x-auto">
+    <div className="bg-white mx-20 mb-2 sticky top-0 z-10 overflow-x-auto">
       <div className="flex justify-between">
         <div className="whitespace-nowrap overflow-x-auto">
           <div
