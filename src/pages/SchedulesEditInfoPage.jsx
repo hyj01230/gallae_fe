@@ -67,8 +67,6 @@ export default function SchedulesEditInfoPage() {
   //   navigate("/");
   // };
 
-  console.log({ editPost });
-
   return (
     <Layout>
       <div

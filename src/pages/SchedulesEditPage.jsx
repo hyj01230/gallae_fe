@@ -48,8 +48,6 @@ export default function SchedulesEditPage() {
     text: timeSpent,
   });
 
-  console.log("수정 : ", { tripDateId });
-
   const [schedule, setSchedule] = useState({
     contents,
     costs,

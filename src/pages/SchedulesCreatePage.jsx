@@ -34,7 +34,6 @@ export default function SchedulesCreatePage() {
     referenceURL: "",
   });
   const { subTitle, chosenDate, tripDateId, postId } = useLocation().state;
-  console.log("게시글 생성 : ", { tripDateId });
   const imageHandler = useImage();
 
   const handleClick = (value) => {
