@@ -110,7 +110,7 @@ export default function LoginPage() {
             onClick={onClickSingUpHandler}
             className="mt-3 rounded-lg w-full h-[50px] bg-[#F8DF00] flex justify-center items-center text-[#333333] text-base/[30px] font-medium cursor-pointer"
           >
-            <img className="w-12 h-12" src={"public/img/kakao.png"} />
+            <img className="w-12 h-12" src="public/img/kakao.png" />
             카카오톡으로 시작하기
           </div>
         </div>
