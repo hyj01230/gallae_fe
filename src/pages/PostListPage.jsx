@@ -49,21 +49,26 @@ export default function PostListPage() {
 
   const params = {
     page: `${page}`, // 백틱으로 변수를 문자열로 변환
-    size: "10",
+    size: "3",
   };
 
   const getPostList = async () => {
-    console.log("getPostList 함수 호출"); // 함수가 호출되는지 확인
+    // console.log("getPostList 함수 호출");
     const response = await axiosInstance.get("/api/posts", { params });
 
     try {
-      // const newPosts = response.data.content;
+      const newPosts = response.data.content;
+      if (newPosts.length === 0) {
+        // 만약 응답으로 받은 데이터가 빈 배열이라면, 스크롤을 멈춥니다.
+        // console.log("마지막 페이지입니다. 스크롤을 멈춥니다.");
+        return;
+      }
 
       // 이제 newPosts를 기존 postList에 추가합니다.
-      setPostList([...postList, ...response.data.content]);
+      setPostList([...postList, ...newPosts]);
 
       // 응답에서 페이지 번호를 확인
-      console.log("페이지 번호 (응답):", response.data.pageable.pageNumber);
+      // console.log("페이지 번호 (응답):", response.data.pageable.pageNumber);
 
       // 요청 성공 시에 페이지에 1 카운트 해주기
       // 라스트불린값이 트루면 끝 아니면 +1
@@ -74,13 +79,18 @@ export default function PostListPage() {
   };
 
   useEffect(() => {
-    // inView가 true 일때만 실행한다.
     if (inView) {
-      console.log(inView, "무한 스크롤 요청 🎃");
+      // console.log(inView, "무한 스크롤 요청 ✌️");
       getPostList();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inView]);
+  }, [inView, postList]);
+
+  useEffect(() => {
+    if (inView && postList.length > 0) {
+      // console.log(inView, "무한 스크롤 요청 😎");
+      getPostList();
+    }
+  }, [inView, postList]);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -179,14 +189,16 @@ export default function PostListPage() {
                         className="text-[18px] font-semibold cursor-pointer"
                         onClick={() => navigate(`/posts/${item.postId}`)}
                       >
-                        {item.title}
+                        {item.title && item.title.length > 20
+                          ? item.title.slice(0, 20) + "..."
+                          : item.title}
                       </span>
                       <span className="text-xs text-gray-500 mt-1 cursor-pointer">
                         {item.postCategory}
                       </span>
                     </div>
                   </div>
-                  <span className="text-xs text-gray-500 mr-4">
+                  <span className="text-xs text-gray-500 mr-4 mt-7">
                     {formatDateDifference(item.createdAt)}
                     <p className="w-2 h-2 ml-[11px] mr-[15px] bg-gray-400 rounded-full inline-block"></p>
                   </span>

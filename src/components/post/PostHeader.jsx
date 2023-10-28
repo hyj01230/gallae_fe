@@ -7,9 +7,9 @@ export default function PostHeader() {
   };
 
   return (
-    <div className="bg-[#ffffff] p-3 flex justify-between items-center sticky top-0 z-10 overflow-y-auto">
+    <div className="bg-[#ffffff] gap-x-1 mx-4 flex justify-between items-center ">
       <div
-        className="text-black text-[20px] font-bold cursor-pointer"
+        className="text-black text-[20px] py-3 font-bold cursor-pointer"
         onClick={scrollToTop}
       >
         커뮤니티

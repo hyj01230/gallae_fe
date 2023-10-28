@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { axiosInstance } from "../../api/axiosInstance";
-import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { nickNameState } from "../../store/atom";
 
@@ -23,7 +22,6 @@ function formatDate(date) {
     .replace(/(\d+)\D+(\d+)/, "$1 $2");
 }
 
-// 29, 186, 216
 export default function Comments({ comments, setComments }) {
   const [selectedComment, setSelectedComment] = useState(null);
   const [selectedCommentForEdit, setSelectedCommentForEdit] = useState(null);
@@ -33,6 +31,7 @@ export default function Comments({ comments, setComments }) {
   const [replyContent, setReplyContent] = useState("");
   const [isReplying, setIsReplying] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const commentInputRef = useRef(null);
   // 리코일 state에 저장된 값을 useRecoilValue를 이용해 가져온다.
   const nickName = useRecoilValue(nickNameState);
 
@@ -43,6 +42,20 @@ export default function Comments({ comments, setComments }) {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+  const commentsListRef = useRef(null);
+
+  // 댓글 목록이 업데이트될 때 포커스를 주는 함수
+  const focusCommentsList = () => {
+    if (commentsListRef.current) {
+      commentsListRef.current.focus();
+    }
+  };
+
+  useEffect(() => {
+    // comments 목록이 업데이트될 때 댓글 목록에 포커스를 줍니다.
+    focusCommentsList();
+  }, [comments]);
 
   useEffect(() => {
     // editedContent가 변경될 때 컴포넌트를 다시 렌더링
@@ -135,27 +148,13 @@ export default function Comments({ comments, setComments }) {
     }
   };
 
-  const fetchReplies = async (commentId) => {
-    try {
-      const response = await axiosInstance.get(
-        `/api/comments/${comments.commentId}/replies`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
-
-      const replies = response.data.content; // 서버에서 반환한 답글 데이터
-      console.log("replies:", replies);
-      // 받아온 답글 데이터를 사용하거나 상태에 업데이트할 수 있습니다.
-    } catch (error) {
-      console.error("답글 조회 중 오류 발생:", error);
-    }
-  };
-
   return (
-    <div className="bg-gray-100">
+    <div
+      className="bg-gray-100"
+      // commentsListRef를 사용하여 댓글 목록 요소에 ref를 설정합니다.
+      ref={commentsListRef}
+      tabIndex={0} // 요소에 키보드 이벤트를 활성화하기 위한 tabIndex 설정
+    >
       <h2 className="text-2xl font-[14px]"></h2>
       {Array.isArray(comments) && comments.length > 0 ? (
         comments.map((comment) => (
@@ -189,16 +188,13 @@ export default function Comments({ comments, setComments }) {
             ) : (
               <div className="h-auto">
                 <div className="flex justify-between">
-                  <p className="text-[16px] font-semibold">
+                  <p className="text-[16px] font-semibold flex items-center space-x-2">
                     <span className="hfont-semibold">{comment.nickname}</span>
-                  </p>
-                  <p className="text-[16px] font-semibold">
-                    {/* <span className="inline-block w-4 h-4 rounded-full bg-gray-200 ml-2">
-                      <button
-                        onClick={handleOpenModal}
-                        className="w-full h-full bg-gray-200 rounded-full"
-                      ></button>
-                    </span> */}
+                    {comment.checkUser === "글쓴이" && (
+                      <span className="border border-orange-300 bg-white rounded-[12px] px-2  ml-2 text-yellow-400 text-[12px]">
+                        글쓴이
+                      </span>
+                    )}
                   </p>
                 </div>
                 <p className="text-[14px] font-nomal w-[360px]">
@@ -206,7 +202,7 @@ export default function Comments({ comments, setComments }) {
                 </p>
                 <p className="text-[12px] font-normal text-[#999]">
                   <span>
-                    {formatDate(comment.createAt)}{" "}
+                    {formatDate(comment.modifiedAt)}{" "}
                     {isCommentEdited(comment) && (
                       <span className="text-gray-600 text-[12px] font-semibold">
                         (수정됨)

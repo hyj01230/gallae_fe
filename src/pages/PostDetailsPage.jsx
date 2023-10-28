@@ -57,11 +57,16 @@ export default function PostDetailsPage() {
         `/api/posts/${postId}/comments`
       );
       setPostComments(commentsResponse.data.content);
-
       setNewComment({ contents: "" });
     } catch (error) {
       console.error("댓글 작성 오류:", error);
     }
+  };
+
+  const navigate = useNavigate();
+
+  const handleTagClick = (tag) => {
+    navigate(`/search?keyword=${tag}`);
   };
 
   const getaccessToken = () => {
@@ -94,40 +99,27 @@ export default function PostDetailsPage() {
     fetchLikedPosts();
   }, [fetchLikedPosts]);
 
-  const navigate = useNavigate();
-
-  const handleTagClick = (tag) => {
-    navigate(`/search?keyword=${tag}`);
-  };
-
-  const handleLikeClick = async (postId) => {
+  const handleLikeClick = async () => {
     try {
       const response = await axiosInstance.get(`/api/posts/like/${postId}`);
-
       if (response.data.check) {
         // 게시물에 좋아요 추가
         setLikedStatus({ ...likedStatus, [postId]: true });
 
-        // likeNum 증가
-        setPostDetails((prevList) =>
-          prevList.map((post) =>
-            post.postId === postId
-              ? { ...post, likeNum: post.likeNum + 1 }
-              : post
-          )
-        );
+        // 현재 게시물의 likeNum 증가
+        setPostDetails((prevDetails) => ({
+          ...prevDetails,
+          likeNum: prevDetails.likeNum + 1,
+        }));
       } else {
         // 게시물의 좋아요 취소
         setLikedStatus({ ...likedStatus, [postId]: false });
 
-        // likeNum 감소
-        setPostDetails((prevList) =>
-          prevList.map((post) =>
-            post.postId === postId
-              ? { ...post, likeNum: post.likeNum - 1 }
-              : post
-          )
-        );
+        // 현재 게시물의 likeNum 감소
+        setPostDetails((prevDetails) => ({
+          ...prevDetails,
+          likeNum: prevDetails.likeNum - 1,
+        }));
       }
     } catch (error) {
       console.error("좋아요 토글 오류:", error);
@@ -149,7 +141,7 @@ export default function PostDetailsPage() {
 
               <div className="flex flex-col ml-[13px]">
                 {postDetails ? (
-                  <span className="text-[18px] font-semibold">
+                  <span className="text-[20px] font-semibold">
                     {postDetails.title}
                   </span>
                 ) : (

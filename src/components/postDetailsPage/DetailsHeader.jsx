@@ -8,7 +8,7 @@ export default function DetailsHeader() {
     <div>
       <header className="bg-[#ffffff] p-4 flex justify-between items-center sticky top-0 z-10">
         <div
-          className="ml-4 text-gray-400 cursor-pointer flex items-center"
+          className=" text-gray-400 cursor-pointer flex items-center"
           onClick={() => {
             navigate(-1);
           }}
