@@ -212,12 +212,20 @@ export default function PostCreatePage() {
         내용을 입력하세요(최대 20,000자)
       </div> */}
 
-      <ContentEditable
+      {/* <ContentEditable
         className="mx-4 py-2 mt-4 mb-14 outline-none"
         innerRef={ref}
         // html={data.title ? data.contents : postData.contents} // innerHTML of the editable div
         html={postData.contents} // innerHTML of the editable div
         disabled={false} // use true to disable editing
+        onChange={(e) =>
+          setPostData((prev) => ({ ...prev, contents: e.target.value }))
+        }
+      /> */}
+
+      <textarea
+        className="w-full p-2"
+        value={postData.contents}
         onChange={(e) =>
           setPostData((prev) => ({ ...prev, contents: e.target.value }))
         }
