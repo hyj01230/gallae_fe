@@ -21,6 +21,9 @@ export default function MyPage() {
   const onClickCommentListHandler = () => {
     navigate("/mypage/comment"); // 나의 댓글 내역
   };
+  const onClickPostListHandler = () => {
+    navigate("/mypage/post"); // 나의 게시글
+  };
 
   // useState
   const [profileModal, setProfileModal] = useState(false); // 모달 : 프로필 사진
@@ -223,11 +226,20 @@ export default function MyPage() {
         </div>
         <div
           onClick={onClickCommentListHandler}
-          className="mt-4 mb-28 flex flex-row items-center cursor-pointer"
+          className="mt-4 flex flex-row items-center cursor-pointer"
         >
           <MyWriting />
           <div className="ml-3 font-medium text-base/normal  text-[#666666]">
             나의 댓글 내역
+          </div>
+        </div>
+        <div
+          onClick={onClickPostListHandler}
+          className="mt-4 mb-28 flex flex-row items-center cursor-pointer"
+        >
+          <MyWriting />
+          <div className="ml-3 font-medium text-base/normal  text-[#666666]">
+            나의 게시글
           </div>
         </div>
       </div>

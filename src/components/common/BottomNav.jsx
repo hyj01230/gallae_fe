@@ -68,14 +68,16 @@ export default function BottomNav() {
           onClick={onClickPosts}
           className="mx-auto w-10 h-10 flex flex-col justify-center items-center cursor-pointer"
         >
-          {currentPath.includes("posts") || currentPath.includes("post") ? (
+          {(currentPath.includes("posts") || currentPath.includes("post")) &&
+          currentPath !== "/mypage/post" ? (
             <CommunityColor />
           ) : (
             <Community />
           )}
           <div
             className={`${
-              currentPath.includes("posts") || currentPath.includes("post")
+              (currentPath.includes("posts") || currentPath.includes("post")) &&
+              currentPath !== "/mypage/post"
                 ? "text-[#FF9900] "
                 : "text-[#888888] "
             }mt-[5px] text-center text-[9px] font-extrabold leading-[9px]`}
