@@ -1,13 +1,10 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { DropDown, DropUp, LikeSmallHeart } from "../../assets/Icon";
 
 // eslint-disable-next-line react/prop-types
-export default function PostRanking({ postList }) {
-  const [expanded, setExpanded] = useState(false);
-  const sortedPostList = [...postList].sort((a, b) => b.likeNum - a.likeNum);
+export default function PostRanking({ rankingList, expanded, setExpanded }) {
+  const sortedPostList = [...rankingList].sort((a, b) => b.likeNum - a.likeNum);
   const topRankedPosts = sortedPostList.slice(0, 3);
-
   return (
     <div className="bg-white mt-4">
       <div className="h-10 mb-3 flex justify-between items-center rounded border-3">

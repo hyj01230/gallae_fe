@@ -20,6 +20,26 @@ export default function PostListPage() {
   const getaccessToken = () => {
     return localStorage.getItem("accessToken"); // 로그인 후 토큰을 저장한 방식에 따라 가져옵니다.
   };
+  const [rankingList, setRankingList] = useState([]);
+  const [expanded, setExpanded] = useState(false);
+
+  const fetchRankingPosts = async () => {
+    try {
+      const response = await axiosInstance.get("/api/posts/rank");
+      const rankingPosts = response.data;
+
+      // 순위 목록을 최대 7개로 제한
+      const limitedRankingPosts = rankingPosts.slice(0, 7);
+      setRankingList(limitedRankingPosts);
+    } catch (error) {
+      console.error("순위 목록 가져오기 오류:", error);
+    }
+  };
+
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 순위 목록을 가져옵니다.
+    fetchRankingPosts();
+  }, []);
 
   const fetchLikedPosts = useCallback(async () => {
     const accessToken = getaccessToken();
@@ -169,7 +189,11 @@ export default function PostListPage() {
       </div>
       <div ref={ref} className="overflow-y-auto mb-20">
         <div className="border-b-2 border-gray-100"></div>
-        <PostRanking postList={postList} />
+        <PostRanking
+          rankingList={rankingList}
+          expanded={expanded}
+          setExpanded={setExpanded}
+        />
         <PostLine />
         <div className="overflow-y-auto">
           {filteredPostList && filteredPostList.length > 0 ? (
