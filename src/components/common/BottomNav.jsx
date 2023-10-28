@@ -25,7 +25,7 @@ export default function BottomNav() {
     } // 일정
   };
   const onClickPosts = () => {
-    navigate("/posts"); // 커뮤니티
+    navigate("/posts?page=0&size=3/"); // 커뮤니티
   };
   const onClickMypage = () => {
     if (!localStorage.getItem("accessToken")) {
