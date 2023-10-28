@@ -31,16 +31,17 @@ export default function SchedulesInfoPage() {
     const index = tagsList.indexOf(textContent);
 
     if (index === -1) {
-      tagsList.push(textContent);
-      if (tagsList.length > 3) {
+      if (tagsList.length + 1 > 3) {
         return;
       }
+      tagsList.push(textContent);
     } else {
       tagsList.splice(index, 1);
     }
 
     setPost((post) => ({ ...post, tagsList }));
   };
+  console.log(post.tagsList);
 
   const handleSubmitClick = () => {
     // 필요한 정보를 클릭 또는 입력하지 않는다면 다음 단계로 넘어가지 못한다.

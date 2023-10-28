@@ -19,35 +19,16 @@ export default function SchedulesEditInfoPage() {
     subTitle,
   });
 
-  // useEffect(() => {
-  //   const getScheduleData = async () => {
-  //     const { title, contents, postCategory, tagsList } = await getDetailPost(
-  //       postId
-  //     );
-  //     setEditPost((prev) => ({
-  //       ...prev,
-  //       title,
-  //       contents,
-  //       postCategory,
-  //       tagsList,
-  //       subTitle,
-  //     }));
-  //   };
-
-  //   getScheduleData();
-  // }, []);
-
   const handleTagsClick = (event) => {
     const { textContent } = event.currentTarget;
     const tagsList = editPost.tagsList;
-
     const index = tagsList.indexOf(textContent);
 
     if (index === -1) {
-      tagsList.push(textContent);
-      if (tagsList.length > 3) {
+      if (tagsList.length + 1 > 3) {
         return;
       }
+      tagsList.push(textContent);
     } else {
       tagsList.splice(index, 1);
     }
@@ -67,27 +48,33 @@ export default function SchedulesEditInfoPage() {
   //   navigate("/");
   // };
 
+  console.log(editPost.tagsList);
+
   return (
     <Layout>
       <div
-        className="flex items-center gap-x-1 p-2 border-b border-gray-300"
+        className="flex items-center gap-x-1 mx-4"
         onClick={() => navigate("/")}
       >
         <div className="mr-2">
           <LeftArrow />
         </div>
-        <div className="h-14 flex items-center text-xl font-bold">
+        <div className="py-3 flex items-center text-xl font-bold">
           여행 만들기
         </div>
       </div>
 
-      <div className="my-7 px-4">
+      <div className="mb-7 mx-4 mt-3">
         <div className="font-semibold mb-4 select-none">누구와 떠나시나요?</div>
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-3 divide-x divide-y border border-[#d1d5db] rounded-xl">
           {CATEGORIES.map((category, index) => (
             <div
               key={index}
-              className="h-10 flex justify-center items-center border border-[#d1d5db] cursor-pointer text-sm"
+              className={`h-10 flex justify-center items-center cursor-pointer text-sm ${
+                editPost.postCategory === category
+                  ? "text-[#F90] font-bold"
+                  : "text-[#D9D9D9]"
+              }`}
               onClick={() =>
                 setEditPost((prev) => ({ ...prev, postCategory: category }))
               }
@@ -102,11 +89,15 @@ export default function SchedulesEditInfoPage() {
         <div className="font-semibold mb-4 select-none">
           여행의 목적은 어떻게 되시나요?(최대 3개 선택)
         </div>
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-3 divide-x divide-y border border-[#d1d5db] rounded-xl">
           {TAGS.map((tag, index) => (
             <div
               key={index}
-              className="h-10 flex justify-center items-center border border-[#d1d5db] cursor-pointer text-sm"
+              className={`h-10 flex justify-center items-center cursor-pointer text-sm ${
+                editPost.tagsList.includes(tag)
+                  ? "text-[#F90] font-bold"
+                  : "text-[#D9D9D9]"
+              }`}
               onClick={handleTagsClick}
             >
               {tag}
