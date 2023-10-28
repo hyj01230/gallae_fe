@@ -71,7 +71,7 @@ export default function SchedulesInfoPage() {
           </div>
         </div>
       </div>
-      <div className="mx-4 mt-3 mb-7">
+      {/* <div className="mx-4 mt-3 mb-7">
         <div className="font-semibold mb-4 select-none">
           어디로 여행을 떠나시나요?
         </div>
@@ -90,9 +90,9 @@ export default function SchedulesInfoPage() {
         {isModal && (
           <PlaceList handleClick={() => setisModal(false)} setPost={setPost} />
         )}
-      </div>
+      </div> */}
 
-      <div className="mb-7 mx-4">
+      <div className="mb-7 mx-4 mt-3">
         <div className="font-semibold mb-4 select-none">누구와 떠나시나요?</div>
         <div className="grid grid-cols-3 divide-x divide-y border border-[#d1d5db] rounded-xl">
           {CATEGORIES.map((category, index) => (

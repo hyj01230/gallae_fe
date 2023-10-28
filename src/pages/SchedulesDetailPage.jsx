@@ -88,7 +88,7 @@ export default function SchedulesDetailPage() {
 
       {/* <div className="w-full h-36"> *ㄴ/}
       {/* <KaKaoMap /> */}
-      <SearchMap keyword={location} />
+      {/* <SearchMap keyword={location} /> */}
       {/* <TestKakaoMap /> */}
       {/* </div>   */}
 

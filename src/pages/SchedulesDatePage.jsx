@@ -45,7 +45,6 @@ export default function SchedulesDatePage() {
 
   const createScheduleMutation = useMutation(() => createPost(schedule), {
     onSuccess: (response) => {
-      console.log(response);
       queryClient.invalidateQueries("mySchedule");
       navigate("/myschedules/details", {
         state: {

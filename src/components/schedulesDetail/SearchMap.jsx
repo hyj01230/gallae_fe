@@ -6,9 +6,6 @@ export default function SearchMap({ keyword = "서울" }) {
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
 
-  console.log({ info });
-  console.log({ markers });
-
   useEffect(() => {
     if (!map) return;
     const ps = new kakao.maps.services.Places();
