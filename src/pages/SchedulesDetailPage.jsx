@@ -139,7 +139,7 @@ export default function SchedulesDetailPage() {
       {modal.isModal && (
         <DateSelectModal
           data={data}
-          selectedDate={tripSchedule.chosenDate}
+          initDate={tripSchedule}
           handleCloseModal={modal.handleCloseModal}
           handleUpdateScheduleClick={handleUpdateScheduleClick}
         />
