@@ -9,6 +9,7 @@ export const router = createBrowserRouter([
   { path: "/signup/admin", element: <Page.SignUpAdminPage /> },
   { path: "/signup/complete", element: <Page.SignUpCompletePage /> },
   { path: "/login", element: <Page.LoginPage /> },
+  { path: "/kakao/callback", element: <Page.LoginPageKakao /> },
   {
     path: "/posts/:postId",
     element: <Page.PostDetailsPage />,

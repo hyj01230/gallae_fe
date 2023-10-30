@@ -166,6 +166,25 @@ export default function SignUpPage() {
     }
   };
 
+  // useState
+  const [agree1, setAgree1] = useState(false); // 개인정보 수집 및 이용 동의
+  const [agree2, setAgree2] = useState(false); // 위치정보 수집 및 이용 동의
+  const [agree3, setAgree3] = useState(false); // 마케팅 수신 동의
+
+  // 동의
+  const onClickAgree1 = () => {
+    setAgree1(true);
+  };
+  const onClickAgree2 = () => {
+    setAgree2(true);
+  };
+  const onClickAgree3 = () => {
+    setAgree3(true);
+  };
+  const onClickAgreeHandler = () => {
+    setAgree1(false);
+  };
+
   // 회원가입 Bar 색상변경
   useEffect(() => {
     if (
@@ -410,25 +429,21 @@ export default function SignUpPage() {
             <div className="flex flex-row items-center mt-[10px]">
               <CheckBox />
               <div className="ml-3 mr-auto text-sm/normal font-normal">
-                [필수] 회원가입 및 운영약관 동의
-              </div>
-              <RightArrow />
-            </div>
-
-            <div className="flex flex-row items-center mt-[10px]">
-              <CheckBox />
-              <div className="ml-3 mr-auto text-sm/normal font-normal">
                 [필수] 개인정보 수집 및 이용 동의
               </div>
-              <RightArrow />
+              <div onClick={onClickAgree1}>
+                <RightArrow />
+              </div>
             </div>
 
             <div className="flex flex-row items-center mt-[10px]">
               <CheckBox />
               <div className="ml-3 mr-auto text-sm/normal font-normal">
-                [필수] 위치정보 이용약관 동의
+                [필수] 위치정보 수집 및 이용 동의
               </div>
-              <RightArrow />
+              <div onClick={onClickAgree2}>
+                <RightArrow />
+              </div>
             </div>
 
             <div className="flex flex-row items-center mt-[10px]">
@@ -436,7 +451,9 @@ export default function SignUpPage() {
               <div className="ml-3 mr-auto text-sm/normal font-normal">
                 [선택] 마케팅 수신 동의
               </div>
-              <RightArrow />
+              <div onClick={onClickAgree3}>
+                <RightArrow />
+              </div>
             </div>
           </div>
         </div>
@@ -444,11 +461,138 @@ export default function SignUpPage() {
       <div
         className={`${
           signUpBar ? "bg-[#FF9900]" : "bg-[#D9D9D9]"
-        } z-20 fixed bottom-0 max-w-3xl w-full h-16 text-[#FFFFFF] text-xl/normal font-medium flex items-center justify-center cursor-pointer`}
+        } z-10 fixed bottom-0 max-w-3xl w-full h-16 text-[#FFFFFF] text-xl/normal font-medium flex items-center justify-center cursor-pointer`}
         onClick={onClickSignUpCompleteHandler}
       >
         회원가입 완료
       </div>
+
+      {/* 동의하기1 : 개인정보 수집 및 이용 동의 */}
+      {agree1 && (
+        <div className="bg-white w-full h-full absolute top-0 left-0 z-20">
+          <div className="mx-4 mt-3 flex justify-start items-center">
+            <div onClick={onClickAgreeHandler} className="cursor-pointer">
+              <LeftArrow />
+            </div>
+            <div className="ml-[18px] text-xl/8 font-semibold text-[#333333]">
+              개인정보 수집 및 이용 동의
+            </div>
+          </div>
+
+          <div className="mx-10 mb-6">
+            <div className="mt-4 text-lg/8 font-normal text-[#333333]">
+              개인정보보호법에 따라 `갈래`에 회원가입 신청하시는 분께 수집하는
+              개인정보의 항목, 개인정보의 수집 및 이용목적, 개인정보의 보유 및
+              이용기간, 동의 거부권 및 동의 거부 시 불이익에 관한 사항을 안내
+              드리오니 자세히 읽은 후 동의하여 주시기 바랍니다.
+            </div>
+
+            <div className="mt-4 text-lg/8 font-medium text-[#333333]">
+              1. 수집하는 개인정보
+            </div>
+            <div className="mx-4 text-lg/8 font-normal text-[#333333]">
+              <p>
+                `갈래`는 회원 가입 및 서비스 이용 시 아래와 같은 최소한의
+                개인정보를 수집합니다.
+              </p>
+              <p>• 회원가입 시 : 아이디, 비밀번호, 이메일</p>
+              <p>
+                • (소셜 계정) 회원가입 시 : 카카오계정(이메일, 전화번호),
+                닉네임, 성별, 생년월일, CI(연계정보), 프로필 이미지
+              </p>
+              <p>• 프로필 정보 : 닉네임, 프로필 사진</p>
+              <p>• 서비스 이용 내역</p>
+            </div>
+
+            <div className="mt-4 text-lg/8 font-medium text-[#333333]">
+              2. 수집한 개인정보의 이용
+            </div>
+            <div className="mx-4 text-lg/8 font-normal text-[#333333]">
+              <p>`갈래`는 수집한 개인정보를 다음과 같은 목적으로 이용합니다.</p>
+              <p>• 회원 가입 및 관리</p>
+              <p>• 서비스 제공 및 개선</p>
+              <p>• 고객 지원 및 연락</p>
+            </div>
+
+            <div className="mt-4 text-lg/8 font-medium text-[#333333]">
+              3. 개인정보 보관기간
+            </div>
+            <div className="mx-4 text-lg/8 font-normal text-[#333333]">
+              <p>
+                `갈래`는 수집한 개인정보를 다음과 같은 기간 동안 보관합니다.
+              </p>
+              <p>• 탈퇴 요청 5일 이내로 지체 없이 파기합니다.</p>
+              <p>
+                • 서비스 부정 이용 기록은 부정 가입 및 이용 방지를 위하여 회원
+                탈퇴 시점으로부터 1년간 보관 후 파기합니다.
+              </p>
+              <p>
+                • 관계 법령에 따라 일정 기간 보존해야 하는 경우 해당 기간 보관
+                후 파기합니다.
+              </p>
+            </div>
+
+            <div className="mt-4 text-lg/8 font-medium text-[#333333]">
+              4. 개인정보 수집 및 이용 동의를 거부할 권리
+            </div>
+            <div className="mx-4 text-lg/8 font-normal text-[#333333]">
+              <p>
+                이용자는 개인정보의 수집 및 이용 동의를 거부할 권리가 있습니다.
+                회원가입 시 수집하는 최소한의 개인정보, 즉, 필수 항목에 대한
+                수집 및 이용 동의를 거부하실 경우, 회원가입이 어려울 수
+                있습니다.
+              </p>
+            </div>
+          </div>
+
+          <div
+            onClick={onClickAgreeHandler}
+            className="bg-[#FF9900] z-30 fixed bottom-0 max-w-3xl w-full h-16 text-[#FFFFFF] text-xl/normal font-medium flex items-center justify-center cursor-pointer"
+          >
+            확인
+          </div>
+        </div>
+      )}
+
+      {/* 동의하기2 : 위치정보 수집 및 이용 동의 */}
+      {agree2 && (
+        <div className="bg-black w-full h-full absolute top-0 left-0 flex justify-center items-center">
+          <div className=" w-full flex flex-col mt-auto mb-24">
+            <div className="mx-4 bg-[#F2F2F2] text-center h-[45px] flex items-center justify-center rounded-t-xl text-[#333333] text-[14px] leading-[100%] font-medium">
+              프로필 사진 설정
+            </div>
+            <div className="mx-4 bg-[#F2F2F2] border-[#666666] border-t-[0.5px] border-b-[0.5px] text-center h-14 flex items-center justify-center text-[#333333] text-[18px] leading-[100%] font-medium cursor-pointer">
+              앨범에서 사진 선택
+            </div>
+            <div className="mx-4 bg-[#F2F2F2] text-center h-14 flex items-center justify-center rounded-b-xl text-[#333333] text-[18px] leading-[100%] font-medium cursor-pointer">
+              기본으로 설정
+            </div>
+            <div className="mt-3 mx-4 bg-[#FFFFFF] rounded-xl h-[58px] flex items-center justify-center text-[##333333] text-[18px] leading-[100%] font-medium cursor-pointer">
+              취소
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 동의하기3 : 마케팅 수신 동의 */}
+      {agree3 && (
+        <div className="bg-black w-full h-full absolute top-0 left-0 flex justify-center items-center">
+          <div className=" w-full flex flex-col mt-auto mb-24">
+            <div className="mx-4 bg-[#F2F2F2] text-center h-[45px] flex items-center justify-center rounded-t-xl text-[#333333] text-[14px] leading-[100%] font-medium">
+              프로필 사진 설정
+            </div>
+            <div className="mx-4 bg-[#F2F2F2] border-[#666666] border-t-[0.5px] border-b-[0.5px] text-center h-14 flex items-center justify-center text-[#333333] text-[18px] leading-[100%] font-medium cursor-pointer">
+              앨범에서 사진 선택
+            </div>
+            <div className="mx-4 bg-[#F2F2F2] text-center h-14 flex items-center justify-center rounded-b-xl text-[#333333] text-[18px] leading-[100%] font-medium cursor-pointer">
+              기본으로 설정
+            </div>
+            <div className="mt-3 mx-4 bg-[#FFFFFF] rounded-xl h-[58px] flex items-center justify-center text-[##333333] text-[18px] leading-[100%] font-medium cursor-pointer">
+              취소
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 }
