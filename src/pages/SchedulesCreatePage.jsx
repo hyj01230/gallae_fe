@@ -20,15 +20,21 @@ import {
 } from "../constants/mySchedule";
 import useImage from "../hooks/useImage";
 import { useMutation, useQueryClient } from "react-query";
+import useModal from "../hooks/useModal";
+import SearchModal from "../components/scheduleCreate/SearchModal";
+import { useRecoilValue } from "recoil";
+import { searchPlaceInfoState } from "../store/atom";
 
 export default function SchedulesCreatePage() {
+  const modal = useModal();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [timeSpent, setTimeSpent] = useState({ time: 0, text: "" });
+  const placeInfo = useRecoilValue(searchPlaceInfoState);
   const [schedule, setSchedule] = useState({
     schedulesCategory: "",
     costs: 0,
-    placeName: null,
+    placeName: placeInfo.placeName,
     contents: "",
     timeSpent: "",
     referenceURL: "",
@@ -69,6 +75,13 @@ export default function SchedulesCreatePage() {
       },
     }
   );
+
+  const handleSearchClick = () => {
+    // modal.handleOpenModal();
+    navigate("/myschedules/search", {
+      state: { postId, subTitle, tripDateId },
+    });
+  };
 
   // const handleSubmitClick = async () => {
   //   await createScheduleDetail(tripDateId, {
@@ -124,13 +137,19 @@ export default function SchedulesCreatePage() {
         <div className="flex justify-between items-center w-3/5">
           <div className="flex items-center gap-2 text-[14px]">
             <Marker />
-            <input
+            {/* <button onClick={handleSearchClick}>검색</button> */}
+            <div onClick={handleSearchClick}>
+              {schedule.placeName !== ""
+                ? schedule.placeName
+                : "장소를 검색하세요"}
+            </div>
+            {/* <input
               className="w-full"
               placeholder="장소를 입력하세요"
               onChange={(e) =>
                 setSchedule((prev) => ({ ...prev, placeName: e.target.value }))
               }
-            />
+            /> */}
           </div>
           <DownArrow />
         </div>
@@ -250,6 +269,14 @@ export default function SchedulesCreatePage() {
           일정 수정 완료
         </button>
       </div>
+
+      {modal.isModal && (
+        <SearchModal
+          placeName={schedule.placeName}
+          setSchedule={setSchedule}
+          handleCloseModal={modal.handleCloseModal}
+        />
+      )}
     </Layout>
   );
 }
