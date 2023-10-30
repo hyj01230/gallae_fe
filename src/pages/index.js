@@ -1,6 +1,7 @@
 import MySchedulesAccountPage from "./MySchedulesAccountPage";
 import SchedulesDetailPage from "./SchedulesDetailPage";
 import LoginPage from "./LoginPage";
+import LoginPageKakao from "./LoginPageKakao";
 import PostListPage from "./PostListPage";
 import MyPage from "./MyPage";
 import MyPageModify from "./MyPageModify";
@@ -26,6 +27,7 @@ import PostSearchPage from "./PostSearchPage";
 
 export default {
   LoginPage,
+  LoginPageKakao,
   MyPage,
   MyPageModify,
   MyPageNickName,

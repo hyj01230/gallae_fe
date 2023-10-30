@@ -58,6 +58,14 @@ export default function LoginPage() {
     }
   };
 
+  // 카카오 로그인
+  const onClickKakaoLoginHandler = () => {
+    const REST_API_KEY = import.meta.env.VITE_REACT_APP_REST_API_KEY; // client_id : REST API KEY 설정('갈래' 인지 확인하는 고유 키)
+    const REDIRECT_URI = import.meta.env.VITE_REACT_APP_KAKAO_REDIRECT_URI; // 리다이렉트 URI 설정(응답받을 주소) > 동의하기 누르면 나오는 페이지
+    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}`; // 카카오 OAuth 인증 URL
+    window.location.href = KAKAO_AUTH_URL; // 카카오 로그인 클릭하면 KAKAO_AUTH_URL 여기로 이동!
+  };
+
   return (
     <Layout isBottomNav={false}>
       <div className="mx-4 mb-10">
@@ -107,7 +115,7 @@ export default function LoginPage() {
 
         <div>
           <div
-            onClick={onClickSingUpHandler}
+            onClick={onClickKakaoLoginHandler}
             className="mt-3 rounded-lg w-full h-[50px] bg-[#F8DF00] flex justify-center items-center text-[#333333] text-base/[30px] font-medium cursor-pointer"
           >
             <img className="w-12 h-12" src="img/kakao.png" />
