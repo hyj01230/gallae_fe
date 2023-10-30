@@ -25,8 +25,6 @@ export default function ScheduleMap({
     if (map) map.setBounds(bounds);
   }, [mapRef.current]);
 
-  console.log(mapRef.current);
-
   return (
     <Map // 로드뷰를 표시할 Container
       center={{

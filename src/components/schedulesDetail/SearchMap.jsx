@@ -4,6 +4,7 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 export default function SearchMap({
   height = "150px",
   keyword = "",
+  isSearch,
   setSearchList,
 }) {
   const [info, setInfo] = useState();
@@ -49,7 +50,7 @@ export default function SearchMap({
         map.setBounds(bounds);
       }
     });
-  }, [map]);
+  }, [isSearch, map]);
 
   return (
     <Map // 로드뷰를 표시할 Container
