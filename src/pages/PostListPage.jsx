@@ -267,27 +267,9 @@ export default function PostListPage() {
                     <PostListComment
                       onClick={() => {
                         navigate(`/posts/${item.postId}`);
-                        if (commentInputRef.current) {
-                          commentInputRef.current.focus();
-                        } else {
-                          console.log("commentInputRef is not connected");
-                        }
                       }}
                     />
-                    <p
-                      className="cursor-pointer"
-                      onClick={() => {
-                        navigate(`/posts/${item.postId}`);
-                        if (commentInputRef.current) {
-                          commentInputRef.current.focus();
-                        } else {
-                          console.log("commentInputRef is not connected");
-                        }
-                      }}
-                    >
-                      {" "}
-                      댓글달기
-                    </p>
+                    <p> 댓글달기</p>
                   </div>
                 </div>
                 <PostLine />

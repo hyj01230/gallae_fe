@@ -1,12 +1,12 @@
-import { LikeHeart, LikeFullHeart, CommentIcon } from "../assets/Icon";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { axiosInstance } from "../api/axiosInstance";
+import { useNavigate, useParams } from "react-router-dom";
 import Layout from "../components/common/Layout";
 import DetailsHeader from "../components/postDetailsPage/DetailsHeader";
 import Image from "../components/postDetailsPage/Image";
-import { axiosInstance } from "../api/axiosInstance";
-import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect, useCallback, useRef } from "react";
-import Comments from "../components/postDetailsPage/Comments";
+import Comments from "../components/postDetailsPage/Comments"; // 수정된 import
 import DetailSchedules from "../components/postDetailsPage/DetailSchedules";
+import CommentsDisplay from "../components/postDetailsPage/PostCommentDisplay"; // 새로 추가한 import
 
 export default function PostDetailsPage() {
   const [postDetails, setPostDetails] = useState({
@@ -25,7 +25,9 @@ export default function PostDetailsPage() {
   const { postId } = useParams();
   const [likedStatus, setLikedStatus] = useState({});
   const [areCommentsVisible, setCommentsVisible] = useState(false);
-  const commentInputRef = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림/닫힘 상태 변수
+
+  const modalRef = useRef(null); // 모달 창 Ref
 
   useEffect(() => {
     const getPostDetails = async () => {
@@ -42,7 +44,7 @@ export default function PostDetailsPage() {
       }
     };
 
-    getPostDetails(); // 함수를 여기서 호출
+    getPostDetails();
   }, [postId]);
 
   const handleCommentSubmit = async (e) => {
@@ -70,7 +72,7 @@ export default function PostDetailsPage() {
   };
 
   const getaccessToken = () => {
-    return localStorage.getItem("accessToken"); // 로그인 후 토큰을 저장한 방식에 따라 가져옵니다.
+    return localStorage.getItem("accessToken");
   };
 
   const fetchLikedPosts = useCallback(async () => {
@@ -80,8 +82,6 @@ export default function PostDetailsPage() {
       try {
         const response = await axiosInstance.get("/api/postlike/id");
         const likedPosts = response.data;
-
-        // 서버에서 가져온 정보를 likedStatus 상태로 설정합니다.
         const likedStatusMap = {};
         likedPosts.forEach((postId) => {
           likedStatusMap[postId] = true;
@@ -95,7 +95,6 @@ export default function PostDetailsPage() {
   }, []);
 
   useEffect(() => {
-    // 컴포넌트가 마운트될 때 사용자의 좋아요 상태를 가져옵니다.
     fetchLikedPosts();
   }, [fetchLikedPosts]);
 
@@ -103,19 +102,13 @@ export default function PostDetailsPage() {
     try {
       const response = await axiosInstance.get(`/api/posts/like/${postId}`);
       if (response.data.check) {
-        // 게시물에 좋아요 추가
         setLikedStatus({ ...likedStatus, [postId]: true });
-
-        // 현재 게시물의 likeNum 증가
         setPostDetails((prevDetails) => ({
           ...prevDetails,
           likeNum: prevDetails.likeNum + 1,
         }));
       } else {
-        // 게시물의 좋아요 취소
         setLikedStatus({ ...likedStatus, [postId]: false });
-
-        // 현재 게시물의 likeNum 감소
         setPostDetails((prevDetails) => ({
           ...prevDetails,
           likeNum: prevDetails.likeNum - 1,
@@ -126,97 +119,107 @@ export default function PostDetailsPage() {
     }
   };
 
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  // 모달 바깥 영역 클릭 시 닫히도록 하는 핸들러
+  const handleModalClickOutside = (e) => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      setIsModalOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    // 페이지가 로드될 때 이벤트 리스너 등록
+    window.addEventListener("click", handleModalClickOutside);
+    return () => {
+      // 페이지가 언로드될 때 이벤트 리스너 제거
+      window.removeEventListener("click", handleModalClickOutside);
+    };
+  }, []);
+
   return (
     <Layout>
       <div>
         <DetailsHeader />
         <Image />
-        <div className="w-393 h-275 bg-white flex flex-col ">
+        <div className="w-393 h-275 bg-white flex flex-col mb-[50px]">
           <div className="flex items-center justify-between mb-2 mt-5">
             <div className="flex items-center">
-              <img
-                className="w-12 h-12 bg-gray-300 rounded-full ml-4 cursor-pointer"
-                src={postDetails.profileImage}
-              />
+              {" "}
+              <div className="flex items-center">
+                <img
+                  className="w-12 h-12 bg-gray-300 rounded-full ml-4 cursor-pointer"
+                  src={postDetails.profileImage}
+                />
 
-              <div className="flex flex-col ml-[13px]">
-                {postDetails ? (
-                  <span className="text-[20px] font-semibold">
-                    {postDetails.title}
-                  </span>
-                ) : (
-                  <p>Loading...</p>
-                )}
-                <div className="">
-                  {postDetails && postDetails.tagsList ? (
-                    postDetails.tagsList.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="text-gray-500 text-sm cursor-pointer mr-1"
-                        onClick={() => handleTagClick(tag)}
-                      >
-                        #{tag}
-                      </span>
-                    ))
+                <div className="flex flex-col ml-[13px]">
+                  {postDetails ? (
+                    <span className="text-[20px] font-semibold">
+                      {postDetails.title}
+                    </span>
                   ) : (
-                    <p>Loading tags...</p>
+                    <p>Loading...</p>
                   )}
+                  <div className="">
+                    {postDetails && postDetails.tagsList ? (
+                      postDetails.tagsList.map((tag, index) => (
+                        <span
+                          key={index}
+                          className="text-gray-500 text-sm cursor-pointer mr-1"
+                          onClick={() => handleTagClick(tag)}
+                        >
+                          #{tag}
+                        </span>
+                      ))
+                    ) : (
+                      <p>Loading tags...</p>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-
           <span className="text-3 mt-4 mx-5 mb-3">{postDetails.contents}</span>
 
           <DetailSchedules postId={postId} />
-
-          <div className="flex items-center justify-between text-sm text-gray-500 h-[50px] border-b-2">
-            <div
-              className="flex items-center space-x-2 flex-1 justify-center p-3"
-              onClick={() => setCommentsVisible(!areCommentsVisible)}
-            >
-              <div className="cursor-pointer ">
-                {areCommentsVisible ? <CommentIcon /> : <CommentIcon />}
-              </div>
-              <p className="cursor-pointer">댓글 {postDetails.commentNum}</p>
-            </div>
-            <div className="border border-gray-500"></div>
-            <div
-              className="flex items-center space-x-2 flex-1 justify-center"
-              onClick={handleLikeClick}
-            >
-              <div className="">
-                {likedStatus[postDetails.postId] ? (
-                  <LikeFullHeart />
-                ) : (
-                  <LikeHeart />
-                )}
-              </div>
-              <p className="cursor-pointer">좋아요 {postDetails.likeNum}</p>
-            </div>
+          <div className="fixed bottom-0 left-0 w-full bg-white ">
+            <CommentsDisplay
+              areCommentsVisible={areCommentsVisible}
+              setCommentsVisible={setCommentsVisible}
+              handleOpenModal={handleOpenModal}
+              postDetails={postDetails}
+              likedStatus={likedStatus}
+              handleLikeClick={handleLikeClick}
+            />
           </div>
-          {areCommentsVisible && (
-            <div className="relative transition-all duration-5000 ease-in-out">
-              <textarea
-                ref={commentInputRef} // ref 연결
-                value={newComment.contents}
-                onChange={(e) => setNewComment({ contents: e.target.value })}
-                placeholder="댓글을 입력하세요."
-                className="w-full p-4 h-[57px]"
-              />
-              <button
-                onClick={handleCommentSubmit}
-                className="bg-white font-[14px] absolute w-20 top-4 right-5 mx-0 rounded-md"
-              >
-                작성
-              </button>
-            </div>
-          )}
-          {areCommentsVisible && (
-            <div className="transition-all duration-5000 ease-in-out">
-              <Comments comments={postComments} setComments={setPostComments} />
-            </div>
-          )}
+        </div>
+      </div>
+      <div
+        className={`fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-80 z-50 ${
+          isModalOpen ? "block" : "hidden"
+        }`}
+      >
+        <div className="modal-content bg-white p-4 rounded shadow-lg">
+          <button
+            onClick={handleCloseModal}
+            className="modal-close-button absolute top-2 right-2 text-gray-500"
+          >
+            닫기
+          </button>
+          <Comments
+            comments={postComments}
+            setComments={setPostComments}
+            newComment={newComment}
+            setNewComment={setNewComment}
+            handleCommentSubmit={handleCommentSubmit}
+            handleCloseModal={handleCloseModal}
+          />
         </div>
       </div>
     </Layout>
