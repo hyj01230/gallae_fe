@@ -11,6 +11,7 @@ import TestKakaoMap from "../components/schedulesDetail/TestKakaoMap";
 import DateDropbox from "../components/schedulesDetail/DateDropbox";
 import DateSelectModal from "../components/schedulesDetail/DateSelectModal";
 import useModal from "../hooks/useModal";
+import ScheduleMap from "../components/schedulesDetail/ScheduleMap";
 
 export default function SchedulesDetailPage() {
   const navigate = useNavigate();
@@ -88,7 +89,7 @@ export default function SchedulesDetailPage() {
 
       {/* <div className="w-full h-36"> *ㄴ/}
       {/* <KaKaoMap /> */}
-      {/* <SearchMap keyword={location} /> */}
+      <ScheduleMap keyword={location} />
       {/* <TestKakaoMap /> */}
       {/* </div>   */}
 
@@ -139,7 +140,7 @@ export default function SchedulesDetailPage() {
       {modal.isModal && (
         <DateSelectModal
           data={data}
-          selectedDate={tripSchedule.chosenDate}
+          initDate={tripSchedule}
           handleCloseModal={modal.handleCloseModal}
           handleUpdateScheduleClick={handleUpdateScheduleClick}
         />

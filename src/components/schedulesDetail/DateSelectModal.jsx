@@ -3,13 +3,13 @@ import { formatDateString } from "../../util/formatDate";
 
 export default function DateSelectModal({
   data,
-  selectedDate,
+  initDate,
   handleCloseModal,
   handleUpdateScheduleClick,
 }) {
   const [isSelected, setIsSelected] = useState({
-    date: selectedDate,
-    dateInfo: {},
+    date: initDate.chosenDate,
+    dateInfo: initDate,
   }); // 글자색상 변경 및 날짜 데이터 저장
   const tailWindClassName =
     "py-[18px] flex gap-[10px] border-b border-[#F2F2F2]";

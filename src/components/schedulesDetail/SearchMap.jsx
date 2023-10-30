@@ -1,13 +1,20 @@
 import { useState, useEffect } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 
-export default function SearchMap({ keyword = "서울" }) {
+export default function SearchMap({
+  height = "150px",
+  keyword = "",
+  isSearch,
+  setSearchList,
+}) {
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
+  const [list, setList] = useState([]);
 
   useEffect(() => {
     if (!map) return;
+    // 장소 검색 객체 생성
     const ps = new kakao.maps.services.Places();
 
     if (keyword === undefined) {
@@ -20,6 +27,10 @@ export default function SearchMap({ keyword = "서울" }) {
         // LatLngBounds 객체에 좌표를 추가합니다
         const bounds = new kakao.maps.LatLngBounds();
         let markers = [];
+
+        if (setSearchList) {
+          setSearchList(data);
+        }
 
         for (var i = 0; i < data.length; i++) {
           // @ts-ignore
@@ -39,7 +50,7 @@ export default function SearchMap({ keyword = "서울" }) {
         map.setBounds(bounds);
       }
     });
-  }, [map]);
+  }, [isSearch, map]);
 
   return (
     <Map // 로드뷰를 표시할 Container
@@ -49,12 +60,12 @@ export default function SearchMap({ keyword = "서울" }) {
       }}
       style={{
         width: "100%",
-        height: "150px",
+        height: `${height}`,
       }}
       level={3}
       onCreate={setMap}
     >
-      {/* {markers.map((marker) => (
+      {markers.map((marker) => (
         <MapMarker
           key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
           position={marker.position}
@@ -66,7 +77,7 @@ export default function SearchMap({ keyword = "서울" }) {
             </div>
           )}
         </MapMarker>
-      ))} */}
+      ))}
     </Map>
   );
 }
