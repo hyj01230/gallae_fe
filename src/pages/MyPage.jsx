@@ -72,16 +72,18 @@ export default function MyPage() {
 
   // PUT : 프로필 사진 - 기본으로 설정
   const onClickDefaultProfileHandler = async () => {
-    setMyPageInfo({ ...myPageInfo, profileImg: null });
+    // setMyPageInfo({ ...myPageInfo, profileImg: null });
     // setUploadImage(null);
 
     try {
-      const formData = new FormData(); // 사진 업로드는 폼데이터로!
-      formData.append("file", null); // null로 보내면 기본사진으로 변경됨!
+      // const formData = new FormData(); // 사진 업로드는 폼데이터로!
+      // formData.append("file", null); // null로 보내면 기본사진으로 변경됨!
 
       const response = await axiosInstance.put(
         "/api/users/profile/update-profileImg",
-        formData
+        {
+          file: null,
+        }
       );
       alert(response.data.messageResponseDto.msg);
       setProfileModal(false); // 모달 닫기

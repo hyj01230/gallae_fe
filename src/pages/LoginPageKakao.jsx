@@ -16,18 +16,18 @@ export default function LoginPageKakao() {
     const KakaoLogin = async () => {
       try {
         const response = await axiosInstance.get(
-          `/api/users/kakao/callback?code=${code}`
-          // {
-          //   headers: {
-          //     "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
-          //   },
-          // },
-          // {
-          //   grant_type: "authorization_code",
-          //   client_id: import.meta.env.VITE_REACT_APP_REST_API_KEY,
-          //   redirect_uri: import.meta.env.VITE_REACT_APP_KAKAO_REDIRECT_URI,
-          //   code,
-          // }
+          `/api/users/kakao/callback?code=${code}`,
+          {
+            headers: {
+              "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+            },
+          },
+          {
+            grant_type: "authorization_code",
+            client_id: import.meta.env.VITE_REACT_APP_REST_API_KEY,
+            redirect_uri: import.meta.env.VITE_REACT_APP_KAKAO_REDIRECT_URI,
+            code,
+          }
         );
         console.log("response", response);
         const accessToken = response.headers.authorization;
