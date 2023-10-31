@@ -3,7 +3,7 @@ import Layout from "../components/common/Layout";
 import SearchMap from "../components/schedulesDetail/SearchMap";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { searchPlaceInfoState } from "../store/atom";
+import { scheduleDataState } from "../store/atom";
 
 export default function SchedulesPlaceSearch() {
   /**
@@ -17,16 +17,12 @@ export default function SchedulesPlaceSearch() {
   const [keyword, setKeyword] = useState(""); // 검색 키워드
   const [searchList, setSearchList] = useState([]); // 검색 목록
   const [isSearch, setIsSearch] = useState(false); // 검색 버튼 클릭 시 상태 변경
-  const [placeInfo, setPlaceInfo] = useRecoilState(searchPlaceInfoState);
+  const [schedule, setSchedule] = useRecoilState(scheduleDataState);
   const navigate = useNavigate();
   const { postId, subTitle, tripDateId } = useLocation().state;
 
   const handleSelectClick = (placeName, x, y) => {
-    // 장소를 클릭하면
-    // 장소명이 placeName에 저장되고
-    // 마커의 info가 나타나고, 목록의 border가 #F90, border-3된다.
-    // setSchedule((prev) => ({ ...prev, placeName }));
-    setPlaceInfo({ placeName, x, y });
+    setSchedule((prev) => ({ ...prev, placeName, x, y }));
   };
 
   const handleSubmitClick = () => {
@@ -70,9 +66,9 @@ export default function SchedulesPlaceSearch() {
             <div
               key={index}
               className={`mx-4 p-1 border rounded-md ${
-                placeInfo.placeName === list.place_name &&
-                placeInfo.x == list.x &&
-                placeInfo.y === list.y
+                schedule.placeName === list.place_name &&
+                schedule.x == list.x &&
+                schedule.y === list.y
                   ? "border-3 border-[#F90]"
                   : " "
               }`}

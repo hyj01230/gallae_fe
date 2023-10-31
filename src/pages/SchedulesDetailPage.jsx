@@ -17,6 +17,7 @@ export default function SchedulesDetailPage() {
   const navigate = useNavigate();
   const { postId, subTitle, location, tripDateId } = useLocation().state;
   const modal = useModal();
+  const [placeList, setPlaceList] = useState([]);
   const [tripSchedule, setTripSchedule] = useState({
     day: "",
     chosenDate: "",
@@ -32,13 +33,25 @@ export default function SchedulesDetailPage() {
     const index = response.findIndex(
       (value) => value.tripDateId === tripDateId
     );
+    const filteredPlaceInfo = response.flatMap(({ schedulesList }) =>
+      schedulesList.map(({ placeName, x, y }) => ({
+        placeName,
+        lat: y,
+        lng: x,
+      }))
+    );
+
     setTripSchedule({ ...foundElement, day: index + 1 });
+    setPlaceList(filteredPlaceInfo);
+
     return response;
   });
 
   if (isLoading) {
     return <div>로딩중</div>;
   }
+
+  console.log(data);
 
   // 모달에 나열된 '날짜' 클릭 시 날짜 정보를 토대로 세부일정 업데이트
   const handleUpdateScheduleClick = (date) => {
@@ -87,11 +100,9 @@ export default function SchedulesDetailPage() {
         <div>{subTitle}</div>
       </div>
 
-      {/* <div className="w-full h-36"> *ㄴ/}
-      {/* <KaKaoMap /> */}
-      <ScheduleMap keyword={location} />
-      {/* <TestKakaoMap /> */}
-      {/* </div>   */}
+      <div className="mt-3">
+        <ScheduleMap keyword={location} placeList={placeList} />
+      </div>
 
       {/* 여행 날짜 드롭다운 */}
       <DateDropbox

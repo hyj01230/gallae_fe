@@ -16,3 +16,17 @@ export const searchPlaceInfoState = atom({
   key: "searchPlaceInfoState",
   default: { placeName: "", x: "", y: "" },
 });
+
+export const scheduleDataState = atom({
+  key: "scheduleDataState",
+  default: {
+    schedulesCategory: "",
+    costs: 0,
+    placeName: null,
+    x: "",
+    y: "",
+    contents: "",
+    timeSpent: "",
+    referenceURL: "",
+  },
+});
