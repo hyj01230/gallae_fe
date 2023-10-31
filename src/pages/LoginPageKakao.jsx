@@ -7,7 +7,7 @@ export default function LoginPageKakao() {
   const navigate = useNavigate();
 
   // 카카오에서 준 인가코드 뽑기
-  const code = new URL(window.location.href).searchParams.get("code");
+  let code = new URL(window.location.href).searchParams.get("code");
   console.log(code);
 
   // 인가코드를 백에 보내보자
@@ -16,7 +16,7 @@ export default function LoginPageKakao() {
     const KakaoLogin = async () => {
       try {
         const response = await axiosInstance.get(
-          `/api/users/kakao/callback?code=${code}`,
+          `https://gallae-trip.com/api/users/kakao/callback?code=${code}`,
           {
             headers: {
               "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
