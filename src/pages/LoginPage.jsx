@@ -8,7 +8,7 @@ export default function LoginPage() {
   // 페이지 이동
   const navigate = useNavigate();
   const onClickSkipHandler = () => {
-    navigate("/");
+    navigate("/posts");
   };
   const onClickSingUpHandler = () => {
     navigate("/signup");
