@@ -22,6 +22,7 @@ export default function ScheduleMap({
   }, [placeList]);
 
   useEffect(() => {
+    if (placeList.length === 0) return;
     const map = mapRef.current;
     if (map) map.setBounds(bounds);
   }, [mapRef.current]);
@@ -39,19 +40,22 @@ export default function ScheduleMap({
       level={3}
       ref={mapRef}
     >
-      {placeList.map((point) => (
-        <MapMarker key={`${point.lat}-${point.lng}`} position={point}>
-          <span>{point.placeName}</span>
-        </MapMarker>
-      ))}
+      {placeList.length > 0 &&
+        placeList.map((point) => (
+          <MapMarker key={`${point.lat}-${point.lng}`} position={point}>
+            <span>{point.placeName}</span>
+          </MapMarker>
+        ))}
 
-      <Polyline
-        path={[position]}
-        strokeWeight={5} // 선의 두께 입니다
-        strokeColor={"#FFAE00"} // 선의 색깔입니다
-        strokeOpacity={0.7} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-        strokeStyle={"solid"} // 선의 스타일입니다
-      />
+      {placeList.length > 0 && (
+        <Polyline
+          path={[position]}
+          strokeWeight={5} // 선의 두께 입니다
+          strokeColor={"#FFAE00"} // 선의 색깔입니다
+          strokeOpacity={0.7} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+          strokeStyle={"solid"} // 선의 스타일입니다
+        />
+      )}
     </Map>
   );
 }
