@@ -21,12 +21,12 @@ export default function LoginPageKakao() {
             headers: {
               "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
             },
-          },
-          {
-            grant_type: "authorization_code",
-            client_id: import.meta.env.VITE_REACT_APP_REST_API_KEY,
-            redirect_uri: import.meta.env.VITE_REACT_APP_KAKAO_REDIRECT_URI,
-            code,
+            params: {
+              grant_type: "authorization_code",
+              client_id: import.meta.env.VITE_REACT_APP_REST_API_KEY,
+              redirect_uri: import.meta.env.VITE_REACT_APP_KAKAO_REDIRECT_URI,
+              code,
+            },
           }
         );
         console.log("response", response);
