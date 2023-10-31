@@ -52,9 +52,9 @@ export default function MyPageCommentList() {
   }, []);
 
   // 댓글/대댓글 클릭해서 이동
-  // const onClickCommentReplyHandler = () => {
-  //   navigate("/mypage");
-  // }
+  const onClickCommentReplyHandler = (commentId) => {
+    navigate(`/comment-detail/${commentId}`);
+  };
 
   // 입력 시간 표시
   const getTimeAgo = (timestamp) => {
@@ -93,9 +93,6 @@ export default function MyPageCommentList() {
     return formattedDate;
   };
 
-  //무한 스크롤
-  // const observer = new IntersectionObserver(callback { threshold: 0.7 });
-
   return (
     <Layout isBottomNav={true}>
       <div
@@ -116,7 +113,7 @@ export default function MyPageCommentList() {
                   ? `comment_${item.commentId}`
                   : `replies_${item.repliesId}`
               }
-              // onClick={onClickCommentReplyHandler}
+              onClick={() => onClickCommentReplyHandler(item.commentId)}
               className="ml-4 mt-4 flex flex-row"
             >
               <div className="flex justify-start">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { LeftArrow, ThreeDots } from "../assets/Icon";
+import { LeftArrow } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
@@ -29,6 +29,43 @@ export default function MyPagePostList() {
   useEffect(() => {
     getPostList();
   }, []);
+
+  // 입력 시간 표시
+  const getTimeAgo = (timestamp) => {
+    const now = new Date();
+    const createAt = new Date(timestamp);
+    const timeDiff = now - createAt;
+    const hoursAgo = Math.floor(timeDiff / (1000 * 60 * 60));
+
+    if (hoursAgo < 1) {
+      const minutesAgo = Math.floor(timeDiff / (1000 * 60));
+      if (minutesAgo < 1) {
+        return "방금 전";
+      }
+      return `${minutesAgo}분 전`;
+    }
+
+    if (hoursAgo < 24) {
+      return `${hoursAgo}시간 전`;
+    }
+
+    const daysAgo = Math.floor(hoursAgo / 24);
+    if (daysAgo === 1) {
+      return "어제";
+    }
+
+    // 년-월-일 시간:분 형식으로 날짜 및 시간 표시
+    const formattedDate = `${createAt.getFullYear()}-${(createAt.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${createAt
+      .getDate()
+      .toString()
+      .padStart(2, "0")} ${createAt
+      .getHours()
+      .toString()
+      .padStart(2, "0")}:${createAt.getMinutes().toString().padStart(2, "0")}`;
+    return formattedDate;
+  };
 
   return (
     <Layout isBottomNav={true}>
@@ -67,29 +104,7 @@ export default function MyPagePostList() {
                   {item.nickName}
                 </div>
                 <div className="mr-auto text-[#999999] text-sm/6 font-normal">
-                  {item.createdAt}
-                </div>
-                <div>
-                  <ThreeDots />
-                  {/* 케밥 모달 */}
-                  {/* {modalPostId === item.postId && openModal && (
-                    <div className="absolute right-4">
-                      <div className="w-[136px] h-[80px] bg-white shadow-[0_0_4px_4px_rgba(0,0,0,0.05)]">
-                        <div
-                          // onClick={ddd}
-                          className="pl-3 w-full h-10 border-b border-[#F2F2F2] flex justify-start items-center cursor-pointer"
-                        >
-                          좋아요 취소
-                        </div>
-                        <div
-                          // onClick={ddd}
-                          className="pl-3 w-full h-10 flex justify-start items-center cursor-pointer"
-                        >
-                          공유하기
-                        </div>
-                      </div>
-                    </div>
-                  )} */}
+                  {getTimeAgo(item.createAt)}
                 </div>
               </div>
             </div>

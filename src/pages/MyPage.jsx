@@ -55,7 +55,7 @@ export default function MyPage() {
   const getMyPageInfo = async () => {
     try {
       const response = await axiosInstance.get("/api/users/profile");
-      console.log("마이페이지 데이터 get 성공 :", response.data);
+      // console.log("마이페이지 데이터 get 성공 :", response.data);
 
       setMyPageInfo(response.data); // 마이페이지 데이터 저장
       setAboutMe(response.data.aboutMe); // 소개글 저장
@@ -72,12 +72,12 @@ export default function MyPage() {
 
   // PUT : 프로필 사진 - 기본으로 설정
   const onClickDefaultProfileHandler = async () => {
-    // setMyPageInfo({ ...myPageInfo, profileImg: null });
-    setUploadImage(null);
+    setMyPageInfo({ ...myPageInfo, profileImg: null });
+    // setUploadImage(null);
 
     try {
       const formData = new FormData(); // 사진 업로드는 폼데이터로!
-      formData.append("file", uploadImage); // null로 보내면 기본사진으로 변경됨!
+      formData.append("file", null); // null로 보내면 기본사진으로 변경됨!
 
       const response = await axiosInstance.put(
         "/api/users/profile/update-profileImg",
@@ -86,11 +86,11 @@ export default function MyPage() {
       alert(response.data.messageResponseDto.msg);
       setProfileModal(false); // 모달 닫기
       console.log("기본 프로필 put 성공 :", response);
-      console.log("uploadImage 성공 :", uploadImage);
+      // console.log("uploadImage 성공 :", uploadImage);
     } catch (error) {
       setProfileModal(false); // 모달 닫기
       console.log("error", error);
-      console.log("uploadImage 실패 :", uploadImage);
+      // console.log("기본으로 실패 :", uploadImage);
     }
   };
 
@@ -111,30 +111,30 @@ export default function MyPage() {
     // putUpdateProfileHandler(); // 사진 변경 PUT 시작!
   };
 
-  // useEffect : 렌더링되면 실행!
-  useEffect(() => {
-    putUpdateProfileHandler();
-  }, [uploadImage]);
+  // // useEffect : 렌더링되면 실행!
+  // useEffect(() => {
+  //   putUpdateProfileHandler();
+  // }, [uploadImage]);
 
-  // PUT : 프로필 사진 - 앨범에서 선택
-  const putUpdateProfileHandler = async () => {
-    try {
-      const formData = new FormData(); // 사진 업로드는 폼데이터로!!!!!!!!!
-      formData.append("file", uploadImage);
+  // // PUT : 프로필 사진 - 앨범에서 선택
+  // const putUpdateProfileHandler = async () => {
+  //   try {
+  //     const formData = new FormData(); // 사진 업로드는 폼데이터로!!!!!!!!!
+  //     formData.append("file", uploadImage);
 
-      const response = await axiosInstance.put(
-        "/api/users/profile/update-profileImg",
-        formData
-      );
-      console.log("성공 : put으로 넘어온 사진이 뭔가?", response);
-      setProfileModal(false); // 모달닫기
-      // getMyPageInfo();
-    } catch (error) {
-      console.log("error", error);
-      console.log("실패 : put으로 넘어온 사진이 뭔가?", uploadImage);
-      setProfileModal(false); // 모달닫기
-    }
-  };
+  //     const response = await axiosInstance.put(
+  //       "/api/users/profile/update-profileImg",
+  //       formData
+  //     );
+  //     console.log("성공 : put으로 넘어온 사진이 뭔가?", response);
+  //     setProfileModal(false); // 모달닫기
+  //     // getMyPageInfo();
+  //   } catch (error) {
+  //     console.log("error", error);
+  //     console.log("실패 : put으로 넘어온 사진이 뭔가?", uploadImage);
+  //     setProfileModal(false); // 모달닫기
+  //   }
+  // };
 
   // PUT : 소개글 변경
   const onClickSaveAboutMeHandler = async () => {
@@ -239,16 +239,22 @@ export default function MyPage() {
         >
           <MyWriting />
           <div className="ml-3 font-medium text-base/normal  text-[#666666]">
-            나의 게시글
+            나의 게시글 목록
           </div>
         </div>
       </div>
 
       {/* 프로필 모달 */}
       {profileModal && (
-        <div className="bg-[#666666]/50 w-full h-full absolute top-0 left-0 flex justify-center items-center">
+        <div
+          onClick={onClickProfileCloseHandler}
+          className="bg-[#666666]/50 w-full h-full absolute top-0 left-0 flex justify-center items-center"
+        >
           <div className=" w-full flex flex-col mt-auto mb-24">
-            <div className="mx-4 bg-[#F2F2F2] text-center h-[45px] flex items-center justify-center rounded-t-xl text-[#333333] text-[14px] leading-[100%] font-medium">
+            <div className="mx-6 text-[#FF9900] font-normal text-sm/normal text-center">
+              사진 업로드는 개당 1MB내외로 업로드 가능합니다.
+            </div>
+            <div className="mx-4 mt-3 bg-[#F2F2F2] text-center h-[45px] flex items-center justify-center rounded-t-xl text-[#333333] text-[14px] leading-[100%] font-medium">
               프로필 사진 설정
             </div>
             <div
@@ -275,7 +281,10 @@ export default function MyPage() {
 
       {/* 소개글 모달 */}
       {aboutMeModal && (
-        <div className="bg-[#333333]/80 w-full h-full absolute top-0 left-0 flex flex-col items-center">
+        <div
+          onClick={onClickAboutMeCloseHandler}
+          className="bg-[#333333]/80 w-full h-full absolute top-0 left-0 flex flex-col items-center"
+        >
           <div className=" mt-[61px] w-full flex flex-row text-white">
             <div
               onClick={onClickAboutMeCloseHandler}
