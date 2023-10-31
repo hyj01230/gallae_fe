@@ -48,8 +48,6 @@ export default function SchedulesDetailPage() {
     return <div>로딩중</div>;
   }
 
-  console.log(data);
-
   // 모달에 나열된 '날짜' 클릭 시 날짜 정보를 토대로 세부일정 업데이트
   const handleUpdateScheduleClick = (date) => {
     setTripSchedule(date);
@@ -70,79 +68,82 @@ export default function SchedulesDetailPage() {
 
   return (
     <Layout isBottomNav={true}>
-      <div className="flex items-center justify-between gap-x-1 p-2   ">
+      {/* 하단의 Navbar가 보이지 않아서 margin-bottom 값 추가 */}
+      <div className="mb-[110px]">
+        <div className="flex items-center justify-between gap-x-1 p-2   ">
+          <div
+            className="flex items-center cursor-pointer"
+            onClick={() => navigate("/")}
+          >
+            <div className="mr-2">
+              <LeftArrow />
+            </div>
+            <div className="py-3 flex items-center text-xl font-bold">
+              나의 일정
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1 mr-3">
+            <button>
+              <Share />
+            </button>
+            <button onClick={handleAccountClick}>
+              <Money />
+            </button>
+          </div>
+        </div>
+
+        <div className="flex justify-between items-center h-10 mt-1 mx-4 p-4 border border-[#EBEBEB] rounded-lg">
+          <div>{subTitle}</div>
+        </div>
+
+        <div className="mt-3">
+          <ScheduleMap keyword={location} placeList={placeList} />
+        </div>
+
+        {/* 여행 날짜 드롭다운 */}
+        <DateDropbox
+          day={tripSchedule.day}
+          date={tripSchedule.chosenDate}
+          handleClick={modal.handleOpenModal}
+        />
+
+        {/* 날짜별 여행계획 리스트 */}
+        {tripSchedule.schedulesList.length >= 1 &&
+          tripSchedule.schedulesList.map((schedule, index) => (
+            <List
+              key={index}
+              schedule={schedule}
+              handleClick={() =>
+                navigate("/myschedules/edit/schedule", {
+                  state: {
+                    ...schedule,
+                    subTitle,
+                    chosenDate: tripSchedule.chosenDate,
+                    postId,
+                    tripDateId: tripSchedule.tripDateId,
+                  },
+                })
+              }
+            />
+          ))}
+
         <div
-          className="flex items-center cursor-pointer"
-          onClick={() => navigate("/")}
+          className="flex justify-center items-center gap-3 mt-4 text-[#666] cursor-pointer"
+          onClick={() =>
+            navigate("/myschedules/create/schedule", {
+              state: {
+                postId,
+                subTitle: subTitle,
+                chosenDate: tripSchedule.chosenDate,
+                tripDateId: tripSchedule.tripDateId,
+              },
+            })
+          }
         >
-          <div className="mr-2">
-            <LeftArrow />
-          </div>
-          <div className="py-3 flex items-center text-xl font-bold">
-            나의 일정
-          </div>
+          <PlusWithCircle />
+          일정 추가하기
         </div>
-
-        <div className="flex items-center gap-1 mr-3">
-          <button>
-            <Share />
-          </button>
-          <button onClick={handleAccountClick}>
-            <Money />
-          </button>
-        </div>
-      </div>
-
-      <div className="flex justify-between items-center h-10 mt-1 mx-4 p-4 border border-[#EBEBEB] rounded-lg">
-        <div>{subTitle}</div>
-      </div>
-
-      <div className="mt-3">
-        <ScheduleMap keyword={location} placeList={placeList} />
-      </div>
-
-      {/* 여행 날짜 드롭다운 */}
-      <DateDropbox
-        day={tripSchedule.day}
-        date={tripSchedule.chosenDate}
-        handleClick={modal.handleOpenModal}
-      />
-
-      {/* 날짜별 여행계획 리스트 */}
-      {tripSchedule.schedulesList.length >= 1 &&
-        tripSchedule.schedulesList.map((schedule, index) => (
-          <List
-            key={index}
-            schedule={schedule}
-            handleClick={() =>
-              navigate("/myschedules/edit/schedule", {
-                state: {
-                  ...schedule,
-                  subTitle,
-                  chosenDate: tripSchedule.chosenDate,
-                  postId,
-                  tripDateId: tripSchedule.tripDateId,
-                },
-              })
-            }
-          />
-        ))}
-
-      <div
-        className="flex justify-center items-center gap-3 mt-4 text-[#666] cursor-pointer"
-        onClick={() =>
-          navigate("/myschedules/create/schedule", {
-            state: {
-              postId,
-              subTitle: subTitle,
-              chosenDate: tripSchedule.chosenDate,
-              tripDateId: tripSchedule.tripDateId,
-            },
-          })
-        }
-      >
-        <PlusWithCircle />
-        일정 추가하기
       </div>
 
       {modal.isModal && (
