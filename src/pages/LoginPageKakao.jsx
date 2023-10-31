@@ -16,7 +16,7 @@ export default function LoginPageKakao() {
     const KakaoLogin = async () => {
       try {
         const response = await axiosInstance.get(
-          `/api/users/kakao/callback?code=${code}`,
+          `https://gallae-fe.vercel.app/api/users/kakao/callback?code=${code}`,
           {
             headers: {
               "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
