@@ -1,15 +1,16 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
 
 export default function ScheduleMap({
   height = "150px",
   placeList = [
-    { content: "제주1", lat: 33.452344169439975, lng: 126.56878163224233 },
-    { content: "제주2", lat: 33.452739313807456, lng: 126.5709308145358 },
-    { content: "제주3", lat: 33.45178067090639, lng: 126.5726886938753 },
+    { placeName: "제주1", lat: 33.452344169439975, lng: 126.56878163224233 },
+    { placeName: "제주2", lat: 33.452739313807456, lng: 126.5709308145358 },
+    { placeName: "제주3", lat: 33.45178067090639, lng: 126.5726886938753 },
   ],
 }) {
   const mapRef = useRef();
+  const position = placeList.map(({ placename, ...rest }) => ({ ...rest }));
 
   const bounds = useMemo(() => {
     const bounds = new kakao.maps.LatLngBounds();
@@ -40,18 +41,12 @@ export default function ScheduleMap({
     >
       {placeList.map((point) => (
         <MapMarker key={`${point.lat}-${point.lng}`} position={point}>
-          <span>{point.content}</span>
+          <span>{point.placeName}</span>
         </MapMarker>
       ))}
 
       <Polyline
-        path={[
-          [
-            { lat: 33.452344169439975, lng: 126.56878163224233 },
-            { lat: 33.452739313807456, lng: 126.5709308145358 },
-            { lat: 33.45178067090639, lng: 126.572688693875 },
-          ],
-        ]}
+        path={[position]}
         strokeWeight={5} // 선의 두께 입니다
         strokeColor={"#FFAE00"} // 선의 색깔입니다
         strokeOpacity={0.7} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다

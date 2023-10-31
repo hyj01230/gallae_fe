@@ -22,23 +22,15 @@ import useImage from "../hooks/useImage";
 import { useMutation, useQueryClient } from "react-query";
 import useModal from "../hooks/useModal";
 import SearchModal from "../components/scheduleCreate/SearchModal";
-import { useRecoilValue } from "recoil";
-import { searchPlaceInfoState } from "../store/atom";
+import { useRecoilState } from "recoil";
+import { scheduleDataState } from "../store/atom";
 
 export default function SchedulesCreatePage() {
   const modal = useModal();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [timeSpent, setTimeSpent] = useState({ time: 0, text: "" });
-  const placeInfo = useRecoilValue(searchPlaceInfoState);
-  const [schedule, setSchedule] = useState({
-    schedulesCategory: "",
-    costs: 0,
-    placeName: placeInfo.placeName,
-    contents: "",
-    timeSpent: "",
-    referenceURL: "",
-  });
+  const [schedule, setSchedule] = useRecoilState(scheduleDataState);
   const { subTitle, chosenDate, tripDateId, postId } = useLocation().state;
   const imageHandler = useImage();
 
@@ -69,6 +61,16 @@ export default function SchedulesCreatePage() {
     {
       onSuccess: () => {
         queryClient.invalidateQueries("schedulesDetail");
+        setSchedule({
+          schedulesCategory: "",
+          costs: 0,
+          placeName: null,
+          x: "",
+          y: "",
+          contents: "",
+          timeSpent: "",
+          referenceURL: "",
+        });
         navigate("/myschedules/details", {
           state: { postId, tripDateId, subTitle },
         });
@@ -77,10 +79,10 @@ export default function SchedulesCreatePage() {
   );
 
   const handleSearchClick = () => {
-    // modal.handleOpenModal();
-    navigate("/myschedules/search", {
-      state: { postId, subTitle, tripDateId },
-    });
+    modal.handleOpenModal();
+    // navigate("/myschedules/search", {
+    //   state: { postId, subTitle, tripDateId },
+    // });
   };
 
   // const handleSubmitClick = async () => {
@@ -119,6 +121,9 @@ export default function SchedulesCreatePage() {
             <Circle />
             <select
               className="w-full text-[#999]"
+              value={
+                schedule.schedulesCategory !== "" && schedule.schedulesCategory
+              }
               onChange={(e) =>
                 setSchedule((prev) => ({
                   ...prev,
@@ -138,8 +143,8 @@ export default function SchedulesCreatePage() {
           <div className="flex items-center gap-2 text-[14px]">
             <Marker />
             {/* <button onClick={handleSearchClick}>검색</button> */}
-            <div onClick={handleSearchClick}>
-              {schedule.placeName !== ""
+            <div className="cursor-pointer" onClick={handleSearchClick}>
+              {schedule.placeName !== null
                 ? schedule.placeName
                 : "장소를 검색하세요"}
             </div>
@@ -272,7 +277,8 @@ export default function SchedulesCreatePage() {
 
       {modal.isModal && (
         <SearchModal
-          placeName={schedule.placeName}
+          // placeName={schedule.placeName}
+          schedule={schedule}
           setSchedule={setSchedule}
           handleCloseModal={modal.handleCloseModal}
         />

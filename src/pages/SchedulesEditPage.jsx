@@ -26,14 +26,19 @@ import {
   SPENT_TIME_LIST,
 } from "../constants/mySchedule";
 import useImage from "../hooks/useImage";
+import useModal from "../hooks/useModal";
+import SearchModal from "../components/scheduleCreate/SearchModal";
 
 export default function SchedulesEditPage() {
   const queryClient = useQueryClient();
+  const modal = useModal();
   const {
     postId, // 이거
     contents,
     costs,
     placeName,
+    x,
+    y,
     referenceURL,
     schedulesCategory,
     schedulesId,
@@ -48,10 +53,14 @@ export default function SchedulesEditPage() {
     text: timeSpent,
   });
 
+  console.log({ x }, { y });
+
   const [schedule, setSchedule] = useState({
     contents,
     costs,
     placeName,
+    x,
+    y,
     referenceURL,
     schedulesCategory,
     timeSpent,
@@ -116,6 +125,13 @@ export default function SchedulesEditPage() {
     setSchedule((prev) => ({ ...prev, timeSpent: timeSpentState.text }));
   }, [timeSpentState]);
 
+  const handleSearchClick = () => {
+    modal.handleOpenModal();
+    // navigate("/myschedules/search", {
+    //   state: { postId, subTitle, tripDateId },
+    // });
+  };
+
   return (
     <Layout>
       <div
@@ -173,13 +189,18 @@ export default function SchedulesEditPage() {
         <div className="flex justify-between items-center w-3/5">
           <div className="flex items-center gap-2 text-[14px]">
             <Marker />
-            <input
+            <div className="cursor-pointer" onClick={handleSearchClick}>
+              {schedule.placeName !== null
+                ? schedule.placeName
+                : "장소를 검색하세요"}
+            </div>
+            {/* <input
               defaultValue={schedule.placeName}
               placeholder="장소를 입력하세요"
               onChange={(e) =>
                 setSchedule((prev) => ({ ...prev, placeName: e.target.value }))
               }
-            />
+            /> */}
           </div>
           <DownArrow />
         </div>
@@ -313,6 +334,15 @@ export default function SchedulesEditPage() {
           일정 수정 완료
         </button>
       </div>
+
+      {modal.isModal && (
+        <SearchModal
+          // placeName={schedule.placeName}
+          schedule={schedule}
+          setSchedule={setSchedule}
+          handleCloseModal={modal.handleCloseModal}
+        />
+      )}
     </Layout>
   );
 }
