@@ -26,7 +26,8 @@ export default function useImage() {
 
     const formData = new FormData();
     formData.append("file", selectImage);
-    setUploadImage((prev) => [...prev, { formData }]);
+    // setUploadImage((prev) => [...prev, { formData }]);
+    setUploadImage(formData);
   };
 
   const handleSubmitClick = async (postId) => {
@@ -35,9 +36,11 @@ export default function useImage() {
     // const response = await uploadPostImage(postId, { file: uploadImage });
     // return response;
 
+    console.log(uploadImage);
+
     const res = await axios.post(
       `${import.meta.env.VITE_REACT_APP_URL}/api/posts/${postId}/postsPictures`,
-      { file: uploadImage },
+      uploadImage,
       {
         headers: {
           "Content-Type": "multipart/form-data",

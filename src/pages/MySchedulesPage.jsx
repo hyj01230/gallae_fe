@@ -26,6 +26,8 @@ export default function MySchedulesPage() {
     return <div>로딩중</div>;
   }
 
+  console.log(data);
+
   return (
     <Layout isBottomNav={true}>
       <div className="flex items-center justify-between gap-x-1 mx-4">

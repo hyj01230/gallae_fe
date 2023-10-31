@@ -67,41 +67,41 @@ export default function PostCreatePage() {
   };
 
   // 게시글 생성
-  const createPostMutation = useMutation(
-    "schedule",
-    () =>
-      updatePost(selectedPostId, {
-        title: postData.title,
-        contents: postData.contents,
-        subTitle: data.subTitle,
-        postCategory: postData.postCategory,
-        tagsList: postData.tagsList,
-      }),
-    {
-      onSuccess: async () => {
-        // await imageHandler.handleSubmitClick(selectedPostId);
-        navigate("/posts");
-      },
-    }
-  );
-
   // const createPostMutation = useMutation(
   //   "schedule",
-  //   () => imageHandler.handleSubmitClick(selectedPostId),
-
+  //   () =>
+  //     updatePost(selectedPostId, {
+  //       title: postData.title,
+  //       contents: postData.contents,
+  //       subTitle: data.subTitle,
+  //       postCategory: postData.postCategory,
+  //       tagsList: postData.tagsList,
+  //     }),
   //   {
   //     onSuccess: async () => {
-  //       await updatePost(selectedPostId, {
-  //         title: postData.title,
-  //         contents: postData.contents,
-  //         subTitle: data.subTitle,
-  //         postCategory: postData.postCategory,
-  //         tagsList: postData.tagsList,
-  //       }),
-  //         navigate("/posts");
+  //       // await imageHandler.handleSubmitClick(selectedPostId);
+  //       navigate("/posts");
   //     },
   //   }
   // );
+
+  const createPostMutation = useMutation(
+    "schedule",
+    () => imageHandler.handleSubmitClick(selectedPostId),
+
+    {
+      onSuccess: async () => {
+        await updatePost(selectedPostId, {
+          title: postData.title,
+          contents: postData.contents,
+          subTitle: data.subTitle,
+          postCategory: postData.postCategory,
+          tagsList: postData.tagsList,
+        }),
+          navigate("/posts");
+      },
+    }
+  );
 
   const handleTestClick = async (id) => {
     imageHandler.handleSubmitClick(id);
