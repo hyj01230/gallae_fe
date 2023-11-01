@@ -56,13 +56,13 @@ export default function MyPage() {
   const getMyPageInfo = async () => {
     try {
       const response = await axiosInstance.get("/api/users/profile");
-      // console.log("마이페이지 데이터 get 성공 :", response.data);
+      console.log("마이페이지 데이터 get 성공 :", response.data);
 
       setMyPageInfo(response.data); // 마이페이지 데이터 저장
       setAboutMe(response.data.aboutMe); // 소개글 저장
       setUploadImage(response.data.profileImg); // 프로필 사진 저장
     } catch (error) {
-      console.log("error :", error.response);
+      console.log("마이페이지 데이터 get 실패 :", error.response);
     }
   };
 
@@ -70,6 +70,48 @@ export default function MyPage() {
   useEffect(() => {
     getMyPageInfo();
   }, [profileModal]); // 프로필 사진 모달이 닫히면, getMyPageInfo 실행되고, 변경된 사진이 바로 적용됨!
+
+  // 프로필 사진 : useRef(input-div 연결)
+  const inputRef = useRef(null); // 사진선택 input - 앨범에서 선택 연결
+  const onClickSelectProfileHandler = () => {
+    inputRef.current.click(); // 앨범에서 선택 - 사진선택 input 연결
+  };
+
+  // 프로필 사진 : 이미지 선택창 나옴
+  const uploadImageHandler = async (e) => {
+    const selectImage = e.target.files[0]; // 선택된 파일 가져오기
+    console.log(`선택된 파일 이름: ${selectImage.name}`);
+    console.log(`선택된 파일 크기: ${selectImage.size} bytes`);
+
+    setUploadImage(selectImage); // 선택한 사진은 프로필 사진 state에 저장
+    console.log("useState로 넘어간 선택된 파일", uploadImage); // 🚨사진이 바로 안넘어가고, 원래 있던 사진이 콘솔에 찍힘
+    putUpdateProfileHandler(); // 사진 변경 PUT 시작!
+  };
+
+  // useEffect : 렌더링되면 실행!
+  useEffect(() => {
+    putUpdateProfileHandler();
+  }, [uploadImage]);
+
+  // PUT : 프로필 사진 - 앨범에서 선택
+  const putUpdateProfileHandler = async () => {
+    try {
+      const formData = new FormData(); // 사진 업로드는 폼데이터로!!!!!!!!!
+      formData.append("file", uploadImage);
+
+      const response = await axiosInstance.put(
+        "/api/users/profile/update-profileImg",
+        formData
+      );
+      console.log("앨범에서 선택 put 성공한 사진 : ", response);
+      setProfileModal(false); // 모달닫기
+      getMyPageInfo();
+    } catch (error) {
+      console.log("error", error);
+      console.log("앨범에서 선택 put 실패한 사진 : ", uploadImage);
+      setProfileModal(false); // 모달닫기
+    }
+  };
 
   // PUT : 프로필 사진 - 기본으로 설정
   const onClickDefaultProfileHandler = async () => {
@@ -88,54 +130,12 @@ export default function MyPage() {
       );
       alert(response.data.messageResponseDto.msg);
       setProfileModal(false); // 모달 닫기
-      console.log("기본 프로필 put 성공 :", response);
+      // console.log("기본 프로필 put 성공 :", response);
       // console.log("uploadImage 성공 :", uploadImage);
     } catch (error) {
       setProfileModal(false); // 모달 닫기
-      console.log("error", error);
+      // console.log("error", error);
       // console.log("기본으로 실패 :", uploadImage);
-    }
-  };
-
-  // 프로필 사진 : useRef(input-div 연결)
-  const inputRef = useRef(null); // 사진선택 input - 앨범에서 선택 연결
-  const onClickSelectProfileHandler = () => {
-    inputRef.current.click(); // 앨범에서 선택 - 사진선택 input 연결
-  };
-
-  // 프로필 사진 : 이미지 선택창 나옴
-  const uploadImageHandler = (e) => {
-    const selectImage = e.target.files[0]; // 선택된 파일 가져오기
-    console.log(`선택된 파일 이름: ${selectImage.name}`);
-    console.log(`선택된 파일 크기: ${selectImage.size} bytes`);
-
-    setUploadImage(selectImage); // 선택한 사진은 프로필 사진 state에 저장
-    console.log("이미지 확인", uploadImage);
-    // putUpdateProfileHandler(); // 사진 변경 PUT 시작!
-  };
-
-  // useEffect : 렌더링되면 실행!
-  useEffect(() => {
-    putUpdateProfileHandler();
-  }, [uploadImage]);
-
-  // PUT : 프로필 사진 - 앨범에서 선택
-  const putUpdateProfileHandler = async () => {
-    try {
-      const formData = new FormData(); // 사진 업로드는 폼데이터로!!!!!!!!!
-      formData.append("file", uploadImage);
-
-      const response = await axiosInstance.put(
-        "/api/users/profile/update-profileImg",
-        formData
-      );
-      console.log("성공 : put으로 넘어온 사진이 뭔가?", response);
-      setProfileModal(false); // 모달닫기
-      // getMyPageInfo();
-    } catch (error) {
-      console.log("error", error);
-      console.log("실패 : put으로 넘어온 사진이 뭔가?", uploadImage);
-      setProfileModal(false); // 모달닫기
     }
   };
 
@@ -253,7 +253,10 @@ export default function MyPage() {
           onClick={onClickProfileCloseHandler}
           className="bg-[#666666]/50 w-full h-full absolute top-0 left-0 flex justify-center items-center"
         >
-          <div className=" w-full flex flex-col mt-auto mb-24">
+          <div
+            onClick={(e) => e.stopPropagation()} // 외부영역만 클릭했을때 모달 닫히게!
+            className=" w-full flex flex-col mt-auto mb-24"
+          >
             <div className="mx-6 text-[#FF9900] font-normal text-sm/normal text-center">
               사진 업로드는 개당 1MB내외로 업로드 가능합니다.
             </div>
