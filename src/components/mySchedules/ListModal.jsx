@@ -26,7 +26,11 @@ export default function ListModal({ scheduleData, handleClick }) {
 
   // 커뮤니티 공유 (글쓰기 페이지 이동)
   const handleShareClick = () => {
-    navigate("/post/create", { state: scheduleData });
+    if (title) {
+      navigate("/post/edit", { state: scheduleData });
+    } else {
+      navigate("/post/create", { state: scheduleData });
+    }
   };
 
   const handleShareKakaoClick = () => {
