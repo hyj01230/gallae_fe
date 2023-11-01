@@ -4,9 +4,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import Layout from "../components/common/Layout";
 import DetailsHeader from "../components/postDetailsPage/DetailsHeader";
 import Image from "../components/postDetailsPage/Image";
-import Comments from "../components/postDetailsPage/Comments"; // 수정된 import
+import Comments from "../components/postDetailsPage/Comments";
 import DetailSchedules from "../components/postDetailsPage/DetailSchedules";
-import CommentsDisplay from "../components/postDetailsPage/PostCommentDisplay"; // 새로 추가한 import
+import CommentsDisplay from "../components/postDetailsPage/PostCommentDisplay";
 
 export default function PostDetailsPage() {
   const [postDetails, setPostDetails] = useState({
@@ -146,7 +146,9 @@ export default function PostDetailsPage() {
   return (
     <Layout>
       <div>
-        <DetailsHeader />
+        <div className="sticky top-0 bg-white z-10 ">
+          <DetailsHeader />
+        </div>
         <Image />
         <div className="w-393 h-275 bg-white flex flex-col mb-[50px]">
           <div className="flex items-center justify-between mb-2 mt-5">

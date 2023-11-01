@@ -264,11 +264,7 @@ export default function PostListPage() {
                   </div>
 
                   <div className="flex items-center space-x-2 flex-1 justify-center">
-                    <PostListComment
-                      onClick={() => {
-                        navigate(`/posts/${item.postId}`);
-                      }}
-                    />
+                    <PostListComment />
                     <p> 댓글달기</p>
                   </div>
                 </div>

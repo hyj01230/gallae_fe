@@ -4,6 +4,7 @@ import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate, useLocation } from "react-router-dom";
 import SearchCategory from "../components/postSearch/SearchCategory";
 import { LeftArrow } from "../assets/Icon";
+import Image from "../components/postDetailsPage/Image";
 
 function highlightKeyword(text, keyword) {
   if (keyword && text) {
@@ -97,9 +98,9 @@ export default function PostSearchPage() {
 
   // 입력 필드가 포커스 상태인지 여부에 따라 컨텐츠를 조건부로 렌더링
   const renderContent = inputFocused ? null : (
-    <div className="flex flex-wrap -mx-4 mt-[52px]">
+    <div className="flex flex-wrap -mx-4 mt-[52px]  h-[96px]">
       {searchResults.length === 0 && keyword && (
-        <p className="text-xl text-gray-600 mt-4 text-center p-4 bg-gray-100 border border-gray-300 rounded my-8 w-full">
+        <p className="text-xl text-gray-600 mt-4 text-center p-4 bg-gray-100 border border-gray-300 rounded my-8 w-full ">
           <span className="text-yellow-500">{keyword}</span> 에 대한 검색 결과가
           없습니다.
         </p>
@@ -107,10 +108,11 @@ export default function PostSearchPage() {
       {searchResults.map((result) => (
         <div
           key={result.postId}
-          className="w-full px-4 mb-4 cursor-pointer"
+          className="w-full px-4 mb-4 cursor-pointer flex"
+          style={{ height: "92px" }}
           onClick={() => navigate(`/posts/${result.postId}`)}
         >
-          <div className="bg-white rounded-lg border-2">
+          <div className="bg-white rounded-lg border-2 ">
             <div className="px-4 pt-4">
               <h3 className="text-[18px] font-semibold mb-[9px] ">
                 {highlightKeyword(truncateText(result.title, 18), keyword)}
@@ -143,7 +145,13 @@ export default function PostSearchPage() {
                 </div>
               </div>
             </div>
-            <div className="pb-4 px-4"></div>
+          </div>
+          {/* Image 컴포넌트 추가 */}
+          <div className="flex items-center">
+            <img
+              className="w-[96px] h-[96px] bg-gray-300  ml-4 cursor-pointer"
+              src={result.postsPicturesList}
+            />
           </div>
         </div>
       ))}

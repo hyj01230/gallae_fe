@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { axiosInstance } from "../../api/axiosInstance";
 import { useRecoilValue } from "recoil";
 import { nickNameState } from "../../store/atom";
@@ -31,24 +31,63 @@ export default function Comments({
 }) {
   const [selectedComment, setSelectedComment] = useState(null);
   const [selectedCommentForEdit, setSelectedCommentForEdit] = useState(null);
-  const [selectedCommentForReply, setSelectedCommentForReply] = useState(null);
   const [editedContent, setEditedContent] = useState("");
   const [editedCommentIds, setEditedCommentIds] = useState([]);
-  const [replyContent, setReplyContent] = useState("");
-  const [isReplying, setIsReplying] = useState(false);
+  const [replyContent, setReplyContent] = useState(""); // 대댓글 입력 필드
+  const [selectedCommentForReply, setSelectedCommentForReply] = useState(null);
+  const [isReplyInputVisible, setIsReplyInputVisible] = useState(false);
   const nickName = useRecoilValue(nickNameState);
 
-  const commentsListRef = useRef(null);
+  // 대댓글 추가 함수
+  const handleReplySubmit = async (comment) => {
+    try {
+      const response = await axiosInstance.post(
+        `/api/comments/${comment.commentId}/replies`,
+        {
+          contents: replyContent,
+          email: "string",
+          nickname: "string",
+          checkUser: "string",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
 
-  const focusCommentsList = () => {
-    if (commentsListRef.current) {
-      commentsListRef.current.focus();
+      // 대댓글을 추가한 후 해당 댓글의 대댓글 목록 배열에 대댓글을 추가
+      const updatedComments = comments.map((c) => {
+        if (c.commentId === comment.commentId) {
+          return {
+            ...c,
+            replies: [
+              ...(c.replies || []), // 대댓글 배열이 없을 경우 빈 배열로 초기화
+              {
+                repliesId: response.data.repliesId,
+                contents: replyContent,
+                email: "string",
+                nickname: "string",
+                checkUser: "string",
+                createAt: response.data.createAt,
+                modifiedAt: response.data.modifiedAt,
+              },
+            ],
+          };
+        }
+        return c;
+      });
+
+      setComments(updatedComments);
+
+      setReplyContent(""); // 대댓글 입력 필드 초기화
+      setIsReplyInputVisible(false); // 대댓글 작성 완료 후 입력 창 숨김
+    } catch (error) {
+      console.error("대댓글 작성 중 오류 발생:", error);
     }
   };
 
-  useEffect(() => {
-    focusCommentsList();
-  }, [comments]);
+  useEffect(() => {}, [comments]);
 
   useEffect(() => {
     // ... (editedContent가 변경될 때의 로직)
@@ -83,6 +122,11 @@ export default function Comments({
     }
   };
 
+  const handleReply = (comment) => {
+    setSelectedCommentForReply(comment);
+    setIsReplyInputVisible(true); // 대댓글 작성 버튼을 누르면 입력 창 표시
+  };
+
   const handleSave = async (comment) => {
     try {
       await axiosInstance.put(
@@ -107,26 +151,6 @@ export default function Comments({
       setEditedContent("");
     } catch (error) {
       console.error("댓글 수정 중 오류 발생:", error);
-    }
-  };
-
-  const handleAddReply = async (comment) => {
-    try {
-      const response = await axiosInstance.post(
-        `/api/comments/${comment.commentId}/replies`,
-        { contents: replyContent }
-      );
-
-      if (selectedCommentForReply === comment) {
-        setIsReplying(false);
-        setSelectedCommentForReply(null);
-      } else {
-        setSelectedCommentForReply(comment);
-        setIsReplying(true);
-      }
-      setReplyContent("");
-    } catch (error) {
-      console.error("답글 생성 중 오류 발생:", error);
     }
   };
 
@@ -181,78 +205,73 @@ export default function Comments({
                   key={comment.commentId}
                   className="bg-white p-4 border relative font-[14px] h-[127px]"
                 >
-                  {selectedCommentForEdit === comment ? (
-                    <div>
+                  <div>
+                    {isReplyInputVisible && ( // 대댓글 입력 창 표시 여부에 따라 렌더링
                       <textarea
-                        value={editedContent}
-                        onChange={(e) => setEditedContent(e.target.value)}
-                        placeholder="댓글을 수정하세요..."
+                        value={replyContent}
+                        onChange={(e) => setReplyContent(e.target.value)}
+                        placeholder="대댓글을 작성하세요..."
                         className="w-full border rounded p-2"
                       />
-                      <div className="absolute right-4 top-4 flex space-x-2">
+                    )}
+                    <div className="absolute right-4 top-4 flex space-x-2">
+                      <button
+                        onClick={() => handleReplySubmit(comment)}
+                        className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                      >
+                        작성
+                      </button>
+                    </div>
+                  </div>
+                  <div className="h-auto">
+                    <div className="flex justify-between">
+                      <p className="text-[16px] font-semibold flex items-center space-x-2">
+                        <span className="hfont-semibold">
+                          {comment.nickname}
+                        </span>
+                        {comment.checkUser === "글쓴이" && (
+                          <span className="border border-orange-300 bg-white rounded-[12px] px-2 ml-2 text-yellow-400 text-[12px]">
+                            글쓴이
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                    <p className="text-[14px] font-nomal w-[360px]">
+                      <span>{comment.contents}</span>
+                    </p>
+                    <p className="text-[12px] font-normal text-[#999]">
+                      <span>
+                        {formatDate(comment.modifiedAt)}{" "}
+                        {isCommentEdited(comment) && (
+                          <span className="text-gray-600 text-[12px] font-semibold">
+                            (수정됨)
+                          </span>
+                        )}
+                      </span>
+                    </p>
+                    {comment.nickname === nickName && (
+                      <div>
                         <button
-                          onClick={() => handleSave(comment)}
-                          className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                          onClick={() => handleEdit(comment)}
+                          className="text-[#999] border-[#FF9900] text-sm mr-1"
                         >
-                          저장
+                          수정
                         </button>
                         <button
                           onClick={() => handleDelete(comment)}
-                          className="text-red-500"
+                          className="text-[#999] border-[#FF9900] text-sm"
                         >
                           삭제
                         </button>
+                        <button
+                          onClick={() => handleReply(comment)}
+                          className="text-green-500"
+                        >
+                          대댓글 작성
+                        </button>
                       </div>
-                    </div>
-                  ) : (
-                    <div className="h-auto">
-                      <div className="flex justify-between">
-                        <p className="text-[16px] font-semibold flex items-center space-x-2">
-                          <span className="hfont-semibold">
-                            {comment.nickname}
-                          </span>
-                          {comment.checkUser === "글쓴이" && (
-                            <span className="border border-orange-300 bg-white rounded-[12px] px-2 ml-2 text-yellow-400 text-[12px]">
-                              글쓴이
-                            </span>
-                          )}
-                        </p>
-                      </div>
-                      <p className="text-[14px] font-nomal w-[360px]">
-                        <span>{comment.contents}</span>
-                      </p>
-                      <p className="text-[12px] font-normal text-[#999]">
-                        <span>
-                          {formatDate(comment.modifiedAt)}{" "}
-                          {isCommentEdited(comment) && (
-                            <span className="text-gray-600 text-[12px] font-semibold">
-                              (수정됨)
-                            </span>
-                          )}
-                        </span>
-                      </p>
-                      {comment.nickname === nickName && (
-                        <div>
-                          <button
-                            onClick={() => handleEdit(comment)}
-                            className="text-[#999] border-[#FF9900] text-sm mr-1"
-                          >
-                            수정
-                          </button>
-                          <button
-                            onClick={() => handleDelete(comment)}
-                            className="text-[#999] border-[#FF9900] text-sm"
-                          >
-                            삭제
-                          </button>
-                          <button
-                            onClick={() => handleAddReply(comment)}
-                            className="text-green-500"
-                          ></button>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               ))
             ) : (
