@@ -2,6 +2,7 @@ import { useState } from "react";
 import SearchMap from "../schedulesDetail/SearchMap";
 import { useRecoilState } from "recoil";
 import { searchPlaceInfoState } from "../../store/atom";
+import { Search } from "../../assets/Icon";
 
 export default function SearchModal({
   // placeName,
@@ -20,7 +21,12 @@ export default function SearchModal({
   const [keyword, setKeyword] = useState("");
   const [searchList, setSearchList] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
-  const [placeInfo, setPlaceInfo] = useRecoilState(searchPlaceInfoState);
+  // const [placeInfo, setPlaceInfo] = useRecoilState(searchPlaceInfoState);
+
+  const handleSearchDown = (e) => {
+    if (e.key === "Enter") setIsSearch(!isSearch);
+    return;
+  };
 
   const handleSelectClick = (placeName, x, y) => {
     // 장소를 클릭하면
@@ -47,14 +53,18 @@ export default function SearchModal({
       </div>
 
       {/* 장소 검색창 */}
-      <div className="mx-4">
+      <div className="flex gap-2 justify-center items-center mx-4  bg-[#F2F2F2] text-sm text-[#999] py-2 rounded-2xl">
+        <div className="ml-3">
+          <Search />
+        </div>
         <input
-          className="p-1"
+          className="w-full bg-[#F2F2F2] outline-none "
           placeholder="장소를 입력하세요"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
+          onKeyDown={handleSearchDown}
         />
-        <button onClick={() => setIsSearch(!isSearch)}>검색</button>
+        {/* <button onClick={() => setIsSearch(!isSearch)}>검색</button> */}
       </div>
       {/* 지도 */}
       <>
