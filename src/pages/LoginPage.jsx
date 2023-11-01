@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
 import { Logo } from "../assets/Icon";
@@ -26,6 +26,14 @@ export default function LoginPage() {
     setPassword(e.target.value);
   };
 
+  // 로그인 후 접근하면 막기!
+  useEffect(() => {
+    if (localStorage.getItem("accessToken")) {
+      alert("이미 로그인한 유저입니다.");
+      navigate("/");
+    }
+  }, []);
+
   // 사용자가 Enter 키를 눌렀을 때 로그인 실행하는 함수
   // const handleEnterKey = (event) => {
   //   if (event.key === "Enter") {
@@ -44,7 +52,11 @@ export default function LoginPage() {
       console.log("response", response);
 
       if (response.data.statusCode === 200) {
-        localStorage.setItem("accessToken", response.headers.authorization); // 성공하면 토큰 저장!
+        localStorage.setItem("accessToken", response.headers.authorization); // accessToken 저장!
+        localStorage.setItem(
+          "refreshToken",
+          response.headers.authorization_refresh
+        ); // refreshToken 저장!
         navigate("/");
       }
       alert(response.data.msg);

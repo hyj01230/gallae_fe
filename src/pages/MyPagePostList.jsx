@@ -25,6 +25,10 @@ export default function MyPagePostList() {
     }
   };
 
+  const onCilckMyPostHandler = (postId) => {
+    navigate(`/posts/${postId}`);
+  };
+
   // useEffect : 렌더링되면 실행!
   useEffect(() => {
     getPostList();
@@ -81,7 +85,11 @@ export default function MyPagePostList() {
       <div className="mb-44">
         {postList.length > 0 &&
           postList.map((item) => (
-            <div key={item.postId} className="mx-4 cursor-pointer">
+            <div
+              key={item.postId}
+              onClick={() => onCilckMyPostHandler(item.postId)}
+              className="mx-4 cursor-pointer"
+            >
               <div className="mt-4 flex w-full">
                 <div className="flex flex-col w-full mr-auto">
                   <div className="text-sm/[22px] font-semibold">
@@ -104,7 +112,7 @@ export default function MyPagePostList() {
                   {item.nickName}
                 </div>
                 <div className="mr-auto text-[#999999] text-sm/6 font-normal">
-                  {getTimeAgo(item.createAt)}
+                  {getTimeAgo(item.createdAt)}
                 </div>
               </div>
             </div>
