@@ -9,6 +9,7 @@ import { getDetailPost, updatePost } from "../api";
 import { useMutation } from "react-query";
 import { CATEGORIES, TAGS } from "../constants/mySchedule";
 import useImage from "../hooks/useImage";
+import UploadLimitMessage from "../components/postCreate/UploadLimitMessage";
 
 export default function PostCreatePage() {
   const ref = useRef();
@@ -20,19 +21,21 @@ export default function PostCreatePage() {
   const [selectedPostId, setSelectedPostId] = useState(data.postId);
   const [postData, setPostData] = useState({ contents: "", tagsList: [] });
   const [listData, setListData] = useState(data);
-  const [mode, setMode] = useState("");
+  // const [mode, setMode] = useState("");
   const imageHandler = useImage();
+
+  console.log(postData);
 
   useEffect(() => {
     const getData = async () => {
       const response = await getDetailPost(selectedPostId);
 
-      if (data.title) {
-        setMode("edit");
-        setPostData({ ...response, contents: data.contents });
-      } else {
-        setPostData({ ...response, contents: "" });
-      }
+      // if (data.title) {
+      //   setMode("edit");
+      //   setPostData({ ...response, contents: data.contents });
+      // } else {
+      setPostData({ ...response, contents: "" });
+      // }
     };
 
     getData();
@@ -66,25 +69,6 @@ export default function PostCreatePage() {
     setIsModal(false);
   };
 
-  // 게시글 생성
-  // const createPostMutation = useMutation(
-  //   "schedule",
-  //   () =>
-  //     updatePost(selectedPostId, {
-  //       title: postData.title,
-  //       contents: postData.contents,
-  //       subTitle: data.subTitle,
-  //       postCategory: postData.postCategory,
-  //       tagsList: postData.tagsList,
-  //     }),
-  //   {
-  //     onSuccess: async () => {
-  //       // await imageHandler.handleSubmitClick(selectedPostId);
-  //       navigate("/posts");
-  //     },
-  //   }
-  // );
-
   const createPostMutation = useMutation(
     "schedule",
     () => imageHandler.handleSubmitClick(selectedPostId),
@@ -103,116 +87,157 @@ export default function PostCreatePage() {
     }
   );
 
-  const handleTestClick = async (id) => {
-    imageHandler.handleSubmitClick(id);
-  };
-
   return (
     <Layout>
-      <div className="flex items-center gap-x-1 p-2 border-b border-gray-300">
-        <div className="mr-2" onClick={() => navigate("/")}>
-          <LeftArrow />
+      <div className="mb-[70px]">
+        <div className="flex items-center gap-x-1 p-2 border-b border-gray-300">
+          <div className="mr-2" onClick={() => navigate("/")}>
+            <LeftArrow />
+          </div>
+          <div className="h-14 flex items-center text-xl">
+            {/* {mode === "edit" ? "수정하기" : "글쓰기"} */}
+            글쓰기
+          </div>
         </div>
-        <div className="h-14 flex items-center text-xl">
-          {mode === "edit" ? "수정하기" : "글쓰기"}
-        </div>
-      </div>
 
-      <div
-        className="border-b border-gray-300 pl-10"
-        onClick={() => setIsCategoryDrop(!isCategoryDrop)}
-      >
-        <div className="h-12 flex items-center gap-x-4 text-base text-gray-300 cursor-pointer select-none">
-          카테고리
-          <DownArrow />
-          <span className="text-[black]">{postData.postCategory}</span>
-        </div>
-      </div>
-      {isCategoryDrop && (
-        <div className="pl-10 cursor-pointer">
-          {CATEGORIES.map((category, index) => (
-            <div key={index} className="py-5" onClick={handleCategoryClick}>
-              {category}
-            </div>
-          ))}
-        </div>
-      )}
-
-      <div
-        className="border-b border-gray-300 pl-10"
-        onClick={() => setIsPurposeDrop(!isPurposeDrop)}
-      >
-        <div className="h-12 flex items-center gap-x-4 text-base text-gray-300 cursor-pointer select-none">
-          목적
-          <DownArrow />
-          {postData.tagsList.map((value, index) => (
-            <div key={index} className="text-[black]">
-              {value}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {isPurposeDrop && (
-        <div className="grid grid-cols-3 divide-x divide-y border-b">
-          {TAGS.map((tag, index) => (
-            <div
-              key={index}
-              className="h-10 flex justify-center items-center cursor-pointer text-sm"
-              onClick={handlePurposeClick}
-            >
-              {tag}
-            </div>
-          ))}
-        </div>
-      )}
-
-      <div className="border-b border-gray-300 pl-10">
-        <input
-          className="w-full h-12 flex items-center gap-x-4 text-base text-black cursor-pointer select-none outline-none"
-          defaultValue={data.title && data.title}
-          placeholder="제목을 입력하세요"
-          onChange={(e) =>
-            setPostData((data) => ({ ...data, title: e.target.value }))
-          }
-        />
-      </div>
-
-      <div className="h-10 border-b border-gray-300 flex cursor-pointer select-none">
         <div
-          className="flex-1 flex items-center justify-center text-sm text-gray-600 border-r border-gray-300"
-          onClick={() => setIsModal(true)}
+          className="border-b border-gray-300 pl-10"
+          onClick={() => setIsCategoryDrop(!isCategoryDrop)}
         >
-          여행 일정 불러오기
+          <div className="h-12 flex items-center gap-x-4 text-base text-gray-300 cursor-pointer select-none">
+            카테고리
+            <DownArrow />
+            <span className="text-[black]">{postData.postCategory}</span>
+          </div>
         </div>
+        {isCategoryDrop && (
+          <div className="pl-10 cursor-pointer">
+            {CATEGORIES.map((category, index) => (
+              <div key={index} className="py-5" onClick={handleCategoryClick}>
+                {category}
+              </div>
+            ))}
+          </div>
+        )}
+
         <div
-          className="flex-1 flex items-center justify-center text-sm text-gray-600"
-          onClick={imageHandler.onClickSelectProfileHandler}
+          className="border-b border-gray-300 pl-10"
+          onClick={() => setIsPurposeDrop(!isPurposeDrop)}
         >
+          <div className="h-12 flex items-center gap-x-4 text-base text-gray-300 cursor-pointer select-none">
+            목적
+            <DownArrow />
+            {postData.tagsList.map((value, index) => (
+              <div key={index} className="text-[black]">
+                {value}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {isPurposeDrop && (
+          <div className="grid grid-cols-3 divide-x divide-y border-b">
+            {TAGS.map((tag, index) => (
+              <div
+                key={index}
+                className="h-10 flex justify-center items-center cursor-pointer text-sm"
+                onClick={handlePurposeClick}
+              >
+                {tag}
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="border-b border-gray-300 pl-10">
           <input
-            type="file"
-            className="hidden"
-            onChange={imageHandler.uploadImageHandler}
-            accept="image/*"
-            ref={imageHandler.inputRef}
+            className="w-full h-12 flex items-center gap-x-4 text-base text-black cursor-pointer select-none outline-none"
+            defaultValue={data.title && data.title}
+            placeholder="제목을 입력하세요"
+            onChange={(e) =>
+              setPostData((data) => ({ ...data, title: e.target.value }))
+            }
           />
-          사진 첨부
         </div>
-      </div>
-      {/* <button onClick={() => handleTestClick(selectedPostId)}>test</button> */}
 
-      <div className="flex">
-        {imageHandler.previewImage.length > 0 &&
-          imageHandler.previewImage.map((value, index) => (
-            <img key={index} src={value} className="w-36 h-36" />
-          ))}
+        <div className="h-10 border-b border-gray-300 flex cursor-pointer select-none">
+          <div
+            className="flex-1 flex items-center justify-center text-sm text-gray-600 border-r border-gray-300"
+            onClick={() => setIsModal(true)}
+          >
+            여행 일정 불러오기
+          </div>
+          <div
+            className="flex-1 flex items-center justify-center text-sm text-gray-600"
+            onClick={imageHandler.onClickSelectProfileHandler}
+          >
+            <input
+              type="file"
+              className="hidden"
+              onChange={imageHandler.uploadImageHandler}
+              accept="image/*"
+              ref={imageHandler.inputRef}
+            />
+            사진 첨부
+          </div>
+        </div>
+        {/* <button onClick={() => handleTestClick(selectedPostId)}>test</button> */}
+
+        {/* {mode !== "edit" && imageHandler.previewImage ? ( */}
+        {imageHandler.previewImage ? (
+          <div className="mx-4 mt-6">
+            <img src={imageHandler.previewImage} className="w-36 h-36" />
+          </div>
+        ) : (
+          <UploadLimitMessage />
+        )}
+
+        {/* mode가 edit이고 사진이 있다면 previewImage를 보여준다 */}
+        {/* {mode === "edit" && postData.postsPicturesList.length > 0 ? (
+          <div className="mx-4 mt-6">
+            <img
+              src={postData.postsPicturesList[0].postsPicturesURL}
+              className="w-36 h-36"
+            />
+          </div>
+        ) : (
+          <UploadLimitMessage />
+        )} */}
+
+        <div
+          contentEditable
+          className="mx-4 my-5 outline-none"
+          value={postData.contents}
+          onInput={(e) =>
+            setPostData((prev) => ({ ...prev, contents: e.target.innerText }))
+          }
+        ></div>
+
+        {listData && <List schedule={listData} isPointer={false} />}
       </div>
 
-      {/* <div className="mx-4 py-2 text-gray-200">
+      <div
+        className="max-w-3xl flex fixed bottom-0 z-10"
+        onClick={() => createPostMutation.mutate()}
+      >
+        <button className="w-screen h-14 bg-gray-300 text-white">
+          게시하기
+          {/* {mode === "edit" ? "수정하기" : "게시하기"} */}
+        </button>
+      </div>
+
+      {isModal && <SelectScheduleModal handleClick={handleScheduleClick} />}
+    </Layout>
+  );
+}
+{
+  /* <div className="mx-4 py-2 text-gray-200">
         내용을 입력하세요(최대 20,000자)
-      </div> */}
+      </div> */
+}
 
-      {/* <ContentEditable
+{
+  /* <ContentEditable
         className="mx-4 py-2 mt-4 mb-14 outline-none"
         innerRef={ref}
         // html={data.title ? data.contents : postData.contents} // innerHTML of the editable div
@@ -221,28 +246,15 @@ export default function PostCreatePage() {
         onChange={(e) =>
           setPostData((prev) => ({ ...prev, contents: e.target.value }))
         }
-      /> */}
+      /> */
+}
 
-      <textarea
-        className="w-full p-2"
-        value={postData.contents}
-        onChange={(e) =>
-          setPostData((prev) => ({ ...prev, contents: e.target.value }))
-        }
-      />
-
-      {listData && <List schedule={listData} isPointer={false} />}
-
-      <div
-        className="max-w-3xl flex fixed bottom-0 z-10"
-        onClick={() => createPostMutation.mutate()}
-      >
-        <button className="w-screen h-14 bg-gray-300 text-white">
-          {mode === "edit" ? "수정하기" : "게시하기"}
-        </button>
-      </div>
-
-      {isModal && <SelectScheduleModal handleClick={handleScheduleClick} />}
-    </Layout>
-  );
+{
+  /* <textarea
+          className="w-full outline-none resize-none mx-4 mt-3"
+          value={postData.contents}
+          onChange={(e) =>
+            setPostData((prev) => ({ ...prev, contents: e.target.value }))
+          }
+        /> */
 }
