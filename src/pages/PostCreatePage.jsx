@@ -201,7 +201,35 @@ export default function PostCreatePage() {
       </div>
       {/* <button onClick={() => handleTestClick(selectedPostId)}>test</button> */}
 
-      <div className="flex">
+      <div
+        className="mt-4 mx-auto rounded-xl flex items-center justify-center text-[#999]"
+        style={{
+          position: "relative",
+          backgroundColor: "#eee",
+          width: "90%",
+          padding: "12px 0",
+        }}
+      >
+        <div
+          style={{
+            content: "",
+            position: "absolute",
+            borderStyle: "solid",
+            borderWidth: "0 15px 15px",
+            borderColor: "#eee transparent",
+            display: "block",
+            width: "0px",
+            zIndex: "1",
+            top: "-20%",
+            left: "75%",
+          }}
+        >
+          <div style={{ display: "none" }}></div>
+        </div>
+        사진 업로드는 개당 1MB내외로 업로드 가능합니다.
+      </div>
+
+      <div className="flex mx-4 mt-6">
         {imageHandler.previewImage.length > 0 &&
           imageHandler.previewImage.map((value, index) => (
             <img key={index} src={value} className="w-36 h-36" />
