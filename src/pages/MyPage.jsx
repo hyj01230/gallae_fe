@@ -10,7 +10,8 @@ export default function MyPage() {
   const navigate = useNavigate(); // navigate 할당
   const onClickLogOutHandler = () => {
     localStorage.removeItem("accessToken");
-    navigate("/posts"); // 로그아웃(ㄴ토큰 제거!)
+    localStorage.removeItem("refreshToken");
+    navigate("/posts"); // 로그아웃
   };
   const onClickModifyHandler = () => {
     navigate("/mypage/modify"); // 톱니바퀴
@@ -113,30 +114,30 @@ export default function MyPage() {
     // putUpdateProfileHandler(); // 사진 변경 PUT 시작!
   };
 
-  // // useEffect : 렌더링되면 실행!
-  // useEffect(() => {
-  //   putUpdateProfileHandler();
-  // }, [uploadImage]);
+  // useEffect : 렌더링되면 실행!
+  useEffect(() => {
+    putUpdateProfileHandler();
+  }, [uploadImage]);
 
-  // // PUT : 프로필 사진 - 앨범에서 선택
-  // const putUpdateProfileHandler = async () => {
-  //   try {
-  //     const formData = new FormData(); // 사진 업로드는 폼데이터로!!!!!!!!!
-  //     formData.append("file", uploadImage);
+  // PUT : 프로필 사진 - 앨범에서 선택
+  const putUpdateProfileHandler = async () => {
+    try {
+      const formData = new FormData(); // 사진 업로드는 폼데이터로!!!!!!!!!
+      formData.append("file", uploadImage);
 
-  //     const response = await axiosInstance.put(
-  //       "/api/users/profile/update-profileImg",
-  //       formData
-  //     );
-  //     console.log("성공 : put으로 넘어온 사진이 뭔가?", response);
-  //     setProfileModal(false); // 모달닫기
-  //     // getMyPageInfo();
-  //   } catch (error) {
-  //     console.log("error", error);
-  //     console.log("실패 : put으로 넘어온 사진이 뭔가?", uploadImage);
-  //     setProfileModal(false); // 모달닫기
-  //   }
-  // };
+      const response = await axiosInstance.put(
+        "/api/users/profile/update-profileImg",
+        formData
+      );
+      console.log("성공 : put으로 넘어온 사진이 뭔가?", response);
+      setProfileModal(false); // 모달닫기
+      // getMyPageInfo();
+    } catch (error) {
+      console.log("error", error);
+      console.log("실패 : put으로 넘어온 사진이 뭔가?", uploadImage);
+      setProfileModal(false); // 모달닫기
+    }
+  };
 
   // PUT : 소개글 변경
   const onClickSaveAboutMeHandler = async () => {
@@ -283,10 +284,7 @@ export default function MyPage() {
 
       {/* 소개글 모달 */}
       {aboutMeModal && (
-        <div
-          onClick={onClickAboutMeCloseHandler}
-          className="bg-[#333333]/80 w-full h-full absolute top-0 left-0 flex flex-col items-center"
-        >
+        <div className="bg-[#333333]/80 w-full h-full absolute top-0 left-0 flex flex-col items-center">
           <div className=" mt-[61px] w-full flex flex-row text-white">
             <div
               onClick={onClickAboutMeCloseHandler}

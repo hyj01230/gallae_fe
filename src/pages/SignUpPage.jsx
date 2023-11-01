@@ -12,6 +12,13 @@ export default function SignUpPage() {
     navigate("/login");
   };
 
+  // 로그인 후 접근하면 막기!
+  useEffect(() => {
+    if (localStorage.getItem("accessToken")) {
+      navigate(-1); // 뒤로가기
+    }
+  }, []);
+
   // useState
   const [nickName, setNickName] = useState(""); // 닉네임
   const [checkNickName, setCheckNickName] = useState(""); // 닉네임 중복확인(true = 사용가능 / false = 중복 / 재확인 = 중복체크 미완료)
@@ -22,23 +29,23 @@ export default function SignUpPage() {
   const [password, setPassword] = useState(""); // 비밀번호
   const [checkPassword, setCheckPassword] = useState(""); // 비밀번호 확인
   const [signUpBar, setSignUpBar] = useState(false); // 회원가입바
-  const [allAgreed, setAllAgreed] = useState(false); // 전체 동의 여부
+  // const [allAgreed, setAllAgreed] = useState(false); // 전체 동의 여부
   const [agreeChecked1, setAgreeChecked1] = useState(false); //
   const [agreeChecked2, setAgreeChecked2] = useState(false); //
   const [agreeChecked3, setAgreeChecked3] = useState(false); //
-  const [agreeChecked4, setAgreeChecked4] = useState(false); //
+  // const [agreeChecked4, setAgreeChecked4] = useState(false); //
   const [agree1, setAgree1] = useState(false); // 모달 : 개인정보 수집 및 이용 동의
   const [agree2, setAgree2] = useState(false); // 모달 : 위치정보 수집 및 이용 동의
   const [agree3, setAgree3] = useState(false); // 모달 : 마케팅 수신 동의
 
   // onClick
-  const onClickAllAgreeHandler = () => {
-    setAllAgreed(!allAgreed);
-    setAgreeChecked1(!agreeChecked1);
-    setAgreeChecked2(!agreeChecked2);
-    setAgreeChecked3(!agreeChecked3);
-    setAgreeChecked4(!agreeChecked4); // 전체 동의하기 체크박스 핸들러
-  };
+  // const onClickAllAgreeHandler = () => {
+  //   setAllAgreed(!allAgreed);
+  //   setAgreeChecked1(!agreeChecked1);
+  //   setAgreeChecked2(!agreeChecked2);
+  //   setAgreeChecked3(!agreeChecked3);
+  //   setAgreeChecked4(!agreeChecked4); // 전체 동의하기 체크박스 핸들러
+  // };
   const onClickAgreeChecked1Handler = () => {
     setAgreeChecked1(!agreeChecked1);
   };
@@ -48,18 +55,18 @@ export default function SignUpPage() {
   const onClickAgreeChecked3Handler = () => {
     setAgreeChecked3(!agreeChecked3);
   };
-  const onClickAgreeChecked4Handler = () => {
-    setAgreeChecked4(!agreeChecked4);
-  };
+  // const onClickAgreeChecked4Handler = () => {
+  //   setAgreeChecked4(!agreeChecked4);
+  // };
   const onClickAgree1 = () => {
     setAgree1(true); // 모달 : 열기_개인정보 수집 및 이용 동의
   };
   const onClickAgree2 = () => {
     setAgree2(true); // 모달 : 열기_위치정보 수집 및 이용 동의
   };
-  const onClickAgree3 = () => {
-    setAgree3(true); // 모달 : 열기_마케팅 수신 동의
-  };
+  // const onClickAgree3 = () => {
+  //   setAgree3(true); // 모달 : 열기_마케팅 수신 동의
+  // };
   const onClickAgreeHandler = () => {
     setAgree1(false); // 모달 : 닫기_개인정보 수집 및 이용 동의
     setAgree2(false); // 모달 : 닫기_위치정보 수집 및 이용 동의
@@ -444,7 +451,7 @@ export default function SignUpPage() {
           )}
         </div>
 
-        <div className="mt-[27px] flex flex-col">
+        {/* <div className="mt-[27px] flex flex-col">
           <div className="flex flex-row items-center">
             <input
               type="checkbox"
@@ -457,7 +464,7 @@ export default function SignUpPage() {
           <div className="mt-2 ml-8 text-[#999999] text-sm/normal font-normal">
             선택정보에 대한 동의를 포함합니다.
           </div>
-        </div>
+        </div> */}
 
         <div className="mt-4 flex mb-20">
           <div className="border border-[#D9D9D9] rounded-lg w-full pt-[21px] pr-3 pb-[23px] pl-5">
@@ -503,7 +510,7 @@ export default function SignUpPage() {
               </div>
             </div>
 
-            <div className="flex flex-row items-center mt-[10px]">
+            {/* <div className="flex flex-row items-center mt-[10px]">
               <input
                 type="checkbox"
                 checked={agreeChecked4}
@@ -516,7 +523,7 @@ export default function SignUpPage() {
               <div onClick={onClickAgree3}>
                 <RightArrow />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

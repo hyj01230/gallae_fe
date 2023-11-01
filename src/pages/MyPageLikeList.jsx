@@ -158,7 +158,7 @@ export default function MyPageLikeList() {
                   {item.nickName}
                 </div>
                 <div className="mr-auto text-[#999999] text-sm/6 font-normal">
-                  {getTimeAgo(item.createAt)}
+                  {getTimeAgo(item.createdAt)}
                 </div>
                 <div
                   onClick={(e) => {
