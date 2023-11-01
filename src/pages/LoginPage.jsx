@@ -57,6 +57,14 @@ export default function LoginPage() {
           "refreshToken",
           response.headers.authorization_refresh
         ); // refreshToken 저장!
+
+        // setTimeout(() => {
+        //   localStorage.removeItem("accessToken");
+        //   localStorage.removeItem("refreshToken");
+        //   alert("로그인 시간 만료! 재로그인이 필요합니다.");
+        //   navigate("/posts");
+        // }, 60000); // 1시간
+
         navigate("/");
       }
       alert(response.data.msg);
