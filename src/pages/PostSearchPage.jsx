@@ -150,7 +150,7 @@ export default function PostSearchPage() {
           <div className="flex items-center">
             <img
               className="w-[96px] h-[96px] bg-gray-300  ml-4 cursor-pointer"
-              src={result.postsPicturesList}
+              src={result.postsPicturesList[0].postsPicturesURL}
             />
           </div>
         </div>
