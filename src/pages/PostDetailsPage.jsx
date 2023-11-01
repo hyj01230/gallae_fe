@@ -18,6 +18,7 @@ export default function PostDetailsPage() {
     createdAt: "",
     modifiedAt: "",
     commentNum: "",
+    postsPicturesList: [{ postsPicturesURL: "" }],
     // 다른 속성들 초기값 설정
   });
   const [postComments, setPostComments] = useState([{}]);
@@ -147,7 +148,7 @@ export default function PostDetailsPage() {
     <Layout>
       <div>
         <DetailsHeader />
-        <Image />
+        <Image url={postDetails.postsPicturesList[0].postsPicturesURL} />
         <div className="w-393 h-275 bg-white flex flex-col mb-[50px]">
           <div className="flex items-center justify-between mb-2 mt-5">
             <div className="flex items-center">
