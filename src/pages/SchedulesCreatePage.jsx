@@ -61,16 +61,7 @@ export default function SchedulesCreatePage() {
     {
       onSuccess: () => {
         queryClient.invalidateQueries("schedulesDetail");
-        setSchedule({
-          schedulesCategory: "",
-          costs: 0,
-          placeName: null,
-          x: "",
-          y: "",
-          contents: "",
-          timeSpent: "",
-          referenceURL: "",
-        });
+        initRecoilState();
         navigate("/myschedules/details", {
           state: { postId, tripDateId, subTitle },
         });
@@ -85,6 +76,20 @@ export default function SchedulesCreatePage() {
     // });
   };
 
+  // 뒤로 가기 또는 게시글 생성 시 전역 상태 초기화
+  const initRecoilState = () => {
+    setSchedule({
+      schedulesCategory: "",
+      costs: 0,
+      placeName: null,
+      x: "",
+      y: "",
+      contents: "",
+      timeSpent: "",
+      referenceURL: "",
+    });
+  };
+
   // const handleSubmitClick = async () => {
   //   await createScheduleDetail(tripDateId, {
   //     schedulesList: [schedule],
@@ -96,11 +101,12 @@ export default function SchedulesCreatePage() {
     <Layout>
       <div
         className="flex items-center gap-x-1 p-2"
-        onClick={() =>
+        onClick={() => {
+          initRecoilState();
           navigate("/myschedules/details", {
             state: { postId, subTitle, tripDateId },
-          })
-        }
+          });
+        }}
       >
         <div className="mr-2">
           <LeftArrow />
