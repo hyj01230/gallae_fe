@@ -59,6 +59,10 @@ export default function MyPageLikeList() {
         },
       });
       console.log("response", response);
+      console.log(
+        "사진",
+        response.data.content[1].postsPicturesList[0].postsPicturesURL
+      );
       setLikeList(response.data.content);
     } catch (error) {
       console.log("error", error);
@@ -148,10 +152,12 @@ export default function MyPageLikeList() {
 
                 <div className="flex justify-end">
                   <div className="ml-3 w-[88px] h-[88px] bg-[#F2F2F2] rounded-lg flex items-center justify-center">
+
                     <img
                       className="w-[96px] h-[96px] bg-gray-300  ml-4 cursor-pointer"
                       src={item.postsPicturesList[0].postsPicturesURL}
                     />
+
                   </div>
                 </div>
               </div>
