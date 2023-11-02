@@ -8,7 +8,7 @@ export default function PostRanking({ rankingList, expanded, setExpanded }) {
   return (
     <div className="bg-white mt-4">
       <div className="h-10 mb-3 flex justify-between items-center rounded border-3">
-        <div className="ml-4 text-lg font-semibold leading-4">이번주 순위</div>
+        <div className="ml-5 text-lg font-semibold leading-4">인기 게시글</div>
         <button
           onClick={() => setExpanded(!expanded)}
           className="mr-6 px-2 py-2 bg-white text-[#a8a1a1] rounded-lg hover-bg-yellow-400 transition duration-300"
