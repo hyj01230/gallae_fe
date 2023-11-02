@@ -3,6 +3,7 @@ import { LeftArrow, ThreeDots } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
+import { shareKakao } from "../util/shareKakaoLink";
 
 export default function MyPageLikeList() {
   // 페이지 이동
@@ -118,6 +119,13 @@ export default function MyPageLikeList() {
   };
 
   // 카카오 공유하기
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://developers.kakao.com/sdk/js/kakao.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => document.body.removeChild(script);
+  }, []);
 
   return (
     <Layout isBottomNav={true}>
@@ -188,7 +196,7 @@ export default function MyPageLikeList() {
                           좋아요 취소
                         </div>
                         <div
-                          // onClick={ddd}
+                          onClick={() => shareKakao(item.title, item.postId)}
                           className="pl-3 w-full h-10 flex justify-start items-center cursor-pointer"
                         >
                           공유하기
