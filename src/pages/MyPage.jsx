@@ -114,30 +114,51 @@ export default function MyPage() {
   };
 
   // PUT : 프로필 사진 - 기본으로 설정
+  // 폼데이터(400)
   const onClickDefaultProfileHandler = async () => {
-    // setMyPageInfo({ ...myPageInfo, profileImg: null });
-    // setUploadImage(null);
-
     try {
-      // const formData = new FormData(); // 사진 업로드는 폼데이터로!
-      // formData.append("file", null); // null로 보내면 기본사진으로 변경됨!
+      const formData = new FormData(); // 사진 업로드는 폼데이터로!!!!!!!!!
+      formData.append("file", "");
 
       const response = await axiosInstance.put(
         "/api/users/profile/update-profileImg",
+        formData,
         {
-          file: null,
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: localStorage.getItem("accessToken"),
+          },
+          withCredentials: true,
         }
       );
       alert(response.data.messageResponseDto.msg);
       setProfileModal(false); // 모달 닫기
-      // console.log("기본 프로필 put 성공 :", response);
-      // console.log("uploadImage 성공 :", uploadImage);
+      console.log("기본 프로필 put 성공 :", response);
     } catch (error) {
       setProfileModal(false); // 모달 닫기
-      // console.log("error", error);
-      // console.log("기본으로 실패 :", uploadImage);
+      console.log("기본 프로필 put 실패 :", error);
     }
   };
+
+  // // 일반 형식(403)
+  // const onClickDefaultProfileHandler = async () => {
+  //   try {
+  //     const response = await axiosInstance.put(
+  //       "/api/users/profile/update-profileImg",
+  //       {
+  //         file: null,
+  //       }
+  //     );
+  //     alert(response.data.messageResponseDto.msg);
+  //     setProfileModal(false); // 모달 닫기
+  //     // console.log("기본 프로필 put 성공 :", response);
+  //     // console.log("uploadImage 성공 :", uploadImage);
+  //   } catch (error) {
+  //     setProfileModal(false); // 모달 닫기
+  //     console.log("error", error);
+  //     // console.log("기본으로 실패 :", uploadImage);
+  //   }
+  // };
 
   // PUT : 소개글 변경
   const onClickSaveAboutMeHandler = async () => {
