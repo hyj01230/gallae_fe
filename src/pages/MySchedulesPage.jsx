@@ -62,17 +62,20 @@ export default function MySchedulesPage() {
         </div>
       )}
 
-      {data &&
-        data.map((schedule) => (
-          <List
-            key={schedule.postId}
-            schedule={schedule}
-            handleClick={(e) => {
-              e.stopPropagation();
-              handleOpenModal(schedule);
-            }}
-          />
-        ))}
+      {data && (
+        <div className="mb-[100px]">
+          {data.map((schedule) => (
+            <List
+              key={schedule.postId}
+              schedule={schedule}
+              handleClick={(e) => {
+                e.stopPropagation();
+                handleOpenModal(schedule);
+              }}
+            />
+          ))}
+        </div>
+      )}
 
       {modal.isModal && (
         <ListModal
