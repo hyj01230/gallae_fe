@@ -252,8 +252,18 @@ export default function PostListPage() {
                   </div>
                 </div>
                 <div className="flex items-center justify-between text-sm text-gray-500 h-[40px] bordertop-solid border-t-2">
-                  <div className="flex items-center space-x-2 flex-1 justify-center border-r-2 h-[40px]">
-                    <div onClick={() => handleLikeClick(item.postId)}>
+                  <div
+                    className="flex items-center space-x-2 flex-1 justify-center border-r-2 h-[40px]"
+                    onClick={() => {
+                      if (!localStorage.getItem("accessToken")) {
+                        alert("로그인이 필요한 서비스입니다.");
+                        navigate("/login");
+                      } else {
+                        handleLikeClick(item.postId);
+                      }
+                    }}
+                  >
+                    <div>
                       {likedStatus[item.postId] ? (
                         <LikeFullHeart />
                       ) : (
@@ -263,7 +273,17 @@ export default function PostListPage() {
                     <p className="cursor-pointer">좋아요</p>
                   </div>
 
-                  <div className="flex items-center space-x-2 flex-1 justify-center">
+                  <div
+                    className="flex items-center space-x-2 flex-1 justify-center"
+                    onClick={() => {
+                      if (!localStorage.getItem("accessToken")) {
+                        alert("로그인이 필요한 서비스입니다.");
+                        navigate("/login");
+                      } else {
+                        // 댓글 모달 창으로 가는 코드 추가하기
+                      }
+                    }}
+                  >
                     <PostListComment />
                     <p> 댓글달기</p>
                   </div>
