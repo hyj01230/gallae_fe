@@ -15,7 +15,7 @@ export default function SignUpPage() {
   // 로그인 후 접근하면 막기!
   useEffect(() => {
     if (localStorage.getItem("accessToken")) {
-      navigate(-1); // 뒤로가기
+      navigate("/"); // 뒤로가기
     }
   }, []);
 
