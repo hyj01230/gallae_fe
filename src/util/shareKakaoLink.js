@@ -14,22 +14,20 @@ export const shareKakao = (title, postId) => {
         imageUrl: "public/img/gallae.png",
         link: {
           mobileWebUrl:
-            import.meta.env.VITE_REACT_APP_URL + `/api/posts/like/${postId}`, // 인자값으로 받은 route(uri 형태)
-          webUrl:
-            import.meta.env.VITE_REACT_APP_URL + `/api/posts/like/${postId}`,
+            import.meta.env.VITE_REACT_APP_URL + `/api/posts/${postId}`, // 인자값으로 받은 route(uri 형태)
+          webUrl: import.meta.env.VITE_REACT_APP_URL + `/api/posts/${postId}`,
         },
       },
-      buttons: [
-        {
-          title: "title",
-          link: {
-            mobileWebUrl:
-              import.meta.env.VITE_REACT_APP_URL + `/api/posts/like/${postId}`,
-            webUrl:
-              import.meta.env.VITE_REACT_APP_URL + `/api/posts/like/${postId}`,
-          },
-        },
-      ],
+      //   buttons: [
+      //     {
+      //       title: "title",
+      //       link: {
+      //         mobileWebUrl:
+      //           import.meta.env.VITE_REACT_APP_URL + `/api/posts/${postId}`,
+      //         webUrl: import.meta.env.VITE_REACT_APP_URL + `/api/posts/${postId}`,
+      //       },
+      //     },
+      //   ],
     });
   }
 };
