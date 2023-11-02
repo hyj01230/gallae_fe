@@ -1055,8 +1055,6 @@ export const Trash = () => {
   );
 };
 
-// -------------------------------------------------------------------------------------------------------------------------
-
 export const SearchIcon = () => {
   return (
     <svg
@@ -1071,6 +1069,104 @@ export const SearchIcon = () => {
         d="M27.9996 27.9996C26.3996 26.5329 23.5996 23.9196 23.5996 23.5996"
         stroke="#999999"
         strokeWidth="2"
+      />
+    </svg>
+  );
+};
+
+// -------------------------------------------------------------------------------------------------------------------------
+
+// 생김새 : 확대 버튼
+export const ZoomIn = () => {
+  return (
+    <svg
+      width="40"
+      height="40"
+      viewBox="0 0 40 40"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle opacity="0.8" cx="20" cy="20" r="14" fill="#888888" />
+      <path
+        d="M20 16V24"
+        stroke="#F2F2F2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M24 20H16"
+        stroke="#F2F2F2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12 15L12 12L15 12"
+        stroke="#F2F2F2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M25 12H28V15"
+        stroke="#F2F2F2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M15 28L12 28L12 25"
+        stroke="#F2F2F2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M28 25L28 28L25 28"
+        stroke="#F2F2F2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
+
+// 생김새 : 축소 버튼
+export const ZoomOut = () => {
+  return (
+    <svg
+      width="40"
+      height="40"
+      viewBox="0 0 40 40"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle opacity="0.8" cx="20" cy="20" r="14" fill="#888888" />
+      <path
+        d="M24 20H16"
+        stroke="#F2F2F2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12 15L12 12L15 12"
+        stroke="#F2F2F2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M25 12H28V15"
+        stroke="#F2F2F2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M15 28L12 28L12 25"
+        stroke="#F2F2F2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M28 25L28 28L25 28"
+        stroke="#F2F2F2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

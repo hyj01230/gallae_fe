@@ -1,5 +1,12 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Money, LeftArrow, Share, PlusWithCircle } from "../assets/Icon";
+import {
+  Money,
+  LeftArrow,
+  Share,
+  PlusWithCircle,
+  ZoomIn,
+  ZoomOut,
+} from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import List from "../components/schedulesDetail/List";
 import { useQuery } from "react-query";
@@ -21,6 +28,7 @@ export default function SchedulesDetailPage() {
     schedulesList: [],
     tripDateId: "",
   });
+  const [isZoomOut, setIsZoomOut] = useState(false);
 
   const { isLoading, error, data } = useQuery("schedulesDetail", async () => {
     const response = await getTripDate(postId);
@@ -97,8 +105,18 @@ export default function SchedulesDetailPage() {
           <div>{subTitle}</div>
         </div>
 
-        <div className="mt-3">
-          <ScheduleMap keyword={location} placeList={placeList} />
+        <div className="relative mt-3">
+          <ScheduleMap
+            keyword={location}
+            placeList={placeList}
+            height={isZoomOut ? "300px" : "150px"}
+          />
+          <div
+            className="absolute z-10 right-0 bottom-[0] p-2 cursor-pointer"
+            onClick={() => setIsZoomOut(!isZoomOut)}
+          >
+            {isZoomOut ? <ZoomOut /> : <ZoomIn />}
+          </div>
         </div>
 
         {/* 여행 날짜 드롭다운 */}
