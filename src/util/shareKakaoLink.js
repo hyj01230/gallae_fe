@@ -20,6 +20,7 @@ export const shareKakao = (title, postId) => {
         },
       },
       social: {},
+      // 버튼 전체내용 빈 배열로 설정해야 버튼 숨겨짐!
       buttons: [
         {
           title: "",
@@ -35,7 +36,7 @@ export const shareKakao = (title, postId) => {
             webUrl: "",
           },
         },
-      ], // 빈 배열로 설정하여 버튼을 숨깁니다.
+      ],
     });
   }
 };
