@@ -222,12 +222,12 @@ export default function SchedulesEditPage() {
           <Plus />
         </div>
 
-        <div className="flex">
+        {/* <div className="flex">
           {imageHandler.previewImage.length > 0 &&
             imageHandler.previewImage.map((value, index) => (
               <img key={index} src={value} className="w-36 h-36" />
             ))}
-        </div>
+        </div> */}
       </div>
 
       <div className="text-xs text-[#999] mx-4 mt-3">
