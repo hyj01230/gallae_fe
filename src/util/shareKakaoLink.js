@@ -10,7 +10,7 @@ export const shareKakao = (title, postId) => {
       templateId: 100240,
       templateArgs: {
         title: "[갈래] 우리 여행 갈래?",
-        description: `${title}`,
+        posttitle: `${title}`,
         postId: `${postId}`,
       },
     });
