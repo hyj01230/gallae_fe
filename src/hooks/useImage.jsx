@@ -26,11 +26,28 @@ export default function useImage() {
     setUploadImage(formData);
   };
 
+  // 게시글 이미지 수정
   const handleUpdateImage = async (postPicturesId) => {
     const response = await axios.put(
       `${
         import.meta.env.VITE_REACT_APP_URL
       }/api/postsPictures/${postPicturesId}`,
+      uploadImage,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Authorization": localStorage.getItem("accessToken"),
+        },
+        withCredentials: true,
+      }
+    );
+    return response;
+  };
+
+  // 게시글 이미지 수정
+  const handleUpdateSheduleImage = async (picturesId) => {
+    const response = await axios.put(
+      `${import.meta.env.VITE_REACT_APP_URL}/api/pictures/${picturesId}`,
       uploadImage,
       {
         headers: {
@@ -62,6 +79,7 @@ export default function useImage() {
     return response;
   };
 
+  // 게시글 이미지 생성
   const handleSubmitClick = async (postId) => {
     const res = await axios.post(
       `${import.meta.env.VITE_REACT_APP_URL}/api/posts/${postId}/postsPictures`,
@@ -87,6 +105,7 @@ export default function useImage() {
     uploadImageHandler,
     createScheduleImage,
     handleUpdateImage,
+    handleUpdateSheduleImage,
     handleSubmitClick,
   };
 }

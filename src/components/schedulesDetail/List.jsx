@@ -17,7 +17,10 @@ export default function List({ schedule, handleClick, move = true }) {
         </div>
         <div className="w-16 h-14 mt-2 bg-[#F2F2F2] rounded">
           {schedule.picturesResponseDtoList.length > 0 && (
-            <img src={schedule.picturesResponseDtoList[0].picturesURL} />
+            <img
+              className="w-full h-full rounded"
+              src={schedule.picturesResponseDtoList[0].picturesURL}
+            />
           )}
         </div>
       </div>

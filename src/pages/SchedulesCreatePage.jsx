@@ -178,10 +178,6 @@ export default function SchedulesCreatePage() {
           accept="image/*"
           ref={imageHandler.inputRef}
         />
-        <div className="w-36 h-36 flex justify-center items-center bg-[#F2F2F2] rounded-lg cursor-pointer">
-          <Plus />
-        </div>
-
         {imageHandler.previewImage ? (
           <div className="mt-3">
             <img src={imageHandler.previewImage} className="w-36 h-36" />

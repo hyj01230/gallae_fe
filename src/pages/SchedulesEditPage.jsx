@@ -39,6 +39,7 @@ export default function SchedulesEditPage() {
     placeName,
     x,
     y,
+    picturesResponseDtoList,
     referenceURL,
     schedulesCategory,
     schedulesId,
@@ -53,7 +54,7 @@ export default function SchedulesEditPage() {
     text: timeSpent,
   });
 
-  console.log({ x }, { y });
+  console.log({ picturesResponseDtoList });
 
   const [schedule, setSchedule] = useState({
     contents,
@@ -67,7 +68,18 @@ export default function SchedulesEditPage() {
   });
 
   const imageHandler = useImage();
-  // console.log("image : ", imageHandler.uploadImage);
+
+  const handleUpdateClick = async () => {
+    if (imageHandler.previewImage) {
+      const { picturesId } = picturesResponseDtoList[0];
+      await imageHandler.handleUpdateSheduleImage(picturesId);
+    }
+
+    await updateScheduleDetail(schedulesId, schedule);
+    navigate("/myschedules/details", {
+      state: { postId, subTitle, tripDateId },
+    });
+  };
 
   const updateScheduleMutation = useMutation(
     async () => {
@@ -194,13 +206,6 @@ export default function SchedulesEditPage() {
                 ? schedule.placeName
                 : "장소를 검색하세요"}
             </div>
-            {/* <input
-              defaultValue={schedule.placeName}
-              placeholder="장소를 입력하세요"
-              onChange={(e) =>
-                setSchedule((prev) => ({ ...prev, placeName: e.target.value }))
-              }
-            /> */}
           </div>
           <DownArrow />
         </div>
@@ -209,7 +214,7 @@ export default function SchedulesEditPage() {
       {/* 이미지 업로드 */}
       <div
         className="mt-3 mx-4"
-        // onClick={imageHandler.onClickSelectProfileHandler}
+        onClick={imageHandler.onClickSelectProfileHandler}
       >
         <input
           type="file"
@@ -218,39 +223,26 @@ export default function SchedulesEditPage() {
           accept="image/*"
           ref={imageHandler.inputRef}
         />
-        <div className="w-36 h-36 flex justify-center items-center bg-[#F2F2F2] rounded-lg cursor-pointer">
-          <Plus />
-        </div>
-
-        {/* <div className="flex">
-          {imageHandler.previewImage.length > 0 &&
-            imageHandler.previewImage.map((value, index) => (
-              <img key={index} src={value} className="w-36 h-36" />
-            ))}
-        </div> */}
+        {imageHandler.previewImage || picturesResponseDtoList[0].picturesURL ? (
+          <div>
+            <img
+              className="w-36 h-36"
+              src={
+                imageHandler.previewImage ||
+                picturesResponseDtoList[0].picturesURL
+              }
+            />
+          </div>
+        ) : (
+          <div className="w-36 h-36 flex justify-center items-center bg-[#F2F2F2] rounded-lg cursor-pointer">
+            <Plus />
+          </div>
+        )}
       </div>
 
       <div className="text-xs text-[#999] mx-4 mt-3">
-        <p>사진 업로드 기능은 추후 개발될 예정입니다.</p>
-        {/* 사진 업로드는 개당 1MB내외로 업로드 가능합니다. */}
+        <p>사진 업로드는 개당 1MB내외로 업로드 가능합니다.</p>
       </div>
-
-      {/* <div className="flex flex-col mt-7 mx-7">
-        <div className="flex gap-4">
-          <Clock />
-          <div className="w-full flex items-center gap-8 border border-[#D9D9D9] rounded-lg px-3 py-2">
-            <span>소요시간</span>
-            <span>{timeSpentState.text}</span>
-          </div>
-        </div>
-        <div className="flex justify-between">
-          {SPENT_TIME_LIST.map((value, index) => (
-            <button key={index} onClick={() => handleClick(value.minute)}>
-              {value.text}
-            </button>
-          ))}
-        </div>
-      </div> */}
 
       <div className="flex flex-col mt-7 mx-7">
         <div className="flex gap-4">
@@ -327,7 +319,7 @@ export default function SchedulesEditPage() {
       <div className="fixed bottom-0 max-w-3xl flex">
         <button
           className="w-screen h-14 bg-gray-300 text-white"
-          onClick={() => updateScheduleMutation.mutate()}
+          onClick={handleUpdateClick}
         >
           일정 수정 완료
         </button>
@@ -335,7 +327,6 @@ export default function SchedulesEditPage() {
 
       {modal.isModal && (
         <SearchModal
-          // placeName={schedule.placeName}
           schedule={schedule}
           setSchedule={setSchedule}
           handleCloseModal={modal.handleCloseModal}

@@ -7,9 +7,6 @@ export const DETAIL_SCHEDULES_CATEGORIES = [
   "교통",
   "마트",
   "쇼핑",
-  "숙박",
-  "즐길거리",
-  "음식",
 ];
 
 export const ACCOUNT_ICON = [
@@ -22,16 +19,6 @@ export const ACCOUNT_ICON = [
   "Mart",
   "Shopping",
 ];
-
-// export const DETAIL_SCHEDULES_CATEGORIES_ACCOUNT = [
-//   { category: "식당", icon: "Restaurant" },
-//   { category: "숙소", icon: "Accommdation" },
-//   { category: "카페", icon: "Cafe" },
-//   { category: "명소", icon: "Landmark" },
-//   { category: "교통", icon: "Transportation" },
-//   { category: "마트", icon: "Mart" },
-//   { category: "쇼핑", icon: "Shopping" },
-// ];
 
 export const SPENT_TIME_LIST = [
   { minute: 5, text: "5분" },
