@@ -231,9 +231,7 @@ export default function SchedulesEditPage() {
       </div>
 
       <div className="text-xs text-[#999] mx-4 mt-3">
-        <p className="text-[#d05454]">
-          (사진 업로드 기능은 MVP 이후 개발 예정입니다)
-        </p>
+        <p>사진 업로드 기능은 추후 개발될 예정입니다.</p>
         {/* 사진 업로드는 개당 1MB내외로 업로드 가능합니다. */}
       </div>
 
