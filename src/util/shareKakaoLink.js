@@ -12,6 +12,10 @@ export const shareKakao = (title, postId) => {
         title: "[갈래] 나랑 여행 갈래?",
         description: title,
       },
+      link: {
+        mobileWebUrl: `https://gallae-fe.vercel.app/posts/${postId}`,
+        webUrl: `https://gallae-fe.vercel.app/posts/${postId}`,
+      },
     });
   }
 };
