@@ -59,10 +59,6 @@ export default function MyPageLikeList() {
         },
       });
       console.log("response", response);
-      console.log(
-        "사진",
-        response.data.content[1].postsPicturesList[0].postsPicturesURL
-      );
       setLikeList(response.data.content);
     } catch (error) {
       console.log("error", error);
@@ -121,6 +117,8 @@ export default function MyPageLikeList() {
     return formattedDate;
   };
 
+  // 카카오 공유하기
+
   return (
     <Layout isBottomNav={true}>
       <div className="mt-3 ml-4 flex justify-start items-center">
@@ -152,12 +150,16 @@ export default function MyPageLikeList() {
 
                 <div className="flex justify-end">
                   <div className="ml-3 w-[88px] h-[88px] bg-[#F2F2F2] rounded-lg flex items-center justify-center">
-
-                    <img
-                      className="w-[96px] h-[96px] bg-gray-300  ml-4 cursor-pointer"
-                      src={item.postsPicturesList[0].postsPicturesURL}
-                    />
-
+                    {item.postsPicturesList.length > 0 ? (
+                      <img
+                        className="w-[88px] h-[88px] rounded-lg"
+                        src={item.postsPicturesList[0].postsPicturesURL}
+                      />
+                    ) : (
+                      <p className=" text-4 text-black font-semibold text-center">
+                        대표 이미지
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
