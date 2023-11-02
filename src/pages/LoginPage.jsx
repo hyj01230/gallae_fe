@@ -29,7 +29,6 @@ export default function LoginPage() {
   // 로그인 후 접근하면 막기!
   useEffect(() => {
     if (localStorage.getItem("accessToken")) {
-      alert("이미 로그인한 유저입니다.");
       navigate("/");
     }
   }, []);
@@ -58,14 +57,15 @@ export default function LoginPage() {
           response.headers.authorization_refresh
         ); // refreshToken 저장!
 
-        // setTimeout(() => {
-        //   localStorage.removeItem("accessToken");
-        //   localStorage.removeItem("refreshToken");
-        //   alert("로그인 시간 만료! 재로그인이 필요합니다.");
-        //   navigate("/posts");
-        // }, 60000); // 1시간
-
         navigate("/");
+
+        // accessToken 만료시 로그아웃 - 임시로 사용! 수정예정!
+        setTimeout(() => {
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          alert("로그인 시간 만료! 재로그인이 필요합니다.");
+          navigate("/login");
+        }, 3600000); // 1시간
       }
       alert(response.data.msg);
     } catch (error) {
