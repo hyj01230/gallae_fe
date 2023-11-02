@@ -59,9 +59,15 @@ export default function SchedulesCreatePage() {
   const createScheduleMutation = useMutation(
     () => createScheduleDetail(tripDateId, { schedulesList: [schedule] }),
     {
-      onSuccess: () => {
+      onSuccess: async () => {
         queryClient.invalidateQueries("schedulesDetail");
         initRecoilState();
+        const response = await getScheduleDetail(tripDateId);
+        const schedulesId = response.data.schedulesList.at(-1).schedulesId;
+        // 이미지 업로드 하는 것
+        if (imageHandler.previewImage) {
+          await imageHandler.createScheduleImage(schedulesId);
+        }
         navigate("/myschedules/details", {
           state: { postId, tripDateId, subTitle },
         });
@@ -87,12 +93,18 @@ export default function SchedulesCreatePage() {
     });
   };
 
-  // const handleSubmitClick = async () => {
-  //   await createScheduleDetail(tripDateId, {
-  //     schedulesList: [schedule],
-  //   });
-  //   navigate("/myschedules/details", { state: { postId, tripDat  eId } });
-  // };
+  const handleSubmitClick = async () => {
+    /**
+     * 1. 세부일정 생성 api
+     * 2. 생성이 잘 되면, GET tripDate해서 가장 마지막에 생성된 애의 schedulesId를 가져온다
+     * 3. 그 아이디를 이용해 이미지를 업로드한다.
+     *
+     */
+    await createScheduleDetail(tripDateId, {
+      schedulesList: [schedule],
+    });
+    navigate("/myschedules/details", { state: { postId, tripDateId } });
+  };
 
   return (
     <Layout>
@@ -157,7 +169,7 @@ export default function SchedulesCreatePage() {
       {/* 이미지 업로드 */}
       <div
         className="mt-3 mx-4"
-        // onClick={imageHandler.onClickSelectProfileHandler}
+        onClick={imageHandler.onClickSelectProfileHandler}
       >
         <input
           type="file"
@@ -166,11 +178,7 @@ export default function SchedulesCreatePage() {
           accept="image/*"
           ref={imageHandler.inputRef}
         />
-        <div className="w-36 h-36 flex justify-center items-center bg-[#F2F2F2] rounded-lg cursor-pointer">
-          <Plus />
-        </div>
-
-        {/* {imageHandler.previewImage ? (
+        {imageHandler.previewImage ? (
           <div className="mt-3">
             <img src={imageHandler.previewImage} className="w-36 h-36" />
           </div>
@@ -178,7 +186,7 @@ export default function SchedulesCreatePage() {
           <div className="w-36 h-36 flex justify-center items-center bg-[#F2F2F2] rounded-lg cursor-pointer">
             <Plus />
           </div>
-        )} */}
+        )}
 
         {/* <div className="flex">
           {imageHandler.previewImage.length > 0 &&
@@ -189,7 +197,7 @@ export default function SchedulesCreatePage() {
       </div>
 
       <div className="text-xs text-[#999] mx-4 mt-3">
-        <p>사진 업로드는 추후 개발될 예정입니다.</p>
+        <p>사진 업로드는 개당 1MB내외로 업로드 가능합니다.</p>
         {/* 사진 업로드는 개당 1MB내외로 업로드 가능합니다. */}
       </div>
 
@@ -272,6 +280,7 @@ export default function SchedulesCreatePage() {
           }}
           className="w-screen h-14 bg-gray-300 text-white"
           onClick={() => createScheduleMutation.mutate()}
+          // onClick={handleSubmitClick}
         >
           일정 수정 완료
         </button>

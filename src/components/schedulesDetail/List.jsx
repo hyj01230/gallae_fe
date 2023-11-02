@@ -1,6 +1,7 @@
 import { Move } from "../../assets/Icon";
 
 export default function List({ schedule, handleClick, move = true }) {
+  console.log(schedule.picturesResponseDtoList);
   return (
     <div
       className={`flex border border-[#F2F2F2] rounded-lg ${
@@ -14,7 +15,14 @@ export default function List({ schedule, handleClick, move = true }) {
             {schedule.schedulesCategory}
           </div>
         </div>
-        <div className="w-16 h-14 mt-2 bg-[#F2F2F2] rounded"></div>
+        <div className="w-16 h-14 mt-2 bg-[#F2F2F2] rounded">
+          {schedule.picturesResponseDtoList.length > 0 && (
+            <img
+              className="w-full h-full rounded"
+              src={schedule.picturesResponseDtoList[0].picturesURL}
+            />
+          )}
+        </div>
       </div>
 
       <div className="flex flex-col w-3/4">
@@ -26,8 +34,6 @@ export default function List({ schedule, handleClick, move = true }) {
                 e.stopPropagation();
                 window.open(schedule.referenceURL);
               }}
-              // href={schedule.referenceURL}
-              // target="_blank"
               className="text-[12px] text-[#D9D9D9] underline p-[2px]"
             >
               참고링크
