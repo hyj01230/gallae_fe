@@ -1,5 +1,3 @@
-import gallae from "../../public/img";
-
 export const shareKakao = (title, postId) => {
   // url이 id값에 따라 변경되기 때문에 route를 인자값으로 받아줌
   if (window.Kakao) {
@@ -25,7 +23,7 @@ export const shareKakao = (title, postId) => {
       content: {
         title: "[갈래] 나랑 여행 갈래?",
         description: title,
-        imageUrl: gallae,
+        imageUrl: "public/img/gallae.png",
         link: {
           mobileWebUrl: `https://gallae-fe.vercel.app/posts/${postId}`,
           webUrl: `https://gallae-fe.vercel.app/posts/${postId}`,
