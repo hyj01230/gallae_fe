@@ -43,7 +43,8 @@ export default function useImage() {
     return response;
   };
 
-  const createScheduleImage = async ({ schedulesId }) => {
+  // 세부일정 이미지 생성
+  const createScheduleImage = async (schedulesId) => {
     const response = await axios.post(
       `${
         import.meta.env.VITE_REACT_APP_URL

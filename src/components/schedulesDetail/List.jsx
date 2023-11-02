@@ -14,7 +14,7 @@ export default function List({ schedule, handleClick, move = true }) {
             {schedule.schedulesCategory}
           </div>
         </div>
-        <div className="w-16 h-14 mt-2 bg-[#F2F2F2] rounded"></div>
+        <div className="w-16 h-14 mt-2 bg-[#F2F2F2] rounded">사진</div>
       </div>
 
       <div className="flex flex-col w-3/4">
@@ -26,8 +26,6 @@ export default function List({ schedule, handleClick, move = true }) {
                 e.stopPropagation();
                 window.open(schedule.referenceURL);
               }}
-              // href={schedule.referenceURL}
-              // target="_blank"
               className="text-[12px] text-[#D9D9D9] underline p-[2px]"
             >
               참고링크
