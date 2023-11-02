@@ -1,4 +1,4 @@
-export const shareKakao = (title, postId) => {
+export const shareKakao = (title) => {
   // url이 id값에 따라 변경되기 때문에 route를 인자값으로 받아줌
   if (window.Kakao) {
     const kakao = window.Kakao;
@@ -9,18 +9,9 @@ export const shareKakao = (title, postId) => {
     kakao.Share.sendCustom({
       templateId: 100240,
       templateArgs: {
-        title: "[갈래] 우리 여행 갈래?",
-        posttitle: `${title}`,
-        postId: `${postId}`,
+        title: "[갈래] 나랑 여행 갈래?",
+        description: `${title}`,
       },
     });
-
-    // kakao.Share.sendCustom({
-    //   templateId: 100240,
-    //   templateArgs: {
-    //     title: "[갈래] 나랑 여행 갈래?",
-    //     description: title,
-    //   },
-    // });
   }
 };
