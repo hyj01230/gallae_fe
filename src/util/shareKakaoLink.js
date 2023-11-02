@@ -9,7 +9,8 @@ export const shareKakao = (title, postId) => {
     kakao.Share.createCustomButton({
       templateId: 100240,
       templateArgs: {
-        title: `${title}`,
+        title: "[갈래] 우리 여행 갈래?",
+        description: `${title}`,
         postId: `${postId}`,
       },
     });
