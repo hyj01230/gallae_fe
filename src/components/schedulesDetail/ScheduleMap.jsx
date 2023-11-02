@@ -1,7 +1,8 @@
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef, useMemo, useState } from "react";
 import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
 
 export default function ScheduleMap({
+  keyword,
   height = "150px",
   placeList = [
     { placeName: "제주1", lat: 33.452344169439975, lng: 126.56878163224233 },
@@ -10,22 +11,55 @@ export default function ScheduleMap({
   ],
 }) {
   const mapRef = useRef();
+  const [map, setMap] = useState();
+  const [keywordMarkers, setKeywordMarkers] = useState([]);
+
   const position = placeList.map(({ placename, ...rest }) => ({ ...rest }));
 
   const bounds = useMemo(() => {
     const bounds = new kakao.maps.LatLngBounds();
-
     placeList.forEach((list) => {
       bounds.extend(new kakao.maps.LatLng(list.lat, list.lng));
     });
+
     return bounds;
   }, [placeList]);
 
   useEffect(() => {
-    if (placeList.length === 0) return;
-    const map = mapRef.current;
-    if (map) map.setBounds(bounds);
-  }, [mapRef.current]);
+    if (keyword) {
+      const ps = new kakao.maps.services.Places();
+
+      ps.keywordSearch(keyword, (data, status, _pagination) => {
+        if (status === kakao.maps.services.Status.OK) {
+          // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+          // LatLngBounds 객체에 좌표를 추가합니다
+          const bounds = new kakao.maps.LatLngBounds();
+          let markers = [];
+
+          for (var i = 0; i < data.length; i++) {
+            // @ts-ignore
+            markers.push({
+              position: {
+                lat: data[i].y,
+                lng: data[i].x,
+              },
+              content: data[i].place_name,
+            });
+            // @ts-ignore
+            bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+          }
+          setKeywordMarkers(markers);
+
+          // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+          map.setBounds(bounds);
+        }
+      });
+    }
+
+    if (placeList.length > 0 && mapRef.current) {
+      mapRef.current.setBounds(bounds);
+    }
+  }, [map, mapRef, placeList]);
 
   return (
     <Map // 로드뷰를 표시할 Container
@@ -38,11 +72,15 @@ export default function ScheduleMap({
         height: `${height}`,
       }}
       level={3}
+      onCreate={setMap}
       ref={mapRef}
     >
       {placeList.length > 0 &&
         placeList.map((point) => (
-          <MapMarker key={`${point.lat}-${point.lng}`} position={point}>
+          <MapMarker
+            key={`${point.lat}-${point.lng}`}
+            position={{ lat: point.lat, lng: point.lng }}
+          >
             <span>{point.placeName}</span>
           </MapMarker>
         ))}
