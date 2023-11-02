@@ -52,7 +52,10 @@ export default function MyPageNickName() {
   const onClickModifyNickNameHandler = async () => {
     // 에러메시지 있는지 확인
     if (nickNameMessage !== true) {
-      alert("닉네임을 올바르게 입력하세요.");
+      alert("닉네임을 올바르게 입력해주세요.");
+      return;
+    } else if (nickName === "") {
+      alert("변경할 닉네임을 입력해주세요.");
       return;
     }
 
