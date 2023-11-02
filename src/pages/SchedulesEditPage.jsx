@@ -28,6 +28,7 @@ import {
 import useImage from "../hooks/useImage";
 import useModal from "../hooks/useModal";
 import SearchModal from "../components/scheduleCreate/SearchModal";
+import DeleteSchedulesModal from "../components/scheduleEdit/DeleteSchedulesModal";
 
 export default function SchedulesEditPage() {
   const queryClient = useQueryClient();
@@ -48,12 +49,11 @@ export default function SchedulesEditPage() {
     tripDateId,
   } = useLocation().state;
   const navigate = useNavigate();
+  const [isDelete, setIsDelete] = useState(false);
   const [timeSpentState, setTimeSpent] = useState({
     time: timeStringToMinutes(timeSpent),
     text: timeSpent,
   });
-
-  console.log({ x }, { y });
 
   const [schedule, setSchedule] = useState({
     contents,
@@ -132,6 +132,11 @@ export default function SchedulesEditPage() {
     // });
   };
 
+  const handleDelectClick = (e) => {
+    e.stopPropagation();
+    setIsDelete(true);
+  };
+
   return (
     <Layout>
       <div
@@ -151,7 +156,8 @@ export default function SchedulesEditPage() {
 
         <button
           className="cursor-pointer mr-2"
-          onClick={() => deleteScheduleMutation.mutate()}
+          onClick={handleDelectClick}
+          // onClick={() => deleteScheduleMutation.mutate()}
         >
           <Trash />
         </button>
@@ -194,13 +200,6 @@ export default function SchedulesEditPage() {
                 ? schedule.placeName
                 : "장소를 검색하세요"}
             </div>
-            {/* <input
-              defaultValue={schedule.placeName}
-              placeholder="장소를 입력하세요"
-              onChange={(e) =>
-                setSchedule((prev) => ({ ...prev, placeName: e.target.value }))
-              }
-            /> */}
           </div>
           <DownArrow />
         </div>
@@ -234,23 +233,6 @@ export default function SchedulesEditPage() {
         <p>사진 업로드 기능은 추후 개발될 예정입니다.</p>
         {/* 사진 업로드는 개당 1MB내외로 업로드 가능합니다. */}
       </div>
-
-      {/* <div className="flex flex-col mt-7 mx-7">
-        <div className="flex gap-4">
-          <Clock />
-          <div className="w-full flex items-center gap-8 border border-[#D9D9D9] rounded-lg px-3 py-2">
-            <span>소요시간</span>
-            <span>{timeSpentState.text}</span>
-          </div>
-        </div>
-        <div className="flex justify-between">
-          {SPENT_TIME_LIST.map((value, index) => (
-            <button key={index} onClick={() => handleClick(value.minute)}>
-              {value.text}
-            </button>
-          ))}
-        </div>
-      </div> */}
 
       <div className="flex flex-col mt-7 mx-7">
         <div className="flex gap-4">
@@ -335,10 +317,19 @@ export default function SchedulesEditPage() {
 
       {modal.isModal && (
         <SearchModal
-          // placeName={schedule.placeName}
           schedule={schedule}
           setSchedule={setSchedule}
           handleCloseModal={modal.handleCloseModal}
+        />
+      )}
+
+      {isDelete && (
+        <DeleteSchedulesModal
+          schedulesId={schedulesId}
+          postId={postId}
+          subTitle={subTitle}
+          tripDateId={tripDateId}
+          handleCloseModal={() => setIsDelete(false)}
         />
       )}
     </Layout>
