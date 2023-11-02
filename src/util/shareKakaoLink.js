@@ -20,7 +20,22 @@ export const shareKakao = (title, postId) => {
         },
       },
       social: {},
-      buttons: [], // 빈 배열로 설정하여 버튼을 숨깁니다.
+      buttons: [
+        {
+          title: "",
+          link: {
+            mobileWebUrl: "",
+            webUrl: "",
+          },
+        },
+        {
+          title: "",
+          link: {
+            mobileWebUrl: "",
+            webUrl: "",
+          },
+        },
+      ], // 빈 배열로 설정하여 버튼을 숨깁니다.
     });
   }
 };
