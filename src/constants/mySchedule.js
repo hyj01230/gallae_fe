@@ -1,10 +1,37 @@
 export const DETAIL_SCHEDULES_CATEGORIES = [
-  "카테고리를 선택해주세요",
+  "카테고리",
+  "식당",
+  "숙소",
+  "카페",
+  "명소",
   "교통",
+  "마트",
+  "쇼핑",
   "숙박",
   "즐길거리",
   "음식",
 ];
+
+export const ACCOUNT_ICON = [
+  "",
+  "Restaurant",
+  "Accommdation",
+  "Cafe",
+  "Landmark",
+  "Transportation",
+  "Mart",
+  "Shopping",
+];
+
+// export const DETAIL_SCHEDULES_CATEGORIES_ACCOUNT = [
+//   { category: "식당", icon: "Restaurant" },
+//   { category: "숙소", icon: "Accommdation" },
+//   { category: "카페", icon: "Cafe" },
+//   { category: "명소", icon: "Landmark" },
+//   { category: "교통", icon: "Transportation" },
+//   { category: "마트", icon: "Mart" },
+//   { category: "쇼핑", icon: "Shopping" },
+// ];
 
 export const SPENT_TIME_LIST = [
   { minute: 5, text: "5분" },

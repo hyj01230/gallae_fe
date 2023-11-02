@@ -1,4 +1,9 @@
 import { formatDateString } from "../../util/formatDate";
+import {
+  DETAIL_SCHEDULES_CATEGORIES,
+  ACCOUNT_ICON,
+} from "../../constants/mySchedule";
+import AccountIcon from "../../assets/Account";
 
 export default function List({ data, day }) {
   return (
@@ -18,7 +23,17 @@ export default function List({ data, day }) {
           className="flex items-center border-b border-[#F2F2F2]"
         >
           <div className="flex items-center py-5">
-            <div className="mr-[9px]">ICON</div>
+            <div className="mr-[9px]">
+              {
+                AccountIcon[
+                  ACCOUNT_ICON[
+                    DETAIL_SCHEDULES_CATEGORIES.indexOf(
+                      schedule.schedulesCategory
+                    )
+                  ]
+                ]
+              }
+            </div>
             <div className="w-[42px] text-[12px] text-[#999] mr-[10px]">
               {schedule.schedulesCategory}
             </div>
