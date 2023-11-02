@@ -172,8 +172,8 @@ export default function MyPageLikeList() {
                 </div>
               </div>
 
-              <div className="mt-2 flex items-center border-b-[1px] border-[#F2F2F2] pb-3">
-                <div className="mr-4 text-[#999999] text-sm/6 font-normal">
+              <div className="mt-2 flex items-center border-b-[1px] border-[#F2F2F2] pb-3 ">
+                <div className="mr-4 text-[#999999] text-[20px] font-normal">
                   {item.nickName}
                 </div>
                 <div className="mr-auto text-[#999999] text-sm/6 font-normal">

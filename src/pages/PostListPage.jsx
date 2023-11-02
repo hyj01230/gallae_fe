@@ -1,7 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
-import { LikeHeart, LikeFullHeart, PostListComment } from "../assets/Icon";
+import {
+  LikeHeart,
+  LikeFullHeart,
+  PostListComment,
+  ShareIcon,
+} from "../assets/Icon";
 import PostHeader from "../components/post/PostHeader";
 import Layout from "../components/common/Layout";
 import PostCategory from "../components/post/PostCategory";
@@ -204,7 +209,7 @@ export default function PostListPage() {
           {filteredPostList && filteredPostList.length > 0 ? (
             filteredPostList.map((item) => (
               <div
-                key={item.postId} // 고유한 식별자를 사용
+                key={item.postId}
                 className="w-393 h-275 bg-white flex flex-col relative"
               >
                 <div className="flex items-center justify-between mb-2 mt-5">
@@ -222,8 +227,8 @@ export default function PostListPage() {
                           ? item.title.slice(0, 18) + "..."
                           : item.title}
                       </span>
-                      <span className="text-xs text-gray-500 mt-1 cursor-pointer">
-                        {item.postCategory}
+                      <span className="text-[12px]  text-gray-500 mt-1 cursor-pointer">
+                        {item.nickName}
                       </span>
                     </div>
                   </div>
@@ -241,7 +246,21 @@ export default function PostListPage() {
                     : item.contents}
                 </span>
                 <div className="flex items-center text-xs text-gray-500 mb-6 mt-6 ml-4">
-                  <div>
+                  <div className="">
+                    {item && item.tagsList ? (
+                      item.tagsList.map((tag, index) => (
+                        <span
+                          key={index}
+                          className="inline-block text-[#999] border border-solid border-gray-300 rounded-full text-[11px] px-2 py-1 mr-1 cursor-pointer"
+                        >
+                          #{tag}
+                        </span>
+                      ))
+                    ) : (
+                      <p>Loading tags...</p>
+                    )}
+                  </div>
+                  {/* <div>
                     <p className="ml-1">좋아요 {item.likeNum} · </p>
                   </div>
                   <div>
@@ -249,7 +268,7 @@ export default function PostListPage() {
                   </div>
                   <div>
                     <p className="ml-1">조회수 {item.viewNum}</p>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="flex items-center justify-between text-sm text-gray-500 h-[40px] bordertop-solid border-t-2">
                   <div
@@ -270,9 +289,26 @@ export default function PostListPage() {
                         <LikeHeart />
                       )}
                     </div>
-                    <p className="cursor-pointer">좋아요</p>
+                    <p className="cursor-pointer text-[14px]">
+                      좋아요 {item.likeNum}
+                    </p>
                   </div>
-
+                  <div
+                    className="flex items-center space-x-2 flex-1 justify-center border-r-2 h-[40px]"
+                    onClick={() => {
+                      if (!localStorage.getItem("accessToken")) {
+                        alert("로그인이 필요한 서비스입니다.");
+                        navigate("/login");
+                      } else {
+                        handleLikeClick(item.postId);
+                      }
+                    }}
+                  >
+                    <div>
+                      <ShareIcon />
+                    </div>
+                    <p className="cursor-pointer text-[14px]">공유하기</p>
+                  </div>
                   <div
                     className="flex items-center space-x-2 flex-1 justify-center"
                     onClick={() => {
@@ -284,8 +320,13 @@ export default function PostListPage() {
                       }
                     }}
                   >
-                    <PostListComment />
-                    <p> 댓글달기</p>
+                    <div>
+                      <PostListComment />
+                    </div>
+                    <p className="cursor-pointer  text-[14px]">
+                      {" "}
+                      댓글 {item.commentNum}
+                    </p>
                   </div>
                 </div>
                 <PostLine />

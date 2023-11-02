@@ -1074,6 +1074,28 @@ export const SearchIcon = () => {
   );
 };
 
+//공유아이콘_PostListPage
+export const ShareIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="20"
+      viewBox="0 0 16 20"
+      fill="none"
+    >
+      <circle cx="13.3337" cy="2.66667" r="2.16667" stroke="#666666" />
+      <circle cx="13.3337" cy="17.3332" r="2.16667" stroke="#666666" />
+      <circle cx="2.66667" cy="9.33317" r="2.16667" stroke="#666666" />
+      <path
+        d="M11.3333 4L4.66667 8M4 11.3333L11.3333 16.6667"
+        stroke="#666666"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
+
 // 생김새 : 확대 버튼
 export const ZoomIn = () => {
   return (
