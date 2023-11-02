@@ -6,27 +6,34 @@ export const shareKakao = (title, postId) => {
       kakao.init(import.meta.env.VITE_REACT_APP_JavaScript_KEY); // 카카오에서 제공받은 javascript key를 넣어줌 -> .env파일에서 호출시킴
     }
 
-    kakao.Link.sendDefault({
-      objectType: "feed", // 카카오 링크 공유 여러 type들 중 feed라는 타입 -> 자세한 건 카카오에서 확인
+    kakao.Share.sendDefault({
+      objectType: "feed",
       content: {
-        title: "[갈래] 나랑 여행 갈래?",
-        description: title, // 인자값으로 받은 title
-        imageUrl: "public/img/gallae.png",
+        title: "[갈래] 우리 여행 갈래?",
+        description: title,
+        imageUrl:
+          "https://github.com/hyj01230/gallae_fe/blob/main/public/img/gallae.png?raw=true",
         link: {
-          mobileWebUrl:
-            import.meta.env.VITE_REACT_APP_URL + `/api/posts/like/${postId}`, // 인자값으로 받은 route(uri 형태)
-          webUrl:
-            import.meta.env.VITE_REACT_APP_URL + `/api/posts/like/${postId}`,
+          // [내 애플리케이션] > [플랫폼] 에서 등록한 사이트 도메인과 일치해야 함
+          mobileWebUrl: `https://gallae-fe.vercel.app/posts/${postId}`,
+          webUrl: `https://gallae-fe.vercel.app/posts/${postId}`,
         },
       },
+      social: {},
+      // 버튼 전체내용 빈 배열로 설정해야 버튼 숨겨짐!
       buttons: [
         {
-          title: "title",
+          title: "",
           link: {
-            mobileWebUrl:
-              import.meta.env.VITE_REACT_APP_URL + `/api/posts/like/${postId}`,
-            webUrl:
-              import.meta.env.VITE_REACT_APP_URL + `/api/posts/like/${postId}`,
+            mobileWebUrl: "",
+            webUrl: "",
+          },
+        },
+        {
+          title: "",
+          link: {
+            mobileWebUrl: "",
+            webUrl: "",
           },
         },
       ],

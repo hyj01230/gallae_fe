@@ -1064,7 +1064,7 @@ export const SearchIcon = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <circle cx="19.2" cy="19.2" r="6.2" stroke="#999999" stroke-width="2" />
+      <circle cx="19.2" cy="19.2" r="6.2" stroke="#999999" strokeWidth="2" />
       <path
         d="M27.9996 27.9996C26.3996 26.5329 23.5996 23.9196 23.5996 23.5996"
         stroke="#999999"
@@ -1166,6 +1166,54 @@ export const ZoomOut = () => {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+    </svg>
+  );
+};
+
+// 마이페이지 : 나의 댓글 아이콘
+export const MyCommentList = () => {
+  return (
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12.662 14.4565L13.1811 14.3055L13.5917 14.657C14.3158 15.277 15.0985 15.6904 15.8215 15.9654C15.2573 15.0242 15.0838 14.3009 15.0448 13.833L15.0018 13.3177L15.3976 12.9847C16.6311 11.9472 17.333 10.5949 17.333 9.16667C17.333 6.23372 14.2522 3.5 9.99967 3.5C5.74711 3.5 2.66634 6.23372 2.66634 9.16667C2.66634 12.0996 5.74711 14.8333 9.99967 14.8333C10.9364 14.8333 11.8341 14.6973 12.662 14.4565Z"
+        stroke="#666666"
+        strokeWidth="2"
+      />
+    </svg>
+  );
+};
+
+// 가로 점 세개
+export const ThreecIrcle = () => {
+  return (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle
+        cx="24"
+        cy="16"
+        r="2"
+        transform="rotate(90 24 16)"
+        fill="#D9D9D9"
+      />
+      <circle
+        cx="16"
+        cy="16"
+        r="2"
+        transform="rotate(90 16 16)"
+        fill="#D9D9D9"
+      />
+      <circle cx="8" cy="16" r="2" transform="rotate(90 8 16)" fill="#D9D9D9" />
     </svg>
   );
 };

@@ -466,7 +466,7 @@ export default function SignUpPage() {
           </div>
         </div> */}
 
-        <div className="mt-4 flex mb-20">
+        <div className="mt-6 flex mb-20">
           <div className="border border-[#D9D9D9] rounded-lg w-full pt-[21px] pr-3 pb-[23px] pl-5">
             <div className="flex flex-row items-center">
               <input
@@ -609,7 +609,7 @@ export default function SignUpPage() {
               </div>
               <div className="mx-4 text-lg/8 font-normal text-[#333333]">
                 <p className="pb-24">
-                  이용자는 개인정보의 수집 및 이용 동의를 거부할 권리가
+                  사용자는 개인정보의 수집 및 이용 동의를 거부할 권리가
                   있습니다. 회원가입 시 수집하는 최소한의 개인정보, 즉, 필수
                   항목에 대한 수집 및 이용 동의를 거부하실 경우, 회원가입이
                   어려울 수 있습니다.
@@ -641,11 +641,27 @@ export default function SignUpPage() {
 
           <div className="bg-white absolute h-full">
             <div className="mx-10">
-              <div className="mt-4 text-lg/8 font-normal text-[#333333] ">
-                `갈래`는 이용자의 위치 정보를 수집하고 사용하며, 이는 여행 관련
-                서비스 제공 및 향상에 활용됩니다. 이용자의 위치 정보는 안전하게
-                보호하며, 개인 정보 보호 정책을 준수합니다. 이용자는 위치 정보
-                수집을 거부할 수 있지만, 일부 기능 사용에 영향을 줄 수 있습니다.
+              <div className="mt-4 text-lg/8 font-medium text-[#333333]">
+                1. 위치정보 수집 및 이용 목적
+              </div>
+              <div className="mx-4 text-lg/8 font-normal text-[#333333]">
+                <p>
+                  `갈래`의 서비스 향상과 사용자 경험을 개선하기 위한 것으로,
+                  사용자에게 더 나은 여행 정보와 편의성을 제공하기 위한
+                  것입니다.
+                </p>
+                <p>• 여행 관련 서비스 제공 및 향상에 활용</p>
+                <p>• 위치 관련 검색 및 정보 제공</p>
+              </div>
+
+              <div className="mt-4 text-lg/8 font-medium text-[#333333]">
+                2. 위치정보 수집 및 이용 동의를 거부할 권리
+              </div>
+              <div className="mx-4 text-lg/8 font-normal text-[#333333]">
+                <p className="pb-24">
+                  사용자는 위치 정보 수집을 거부할 수 있지만, 일부 기능 사용에
+                  영향을 줄 수 있습니다.
+                </p>
               </div>
             </div>
           </div>
@@ -674,7 +690,7 @@ export default function SignUpPage() {
           <div className="bg-white absolute h-full">
             <div className="mx-10">
               <div className="mt-4 text-lg/8 font-normal text-[#333333]">
-                `갈래`는 이용자에게 다양한 마케팅 정보를 제공합니다. 마케팅
+                `갈래`는 사용자에게 다양한 마케팅 정보를 제공합니다. 마케팅
                 정보는 이메일, SMS, 푸시 알림, 또는 기타 통신 수단을 통해 전달될
                 수 있습니다.
               </div>

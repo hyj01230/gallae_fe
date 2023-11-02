@@ -28,6 +28,7 @@ import {
 import useImage from "../hooks/useImage";
 import useModal from "../hooks/useModal";
 import SearchModal from "../components/scheduleCreate/SearchModal";
+import DeleteSchedulesModal from "../components/scheduleEdit/DeleteSchedulesModal";
 
 export default function SchedulesEditPage() {
   const queryClient = useQueryClient();
@@ -49,12 +50,12 @@ export default function SchedulesEditPage() {
     tripDateId,
   } = useLocation().state;
   const navigate = useNavigate();
+  const [isDelete, setIsDelete] = useState(false);
   const [timeSpentState, setTimeSpent] = useState({
     time: timeStringToMinutes(timeSpent),
     text: timeSpent,
   });
 
-  console.log({ picturesResponseDtoList });
 
   const [schedule, setSchedule] = useState({
     contents,
@@ -144,6 +145,11 @@ export default function SchedulesEditPage() {
     // });
   };
 
+  const handleDelectClick = (e) => {
+    e.stopPropagation();
+    setIsDelete(true);
+  };
+
   return (
     <Layout>
       <div
@@ -163,7 +169,8 @@ export default function SchedulesEditPage() {
 
         <button
           className="cursor-pointer mr-2"
-          onClick={() => deleteScheduleMutation.mutate()}
+          onClick={handleDelectClick}
+          // onClick={() => deleteScheduleMutation.mutate()}
         >
           <Trash />
         </button>
@@ -330,6 +337,16 @@ export default function SchedulesEditPage() {
           schedule={schedule}
           setSchedule={setSchedule}
           handleCloseModal={modal.handleCloseModal}
+        />
+      )}
+
+      {isDelete && (
+        <DeleteSchedulesModal
+          schedulesId={schedulesId}
+          postId={postId}
+          subTitle={subTitle}
+          tripDateId={tripDateId}
+          handleCloseModal={() => setIsDelete(false)}
         />
       )}
     </Layout>

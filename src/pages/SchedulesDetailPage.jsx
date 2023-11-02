@@ -30,32 +30,6 @@ export default function SchedulesDetailPage() {
   });
   const [isZoomOut, setIsZoomOut] = useState(false);
 
-  const { isLoading, error, data } = useQuery("schedulesDetail", async () => {
-    const response = await getTripDate(postId);
-    const foundElement = response.find(
-      (value) => value.tripDateId === tripDateId
-    );
-    const index = response.findIndex(
-      (value) => value.tripDateId === tripDateId
-    );
-    const filteredPlaceInfo = response.flatMap(({ schedulesList }) =>
-      schedulesList.map(({ placeName, x, y }) => ({
-        placeName,
-        lat: y,
-        lng: x,
-      }))
-    );
-
-    setTripSchedule({ ...foundElement, day: index + 1 });
-    setPlaceList(filteredPlaceInfo);
-
-    return response;
-  });
-
-  if (isLoading) {
-    return <div>로딩중</div>;
-  }
-
   // 모달에 나열된 '날짜' 클릭 시 날짜 정보를 토대로 세부일정 업데이트
   const handleUpdateScheduleClick = (date) => {
     setTripSchedule(date);
@@ -73,6 +47,35 @@ export default function SchedulesDetailPage() {
       state: { accountList, postId, subTitle, tripDateId },
     });
   };
+
+  const { isLoading, error, data } = useQuery("schedulesDetail", async () => {
+    const response = await getTripDate(postId);
+    console.log({ response });
+    const foundElement = response.find(
+      (value) => value.tripDateId === tripDateId
+    );
+
+    const index = response.findIndex(
+      (value) => value.tripDateId === tripDateId
+    );
+    const filteredPlaceInfo = response.flatMap(({ schedulesList }) =>
+      schedulesList.map(({ placeName, x, y }) => ({
+        placeName,
+        lat: y,
+        lng: x,
+      }))
+    );
+    setTripSchedule({ ...foundElement, day: index + 1 });
+    setPlaceList(filteredPlaceInfo);
+
+    return response;
+  });
+
+  if (isLoading) {
+    return <div>로딩중</div>;
+  }
+
+  console.log("tripSchedule : ", tripSchedule);
 
   return (
     <Layout isBottomNav={true}>

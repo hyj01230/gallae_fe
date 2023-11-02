@@ -114,17 +114,17 @@ export default function PostSearchPage() {
           >
             <div className="mt-4 flex w-full  ">
               {/* Image 컴포넌트 추가 */}
-              <div className="flex items-center mr-3 ml-1 justify-center ">
+
+              <div className="w-[120px] h-[96px] flex items-center justify-center ml-4">
                 {result.postsPicturesList.length > 0 ? (
                   <img
-                    className="w-[120px] h-[96px] bg-gray-300 ml-4 cursor-pointer rounded-md"
+                    className="w-[120px] h-[96px] rounded-md"
                     src={result.postsPicturesList[0].postsPicturesURL}
                   />
                 ) : (
                   <p className="text-4 text-black font-semibold">Img</p>
                 )}
               </div>
-
               <div className="px-4 pt-4 w-full ">
                 <h3 className="text-[18px] font-semibold">
                   {highlightKeyword(truncateText(result.title, 18), keyword)}

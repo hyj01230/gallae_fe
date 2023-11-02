@@ -1,5 +1,5 @@
 import Layout from "../components/common/Layout";
-import { GearIcon, Heart, MyWriting } from "../assets/Icon";
+import { GearIcon, Heart, MyCommentList, MyWriting } from "../assets/Icon";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 // import defaultProfile from "../../public/img/defaultProfile.png";
@@ -115,30 +115,30 @@ export default function MyPage() {
 
   // PUT : 프로필 사진 - 기본으로 설정
   // 폼데이터(400)
-  const onClickDefaultProfileHandler = async () => {
-    try {
-      const formData = new FormData(); // 사진 업로드는 폼데이터로!!!!!!!!!
-      formData.append("file", "");
+  // const onClickDefaultProfileHandler = async () => {
+  //   try {
+  //     const formData = new FormData(); // 사진 업로드는 폼데이터로!!!!!!!!!
+  //     formData.append("file", "");
 
-      const response = await axiosInstance.put(
-        "/api/users/profile/update-profileImg",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: localStorage.getItem("accessToken"),
-          },
-          withCredentials: true,
-        }
-      );
-      alert(response.data.messageResponseDto.msg);
-      setProfileModal(false); // 모달 닫기
-      console.log("기본 프로필 put 성공 :", response);
-    } catch (error) {
-      setProfileModal(false); // 모달 닫기
-      console.log("기본 프로필 put 실패 :", error);
-    }
-  };
+  //     const response = await axiosInstance.put(
+  //       "/api/users/profile/update-profileImg",
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //           Authorization: localStorage.getItem("accessToken"),
+  //         },
+  //         withCredentials: true,
+  //       }
+  //     );
+  //     alert(response.data.messageResponseDto.msg);
+  //     setProfileModal(false); // 모달 닫기
+  //     console.log("기본 프로필 put 성공 :", response);
+  //   } catch (error) {
+  //     setProfileModal(false); // 모달 닫기
+  //     console.log("기본 프로필 put 실패 :", error);
+  //   }
+  // };
 
   // // 일반 형식(403)
   // const onClickDefaultProfileHandler = async () => {
@@ -249,21 +249,23 @@ export default function MyPage() {
           </div>
         </div>
         <div
-          onClick={onClickCommentListHandler}
+          onClick={onClickPostListHandler}
           className="mt-4 flex flex-row items-center cursor-pointer"
         >
           <MyWriting />
-          <div className="ml-3 font-medium text-base/normal  text-[#666666]">
-            나의 댓글 내역
+          <div className="ml-3 font-medium text-base/normal text-[#666666]">
+            나의 게시글
           </div>
         </div>
         <div
-          onClick={onClickPostListHandler}
+          onClick={onClickCommentListHandler}
           className="mt-4 mb-28 flex flex-row items-center cursor-pointer"
         >
-          <MyWriting />
+          <div className="mx-[2px]">
+            <MyCommentList />
+          </div>
           <div className="ml-3 font-medium text-base/normal  text-[#666666]">
-            나의 게시글 목록
+            나의 댓글
           </div>
         </div>
       </div>
@@ -278,7 +280,7 @@ export default function MyPage() {
             onClick={(e) => e.stopPropagation()} // 외부영역만 클릭했을때 모달 닫히게!
             className=" w-full flex flex-col mt-auto mb-24"
           >
-            <div className="mx-6 text-[#FF9900] font-normal text-sm/normal text-center">
+            <div className="mx-6 text-white font-normal text-base/normal text-center">
               사진 업로드는 개당 1MB내외로 업로드 가능합니다.
             </div>
             <div className="mx-4 mt-3 bg-[#F2F2F2] text-center h-[45px] flex items-center justify-center rounded-t-xl text-[#333333] text-[14px] leading-[100%] font-medium">
@@ -290,12 +292,12 @@ export default function MyPage() {
             >
               앨범에서 사진 선택
             </div>
-            <div
+            {/* <div
               onClick={onClickDefaultProfileHandler}
               className="mx-4 bg-[#F2F2F2] text-center h-14 flex items-center justify-center rounded-b-xl text-[#333333] text-[18px] leading-[100%] font-medium cursor-pointer"
             >
               기본으로 설정
-            </div>
+            </div> */}
             <div
               onClick={onClickProfileCloseHandler}
               className="mt-3 mx-4 bg-[#FFFFFF] rounded-xl h-[58px] flex items-center justify-center text-[##333333] text-[18px] leading-[100%] font-medium cursor-pointer"

@@ -21,14 +21,23 @@ export default function PostDetailsPage() {
     postsPicturesList: [],
     // 다른 속성들 초기값 설정
   });
+  const [comments, setComments] = useState([]);
   const [postComments, setPostComments] = useState([{}]);
   const [newComment, setNewComment] = useState({ contents: "" });
   const { postId } = useParams();
   const [likedStatus, setLikedStatus] = useState({});
   const [areCommentsVisible, setCommentsVisible] = useState(false);
+  const [commentNum, setCommentNum] = useState(0); // 댓글 개수 상태
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림/닫힘 상태 변수
 
   const modalRef = useRef(null); // 모달 창 Ref
+
+  const addComment = (newComment) => {
+    // 새 댓글을 추가하는 로직
+    const updatedComments = [...comments, newComment];
+    setComments(updatedComments);
+    setCommentNum(updatedComments.length); // 댓글 개수 갱신
+  };
 
   useEffect(() => {
     const getPostDetails = async () => {
@@ -39,6 +48,7 @@ export default function PostDetailsPage() {
         const commentsResponse = await axiosInstance.get(
           `/api/posts/${postId}/comments`
         );
+
         setPostComments(commentsResponse.data.content);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
@@ -61,6 +71,7 @@ export default function PostDetailsPage() {
       );
       setPostComments(commentsResponse.data.content);
       setNewComment({ contents: "" });
+      console.log(response);
     } catch (error) {
       console.error("댓글 작성 오류:", error);
     }
@@ -124,8 +135,14 @@ export default function PostDetailsPage() {
     setIsModalOpen(true);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = async () => {
     setIsModalOpen(false);
+    // 모달 닫을 때 댓글 목록을 다시 불러와 렌더링
+    const commentsResponse = await axiosInstance.get(
+      `/api/posts/${postId}/comments`
+    );
+    setPostComments(commentsResponse.data.content);
+    setNewComment({ contents: "" });
   };
 
   // 모달 바깥 영역 클릭 시 닫히도록 하는 핸들러
