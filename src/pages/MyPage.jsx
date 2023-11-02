@@ -1,5 +1,5 @@
 import Layout from "../components/common/Layout";
-import { GearIcon, Heart, MyWriting } from "../assets/Icon";
+import { GearIcon, Heart, MyCommentList, MyWriting } from "../assets/Icon";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 // import defaultProfile from "../../public/img/defaultProfile.png";
@@ -249,21 +249,23 @@ export default function MyPage() {
           </div>
         </div>
         <div
-          onClick={onClickCommentListHandler}
+          onClick={onClickPostListHandler}
           className="mt-4 flex flex-row items-center cursor-pointer"
         >
           <MyWriting />
-          <div className="ml-3 font-medium text-base/normal  text-[#666666]">
-            나의 댓글 내역
+          <div className="ml-3 font-medium text-base/normal text-[#666666]">
+            나의 게시글
           </div>
         </div>
         <div
-          onClick={onClickPostListHandler}
+          onClick={onClickCommentListHandler}
           className="mt-4 mb-28 flex flex-row items-center cursor-pointer"
         >
-          <MyWriting />
+          <div className="mx-[2px]">
+            <MyCommentList />
+          </div>
           <div className="ml-3 font-medium text-base/normal  text-[#666666]">
-            나의 게시글 목록
+            나의 댓글
           </div>
         </div>
       </div>
