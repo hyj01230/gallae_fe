@@ -1056,3 +1056,22 @@ export const Trash = () => {
 };
 
 // -------------------------------------------------------------------------------------------------------------------------
+
+export const SearchIcon = () => {
+  return (
+    <svg
+      width="40"
+      height="40"
+      viewBox="0 0 40 40"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle cx="19.2" cy="19.2" r="6.2" stroke="#999999" stroke-width="2" />
+      <path
+        d="M27.9996 27.9996C26.3996 26.5329 23.5996 23.9196 23.5996 23.5996"
+        stroke="#999999"
+        strokeWidth="2"
+      />
+    </svg>
+  );
+};

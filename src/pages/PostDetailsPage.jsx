@@ -149,10 +149,6 @@ export default function PostDetailsPage() {
   return (
     <Layout>
       <div>
-        <div className="sticky top-0 bg-white z-10 ">
-          <DetailsHeader />
-        </div>
-        <Image />
         <DetailsHeader />
         <Image url={postDetails.postsPicturesList} />
         <div className="w-393 h-275 bg-white flex flex-col mb-[50px]">

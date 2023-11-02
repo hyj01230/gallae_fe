@@ -218,8 +218,8 @@ export default function PostListPage() {
                         className="text-[18px] font-semibold cursor-pointer"
                         onClick={() => navigate(`/posts/${item.postId}`)}
                       >
-                        {item.title && item.title.length > 20
-                          ? item.title.slice(0, 20) + "..."
+                        {item.title && item.title.length > 18
+                          ? item.title.slice(0, 18) + "..."
                           : item.title}
                       </span>
                       <span className="text-xs text-gray-500 mt-1 cursor-pointer">
