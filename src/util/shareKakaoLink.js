@@ -9,8 +9,8 @@ export const shareKakao = (title, postId) => {
     kakao.Share.sendCustom({
       templateId: 100240,
       templateArgs: {
-        title: "[갈래] 나랑 여행 갈래?",
-        description: `${title}`,
+        msgtitle: "[갈래] 나랑 여행 갈래?",
+        title: `${title}`,
         postId: `${postId}`,
       },
     });
