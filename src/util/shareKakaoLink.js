@@ -1,4 +1,4 @@
-export const shareKakao = (title) => {
+export const shareKakao = (title, postId) => {
   // url이 id값에 따라 변경되기 때문에 route를 인자값으로 받아줌
   if (window.Kakao) {
     const kakao = window.Kakao;
@@ -11,6 +11,7 @@ export const shareKakao = (title) => {
       templateArgs: {
         title: "[갈래] 나랑 여행 갈래?",
         description: `${title}`,
+        postId: `${postId}`,
       },
     });
   }
