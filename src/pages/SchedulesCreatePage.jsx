@@ -71,9 +71,6 @@ export default function SchedulesCreatePage() {
 
   const handleSearchClick = () => {
     modal.handleOpenModal();
-    // navigate("/myschedules/search", {
-    //   state: { postId, subTitle, tripDateId },
-    // });
   };
 
   // 뒤로 가기 또는 게시글 생성 시 전역 상태 초기화
@@ -142,25 +139,16 @@ export default function SchedulesCreatePage() {
               ))}
             </select>
           </div>
-          {/* <DownArrow /> */}
         </div>
 
         <div className="flex justify-between items-center w-3/5">
           <div className="flex items-center gap-2 text-[14px]">
             <Marker />
-            {/* <button onClick={handleSearchClick}>검색</button> */}
             <div className="cursor-pointer" onClick={handleSearchClick}>
               {schedule.placeName !== null
                 ? schedule.placeName
                 : "장소를 검색하세요"}
             </div>
-            {/* <input
-              className="w-full"
-              placeholder="장소를 입력하세요"
-              onChange={(e) =>
-                setSchedule((prev) => ({ ...prev, placeName: e.target.value }))
-              }
-            /> */}
           </div>
           <DownArrow />
         </div>
@@ -182,6 +170,16 @@ export default function SchedulesCreatePage() {
           <Plus />
         </div>
 
+        {/* {imageHandler.previewImage ? (
+          <div className="mt-3">
+            <img src={imageHandler.previewImage} className="w-36 h-36" />
+          </div>
+        ) : (
+          <div className="w-36 h-36 flex justify-center items-center bg-[#F2F2F2] rounded-lg cursor-pointer">
+            <Plus />
+          </div>
+        )} */}
+
         {/* <div className="flex">
           {imageHandler.previewImage.length > 0 &&
             imageHandler.previewImage.map((value, index) => (
@@ -191,14 +189,12 @@ export default function SchedulesCreatePage() {
       </div>
 
       <div className="text-xs text-[#999] mx-4 mt-3">
-        <p className="text-[#d05454]">
-          (사진 업로드 기능은 MVP 이후 개발 예정입니다)
-        </p>
+        <p>사진 업로드는 추후 개발될 예정입니다.</p>
         {/* 사진 업로드는 개당 1MB내외로 업로드 가능합니다. */}
       </div>
 
       {/* 소요시간, 참고링크, 바용, 메모 작성 */}
-      <div className="flex flex-col mt-7 mx-7">
+      <div className="flex flex-col mt-5 mx-7">
         <div className="flex gap-4">
           <div className="flex justify-center">
             <Clock />
@@ -283,7 +279,6 @@ export default function SchedulesCreatePage() {
 
       {modal.isModal && (
         <SearchModal
-          // placeName={schedule.placeName}
           schedule={schedule}
           setSchedule={setSchedule}
           handleCloseModal={modal.handleCloseModal}

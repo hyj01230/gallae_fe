@@ -43,6 +43,24 @@ export default function useImage() {
     return response;
   };
 
+  const createScheduleImage = async ({ schedulesId }) => {
+    const response = await axios.post(
+      `${
+        import.meta.env.VITE_REACT_APP_URL
+      }/api/schedules/${schedulesId}/pictures`,
+      uploadImage,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Authorization": localStorage.getItem("accessToken"),
+        },
+        withCredentials: true,
+      }
+    );
+
+    return response;
+  };
+
   const handleSubmitClick = async (postId) => {
     const res = await axios.post(
       `${import.meta.env.VITE_REACT_APP_URL}/api/posts/${postId}/postsPictures`,
@@ -66,6 +84,7 @@ export default function useImage() {
     setUploadImage,
     onClickSelectProfileHandler,
     uploadImageHandler,
+    createScheduleImage,
     handleUpdateImage,
     handleSubmitClick,
   };
