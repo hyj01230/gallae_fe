@@ -38,7 +38,7 @@ export default function PostCommentsDisplay({
           }
         }}
       >
-        <div className="">
+        <div className="" onClick={handleLikeClick}>
           {likedStatus[postDetails.postId] ? <LikeFullHeart /> : <LikeHeart />}
         </div>
         <p className="cursor-pointer">좋아요 {postDetails.likeNum}</p>
