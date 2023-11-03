@@ -98,6 +98,8 @@ export default function PostEditPage() {
   //   }
   // );
 
+  console.log(postData.contents);
+
   return (
     <Layout>
       <div className="mb-[70px]">
@@ -231,14 +233,29 @@ export default function PostEditPage() {
           <UploadLimitMessage />
         )}
 
-        <div
+        <div className="mx-4 my-5">
+          <textarea
+            className="w-full h-[40px] outline-none"
+            rows={10}
+            value={postData.contents}
+            onChange={(e) =>
+              setPostData((prev) => ({ ...prev, contents: e.target.value }))
+            }
+            onInput={(e) => {
+              e.target.style.height = 0;
+              e.target.style.height = e.target.scrollHeight + "px";
+            }}
+          />
+        </div>
+
+        {/* <div
           contentEditable
           className="mx-4 my-5 outline-none"
-          value={postData.contents}
+          dangerouslySetInnerHTML={{ __html: postData.contents }}
           onInput={(e) =>
             setPostData((prev) => ({ ...prev, contents: e.target.innerText }))
           }
-        ></div>
+        ></div> */}
 
         {listData && <List schedule={listData} isPointer={false} />}
       </div>
