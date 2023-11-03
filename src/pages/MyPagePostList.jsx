@@ -59,39 +59,8 @@ export default function MyPagePostList() {
       <div className="mb-44">
         {postList.length > 0 &&
           postList
-            .filter((item) => item.likeNum > 0)
+            .filter((item) => item.contents)
             .map((item) => (
-              // <div
-              //   key={item.postId}
-              //   onClick={() => onCilckMyPostHandler(item.postId)}
-              //   className="mx-4 cursor-pointer"
-              // >
-              //   <div className="mt-4 flex w-full">
-              //     <div className="flex flex-col w-full mr-auto">
-              //       <div className="text-sm/[22px] font-semibold">
-              //         {item.title}
-              //       </div>
-              //       <div className="mt-2 text-xs/[18px] font-normal text-[#999999]">
-              //         {item.contents}
-              //       </div>
-              //     </div>
-
-              //     <div className="flex justify-end">
-              //       <div className="ml-3 w-[88px] h-[88px] bg-[#F2F2F2] rounded-lg flex items-center justify-center">
-              //         사진
-              //       </div>
-              //     </div>
-              //   </div>
-
-              //   <div className="mt-2 flex items-center border-b-[1px] border-[#F2F2F2] pb-3">
-              //     <div className="mr-4 text-[#999999] text-sm/6 font-normal">
-              //       {item.nickName}
-              //     </div>
-              //     <div className="mr-auto text-[#999999] text-sm/6 font-normal">
-              //       {getTimeAgo(item.createdAt)}
-              //     </div>
-              //   </div>
-              // </div>
               <div
                 key={item.postId}
                 onClick={() => onCilckMyPostHandler(item.postId)}

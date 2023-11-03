@@ -217,7 +217,7 @@ export default function PostEditPage() {
         )} */}
 
         {imageHandler.previewImage ||
-        postData.postsPicturesList[0].postsPicturesURL ? (
+        postData.postsPicturesList[0]?.postsPicturesURL ? (
           <div className="mx-4 mt-6">
             <img
               src={

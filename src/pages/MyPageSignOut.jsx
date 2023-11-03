@@ -20,7 +20,7 @@ export default function MyPageSignOut() {
     setPassword(e.target.value); // 비밀번호
   };
 
-  // POST : 이메일 인증번호 확인
+  // delete : 탈퇴
   const onClickDeleteSignOutHandler = async () => {
     try {
       const response = await axiosInstance.delete("/api/users/signout", {
