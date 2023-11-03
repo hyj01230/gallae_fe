@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DropDown, DropUp } from "../../assets/Icon";
 
-export default function SearchCategory({ onCategorySelect }) {
+export default function SearchCategory({ onCategorySelect, keyword }) {
   const categories = [
     "휴식",
     "프리미엄",
@@ -14,7 +14,8 @@ export default function SearchCategory({ onCategorySelect }) {
     "레저",
   ];
 
-  const [showCategories, setShowCategories] = useState(false);
+  // "추천키워드" 섹션의 초기 상태를 키워드가 제공되는지 여부에 따라 설정합니다
+  const [showCategories, setShowCategories] = useState(!keyword);
 
   const toggleCategories = () => {
     setShowCategories(!showCategories);
@@ -23,6 +24,11 @@ export default function SearchCategory({ onCategorySelect }) {
   const handleCategoryClick = (category) => {
     onCategorySelect(category);
   };
+
+  useEffect(() => {
+    // 키워드가 변경될 때 상태를 업데이트합니다
+    setShowCategories(!keyword);
+  }, [keyword]);
 
   return (
     <div>
