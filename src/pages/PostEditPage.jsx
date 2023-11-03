@@ -62,12 +62,15 @@ export default function PostEditPage() {
   };
 
   const handleSubmitClick = async () => {
-    // 사진이 업데이트되었다면, 사진 업데이트 수행하고
-    // 사진이 업데이트 안되었다면 게시글만 업데이트하기
-
-    if (imageHandler.previewImage) {
+    // 기존에 있는 사진을 수정하기
+    if (imageHandler.previewImage && data.postsPicturesList[0]) {
       const { postsPicturesId } = data.postsPicturesList[0];
       await imageHandler.handleUpdateImage(postsPicturesId);
+    }
+
+    // 기존에 사진이 없는데, 사진을 생성하기
+    if (imageHandler.previewImage) {
+      await imageHandler.handleSubmitClick(selectedPostId);
     }
 
     await updatePost(selectedPostId, {
@@ -79,24 +82,6 @@ export default function PostEditPage() {
     }),
       navigate("/posts");
   };
-
-  // const updatePostMutation = useMutation(
-  //   "schedule",
-  //   () => imageHandler.handleSubmitClick(selectedPostId),
-
-  //   {
-  //     onSuccess: async () => {
-  //       await updatePost(selectedPostId, {
-  //         title: postData.title,
-  //         contents: postData.contents,
-  //         subTitle: data.subTitle,
-  //         postCategory: postData.postCategory,
-  //         tagsList: postData.tagsList,
-  //       }),
-  //         navigate("/posts");
-  //     },
-  //   }
-  // );
 
   console.log(postData.contents);
 
@@ -192,32 +177,6 @@ export default function PostEditPage() {
           </div>
         </div>
 
-        {/* 
-          이미지가 업로드 되어 있는 상태라면 => 이미지를 나타내고, 메세지는 보이지 않게 한다.
-          이미지가 없는 상태라면 => 메세지를 보이게 한다.
-
-          근데 여기서 이미지 수정 시 수정된 이미지를 보여줘야한다.
-        */}
-
-        {/* {imageHandler.previewImage ? (
-          <div className="mx-4 mt-6">
-            <img src={imageHandler.previewImage} className="w-36 h-36" />
-          </div>
-        ) : (
-          <UploadLimitMessage />
-        )}
-
-        {postData.postsPicturesList[0].postsPicturesURL ? (
-          <div className="mx-4 mt-6">
-            <img
-              src={postData.postsPicturesList[0].postsPicturesURL}
-              className="w-36 h-36"
-            />
-          </div>
-        ) : (
-          <UploadLimitMessage />
-        )} */}
-
         {imageHandler.previewImage ||
         postData.postsPicturesList[0]?.postsPicturesURL ? (
           <div className="mx-4 mt-6">
@@ -247,15 +206,6 @@ export default function PostEditPage() {
             }}
           />
         </div>
-
-        {/* <div
-          contentEditable
-          className="mx-4 my-5 outline-none"
-          dangerouslySetInnerHTML={{ __html: postData.contents }}
-          onInput={(e) =>
-            setPostData((prev) => ({ ...prev, contents: e.target.innerText }))
-          }
-        ></div> */}
 
         {listData && <List schedule={listData} isPointer={false} />}
       </div>
