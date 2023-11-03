@@ -35,7 +35,7 @@ export default function PostCommentsDisplay({
             navigate("/login");
           } else {
             {
-              handleLikeClick;
+              handleLikeClick();
             }
           }
         }}
