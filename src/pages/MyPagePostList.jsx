@@ -58,88 +58,90 @@ export default function MyPagePostList() {
 
       <div className="mb-44">
         {postList.length > 0 &&
-          postList.map((item) => (
-            // <div
-            //   key={item.postId}
-            //   onClick={() => onCilckMyPostHandler(item.postId)}
-            //   className="mx-4 cursor-pointer"
-            // >
-            //   <div className="mt-4 flex w-full">
-            //     <div className="flex flex-col w-full mr-auto">
-            //       <div className="text-sm/[22px] font-semibold">
-            //         {item.title}
-            //       </div>
-            //       <div className="mt-2 text-xs/[18px] font-normal text-[#999999]">
-            //         {item.contents}
-            //       </div>
-            //     </div>
+          postList
+            .filter((item) => item.likeNum > 0)
+            .map((item) => (
+              // <div
+              //   key={item.postId}
+              //   onClick={() => onCilckMyPostHandler(item.postId)}
+              //   className="mx-4 cursor-pointer"
+              // >
+              //   <div className="mt-4 flex w-full">
+              //     <div className="flex flex-col w-full mr-auto">
+              //       <div className="text-sm/[22px] font-semibold">
+              //         {item.title}
+              //       </div>
+              //       <div className="mt-2 text-xs/[18px] font-normal text-[#999999]">
+              //         {item.contents}
+              //       </div>
+              //     </div>
 
-            //     <div className="flex justify-end">
-            //       <div className="ml-3 w-[88px] h-[88px] bg-[#F2F2F2] rounded-lg flex items-center justify-center">
-            //         사진
-            //       </div>
-            //     </div>
-            //   </div>
+              //     <div className="flex justify-end">
+              //       <div className="ml-3 w-[88px] h-[88px] bg-[#F2F2F2] rounded-lg flex items-center justify-center">
+              //         사진
+              //       </div>
+              //     </div>
+              //   </div>
 
-            //   <div className="mt-2 flex items-center border-b-[1px] border-[#F2F2F2] pb-3">
-            //     <div className="mr-4 text-[#999999] text-sm/6 font-normal">
-            //       {item.nickName}
-            //     </div>
-            //     <div className="mr-auto text-[#999999] text-sm/6 font-normal">
-            //       {getTimeAgo(item.createdAt)}
-            //     </div>
-            //   </div>
-            // </div>
-            <div
-              key={item.postId}
-              onClick={() => onCilckMyPostHandler(item.postId)}
-              className="mx-4 mb-4 cursor-pointer"
-            >
-              <div className="flex flex-col w-full border rounded-xl border-[#D9D9D9">
-                <div>
-                  {item.postsPicturesList.length > 0 ? (
-                    <img
-                      className="w-full h-[167px] rounded-lg"
-                      src={item.postsPicturesList[0].postsPicturesURL}
-                    />
-                  ) : (
-                    <div className="w-full h-[167px] bg-[#F2F2F2] text-4 text-black font-semibold flex justify-center items-center ">
-                      대표 이미지
-                    </div>
-                  )}
-                </div>
-                <div className="ml-[14px] mr-1 mt-3 flex flex-row items-center justify-between">
-                  <div className="text-lg/normal font-semibold text-[#333333]">
-                    {item.title}
-                  </div>
-                  <div>{/* <ThreecIrcle /> */}</div>
-                </div>
-
-                <div className="mt-[9px] px-3">
-                  {item.tagsList &&
-                    item.tagsList.map((tag, index) => (
-                      <div
-                        key={index}
-                        className="mr-1 inline-block border text-center border-[#D9D9D9] rounded-xl px-[9px] py-1 h-5 text-xs/3 font-normal text-[#888888]"
-                      >
-                        {tag}
+              //   <div className="mt-2 flex items-center border-b-[1px] border-[#F2F2F2] pb-3">
+              //     <div className="mr-4 text-[#999999] text-sm/6 font-normal">
+              //       {item.nickName}
+              //     </div>
+              //     <div className="mr-auto text-[#999999] text-sm/6 font-normal">
+              //       {getTimeAgo(item.createdAt)}
+              //     </div>
+              //   </div>
+              // </div>
+              <div
+                key={item.postId}
+                onClick={() => onCilckMyPostHandler(item.postId)}
+                className="mx-4 mb-4 cursor-pointer"
+              >
+                <div className="flex flex-col w-full border rounded-xl border-[#D9D9D9">
+                  <div>
+                    {item.postsPicturesList.length > 0 ? (
+                      <img
+                        className="w-full h-[167px] rounded-lg"
+                        src={item.postsPicturesList[0].postsPicturesURL}
+                      />
+                    ) : (
+                      <div className="w-full h-[167px] bg-[#F2F2F2] text-4 text-black font-semibold flex justify-center items-center ">
+                        대표 이미지
                       </div>
-                    ))}
-                </div>
+                    )}
+                  </div>
+                  <div className="ml-[14px] mr-1 mt-3 flex flex-row items-center justify-between">
+                    <div className="text-lg/normal font-semibold text-[#333333]">
+                      {item.title}
+                    </div>
+                    <div>{/* <ThreecIrcle /> */}</div>
+                  </div>
 
-                <div className="mt-8 mb-4 ml-3 mr-[14px] flex justify-between items-center">
-                  <div className="flex flex-row text-xs/3 text-[#666666] font-normal">
-                    {/* <div>댓글 </div>
+                  <div className="mt-[9px] px-3">
+                    {item.tagsList &&
+                      item.tagsList.map((tag, index) => (
+                        <div
+                          key={index}
+                          className="mr-1 inline-block border text-center border-[#D9D9D9] rounded-xl px-[9px] py-1 h-5 text-xs/3 font-normal text-[#888888]"
+                        >
+                          {tag}
+                        </div>
+                      ))}
+                  </div>
+
+                  <div className="mt-8 mb-4 ml-3 mr-[14px] flex justify-between items-center">
+                    <div className="flex flex-row text-xs/3 text-[#666666] font-normal">
+                      {/* <div>댓글 </div>
                     <div>공유 </div>
                     <div>좋아요 </div> */}
-                  </div>
-                  <div className="text-xs/normal font-normal text-[#666666]">
-                    게시일 {formatDate(item.createdAt)}
+                    </div>
+                    <div className="text-xs/normal font-normal text-[#666666]">
+                      게시일 {formatDate(item.createdAt)}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
       </div>
     </Layout>
   );
