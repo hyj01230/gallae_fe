@@ -29,6 +29,7 @@ export default function PostDetailsPage() {
   const [areCommentsVisible, setCommentsVisible] = useState(false);
   const [commentNum, setCommentNum] = useState(0); // 댓글 개수 상태
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림/닫힘 상태 변수
+  const [isUpdate, setIsUpdate] = useState(false);
 
   const modalRef = useRef(null); // 모달 창 Ref
 
@@ -159,7 +160,7 @@ export default function PostDetailsPage() {
       // 페이지가 언로드될 때 이벤트 리스너 제거
       window.removeEventListener("click", handleModalClickOutside);
     };
-  }, []);
+  }, [isUpdate]);
 
   console.log(postDetails.postsPicturesList);
 
@@ -220,28 +221,19 @@ export default function PostDetailsPage() {
           </div>
         </div>
       </div>
-      <div
-        className={`fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-80 z-50 ${
-          isModalOpen ? "block" : "hidden"
-        }`}
-      >
-        <div className="modal-content bg-white p-4 rounded shadow-lg">
-          <button
-            onClick={handleCloseModal}
-            className="modal-close-button absolute top-2 right-2 text-gray-500"
-          >
-            닫기
-          </button>
-          <Comments
-            comments={postComments}
-            setComments={setPostComments}
-            newComment={newComment}
-            setNewComment={setNewComment}
-            handleCommentSubmit={handleCommentSubmit}
-            handleCloseModal={handleCloseModal}
-          />
-        </div>
-      </div>
+
+      {isModalOpen && (
+        <Comments
+          isUpdate={isUpdate}
+          setIsUpdate={setIsUpdate}
+          comments={postComments}
+          setComments={setPostComments}
+          newComment={newComment}
+          setNewComment={setNewComment}
+          handleCommentSubmit={handleCommentSubmit}
+          handleCloseModal={handleCloseModal}
+        />
+      )}
     </Layout>
   );
 }

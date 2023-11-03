@@ -2,8 +2,15 @@ import { useState, useEffect, useRef } from "react";
 import { axiosInstance } from "../../api/axiosInstance";
 import { useRecoilValue } from "recoil";
 import { nickNameState } from "../../store/atom";
+import { CommentThreeDots, LeftArrow, Reply } from "../../assets/Icon";
+import EditDeleteModal from "./EditDeleteModal";
 
+// 날짜 시간 형식
 function formatDate(date) {
+  if (!date || isNaN(new Date(date).getTime())) {
+    return "";
+  }
+
   const options = {
     year: "numeric",
     month: "2-digit",
@@ -12,16 +19,14 @@ function formatDate(date) {
     minute: "2-digit",
   };
 
-  if (!date || isNaN(new Date(date).getTime())) {
-    return "";
-  }
+  const formattedDate = new Date(date).toLocaleString("ko-KR", options);
 
-  return new Date(date)
-    .toLocaleDateString(undefined, options)
-    .replace(/(\d+)\D+(\d+)/, "$1 $2");
+  return formattedDate.replace("오전", "").replace("오후", "");
 }
 
 export default function Comments({
+  isUpdate,
+  setIsUpdate,
   comments,
   setComments,
   newComment,
@@ -39,14 +44,16 @@ export default function Comments({
   const [selectedReplyForEdit, setSelectedReplyForEdit] = useState(null);
   const [editedReplyContent, setEditedReplyContent] = useState("");
   const editedReplyContentRef = useRef(null);
+  const [isEditDelete, setIsEditDelete] = useState(false); // 댓글 수정/삭제 모달 상태 관리
+  const [commentType, setCommentType] = useState("normal"); // 댓글 상태관리 (댓글 입력, 댓글 수정, 대댓글 입력,대댓글 수정)
 
   const editedContentRef = useRef(null);
 
   const nickName = useRecoilValue(nickNameState);
 
-  useEffect(() => {
-    // ... (editedContent가 변경될 때의 로직)
-  }, [editedContent]);
+  // useEffect(() => {
+  //   // ... (editedContent가 변경될 때의 로직)
+  // }, [editedContent]);
 
   // 이벤트 핸들러 함수들
   const handleEdit = (comment) => {
@@ -56,66 +63,66 @@ export default function Comments({
   };
 
   // 댓글 삭제 로직
-  const handleDelete = async (comment) => {
-    const updatedComments = comments.filter(
-      (c) => c.commentId !== comment.commentId
-    );
+  const handleDelete = async (commentId) => {
+    const updatedComments = comments.filter((c) => c.commentId !== commentId);
 
     try {
-      await axiosInstance.delete(`/api/comments/${comment.commentId}`, {
+      await axiosInstance.delete(`/api/comments/${commentId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
-
+      setIsEditDelete(false);
       setComments(updatedComments);
     } catch (error) {
       console.error("댓글 삭제 중 오류 발생:", error);
     }
   };
   // 댓글 저장 로직
-  const handleSave = async (comment) => {
+  const handleSave = async (contents) => {
     try {
-      await axiosInstance.put(
-        `/api/comments/${comment.commentId}`,
-        { contents: editedContent },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
-
-      const updatedComments = comments.map((c) => {
-        if (c.commentId === comment.commentId) {
-          setEditedCommentIds([...editedCommentIds, comment.commentId]);
-          return { ...c, contents: editedContent, modifiedAt: new Date() };
-        }
-        return c;
+      setIsUpdate(!isUpdate);
+      await axiosInstance.put(`/api/comments/${selectedComment}`, contents, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       });
 
-      setComments(updatedComments);
-      setEditedContent("");
+      setIsUpdate(!isUpdate);
+      setNewComment({ contents: "" });
+      setCommentType("normal");
+
+      // const updatedComments = comments.map((c) => {
+      //   if (c.commentId === selectedComment) {
+      //     setEditedCommentIds([...editedCommentIds, selectedComment]);
+      //     return { ...c, contents: editedContent, modifiedAt: new Date() };
+      //   }
+      //   return c;
+      // });
+
+      // setComments(updatedComments);
+      // // setEditedContent("");
     } catch (error) {
       console.error("댓글 수정 중 오류 발생:", error);
     }
   };
   // 대댓글 추가 로직
-  const handleAddReply = async (commentId, content) => {
+  const handleAddReply = async (contents) => {
     try {
       const response = await axiosInstance.post(
-        `/api/comments/${commentId}/replies`,
-        { contents: content }
+        `/api/comments/${selectedComment}/replies`,
+        contents
       );
+      setCommentType("normal");
 
-      // 대댓글 작성 후 서버에서 대댓글 목록을 다시 가져옴
-      const commentsResponse = await axiosInstance.get(
-        `/api/posts/${postId}/comments`
-      );
-      setComments(commentsResponse.data.content);
+      // // 대댓글 작성 후 서버에서 대댓글 목록을 다시 가져옴
+      // const commentsResponse = await axiosInstance.get(
+      //   `/api/posts/${postId}/comments`
+      // );
+      // setComments(commentsResponse.data.content);
 
-      setReplyContent("");
-      setSelectedCommentForReply(null);
+      // setReplyContent("");
+      // setSelectedCommentForReply(null);
     } catch (error) {
       console.error("대댓글 작성 오류:", error);
     }
@@ -195,249 +202,182 @@ export default function Comments({
     handleCloseModal();
   };
 
+  const handleOpenEditDeleteModal = (index) => {
+    setSelectedComment(index);
+    setIsEditDelete(!isEditDelete);
+  };
+
+  console.log(comments);
+  console.log(selectedComment);
+
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <button
-          onClick={handleCloseModal}
-          className="modal-close-button"
-        ></button>
-        <div
-          className="bg-gray-100 overflow-y-auto w-full"
-          style={{ height: "800px" }}
-        >
-          <div className="relative transition-all duration-5000 ease-in-out">
-            {/* 댓글 입력창 고정 부분 */}
-            <div className="sticky top-0 bg-white z-10">
-              <textarea
-                value={newComment.contents}
-                onChange={(e) => setNewComment({ contents: e.target.value })}
-                placeholder="댓글을 입력하세요."
-                className="w-full p-4 h-[57px]"
-              />
-              <button
-                onClick={handleCommentSubmit}
-                className="bg-white font-[14px] absolute top-4 right-5 mx-0 rounded-md"
+    <div className="bg-white fixed top-0 left-0 right-0 max-w-screen-md h-screen mx-auto z-50 flex flex-col">
+      {/* [CSS] 헤더 */}
+      <div className="flex items-center gap-4">
+        <div className="ml-4" onClick={handleCloseModal}>
+          <LeftArrow />
+        </div>
+        <div className="text-[20px] text-[#333] font-semibold py-3">댓글</div>
+      </div>
+
+      {/* [CSS] 댓글 및 대댓글 리스트 */}
+      <div className="grid divide-y overflow-clip overflow-y-auto mb-[80px]">
+        {Array.isArray(comments) && comments.length > 0 ? (
+          comments.map((value, index) => (
+            <div>
+              {/* 댓글 */}
+              <div
+                key={index}
+                className="px-4 py-[15px] h-[126px] border-b border-[#F2F2F2]"
               >
-                작성
-              </button>
-            </div>
-            {/* 댓글 입력창 고정 부분 끝 */}
-            <h2 className="text-2xl font-[14px]"></h2>
-            {Array.isArray(comments) && comments.length > 0 ? (
-              comments.map((comment) => (
-                <div
-                  key={comment.commentId}
-                  className="bg-white p-4 border relative font-[14px] h-[127px]"
-                >
-                  {selectedCommentForEdit === comment ? (
-                    <div>
-                      <textarea
-                        value={editedContent}
-                        onChange={(e) => setEditedContent(e.target.value)}
-                        placeholder="댓글을 수정하세요..."
-                        className="w-full border rounded p-2"
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center">
+                    <span className="text-base/normal font-semibold text-[#333333]">
+                      {value.nickname}
+                    </span>
+                    {value.checkUser === "글쓴이" && (
+                      <span className="border border-orange-300 bg-white rounded-[12px] px-2 ml-2 text-yellow-400 text-[12px]">
+                        글쓴이
+                      </span>
+                    )}
+                  </div>
+                  <div
+                    onClick={() => handleOpenEditDeleteModal(value.commentId)}
+                  >
+                    <CommentThreeDots />
+                    {/* 케밥 메뉴를 눌렀을 때 작성자면 댓글 수정/삭제 모달을 띄운다 */}
+                    {selectedComment === value.commentId &&
+                    value.nickname === nickName &&
+                    isEditDelete ? (
+                      <EditDeleteModal
+                        commentId={value.commentId}
+                        contents={value.contents}
+                        setCommentType={setCommentType}
+                        setNewComment={setNewComment}
+                        handleDelete={handleDelete}
                       />
-                      <div className="absolute right-4 top-4 flex space-x-2">
-                        <button
-                          onClick={() => handleSave(comment)}
-                          className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                        >
-                          저장
-                        </button>
-                        <button
-                          onClick={() => handleDelete(comment)}
-                          className="text-red-500"
-                        >
-                          삭제
-                        </button>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                </div>
+                <div className="h-9 w-full text-sm/normal font-normal text-[#333333]">
+                  {value.contents}
+                </div>
+                <div className="flex flex-row justify-between">
+                  <div className="text-xs/normal font-light text-[#999999] flex items-end">
+                    {formatDate(value.createAt)}
+                  </div>
+                  <div className="flex flex-row">
+                    {/* <div className="mr-1 flex flex-row items-center h-6 w-[59px] text-center border rounded-[18px]">
+                      <Reply />
+                      <div className="text-xs/normal text-[#D9D9D9] font-normal">
+                        답글
                       </div>
                     </div>
-                  ) : (
-                    <div className="h-auto">
-                      <div className="flex justify-between">
-                        <p className="text-[16px] font-semibold flex items-cençter space-x-2">
-                          <span className="font-semibold">
-                            {comment.nickname}
-                          </span>
-                          {comment.checkUser === "글쓴이" && (
-                            <span className="border border-orange-300 bg-white rounded-[12px] px-2 ml-2 text-yellow-400 text-[12px]">
-                              글쓴이
-                            </span>
-                          )}
-                        </p>
+                    <div className="h-6 w-[50px] text-center border rounded-[18px] flex flex-row items-center justify-center">
+                      <div className="text-xs/normal text-[#D9D9D9] font-normal mr-[2px]">
+                        ♡
                       </div>
-                      <p className="text-[14px] font-normal w-[360px]">
-                        <span>{comment.contents}</span>
-                      </p>
-                      {comment.nickname === nickName && (
-                        <div>
-                          <button
-                            onClick={() => handleEdit(comment)}
-                            className="text-[#999] border-[#FF9900] text-sm mr-1"
-                          >
-                            수정
-                          </button>
-                          <button
-                            onClick={() => handleDelete(comment)}
-                            className="text-[#999] border-[#FF9900] text-sm"
-                          >
-                            삭제
-                          </button>
-                        </div>
-                      )}
-                      <p className="text-[12px] font-normal text-[#999]">
-                        <span>
-                          {formatDate(comment.modifiedAt)}{" "}
-                          {isCommentEdited(comment) && (
-                            <span className="text-gray-600 text-[12px] font-semibold">
-                              (수정됨)
-                            </span>
-                          )}
-                        </span>
-                      </p>
-                      <button
-                        onClick={() =>
-                          setSelectedCommentForReply(comment.commentId)
-                        }
-                      >
-                        대댓글 작성
-                      </button>
-                      {selectedCommentForReply === comment.commentId && (
-                        <div>
-                          <input
-                            value={replyContent}
-                            onChange={(e) => setReplyContent(e.target.value)}
-                            placeholder="대댓글을 입력하세요."
-                            className="w-full"
-                          />
-                          <button
+                      <div className="text-xs/normal text-[#D9D9D9] font-normal">
+                        1
+                      </div>
+                    </div> */}
+                    {/* <button
+                      onClick={() => {
+                        setSelectedComment(value.commentId);
+                        setCommentType("reply");
+                      }}
+                    >
+                      답글
+                    </button> */}
+                  </div>
+                </div>
+              </div>
+              {/* 대댓글 */}
+              {/* {value.repliesList.length > 1 &&
+                value.repliesList.map((reply, index) => (
+                  <div key={index}>
+                    <div className="bg-[#FAFAFA] px-4 py-[15px] h-[126px] border-b border-[#F2F2F2]"> */}
+              {/* 대댓글 내용 */}
+              {/* <div className="flex flex-row items-center">
+                        <Reply />
+                        <div className="ml-3 flex flex-row items-center w-full">
+                          <div className="mr-2 text-base/normal font-semibold text-[#333333]">
+                            {reply.nickname}
+                          </div>
+                          <div className="pr- border border-[#FF9900] rounded-xl w-[43px] h-4 text-[10px]/normal text-[#FF9900] font-normal text-center">
+                            글쓴이
+                          </div>
+                          <div
                             onClick={() =>
-                              handleAddReply(comment.commentId, replyContent)
+                              handleOpenEditDeleteModal(reply.repliesId)
                             }
                           >
-                            작성
-                          </button>
-                        </div>
-                      )}
-
-                      {comment.repliesList && comment.repliesList.length > 0 ? (
-                        comment.repliesList.map((reply) => (
-                          <div
-                            key={reply.repliesId}
-                            className="bg-white p-4 border relative font-[14px] h-[127px] w-full"
-                          >
-                            {selectedReplyForEdit === reply ? (
-                              <div>
-                                <textarea
-                                  ref={editedReplyContentRef}
-                                  value={editedReplyContent}
-                                  onChange={(e) =>
-                                    setEditedReplyContent(e.target.value)
-                                  }
-                                  placeholder="대댓글을 수정하세요..."
-                                  className="w-full border rounded p-2"
-                                />
-                                <div className="absolute right-4 top-4 flex space-x-2">
-                                  <button
-                                    onClick={() =>
-                                      handleSaveReply(comment, reply)
-                                    }
-                                    className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                                  >
-                                    저장
-                                  </button>
-                                  <button
-                                    onClick={() =>
-                                      setSelectedReplyForEdit(null)
-                                    }
-                                    className="text-red-500"
-                                  >
-                                    취소
-                                  </button>
-                                </div>
-                              </div>
+                            <CommentThreeDots /> */}
+              {/* 케밥 메뉴를 눌렀을 때 작성자면 댓글 수정/삭제 모달을 띄운다 */}
+              {/* {selectedComment === reply.repliesId &&
+                            reply.nickname === nickName &&
+                            isEditDelete ? (
+                              <EditDeleteModal
+                                commentId={reply.repliesId}
+                                contents={reply.contents}
+                                setCommentType={setCommentType}
+                                setNewComment={setNewComment}
+                                handleDelete={handleDelete}
+                              />
                             ) : (
-                              <div className="h-auto">
-                                {/* 대댓글 내용 및 수정, 삭제 버튼 */}
-                                <div className="flex justify-between">
-                                  <p className="text-[16px] font-semibold flex items-center space-x-2">
-                                    <span className="font-semibold">
-                                      {reply.nickname}
-                                    </span>
-                                    {reply.checkUser === "글쓴이" && (
-                                      <span className="border border-orange-300 bg-white rounded-[12px] px-2 ml-2 text-yellow-400 text-[12px]">
-                                        글쓴이
-                                      </span>
-                                    )}
-                                  </p>
-                                </div>
-                                <p className="text-[14px] font-nomal w-[360px]">
-                                  <span>{reply.contents}</span>
-                                </p>
-                                {reply.nickname === nickName && (
-                                  <div>
-                                    <button
-                                      onClick={() =>
-                                        setSelectedReplyForEdit(reply)
-                                      }
-                                      className="text-[#999] border-[#FF9900] text-sm mr-1"
-                                    >
-                                      수정
-                                    </button>
-                                    <button
-                                      onClick={() =>
-                                        handleDeleteReply(comment, reply)
-                                      }
-                                      className="text-[#999] border-[#FF9900] text-sm"
-                                    >
-                                      삭제
-                                    </button>
-                                  </div>
-                                )}
-                                <p className="text-[12px] font-normal text-[#999]">
-                                  <span>
-                                    {formatDate(reply.modifiedAt)}
-                                    {isCommentEdited(reply) && (
-                                      <span className="text-gray-600 text-[12px] font-semibold">
-                                        (수정됨)
-                                      </span>
-                                    )}
-                                  </span>
-                                </p>
-                              </div>
+                              <></>
                             )}
                           </div>
-                        ))
-                      ) : (
-                        <p className="p-4 text-[14px] font-normal">
-                          대댓글이 아직 없습니다.
-                        </p>
-                      )}
+                        </div>
+                      </div>
+
+                      <div className="ml-9 h-9 w-full text-sm/normal font-normal text-[#333333]">
+                        {reply.contents}
+                      </div>
+
+                      <div className="ml-9 flex flex-row justify-between">
+                        <div className="text-xs/normal font-light text-[#999999] flex items-end">
+                          {formatDate(reply.createAt)}
+                        </div>
+                      </div>
                     </div>
-                  )}
-                </div>
-              ))
-            ) : (
-              <div className="p-4 text-[14px] font-normal">
-                댓글이 아직 없습니다.
-              </div>
-            )}
-          </div>
-        </div>
+                  </div> */}
+              {/* ))} */}
+            </div>
+          ))
+        ) : (
+          <>작성된 댓글이 없습니다</>
+        )}
       </div>
-      <div className="bottom-bar flex">
-        <button className="w-1/3 p-3 bg-[#ff9900] text-white border border-r border-transparent">
-          좋아요
-        </button>
+
+      {/* [CSS] 댓글 입력창 고정 부분 */}
+      <div className="fixed left-0 right-0 bottom-0 max-w-screen-md mx-auto">
+        <textarea
+          value={newComment.contents}
+          onChange={(e) => setNewComment({ contents: e.target.value })}
+          placeholder="댓글을 입력하세요."
+          className="w-full h-[57px] p-4 resize-none outline-none overflow-hidden"
+        />
         <button
-          className="w-1/3 p-3 bg-[#ff9900] text-white border border-r"
-          onClick={handleOriginalPost}
+          onClick={async (e) => {
+            if (commentType === "normal") {
+              await handleCommentSubmit(e);
+            }
+
+            if (commentType === "edit") {
+              await handleSave(newComment);
+            }
+
+            if (commentType === "reply") {
+              await handleAddReply(newComment);
+            }
+          }}
+          className="bg-white font-[14px] absolute top-4 right-5 mx-0 rounded-md text-[#666]"
         >
-          원문보기
-        </button>
-        <button className="w-1/3 p-3 bg-[#ff9900] text-white border-transparent">
-          공유하기
+          {commentType === "normal" && "등록"}
+          {commentType === "edit" && "수정"}
         </button>
       </div>
     </div>
