@@ -35,6 +35,7 @@ export const router = createBrowserRouter([
   { path: "/mypage/modify", element: <Page.MyPageModify /> },
   { path: "/mypage/modify/nickname", element: <Page.MyPageNickName /> },
   { path: "/mypage/modify/password", element: <Page.MyPagePassWord /> },
+  { path: "/mypage/modify/signout", element: <Page.MyPageSignOut /> },
   { path: "/mypage/like", element: <Page.MyPageLikeList /> },
   { path: "/mypage/comment", element: <Page.MyPageCommentList /> },
   { path: "/mypage/post", element: <Page.MyPagePostList /> },

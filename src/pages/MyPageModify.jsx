@@ -14,6 +14,9 @@ export default function MyPageModify() {
   const onClickModifyPassWordHandler = () => {
     navigate("/mypage/modify/password");
   };
+  const onClickModifySignOutHandler = () => {
+    navigate("/mypage/modify/signout");
+  };
 
   return (
     <Layout isBottomNav={true}>
@@ -36,6 +39,12 @@ export default function MyPageModify() {
           className="mt-4 pb-3 border-b border-[#F2F2F2] cursor-pointer"
         >
           비밀번호 변경
+        </div>
+        <div
+          onClick={onClickModifySignOutHandler}
+          className="mt-4 pb-3 border-b border-[#F2F2F2] cursor-pointer"
+        >
+          탈퇴하기
         </div>
       </div>
     </Layout>
