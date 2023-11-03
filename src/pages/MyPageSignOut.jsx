@@ -69,7 +69,7 @@ export default function MyPageSignOut() {
         <input
           type="password"
           placeholder="비밀번호를 입력해주세요"
-          maxLength={15}
+          //   maxLength={15}
           value={password}
           onChange={onChangePasswordHandler}
           className="mt-5 pb-3 w-full outline-none flex items-center border-b border-b-[#D9D9D9] placeholder:text-lg/5 placeholder:font-medium"
