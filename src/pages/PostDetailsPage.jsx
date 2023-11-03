@@ -72,7 +72,7 @@ export default function PostDetailsPage() {
       );
       setPostComments(commentsResponse.data.content);
       setNewComment({ contents: "" });
-      console.log(response);
+      // console.log(response);
     } catch (error) {
       console.error("댓글 작성 오류:", error);
     }
@@ -162,7 +162,7 @@ export default function PostDetailsPage() {
     };
   }, [isUpdate]);
 
-  console.log(postDetails.postsPicturesList);
+  // console.log(postDetails.postsPicturesList);
 
   return (
     <Layout>

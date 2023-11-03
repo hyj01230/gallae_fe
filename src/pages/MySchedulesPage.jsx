@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Hamburger, Plus } from "../assets/Icon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { getMySchedules } from "../api";
 import Layout from "../components/common/Layout";
@@ -12,7 +12,18 @@ export default function MySchedulesPage() {
   const navigate = useNavigate();
   const modal = useModal();
   const [isSelect, setIsSelect] = useState(null);
-  const { data, isLoading, error } = useQuery("mySchedule", getMySchedules);
+  const { data, isLoading, error } = useQuery("mySchedule", getMySchedules, {
+    retry: false,
+    onError: (err) => {
+      console.log({ err });
+      if (err.response.status === 500) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        navigate("/posts");
+        return;
+      }
+    },
+  });
 
   const handleOpenModal = (data) => {
     setIsSelect(data);
@@ -20,13 +31,9 @@ export default function MySchedulesPage() {
   };
 
   if (isLoading) {
-    if (!localStorage.getItem("accessToken")) {
-      navigate("/posts");
-    }
+    // Loading state
     return <div>로딩중</div>;
   }
-
-  console.log(data);
 
   return (
     <Layout isBottomNav={true}>
@@ -45,7 +52,7 @@ export default function MySchedulesPage() {
         </div>
       </div>
 
-      {data.length === 0 && (
+      {data && data.length === 0 ? (
         <div className="mx-auto mt-[100px]">
           <img
             src={"/img/woman_writing_with_a_big_pencil.png"}
@@ -60,6 +67,8 @@ export default function MySchedulesPage() {
             </p>
           </div>
         </div>
+      ) : (
+        <></>
       )}
 
       {data && (
