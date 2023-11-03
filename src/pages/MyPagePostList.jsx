@@ -19,10 +19,10 @@ export default function MyPagePostList() {
   const getPostList = async () => {
     try {
       const response = await axiosInstance.get("/api/user/posts");
-      console.log("response", response);
+      // console.log("response", response);
       setPostList(response.data);
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
     }
   };
 

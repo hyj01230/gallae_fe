@@ -59,20 +59,20 @@ export default function MyPageLikeList() {
           size: 20, // 원하는 페이지 크기
         },
       });
-      console.log("response", response);
+      // console.log("response", response);
       setLikeList(response.data.content);
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
     }
   };
 
   const onClickLikeCancleHandler = async (postId) => {
     try {
       const response = await axiosInstance.get(`/api/posts/like/${postId}`);
-      console.log("response", response);
+      // console.log("response", response);
       getLikeList();
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
     }
   };
 

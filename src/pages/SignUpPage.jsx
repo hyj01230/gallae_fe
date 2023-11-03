@@ -163,10 +163,10 @@ export default function SignUpPage() {
           nickName,
         }
       );
-      console.log("response", response);
+      // console.log("response", response);
       setCheckNickName(true); // 사용가능 닉네임은 checkNickName이 true로 => 가능 메시지 나옴!
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       setCheckNickName(false); // 사용가능 닉네임은 checkNickName이 false로 => 중복 메시지 나옴!
     }
   };
@@ -182,14 +182,14 @@ export default function SignUpPage() {
       const response = await axiosInstance.post("/api/users/signup/email", {
         email,
       });
-      console.log("response", response);
+      // console.log("response", response);
 
       if (response.data.statusCode === 200) {
         alert(response.data.msg);
         setEmailCordInput(true);
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       alert(error.response.data.msg);
     }
   };
@@ -204,14 +204,14 @@ export default function SignUpPage() {
           validNumber: emailCord,
         }
       );
-      console.log("response", response);
+      // console.log("response", response);
 
       if (response.status === 200) {
         alert("인증완료!");
         setEmailAuthCompleted(true);
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       alert(error.response.data.msg);
     }
   };
@@ -286,14 +286,14 @@ export default function SignUpPage() {
         password,
         profileImg: null,
       });
-      console.log("response", response);
+      // console.log("response", response);
 
       if (response.data.statusCode === 201) {
         alert(response.data.msg);
         navigate("/signup/complete", { state: { nickName } }); // 웰컴페이지로 닉네임 보내기!
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       alert(error.response.data.msg);
     }
   };

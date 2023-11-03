@@ -104,14 +104,14 @@ export default function SignUpPage() {
       const response = await axiosInstance.post("/api/users/signup/email", {
         email,
       });
-      console.log("response", response);
+      // console.log("response", response);
 
       if (response.data.statusCode === 200) {
         alert(response.data.msg);
         setEmailCordInput(true);
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       alert(error.response.data.msg);
     }
   };
@@ -126,14 +126,14 @@ export default function SignUpPage() {
           validNumber: emailCord,
         }
       );
-      console.log("response", response);
+      // console.log("response", response);
 
       if (response.status === 200) {
         alert("인증완료!");
         setEmailAuthCompleted(true);
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       alert(error.response.data.msg);
     }
   };
@@ -161,15 +161,15 @@ export default function SignUpPage() {
         profileImg: null,
         adminToken: import.meta.env.VITE_ADMIN_TOKEN,
       });
-      console.log("response", response);
+      // console.log("response", response);
 
       if (response.data.statusCode === 201) {
         alert(response.data.msg);
         navigate("/signup/complete", { state: { nickName } }); // 웰컴페이지로 닉네임 보내기!
       }
     } catch (error) {
-      console.log("error", error);
-      console.log("VITE_ADMIN_TOKEN", import.meta.env.VITE_ADMIN_TOKEN); // 관리자 토큰 전송!
+      // console.log("error", error);
+      // console.log("VITE_ADMIN_TOKEN", import.meta.env.VITE_ADMIN_TOKEN); // 관리자 토큰 전송!
       // console.log("admin", adminToken);
       alert(error.response.data.msg);
     }

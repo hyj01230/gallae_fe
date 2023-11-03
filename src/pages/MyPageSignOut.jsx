@@ -28,13 +28,13 @@ export default function MyPageSignOut() {
         password,
       });
 
-      console.log("회원탈퇴 성공", response);
+      // console.log("회원탈퇴 성공", response);
       alert("회원탈퇴");
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       navigate("/");
     } catch (error) {
-      console.log("회원탈퇴 실패", error);
+      // console.log("회원탈퇴 실패", error);
     }
   };
 

@@ -23,10 +23,10 @@ export default function MyPageCommentList() {
   const getMyCommentsList = async () => {
     try {
       const response = await axiosInstance.get("/api/commentsme");
-      console.log("댓글 response :", response);
+      // console.log("댓글 response :", response);
       setMyCommentsList(response.data.content);
     } catch (error) {
-      console.log("댓글 error :", error);
+      // console.log("댓글 error :", error);
     }
   };
 
@@ -39,10 +39,10 @@ export default function MyPageCommentList() {
   const getMyRepliesList = async () => {
     try {
       const response = await axiosInstance.get("/api/repliesme");
-      console.log("대댓글 response :", response);
+      // console.log("대댓글 response :", response);
       setMyRepliesList(response.data.content);
     } catch (error) {
-      console.log("대댓글 error :", error);
+      // console.log("대댓글 error :", error);
     }
   };
 

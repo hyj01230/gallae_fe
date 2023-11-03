@@ -56,13 +56,13 @@ export default function MyPage() {
   const getMyPageInfo = async () => {
     try {
       const response = await axiosInstance.get("/api/users/profile");
-      console.log("마이페이지 데이터 get 성공 :", response.data);
+      // console.log("마이페이지 데이터 get 성공 :", response.data);
 
       setMyPageInfo(response.data); // 마이페이지 데이터 저장
       setAboutMe(response.data.aboutMe); // 소개글 저장
       setUploadImage(response.data.profileImg); // 프로필 사진 저장
     } catch (error) {
-      console.log("마이페이지 데이터 get 실패 :", error.response);
+      // console.log("마이페이지 데이터 get 실패 :", error.response);
     }
   };
 
@@ -80,11 +80,11 @@ export default function MyPage() {
   // 프로필 사진 : 이미지 선택창 나옴
   const uploadImageHandler = async (e) => {
     const selectImage = e.target.files[0]; // 선택된 파일 가져오기
-    console.log(`선택된 파일 이름: ${selectImage.name}`);
-    console.log(`선택된 파일 크기: ${selectImage.size} bytes`);
+    // console.log(`선택된 파일 이름: ${selectImage.name}`);
+    // console.log(`선택된 파일 크기: ${selectImage.size} bytes`);
 
     setUploadImage(selectImage); // 선택한 사진은 프로필 사진 state에 저장
-    console.log("useState로 넘어간 선택된 파일", uploadImage); // 🚨사진이 바로 안넘어가고, 원래 있던 사진이 콘솔에 찍힘
+    // console.log("useState로 넘어간 선택된 파일", uploadImage); // 🚨사진이 바로 안넘어가고, 원래 있던 사진이 콘솔에 찍힘
     putUpdateProfileHandler(); // 사진 변경 PUT 시작!
   };
 
@@ -103,12 +103,12 @@ export default function MyPage() {
         "/api/users/profile/update-profileImg",
         formData
       );
-      console.log("앨범에서 선택 put 성공한 사진 : ", response);
+      // console.log("앨범에서 선택 put 성공한 사진 : ", response);
       setProfileModal(false); // 모달닫기
       getMyPageInfo();
     } catch (error) {
-      console.log("error", error);
-      console.log("앨범에서 선택 put 실패한 사진 : ", uploadImage);
+      // console.log("error", error);
+      // console.log("앨범에서 선택 put 실패한 사진 : ", uploadImage);
       setProfileModal(false); // 모달닫기
     }
   };
@@ -169,12 +169,12 @@ export default function MyPage() {
           aboutMe,
         }
       );
-      console.log("소개글 put 성공 :", response);
+      // console.log("소개글 put 성공 :", response);
       alert(response.data.msg);
       setAboutMeModal(false); // 모달창 닫기
       setMyPageInfo({ ...myPageInfo, aboutMe }); // 마이페이지 소개글에 바로 적용되게!
     } catch (error) {
-      console.log("error :", error);
+      // console.log("error :", error);
     }
   };
 

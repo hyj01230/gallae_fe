@@ -36,11 +36,11 @@ export default function MyPageNickName() {
   const getMyPageInfo = async () => {
     try {
       const response = await axiosInstance.get("/api/users/profile");
-      console.log("닉네임 response :", response.data);
+      // console.log("닉네임 response :", response.data);
       setMyPageInfo(response.data); // 마이페이지 데이터 저장
       // setNickName(response.data.nickName);
     } catch (error) {
-      console.log("error :", error);
+      // console.log("error :", error);
     }
   };
 
@@ -66,11 +66,11 @@ export default function MyPageNickName() {
           updateNickName: nickName,
         }
       );
-      console.log("닉네임 변경", response);
+      // console.log("닉네임 변경", response);
       alert(response.data.msg);
       setMyPageInfo({ ...myPageInfo, nickName });
     } catch (error) {
-      console.log("error :", error);
+      // console.log("error :", error);
       alert(error.response.data.msg);
     }
   };

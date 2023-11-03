@@ -15,7 +15,7 @@ export default function SignUpCompletePage() {
   // useLocation : 회원가입 페이지에서 닉네임 받아오기!
   const { state } = useLocation(); // useLocation() 함수에서 반환된 객체에서 구조 분해 할당을 사용하여 state 변수를 추출
   const nickName = state.nickName; // state 객체에서 nickName 속성을 변수 nickName에 할당
-  console.log({ state });
+  // console.log({ state });
 
   return (
     <Layout>
