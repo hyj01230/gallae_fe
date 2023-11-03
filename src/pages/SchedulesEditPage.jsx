@@ -56,7 +56,6 @@ export default function SchedulesEditPage() {
     text: timeSpent,
   });
 
-
   const [schedule, setSchedule] = useState({
     contents,
     costs,
@@ -230,7 +229,8 @@ export default function SchedulesEditPage() {
           accept="image/*"
           ref={imageHandler.inputRef}
         />
-        {imageHandler.previewImage || picturesResponseDtoList[0].picturesURL ? (
+        {imageHandler.previewImage ||
+        picturesResponseDtoList[0]?.picturesURL ? (
           <div>
             <img
               className="w-36 h-36"
