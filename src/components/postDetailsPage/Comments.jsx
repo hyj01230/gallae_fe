@@ -7,7 +7,7 @@ import { CommentThreeDots, LeftArrow, Reply } from "../../assets/Icon";
 import EditDeleteModal from "./EditDeleteModal";
 
 // 날짜 시간 형식
-function formatDate(date) {
+function formatDate(date, isModified) {
   if (!date || isNaN(new Date(date).getTime())) {
     return "";
   }
@@ -71,32 +71,12 @@ export default function Comments({
       navigate("/login");
       return;
     }
-
-    if (commentType === "normal") {
-      if (newComment.contents.trim() === "") {
-        alert("댓글 내용을 입력하세요.");
-        return;
-      }
-      await handleCommentSubmit();
-    }
-
-    if (commentType === "edit") {
-      if (newComment.contents.trim() === "") {
-        alert("댓글 내용을 입력하세요.");
-        return;
-      }
-      await handleSave(newComment);
-    }
-
-    if (commentType === "reply") {
-      if (newComment.contents.trim() === "") {
-        alert("댓글 내용을 입력하세요.");
-        return;
-      }
-      await handleAddReply(newComment);
-    }
   };
 
+  if (newComment.contents.trim() === "") {
+    alert("댓글 내용을 입력하세요.");
+    return;
+  }
   // 댓글 삭제 로직
   const handleDelete = async (commentId) => {
     const updatedComments = comments.filter((c) => c.commentId !== commentId);
@@ -126,17 +106,6 @@ export default function Comments({
       setIsUpdate(!isUpdate);
       setNewComment({ contents: "" });
       setCommentType("normal");
-
-      // const updatedComments = comments.map((c) => {
-      //   if (c.commentId === selectedComment) {
-      //     setEditedCommentIds([...editedCommentIds, selectedComment]);
-      //     return { ...c, contents: editedContent, modifiedAt: new Date() };
-      //   }
-      //   return c;
-      // });
-
-      // setComments(updatedComments);
-      // // setEditedContent("");
     } catch (error) {
       console.error("댓글 수정 중 오류 발생:", error);
     }
@@ -301,7 +270,10 @@ export default function Comments({
                 </div>
                 <div className="flex flex-row justify-between">
                   <div className="text-xs/normal font-light text-[#999999] flex items-end">
-                    {formatDate(value.createAt)}
+                    {formatDate(
+                      value.modifiedAt ? value.modifiedAt : value.createAt,
+                      value.modifiedAt !== null
+                    )}
                   </div>
                   <div className="flex flex-row">
                     {/* <div className="mr-1 flex flex-row items-center h-6 w-[59px] text-center border rounded-[18px]">
