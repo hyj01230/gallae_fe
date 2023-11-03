@@ -71,11 +71,11 @@ export default function ListModal({ scheduleData, handleClick }) {
               {title ? "게시글 수정하기" : "커뮤니티에 공유하기"}
             </button>
           </div>
-          <div>
+          {/* <div>
             <button className="ml-8 my-[19px] text-lg">
               카카오톡으로 공유하기
             </button>
-          </div>
+          </div> */}
           <div onClick={handleEditClick}>
             <button className="ml-8 my-[19px] text-lg">
               이름 및 태그 수정하기
