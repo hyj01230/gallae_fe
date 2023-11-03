@@ -64,6 +64,39 @@ export default function Comments({
     editedContentRef.current.focus();
   };
 
+  // 댓글 작성 버튼 클릭 핸들러
+  const handleCommentButtonClick = async () => {
+    if (!localStorage.getItem("accessToken")) {
+      alert("로그인이 필요한 서비스입니다.");
+      navigate("/login");
+      return;
+    }
+
+    if (commentType === "normal") {
+      if (newComment.contents.trim() === "") {
+        alert("댓글 내용을 입력하세요.");
+        return;
+      }
+      await handleCommentSubmit();
+    }
+
+    if (commentType === "edit") {
+      if (newComment.contents.trim() === "") {
+        alert("댓글 내용을 입력하세요.");
+        return;
+      }
+      await handleSave(newComment);
+    }
+
+    if (commentType === "reply") {
+      if (newComment.contents.trim() === "") {
+        alert("댓글 내용을 입력하세요.");
+        return;
+      }
+      await handleAddReply(newComment);
+    }
+  };
+
   // 댓글 삭제 로직
   const handleDelete = async (commentId) => {
     const updatedComments = comments.filter((c) => c.commentId !== commentId);
@@ -357,12 +390,7 @@ export default function Comments({
       {/* [CSS] 댓글 입력창 고정 부분 */}
       <div
         className="fixed left-0 right-0 bottom-0 max-w-screen-md mx-auto"
-        onClick={() => {
-          if (!localStorage.getItem("accessToken")) {
-            alert("로그인이 필요한 서비스입니다.");
-            navigate("/login");
-          }
-        }}
+        onClick={handleCommentButtonClick}
       >
         <textarea
           value={newComment.contents}
