@@ -20,7 +20,7 @@ export default function SignUpCompletePage() {
   return (
     <Layout>
       <div className="flex flex-col justify-center items-center mt-[292px] mb-[379px]">
-        <div className="bg-[#EBEBEB] w-[121px] h-[121px] mb-4 flex justify-center items-center text-xs">
+        <div className="w-[121px] h-[121px] mb-4 flex justify-center items-center">
           <Logo />
         </div>
         <div className="flex flex-col justify-center items-center">
