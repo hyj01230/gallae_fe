@@ -219,7 +219,12 @@ export default function PostEditPage() {
         </button>
       </div>
 
-      {isModal && <SelectScheduleModal handleClick={handleScheduleClick} />}
+      {isModal && (
+        <SelectScheduleModal
+          handleClick={handleScheduleClick}
+          setIsModal={setIsModal}
+        />
+      )}
     </Layout>
   );
 }
