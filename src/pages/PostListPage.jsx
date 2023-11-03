@@ -110,7 +110,7 @@ export default function PostListPage() {
 
   useEffect(() => {
     if (inView) {
-      console.log(inView, "무한 스크롤 요청 ✌️");
+      // console.log(inView, "무한 스크롤 요청 ✌️");
       getPostList();
     }
   }, [inView, postList]);
