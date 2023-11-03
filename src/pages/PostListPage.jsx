@@ -155,6 +155,9 @@ export default function PostListPage() {
           )
         );
       }
+
+      // 좋아요 상태가 변경되면 랭킹을 다시 가져옵니다.
+      fetchRankingPosts();
     } catch (error) {
       console.error("좋아요 토글 오류:", error);
     }
@@ -223,8 +226,8 @@ export default function PostListPage() {
                         className="text-[18px] font-semibold cursor-pointer"
                         onClick={() => navigate(`/posts/${item.postId}`)}
                       >
-                        {item.title && item.title.length > 18
-                          ? item.title.slice(0, 18) + "..."
+                        {item.title && item.title.length > 17
+                          ? item.title.slice(0, 17) + "..."
                           : item.title}
                       </span>
                       <span className="text-[12px]  text-gray-500 mt-1 cursor-pointer">
@@ -241,8 +244,8 @@ export default function PostListPage() {
                   className="text-3 mt-4 mx-5 cursor-pointer"
                   onClick={() => navigate(`/posts/${item.postId}`)}
                 >
-                  {item.contents && item.contents.length > 200
-                    ? item.contents.slice(0, 200) + "..."
+                  {item.contents && item.contents.length > 96
+                    ? item.contents.slice(0, 96) + "..."
                     : item.contents}
                 </span>
                 <div className="flex items-center text-xs text-gray-500 mb-6 mt-6 ml-4">
