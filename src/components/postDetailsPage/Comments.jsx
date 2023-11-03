@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../api/axiosInstance";
 import { useRecoilValue } from "recoil";
 import { nickNameState } from "../../store/atom";
@@ -17,6 +18,7 @@ function formatDate(date) {
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
+    hour12: false,
   };
 
   const formattedDate = new Date(date).toLocaleString("ko-KR", options);
@@ -46,7 +48,7 @@ export default function Comments({
   const editedReplyContentRef = useRef(null);
   const [isEditDelete, setIsEditDelete] = useState(false); // 댓글 수정/삭제 모달 상태 관리
   const [commentType, setCommentType] = useState("normal"); // 댓글 상태관리 (댓글 입력, 댓글 수정, 대댓글 입력,대댓글 수정)
-
+  const navigate = useNavigate();
   const editedContentRef = useRef(null);
 
   const nickName = useRecoilValue(nickNameState);
@@ -353,7 +355,15 @@ export default function Comments({
       </div>
 
       {/* [CSS] 댓글 입력창 고정 부분 */}
-      <div className="fixed left-0 right-0 bottom-0 max-w-screen-md mx-auto">
+      <div
+        className="fixed left-0 right-0 bottom-0 max-w-screen-md mx-auto"
+        onClick={() => {
+          if (!localStorage.getItem("accessToken")) {
+            alert("로그인이 필요한 서비스입니다.");
+            navigate("/login");
+          }
+        }}
+      >
         <textarea
           value={newComment.contents}
           onChange={(e) => setNewComment({ contents: e.target.value })}

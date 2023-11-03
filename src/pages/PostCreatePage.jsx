@@ -6,7 +6,7 @@ import { DownArrow, LeftArrow } from "../assets/Icon";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getDetailPost, updatePost } from "../api";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { CATEGORIES, TAGS } from "../constants/mySchedule";
 import useImage from "../hooks/useImage";
 import UploadLimitMessage from "../components/postCreate/UploadLimitMessage";
@@ -23,8 +23,7 @@ export default function PostCreatePage() {
   const [listData, setListData] = useState(data);
   // const [mode, setMode] = useState("");
   const imageHandler = useImage();
-
-  console.log(postData);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const getData = async () => {
@@ -69,23 +68,48 @@ export default function PostCreatePage() {
     setIsModal(false);
   };
 
-  const createPostMutation = useMutation(
-    "schedule",
-    () => imageHandler.handleSubmitClick(selectedPostId),
+  const handlePostCreateClick = async () => {
+    if (imageHandler.previewImage) {
+      imageHandler.handleSubmitClick(selectedPostId);
+    }
 
+    createPostMutation.mutate();
+  };
+
+  const createPostMutation = useMutation(
+    () =>
+      updatePost(selectedPostId, {
+        title: postData.title,
+        contents: postData.contents,
+        subTitle: data.subTitle,
+        postCategory: postData.postCategory,
+        tagsList: postData.tagsList,
+      }),
     {
-      onSuccess: async () => {
-        await updatePost(selectedPostId, {
-          title: postData.title,
-          contents: postData.contents,
-          subTitle: data.subTitle,
-          postCategory: postData.postCategory,
-          tagsList: postData.tagsList,
-        }),
-          navigate("/posts");
+      onSuccess: () => {
+        queryClient.invalidateQueries("schedule");
+        navigate("/posts");
       },
     }
   );
+
+  // const createPostMutation = useMutation(
+  //   "schedule",
+  //   () => imageHandler.handleSubmitClick(selectedPostId),
+
+  //   {
+  //     onSuccess: async () => {
+  //       await updatePost(selectedPostId, {
+  //         title: postData.title,
+  //         contents: postData.contents,
+  //         subTitle: data.subTitle,
+  //         postCategory: postData.postCategory,
+  //         tagsList: postData.tagsList,
+  //       }),
+  //         navigate("/posts");
+  //     },
+  //   }
+  // );
 
   return (
     <Layout>
@@ -218,7 +242,7 @@ export default function PostCreatePage() {
 
       <div
         className="max-w-3xl flex fixed bottom-0 z-10"
-        onClick={() => createPostMutation.mutate()}
+        onClick={handlePostCreateClick}
       >
         <button className="w-screen h-14 bg-gray-300 text-white">
           게시하기

@@ -24,8 +24,6 @@ export default function PostEditPage() {
   const [listData, setListData] = useState(data);
   const imageHandler = useImage();
 
-  console.log(data);
-
   useEffect(() => {
     if (data.postId === selectedPostId) return;
     const getData = async () => {
@@ -219,7 +217,7 @@ export default function PostEditPage() {
         )} */}
 
         {imageHandler.previewImage ||
-        postData.postsPicturesList[0].postsPicturesURL ? (
+        postData.postsPicturesList[0]?.postsPicturesURL ? (
           <div className="mx-4 mt-6">
             <img
               src={
