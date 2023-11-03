@@ -24,8 +24,6 @@ export default function PostEditPage() {
   const [listData, setListData] = useState(data);
   const imageHandler = useImage();
 
-  console.log(data);
-
   useEffect(() => {
     if (data.postId === selectedPostId) return;
     const getData = async () => {
