@@ -242,8 +242,8 @@ export default function Comments({
     setIsEditDelete(!isEditDelete);
   };
 
-  console.log(comments);
-  console.log(selectedComment);
+  // console.log(comments);
+  // console.log(selectedComment);
 
   return (
     <div className="bg-white fixed top-0 left-0 right-0 max-w-screen-md h-screen mx-auto z-50 flex flex-col">
