@@ -320,6 +320,7 @@ export default function PostListPage() {
                         navigate("/login");
                       } else {
                         // 댓글 모달 창으로 가는 코드 추가하기
+                        navigate(`/posts/${item.postId}/`);
                       }
                     }}
                   >
