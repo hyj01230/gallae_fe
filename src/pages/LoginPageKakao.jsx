@@ -21,6 +21,7 @@ export default function LoginPageKakao() {
             headers: {
               "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
             },
+            // withCredentials: true,
           }
           // {
           //   grant_type: "authorization_code",
