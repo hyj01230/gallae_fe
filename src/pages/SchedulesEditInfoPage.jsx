@@ -43,12 +43,13 @@ export default function SchedulesEditInfoPage() {
     },
   });
 
-  // const handleSubmitClick = async () => {
-  //   editTagsMutation.mutate();
-  //   navigate("/");
-  // };
-
-  console.log(editPost.tagsList);
+  const handleInputChange = (e) => {
+    const inputText = e.target.value;
+    if (inputText.length <= 20) {
+      setEditPost((post) => ({ ...post, subTitle: inputText }));
+    }
+    return;
+  };
 
   return (
     <Layout>
@@ -111,15 +112,10 @@ export default function SchedulesEditInfoPage() {
         <div>
           <input
             type="text"
-            defaultValue={subTitle}
-            placeholder="여행의 이름을 입력해주세요."
+            value={editPost.subTitle}
+            placeholder="여행의 이름을 입력해주세요(20자 이내)"
             className="w-full p-4 border border-[#C9C9C9] rounded-lg text-sm"
-            onChange={(event) =>
-              setEditPost((post) => ({
-                ...post,
-                subTitle: event.target.value,
-              }))
-            }
+            onChange={handleInputChange}
           />
         </div>
       </div>
