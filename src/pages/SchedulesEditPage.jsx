@@ -100,16 +100,6 @@ export default function SchedulesEditPage() {
     }
   );
 
-  const deleteScheduleMutation = useMutation(
-    () => deleteScheduleDetail(schedulesId),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("schedulesDetail");
-        navigate("/myschedules/details", { state: { postId, subTitle } });
-      },
-    }
-  );
-
   const handleClick = (value) => {
     if (value === 0) {
       setTimeSpent({ time: 0, text: "" });
@@ -139,9 +129,6 @@ export default function SchedulesEditPage() {
 
   const handleSearchClick = () => {
     modal.handleOpenModal();
-    // navigate("/myschedules/search", {
-    //   state: { postId, subTitle, tripDateId },
-    // });
   };
 
   const handleDelectClick = (e) => {
