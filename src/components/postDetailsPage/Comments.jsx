@@ -102,19 +102,10 @@ export default function Comments({
       setIsUpdate(!isUpdate);
       setNewComment({ contents: "" });
       setCommentType("normal");
-      // 댓글 수정 후 수정된 댓글 바로 적용
-      const updatedComments = comments.map((c) => {
-        if (c.commentId === selectedComment) {
-          return { ...c, contents: contents.contents, modifiedAt: new Date() };
-        }
-        return c;
-      });
-      setComments(updatedComments);
     } catch (error) {
       console.error("댓글 수정 중 오류 발생:", error);
     }
   };
-
   // 대댓글 추가 로직
   const handleAddReply = async (contents) => {
     try {
@@ -220,7 +211,7 @@ export default function Comments({
   // console.log(selectedComment);
 
   return (
-    <div className="bg-white fixed top-0 left-0 right-0 max-w-screen-md h-screen mx-auto z-50 flex flex-col">
+    <div className="bg-white fixed top-0 left-0 right-0  h-screen  z-50 flex flex-col  overflow-auto max-w-3xl mx-auto">
       {/* [CSS] 헤더 */}
       <div className="flex items-center gap-4">
         <div className="ml-4" onClick={handleCloseModal}>
@@ -230,14 +221,17 @@ export default function Comments({
       </div>
 
       {/* [CSS] 댓글 및 대댓글 리스트 */}
-      <div className="grid divide-y overflow-clip overflow-y-auto mb-[80px]">
+      <div
+        className="grid divide-y overflow-auto overflow-y-auto mb-[80px] mr-4 w-[400px]"
+        style={{ overflowX: "hidden" }}
+      >
         {Array.isArray(comments) && comments.length > 0 ? (
           comments.map((value, index) => (
-            <div>
+            <div key={index} style={{ maxWidth: "100%" }}>
               {/* 댓글 */}
               <div
                 key={index}
-                className="px-4 py-[15px] h-[126px] border-b border-[#F2F2F2]"
+                className="px-4 py-[15px] h-auto border-b border-[#F2F2F2]"
               >
                 <div className="flex justify-between items-center">
                   <div className="flex items-center">
@@ -270,7 +264,7 @@ export default function Comments({
                     )}
                   </div>
                 </div>
-                <div className="h-9 w-full text-sm/normal font-normal text-[#333333]">
+                <div className="h-auto w-full text-sm/normal font-normal text-[#333333]">
                   {value.contents}
                 </div>
                 <div className="flex flex-row justify-between">
@@ -377,6 +371,10 @@ export default function Comments({
         />
         <button
           onClick={async (e) => {
+            if (newComment.contents.trim() === "") {
+              alert("댓글 내용을 입력하세요.");
+              return;
+            }
             if (commentType === "normal") {
               await handleCommentSubmit(e);
             }
