@@ -187,13 +187,6 @@ export default function SchedulesCreatePage() {
             <Plus />
           </div>
         )}
-
-        {/* <div className="flex">
-          {imageHandler.previewImage.length > 0 &&
-            imageHandler.previewImage.map((value, index) => (
-              <img key={index} src={value} className="w-36 h-36" />
-            ))}
-        </div> */}
       </div>
 
       <div className="text-xs text-[#999] mx-4 mt-3">
@@ -282,7 +275,7 @@ export default function SchedulesCreatePage() {
           onClick={() => createScheduleMutation.mutate()}
           // onClick={handleSubmitClick}
         >
-          일정 수정 완료
+          일정 작성하기
         </button>
       </div>
 

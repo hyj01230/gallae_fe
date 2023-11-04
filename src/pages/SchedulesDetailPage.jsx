@@ -75,8 +75,6 @@ export default function SchedulesDetailPage() {
     return <div>로딩중</div>;
   }
 
-  console.log("tripSchedule : ", tripSchedule);
-
   return (
     <Layout isBottomNav={true}>
       {/* 하단의 Navbar가 보이지 않아서 margin-bottom 값 추가 */}
@@ -95,9 +93,9 @@ export default function SchedulesDetailPage() {
           </div>
 
           <div className="flex items-center gap-1 mr-3">
-            <button>
+            {/* <button>
               <Share />
-            </button>
+            </button> */}
             <button onClick={handleAccountClick}>
               <Money />
             </button>
