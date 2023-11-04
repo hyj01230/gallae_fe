@@ -75,6 +75,7 @@ export default function SchedulesCreatePage() {
     }
   );
 
+  // 모달 열림
   const handleSearchClick = () => {
     modal.handleOpenModal();
   };
@@ -104,6 +105,18 @@ export default function SchedulesCreatePage() {
       schedulesList: [schedule],
     });
     navigate("/myschedules/details", { state: { postId, tripDateId } });
+  };
+
+  const isValidate = () => {
+    // 카테고리와 장소명이 정해지지 않으면 버튼 활성화 안되게 하기
+    if (
+      DETAIL_SCHEDULES_CATEGORIES.includes(schedule.schedulesCategory) &&
+      schedule.placeName &&
+      schedule.placeName.trim() !== ""
+    ) {
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -269,11 +282,15 @@ export default function SchedulesCreatePage() {
         <button
           style={{
             background:
+              isValidate() &&
               "linear-gradient(95deg, #F90 -39.5%, #FFB800 5.63%, #FF912C 109.35%, #FF912C 109.35%)",
           }}
           className="w-screen h-14 bg-gray-300 text-white"
-          onClick={() => createScheduleMutation.mutate()}
-          // onClick={handleSubmitClick}
+          onClick={() => {
+            if (isValidate) {
+              createScheduleMutation.mutate();
+            }
+          }}
         >
           일정 작성하기
         </button>

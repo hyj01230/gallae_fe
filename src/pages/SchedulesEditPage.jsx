@@ -75,7 +75,9 @@ export default function SchedulesEditPage() {
       await imageHandler.handleUpdateSheduleImage(picturesId);
     }
 
-    await updateScheduleDetail(schedulesId, schedule);
+    console.log(schedule);
+    const res = await updateScheduleDetail(schedulesId, schedule);
+    console.log({ res });
     navigate("/myschedules/details", {
       state: { postId, subTitle, tripDateId },
     });
@@ -134,6 +136,18 @@ export default function SchedulesEditPage() {
   const handleDelectClick = (e) => {
     e.stopPropagation();
     setIsDelete(true);
+  };
+
+  const isValidate = () => {
+    // 카테고리와 장소명이 정해지지 않으면 버튼 활성화 안되게 하기
+    if (
+      DETAIL_SCHEDULES_CATEGORIES.includes(schedule.schedulesCategory) &&
+      schedule.placeName &&
+      schedule.placeName.trim() !== ""
+    ) {
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -312,8 +326,17 @@ export default function SchedulesEditPage() {
 
       <div className="fixed bottom-0 max-w-3xl flex">
         <button
+          style={{
+            background:
+              isValidate() &&
+              "linear-gradient(95deg, #F90 -39.5%, #FFB800 5.63%, #FF912C 109.35%, #FF912C 109.35%)",
+          }}
           className="w-screen h-14 bg-gray-300 text-white"
-          onClick={handleUpdateClick}
+          onClick={() => {
+            if (isValidate()) {
+              handleUpdateClick();
+            }
+          }}
         >
           일정 수정 완료
         </button>
