@@ -1,8 +1,6 @@
 import { useState } from "react";
 import SearchMap from "../schedulesDetail/SearchMap";
-import { useRecoilState } from "recoil";
-import { searchPlaceInfoState } from "../../store/atom";
-import { Search } from "../../assets/Icon";
+import { LeftArrow, Search } from "../../assets/Icon";
 
 export default function SearchModal({
   // placeName,
@@ -21,7 +19,6 @@ export default function SearchModal({
   const [keyword, setKeyword] = useState("");
   const [searchList, setSearchList] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
-  // const [placeInfo, setPlaceInfo] = useRecoilState(searchPlaceInfoState);
 
   const handleSearchDown = (e) => {
     if (e.key === "Enter") setIsSearch(!isSearch);
@@ -47,11 +44,11 @@ export default function SearchModal({
     <div
       className={`bg-white fixed top-0 left-0 right-0 mx-auto max-w-screen-md h-screen flex flex-col`}
     >
-      <div
-        className="py-3 px-2 font-bold text-[20px]"
-        onClick={handleCloseModal}
-      >
-        장소 검색하기
+      <div className="flex gap-4 py-3 px-2 font-bold text-[20px]">
+        <div className="cursor-pointer" onClick={handleCloseModal}>
+          <LeftArrow />
+        </div>
+        <div>장소 검색하기</div>
       </div>
 
       {/* 장소 검색창 */}
