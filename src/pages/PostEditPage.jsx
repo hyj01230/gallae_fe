@@ -83,7 +83,18 @@ export default function PostEditPage() {
       navigate("/posts");
   };
 
-  console.log(postData.contents);
+  const formValidation = () => {
+    if (
+      !CATEGORIES.includes(postData.postCategory) ||
+      postData.tagsList.length < 1 ||
+      (postData.title && postData.title.trim() === "") ||
+      (postData.contents && postData.contents.trim()) === ""
+    ) {
+      return false;
+    }
+
+    return true;
+  };
 
   return (
     <Layout>
@@ -194,6 +205,7 @@ export default function PostEditPage() {
 
         <div className="mx-4 my-5">
           <textarea
+            placeholder="내용을 입력해주세요"
             className="w-full h-[40px] outline-none"
             rows={10}
             value={postData.contents}
@@ -214,7 +226,11 @@ export default function PostEditPage() {
         className="max-w-3xl flex fixed bottom-0 z-10"
         onClick={handleSubmitClick}
       >
-        <button className="w-screen h-14 bg-gray-300 text-white">
+        <button
+          className={`w-screen h-14  text-white ${
+            formValidation() ? "bg-[#F90]" : "bg-gray-300"
+          }`}
+        >
           수정하기
         </button>
       </div>

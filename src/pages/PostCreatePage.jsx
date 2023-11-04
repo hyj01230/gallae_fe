@@ -19,22 +19,20 @@ export default function PostCreatePage() {
   const [isCategoryDrop, setIsCategoryDrop] = useState(false);
   const [isPurposeDrop, setIsPurposeDrop] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState(data.postId);
-  const [postData, setPostData] = useState({ contents: "", tagsList: [] });
+  const [postData, setPostData] = useState({
+    title: "",
+    contents: "",
+    tagsList: [],
+  });
   const [listData, setListData] = useState(data);
-  // const [mode, setMode] = useState("");
+  const [isValidate, setIsValidate] = useState(false);
   const imageHandler = useImage();
   const queryClient = useQueryClient();
 
   useEffect(() => {
     const getData = async () => {
       const response = await getDetailPost(selectedPostId);
-
-      // if (data.title) {
-      //   setMode("edit");
-      //   setPostData({ ...response, contents: data.contents });
-      // } else {
       setPostData({ ...response, contents: "" });
-      // }
     };
 
     getData();
@@ -68,12 +66,26 @@ export default function PostCreatePage() {
     setIsModal(false);
   };
 
-  const handlePostCreateClick = async () => {
-    if (imageHandler.previewImage) {
-      imageHandler.handleSubmitClick(selectedPostId);
+  const formValidation = () => {
+    if (
+      !CATEGORIES.includes(postData.postCategory) ||
+      postData.tagsList.length < 1 ||
+      (postData.title && postData.title.trim() === "") ||
+      (postData.contents && postData.contents.trim()) === ""
+    ) {
+      return false;
     }
 
-    createPostMutation.mutate();
+    return true;
+  };
+
+  const handlePostCreateClick = async () => {
+    if (formValidation()) {
+      if (imageHandler.previewImage) {
+        imageHandler.handleSubmitClick(selectedPostId);
+      }
+      createPostMutation.mutate();
+    }
   };
 
   const createPostMutation = useMutation(
@@ -93,24 +105,6 @@ export default function PostCreatePage() {
     }
   );
 
-  // const createPostMutation = useMutation(
-  //   "schedule",
-  //   () => imageHandler.handleSubmitClick(selectedPostId),
-
-  //   {
-  //     onSuccess: async () => {
-  //       await updatePost(selectedPostId, {
-  //         title: postData.title,
-  //         contents: postData.contents,
-  //         subTitle: data.subTitle,
-  //         postCategory: postData.postCategory,
-  //         tagsList: postData.tagsList,
-  //       }),
-  //         navigate("/posts");
-  //     },
-  //   }
-  // );
-
   return (
     <Layout>
       <div className="mb-[70px]">
@@ -118,10 +112,7 @@ export default function PostCreatePage() {
           <div className="mr-2" onClick={() => navigate("/")}>
             <LeftArrow />
           </div>
-          <div className="h-14 flex items-center text-xl">
-            {/* {mode === "edit" ? "수정하기" : "글쓰기"} */}
-            글쓰기
-          </div>
+          <div className="h-14 flex items-center text-xl">글쓰기</div>
         </div>
 
         <div
@@ -205,9 +196,7 @@ export default function PostCreatePage() {
             사진 첨부
           </div>
         </div>
-        {/* <button onClick={() => handleTestClick(selectedPostId)}>test</button> */}
 
-        {/* {mode !== "edit" && imageHandler.previewImage ? ( */}
         {imageHandler.previewImage ? (
           <div className="mx-4 mt-6">
             <img src={imageHandler.previewImage} className="w-36 h-36" />
@@ -216,40 +205,36 @@ export default function PostCreatePage() {
           <UploadLimitMessage />
         )}
 
-        {/* mode가 edit이고 사진이 있다면 previewImage를 보여준다 */}
-        {/* {mode === "edit" && postData.postsPicturesList.length > 0 ? (
-          <div className="mx-4 mt-6">
-            <img
-              src={postData.postsPicturesList[0].postsPicturesURL}
-              className="w-36 h-36"
-            />
-          </div>
-        ) : (
-          <UploadLimitMessage />
-        )} */}
-
-        <div
-          contentEditable
-          className="mx-4 my-5 outline-none"
-          value={postData.contents}
-          onInput={(e) =>
-            setPostData((prev) => ({ ...prev, contents: e.target.innerText }))
-          }
-        ></div>
+        <div className="mx-4 my-5">
+          <textarea
+            className="w-full h-[40px] p-1 outline-none resize-none"
+            rows={10}
+            placeholder="내용을 입력하세요"
+            value={postData.contents}
+            onChange={(e) =>
+              setPostData((prev) => ({ ...prev, contents: e.target.value }))
+            }
+            onInput={(e) => {
+              e.target.style.height = 0;
+              e.target.style.height = e.target.scrollHeight + "px";
+            }}
+          />
+        </div>
 
         {listData && <List schedule={listData} isPointer={false} />}
       </div>
-
       <div
         className="max-w-3xl flex fixed bottom-0 z-10"
         onClick={handlePostCreateClick}
       >
-        <button className="w-screen h-14 bg-gray-300 text-white">
+        <button
+          className={`w-screen h-14  text-white ${
+            formValidation() ? "bg-[#F90]" : "bg-gray-300"
+          }`}
+        >
           게시하기
-          {/* {mode === "edit" ? "수정하기" : "게시하기"} */}
         </button>
       </div>
-
       {isModal && (
         <SelectScheduleModal
           handleClick={handleScheduleClick}
@@ -259,31 +244,5 @@ export default function PostCreatePage() {
     </Layout>
   );
 }
-{
-  /* <div className="mx-4 py-2 text-gray-200">
-        내용을 입력하세요(최대 20,000자)
-      </div> */
-}
 
-{
-  /* <ContentEditable
-        className="mx-4 py-2 mt-4 mb-14 outline-none"
-        innerRef={ref}
-        // html={data.title ? data.contents : postData.contents} // innerHTML of the editable div
-        html={postData.contents} // innerHTML of the editable div
-        disabled={false} // use true to disable editing
-        onChange={(e) =>
-          setPostData((prev) => ({ ...prev, contents: e.target.value }))
-        }
-      /> */
-}
-
-{
-  /* <textarea
-          className="w-full outline-none resize-none mx-4 mt-3"
-          value={postData.contents}
-          onChange={(e) =>
-            setPostData((prev) => ({ ...prev, contents: e.target.value }))
-          }
-        /> */
-}
+// 카테고리 O, 목적 1개 이상, 제목, 내용까지 입력이 되어야 버튼이 활성화되고, 색깔도 바뀜
