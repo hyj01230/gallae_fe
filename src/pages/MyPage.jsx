@@ -114,51 +114,18 @@ export default function MyPage() {
   };
 
   // PUT : 프로필 사진 - 기본으로 설정
-  // 폼데이터(400)
-  // const onClickDefaultProfileHandler = async () => {
-  //   try {
-  //     const formData = new FormData(); // 사진 업로드는 폼데이터로!!!!!!!!!
-  //     formData.append("file", "");
-
-  //     const response = await axiosInstance.put(
-  //       "/api/users/profile/update-profileImg",
-  //       formData,
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //           Authorization: localStorage.getItem("accessToken"),
-  //         },
-  //         withCredentials: true,
-  //       }
-  //     );
-  //     alert(response.data.messageResponseDto.msg);
-  //     setProfileModal(false); // 모달 닫기
-  //     console.log("기본 프로필 put 성공 :", response);
-  //   } catch (error) {
-  //     setProfileModal(false); // 모달 닫기
-  //     console.log("기본 프로필 put 실패 :", error);
-  //   }
-  // };
-
-  // // 일반 형식(403)
-  // const onClickDefaultProfileHandler = async () => {
-  //   try {
-  //     const response = await axiosInstance.put(
-  //       "/api/users/profile/update-profileImg",
-  //       {
-  //         file: null,
-  //       }
-  //     );
-  //     alert(response.data.messageResponseDto.msg);
-  //     setProfileModal(false); // 모달 닫기
-  //     // console.log("기본 프로필 put 성공 :", response);
-  //     // console.log("uploadImage 성공 :", uploadImage);
-  //   } catch (error) {
-  //     setProfileModal(false); // 모달 닫기
-  //     console.log("error", error);
-  //     // console.log("기본으로 실패 :", uploadImage);
-  //   }
-  // };
+  const onClickDefaultProfileHandler = async () => {
+    try {
+      const response = await axiosInstance.put(
+        "/api/users/profile/default-profileImg"
+      );
+      setProfileModal(false); // 모달 닫기
+      // console.log("기본 프로필 put 성공 :", response);
+    } catch (error) {
+      setProfileModal(false); // 모달 닫기
+      // console.log("error", error);
+    }
+  };
 
   // PUT : 소개글 변경
   const onClickSaveAboutMeHandler = async () => {
@@ -280,10 +247,10 @@ export default function MyPage() {
             onClick={(e) => e.stopPropagation()} // 외부영역만 클릭했을때 모달 닫히게!
             className=" w-full flex flex-col mt-auto mb-24"
           >
-            <div className="mx-6 text-white font-normal text-base/normal text-center">
-              사진 업로드는 개당 1MB내외로 업로드 가능합니다.
+            <div className="mx-6 text-white font-normal text-lg/normal text-center">
+              사진 업로드는 개당 1MB 내외로 업로드 가능합니다.
             </div>
-            <div className="mx-4 mt-3 bg-[#F2F2F2] text-center h-[45px] flex items-center justify-center rounded-t-xl text-[#333333] text-[14px] leading-[100%] font-medium">
+            <div className="mt-4 mx-4 bg-[#F2F2F2] text-center h-[45px] flex items-center justify-center rounded-t-xl text-[#333333] text-[14px] leading-[100%] font-medium">
               프로필 사진 설정
             </div>
             <div
@@ -292,12 +259,12 @@ export default function MyPage() {
             >
               앨범에서 사진 선택
             </div>
-            {/* <div
+            <div
               onClick={onClickDefaultProfileHandler}
               className="mx-4 bg-[#F2F2F2] text-center h-14 flex items-center justify-center rounded-b-xl text-[#333333] text-[18px] leading-[100%] font-medium cursor-pointer"
             >
               기본으로 설정
-            </div> */}
+            </div>
             <div
               onClick={onClickProfileCloseHandler}
               className="mt-3 mx-4 bg-[#FFFFFF] rounded-xl h-[58px] flex items-center justify-center text-[##333333] text-[18px] leading-[100%] font-medium cursor-pointer"
