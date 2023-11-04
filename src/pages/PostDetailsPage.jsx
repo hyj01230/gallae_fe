@@ -181,7 +181,7 @@ export default function PostDetailsPage() {
 
                 <div className="flex flex-col ml-[13px]">
                   {postDetails ? (
-                    <span className="text-[20px] font-semibold">
+                    <span className="text-[20px] font-semibold mr-5">
                       {postDetails.title}
                     </span>
                   ) : (
@@ -206,7 +206,7 @@ export default function PostDetailsPage() {
               </div>
             </div>
           </div>
-          <span className="text-3 mt-4 mx-5 mb-3">{postDetails.contents}</span>
+          <span className="text-3 mt-2 mx-6 mb-3">{postDetails.contents}</span>
 
           <DetailSchedules postId={postId} />
           <div className="fixed bottom-0 left-0 w-full bg-white ">
