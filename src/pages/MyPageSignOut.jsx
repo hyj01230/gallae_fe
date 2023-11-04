@@ -23,10 +23,16 @@ export default function MyPageSignOut() {
   // delete : 탈퇴
   const onClickDeleteSignOutHandler = async () => {
     try {
+      // const response = await axiosInstance.delete("/api/users/signout", {
+      //   email,
+      //   password,
+      // });
+
       const response = await axiosInstance.delete("/api/users/signout", {
-        email,
-        password,
+        data: { email, password },
       });
+
+      // const response = await axiosInstance.delete(`/api/users/signout?email=${email}&password=${password}`);
 
       // console.log("회원탈퇴 성공", response);
       alert("회원탈퇴");
@@ -34,7 +40,7 @@ export default function MyPageSignOut() {
       localStorage.removeItem("refreshToken");
       navigate("/");
     } catch (error) {
-      // console.log("회원탈퇴 실패", error);
+      console.log("회원탈퇴 실패", error);
     }
   };
 
