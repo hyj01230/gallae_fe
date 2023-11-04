@@ -34,6 +34,7 @@ export default function MyPageSignOut() {
       navigate("/");
     } catch (error) {
       console.log("회원탈퇴 실패", error);
+      alert(error.response.data.msg);
     }
   };
 
