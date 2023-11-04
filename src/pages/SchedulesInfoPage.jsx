@@ -41,7 +41,13 @@ export default function SchedulesInfoPage() {
 
     setPost((post) => ({ ...post, tagsList }));
   };
-  console.log(post.tagsList);
+
+  const handleInputChange = (e) => {
+    const inputText = e.target.value;
+    if (inputText.length <= 20) {
+      setPost((post) => ({ ...post, subTitle: inputText }));
+    }
+  };
 
   const handleSubmitClick = () => {
     // 필요한 정보를 클릭 또는 입력하지 않는다면 다음 단계로 넘어가지 못한다.
@@ -139,14 +145,10 @@ export default function SchedulesInfoPage() {
         <div>
           <input
             type="text"
-            placeholder="여행의 이름을 입력해주세요."
+            placeholder="여행의 이름을 입력해주세요(20자 이내)"
             className="w-full p-4 border border-[#C9C9C9] rounded-lg text-sm text-[#999] outline-[#F90]"
-            onChange={(event) =>
-              setPost((post) => ({
-                ...post,
-                subTitle: event.target.value,
-              }))
-            }
+            value={post.subTitle}
+            onChange={handleInputChange}
           />
         </div>
       </div>
