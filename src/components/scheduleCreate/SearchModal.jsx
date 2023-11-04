@@ -44,7 +44,9 @@ export default function SearchModal({
   };
 
   return (
-    <div className={`bg-white fixed top-0 w-full h-screen flex flex-col`}>
+    <div
+      className={`bg-white fixed top-0 left-0 right-0 mx-auto max-w-screen-md h-screen flex flex-col`}
+    >
       <div
         className="py-3 px-2 font-bold text-[20px]"
         onClick={handleCloseModal}

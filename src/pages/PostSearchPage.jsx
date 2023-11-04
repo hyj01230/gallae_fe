@@ -4,7 +4,6 @@ import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate, useLocation } from "react-router-dom";
 import SearchCategory from "../components/postSearch/SearchCategory";
 import { LeftArrow, SearchIcon } from "../assets/Icon";
-import Image from "../components/postDetailsPage/Image";
 
 function highlightKeyword(text, keyword) {
   if (keyword && text) {
@@ -109,10 +108,10 @@ export default function PostSearchPage() {
         {searchResults.map((result) => (
           <div
             key={result.postId}
-            style={{ height: "92px" }}
+            style={{ height: "96px" }}
             onClick={() => navigate(`/posts/${result.postId}`)}
           >
-            <div className="mt-4 flex w-full  ">
+            <div className="mt-4 flex w-full h-[96px] ">
               {/* Image 컴포넌트 추가 */}
 
               <div className="w-[120px] h-[96px] flex items-center justify-center ml-4">
@@ -125,7 +124,7 @@ export default function PostSearchPage() {
                   <p className="text-4 text-black font-semibold">Img</p>
                 )}
               </div>
-              <div className="px-4 pt-4 w-full ">
+              <div className="px-4   w-full ">
                 <h3 className="text-[18px] font-semibold">
                   {highlightKeyword(truncateText(result.title, 18), keyword)}
                 </h3>

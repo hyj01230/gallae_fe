@@ -34,11 +34,13 @@ export default function PostCommentsDisplay({
             alert("로그인이 필요한 서비스입니다.");
             navigate("/login");
           } else {
-            handleLikeClick;
+            {
+              handleLikeClick();
+            }
           }
         }}
       >
-        <div className="" onClick={handleLikeClick}>
+        <div className="">
           {likedStatus[postDetails.postId] ? <LikeFullHeart /> : <LikeHeart />}
         </div>
         <p className="cursor-pointer">좋아요 {postDetails.likeNum}</p>
