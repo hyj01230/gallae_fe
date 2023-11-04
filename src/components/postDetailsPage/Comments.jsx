@@ -73,10 +73,6 @@ export default function Comments({
     }
   };
 
-  if (newComment.contents.trim() === "") {
-    alert("댓글 내용을 입력하세요.");
-    return;
-  }
   // 댓글 삭제 로직
   const handleDelete = async (commentId) => {
     const updatedComments = comments.filter((c) => c.commentId !== commentId);
@@ -106,10 +102,19 @@ export default function Comments({
       setIsUpdate(!isUpdate);
       setNewComment({ contents: "" });
       setCommentType("normal");
+      // 댓글 수정 후 수정된 댓글 바로 적용
+      const updatedComments = comments.map((c) => {
+        if (c.commentId === selectedComment) {
+          return { ...c, contents: contents.contents, modifiedAt: new Date() };
+        }
+        return c;
+      });
+      setComments(updatedComments);
     } catch (error) {
       console.error("댓글 수정 중 오류 발생:", error);
     }
   };
+
   // 대댓글 추가 로직
   const handleAddReply = async (contents) => {
     try {
