@@ -275,7 +275,7 @@ export default function SchedulesCreatePage() {
           onClick={() => createScheduleMutation.mutate()}
           // onClick={handleSubmitClick}
         >
-          일정 작성 완료
+          일정 작성하기
         </button>
       </div>
 
