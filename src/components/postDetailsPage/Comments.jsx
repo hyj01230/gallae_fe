@@ -73,10 +73,6 @@ export default function Comments({
     }
   };
 
-  if (newComment.contents.trim() === "") {
-    alert("댓글 내용을 입력하세요.");
-    return;
-  }
   // 댓글 삭제 로직
   const handleDelete = async (commentId) => {
     const updatedComments = comments.filter((c) => c.commentId !== commentId);
