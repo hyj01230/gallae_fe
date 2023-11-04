@@ -1,4 +1,3 @@
-import { Logo } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -21,7 +20,7 @@ export default function SignUpCompletePage() {
     <Layout>
       <div className="flex flex-col justify-center items-center mt-[292px] mb-[379px]">
         <div className="w-[121px] h-[121px] mb-4 flex justify-center items-center">
-          <Logo />
+          <img src={"/img/welcome.png"} className="w-[121px] h-[121px]" />
         </div>
         <div className="flex flex-col justify-center items-center">
           <div className="mb-3 text-lg font-bold">
