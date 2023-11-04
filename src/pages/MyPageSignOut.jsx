@@ -23,16 +23,9 @@ export default function MyPageSignOut() {
   // delete : 탈퇴
   const onClickDeleteSignOutHandler = async () => {
     try {
-      // const response = await axiosInstance.delete("/api/users/signout", {
-      //   email,
-      //   password,
-      // });
-
       const response = await axiosInstance.delete("/api/users/signout", {
         data: { email, password },
       });
-
-      // const response = await axiosInstance.delete(`/api/users/signout?email=${email}&password=${password}`);
 
       // console.log("회원탈퇴 성공", response);
       alert("회원탈퇴");
