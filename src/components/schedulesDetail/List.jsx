@@ -1,7 +1,6 @@
 import { Move } from "../../assets/Icon";
 
 export default function List({ schedule, handleClick, move = true }) {
-  console.log(schedule.picturesResponseDtoList);
   return (
     <div
       className={`flex border border-[#F2F2F2] rounded-lg ${
