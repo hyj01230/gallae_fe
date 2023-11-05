@@ -46,9 +46,9 @@ export default function MySchedulesPage() {
           <button onClick={() => navigate("/myschedules/create/info")}>
             <Plus />
           </button>
-          <button>
+          {/* <button>
             <Hamburger />
-          </button>
+          </button> */}
         </div>
       </div>
 
