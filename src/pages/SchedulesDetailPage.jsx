@@ -50,7 +50,6 @@ export default function SchedulesDetailPage() {
 
   const { isLoading, error, data } = useQuery("schedulesDetail", async () => {
     const response = await getTripDate(postId);
-    console.log({ response });
     const foundElement = response.find(
       (value) => value.tripDateId === tripDateId
     );
@@ -93,9 +92,6 @@ export default function SchedulesDetailPage() {
           </div>
 
           <div className="flex items-center gap-1 mr-3">
-            {/* <button>
-              <Share />
-            </button> */}
             <button onClick={handleAccountClick}>
               <Money />
             </button>

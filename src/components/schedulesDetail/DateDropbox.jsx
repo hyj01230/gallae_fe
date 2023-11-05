@@ -8,7 +8,7 @@ export default function DateDropbox({
 }) {
   return (
     <div
-      className="w-fit flex gap-1 items-center mt-4 ml-4 px-3 py-1 border border-[#F2F2F2] rounded-[20px] cursor-pointer"
+      className="w-fit flex gap-1	items-center mt-4 ml-4 px-3 py-1 border border-[#F2F2F2] rounded-[20px] cursor-pointer "
       onClick={handleClick}
     >
       <span className="text-sm text-[#F90]">{day}일차</span>
