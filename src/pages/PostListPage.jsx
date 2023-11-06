@@ -240,6 +240,16 @@ export default function PostListPage() {
                     <p className="w-2 h-2 ml-[11px] mr-[15px] bg-gray-400 rounded-full inline-block"></p>
                   </span>
                 </div>
+                <div onClick={() => navigate(`/posts/${item.postId}`)}>
+                  {item.postsPicturesList.length > 0 ? (
+                    <img
+                      className="w-full h-[400px]  object-cover rounded-lg"
+                      src={item.postsPicturesList[0].postsPicturesURL}
+                    />
+                  ) : (
+                    <p className=" text-4 text-black font-semibold text-center"></p>
+                  )}
+                </div>
                 <span
                   className="text-3 mt-4 mx-5 cursor-pointer"
                   onClick={() => navigate(`/posts/${item.postId}`)}
@@ -275,7 +285,27 @@ export default function PostListPage() {
                 </div>
                 <div className="flex items-center justify-between text-sm text-gray-500 h-[40px] bordertop-solid border-t-2">
                   <div
-                    className="flex items-center space-x-2 flex-1 justify-center border-r-2 h-[40px]"
+                    className="flex items-center space-x-2 flex-1 justify-center "
+                    onClick={() => {
+                      if (!localStorage.getItem("accessToken")) {
+                        alert("로그인이 필요한 서비스입니다.");
+                        navigate("/login");
+                      } else {
+                        // 댓글 모달 창으로 가는 코드 추가하기
+                        navigate(`/posts/${item.postId}/`);
+                      }
+                    }}
+                  >
+                    <div>
+                      <PostListComment />
+                    </div>
+                    <p className="cursor-pointer  text-[14px]">
+                      {" "}
+                      댓글 {item.commentNum}
+                    </p>
+                  </div>
+                  <div
+                    className="flex items-center space-x-2 flex-1 justify-center  h-[40px]"
                     onClick={() => {
                       if (!localStorage.getItem("accessToken")) {
                         alert("로그인이 필요한 서비스입니다.");
@@ -312,26 +342,6 @@ export default function PostListPage() {
                     </div>
                     <p className="cursor-pointer text-[14px]">공유하기</p>
                   </div> */}
-                  <div
-                    className="flex items-center space-x-2 flex-1 justify-center"
-                    onClick={() => {
-                      if (!localStorage.getItem("accessToken")) {
-                        alert("로그인이 필요한 서비스입니다.");
-                        navigate("/login");
-                      } else {
-                        // 댓글 모달 창으로 가는 코드 추가하기
-                        navigate(`/posts/${item.postId}/`);
-                      }
-                    }}
-                  >
-                    <div>
-                      <PostListComment />
-                    </div>
-                    <p className="cursor-pointer  text-[14px]">
-                      {" "}
-                      댓글 {item.commentNum}
-                    </p>
-                  </div>
                 </div>
                 <PostLine />
               </div>

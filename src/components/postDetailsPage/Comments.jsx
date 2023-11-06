@@ -365,7 +365,13 @@ export default function Comments({
       >
         <textarea
           value={newComment.contents}
-          onChange={(e) => setNewComment({ contents: e.target.value })}
+          onChange={(e) => {
+            if (e.target.value.length <= 300) {
+              // 입력 길이가 300자 이하일 때만 값을 업데이트합니다.
+              setNewComment({ contents: e.target.value });
+            }
+          }}
+          maxLength={300} // 최대 입력 길이를 300으로 설정
           placeholder="댓글을 입력하세요."
           className="w-full h-[57px] p-4 resize-none outline-none overflow-hidden"
         />
@@ -375,6 +381,7 @@ export default function Comments({
               alert("댓글 내용을 입력하세요.");
               return;
             }
+
             if (commentType === "normal") {
               await handleCommentSubmit(e);
             }
