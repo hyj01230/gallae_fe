@@ -7,6 +7,7 @@ import Image from "../components/postDetailsPage/Image";
 import Comments from "../components/postDetailsPage/Comments";
 import DetailSchedules from "../components/postDetailsPage/DetailSchedules";
 import CommentsDisplay from "../components/postDetailsPage/PostCommentDisplay";
+import PostLine from "../components/post/PostLine";
 
 export default function PostDetailsPage() {
   const [postDetails, setPostDetails] = useState({
@@ -210,6 +211,7 @@ export default function PostDetailsPage() {
 
           <DetailSchedules postId={postId} />
           <div className="fixed bottom-0 left-0 w-full bg-white ">
+            <PostLine />
             <CommentsDisplay
               areCommentsVisible={areCommentsVisible}
               setCommentsVisible={setCommentsVisible}
