@@ -31,7 +31,8 @@ export default function MyPage() {
   const [aboutMeModal, setAboutMeModal] = useState(false); // 모달 : 소개글
   const [myPageInfo, setMyPageInfo] = useState({}); // 전체 데이터
   const [uploadImage, setUploadImage] = useState(null); // 프로필 사진 데이터
-  const [aboutMe, setAboutMe] = useState({}); // 소개글 데이터
+  const [aboutMe, setAboutMe] = useState(""); // 소개글 데이터
+  const [characterCount, setCharacterCount] = useState(0); // 소개글 입력 글자수
 
   // 모달
   const onClickProfileOpenHandler = () => {
@@ -49,7 +50,9 @@ export default function MyPage() {
 
   // 소개글 : onChange
   const onChangeAboutMeHandler = (e) => {
-    setAboutMe(e.target.value);
+    const newText = e.target.value;
+    setAboutMe(newText);
+    setCharacterCount(newText.length); // 글자 수 업데이트
   };
 
   // GET : 마이페이지 전체 데이터 가져오기
@@ -304,7 +307,9 @@ export default function MyPage() {
               className="w-full bg-transparent text-center text-white placeholder:text-white border-b-[0.5px] border-[#D9D9D9] outline-none resize-none"
             />
           </div>
-          <div className="mt-2 text-[#D9D9D9] text-xs/5 font-normal">0/80</div>
+          <div className="mt-2 text-[#D9D9D9] text-xs/5 font-normal">
+            {characterCount}/80
+          </div>
         </div>
       )}
     </Layout>
