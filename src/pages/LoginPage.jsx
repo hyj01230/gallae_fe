@@ -1,10 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
 import { Logo } from "../assets/Icon";
 
 export default function LoginPage() {
+  const loginButtonRef = useRef();
+
   // 페이지 이동
   const navigate = useNavigate();
   const onClickSkipHandler = () => {
@@ -34,12 +36,11 @@ export default function LoginPage() {
   }, []);
 
   // 사용자가 Enter 키를 눌렀을 때 로그인 실행하는 함수
-  // const handleEnterKey = (event) => {
-  //   if (event.key === "Enter") {
-  //     // Enter 키가 눌렸을 때, "로그인하기" 버튼을 클릭하도록 시뮬레이트
-  //     onClickLoginHandler();
-  //   }
-  // };
+  const handleEnterKey = (event) => {
+    if (event.key === "Enter") {
+      loginButtonRef.current.click();
+    }
+  };
 
   // POST : 로그인 정보 보내기
   const onClickLoginHandler = async () => {
@@ -115,6 +116,7 @@ export default function LoginPage() {
             type="text"
             value={email}
             onChange={onChangeEmailHandler}
+            onKeyPress={handleEnterKey}
             placeholder="이메일을 입력해주세요."
             className="border border-[#D9D9D9] rounded-lg w-full h-[49px] px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium outline-none"
           />
@@ -122,12 +124,14 @@ export default function LoginPage() {
             type="password"
             value={password}
             onChange={onChangePasswordHandler}
+            onKeyPress={handleEnterKey}
             placeholder="비밀번호를 입력해주세요."
             className="mt-2 border border-[#D9D9D9] rounded-lg w-full h-[49px] px-[17px] placeholder:text-sm/normal placeholder:text-[#999999] placeholder:font-medium outline-none"
           />
         </div>
 
         <div
+          ref={loginButtonRef}
           onClick={onClickLoginHandler}
           className="mt-4 rounded-lg w-full h-[50px] border-[#FF9900] border bg-[#FF9900] flex justify-center items-center text-white text-base/4 font-semibold cursor-pointer"
         >
