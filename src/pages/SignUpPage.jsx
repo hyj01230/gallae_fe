@@ -154,6 +154,9 @@ export default function SignUpPage() {
     if (nickNameMessage !== true) {
       alert("닉네임을 올바르게 입력해주세요.");
       return;
+    } else if (nickName === "") {
+      alert("닉네임을 올바르게 입력해주세요.");
+      return;
     }
 
     try {
@@ -339,7 +342,7 @@ export default function SignUpPage() {
           {/* 닉네임 중복 확인 - 가능 */}
           {/* 닉네임 유효성 메시지가 없을 때(=== true) 그리고, checkNickName에 true일 때만 표시됨! */}
           {nickNameMessage === true && checkNickName === true && (
-            <div className="mt-2 text-[#888888] text-sm/normal font-normal">
+            <div className="mt-2 text-[#FF9900] text-sm/normal font-normal">
               사용 가능한 닉네임입니다.
             </div>
           )}
