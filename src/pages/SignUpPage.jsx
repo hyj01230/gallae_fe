@@ -29,49 +29,6 @@ export default function SignUpPage() {
   const [password, setPassword] = useState(""); // 비밀번호
   const [checkPassword, setCheckPassword] = useState(""); // 비밀번호 확인
   const [signUpBar, setSignUpBar] = useState(false); // 회원가입바
-  // const [allAgreed, setAllAgreed] = useState(false); // 전체 동의 여부
-  const [agreeChecked1, setAgreeChecked1] = useState(false); //
-  const [agreeChecked2, setAgreeChecked2] = useState(false); //
-  const [agreeChecked3, setAgreeChecked3] = useState(false); //
-  // const [agreeChecked4, setAgreeChecked4] = useState(false); //
-  const [agree1, setAgree1] = useState(false); // 모달 : 개인정보 수집 및 이용 동의
-  const [agree2, setAgree2] = useState(false); // 모달 : 위치정보 수집 및 이용 동의
-  const [agree3, setAgree3] = useState(false); // 모달 : 마케팅 수신 동의
-
-  // onClick
-  // const onClickAllAgreeHandler = () => {
-  //   setAllAgreed(!allAgreed);
-  //   setAgreeChecked1(!agreeChecked1);
-  //   setAgreeChecked2(!agreeChecked2);
-  //   setAgreeChecked3(!agreeChecked3);
-  //   setAgreeChecked4(!agreeChecked4); // 전체 동의하기 체크박스 핸들러
-  // };
-  const onClickAgreeChecked1Handler = () => {
-    setAgreeChecked1(!agreeChecked1);
-  };
-  const onClickAgreeChecked2Handler = () => {
-    setAgreeChecked2(!agreeChecked2);
-  };
-  const onClickAgreeChecked3Handler = () => {
-    setAgreeChecked3(!agreeChecked3);
-  };
-  // const onClickAgreeChecked4Handler = () => {
-  //   setAgreeChecked4(!agreeChecked4);
-  // };
-  const onClickAgree1 = () => {
-    setAgree1(true); // 모달 : 열기_개인정보 수집 및 이용 동의
-  };
-  const onClickAgree2 = () => {
-    setAgree2(true); // 모달 : 열기_위치정보 수집 및 이용 동의
-  };
-  // const onClickAgree3 = () => {
-  //   setAgree3(true); // 모달 : 열기_마케팅 수신 동의
-  // };
-  const onClickAgreeHandler = () => {
-    setAgree1(false); // 모달 : 닫기_개인정보 수집 및 이용 동의
-    setAgree2(false); // 모달 : 닫기_위치정보 수집 및 이용 동의
-    setAgree3(false); // 모달 : 닫기_마케팅 수신 동의
-  };
 
   // onChange
   const onChangeNickNameHandler = (e) => {
@@ -219,6 +176,64 @@ export default function SignUpPage() {
     }
   };
 
+  // 정보동의 체크박스 관련
+  const [allAgreed, setAllAgreed] = useState(false); // 전체동의
+  const [agreeChecked1, setAgreeChecked1] = useState(false); // 필수동의1
+  const [agreeChecked2, setAgreeChecked2] = useState(false); // 필수동의2
+  const [agreeChecked3, setAgreeChecked3] = useState(false); // 필수동의3
+
+  const onAgreeCheckedChange = (checkboxNumber, newValue) => {
+    // 개별 동의 항목이 변경되었을 때의 이벤트 핸들러
+    switch (checkboxNumber) {
+      case 1:
+        setAgreeChecked1(newValue);
+        break;
+      case 2:
+        setAgreeChecked2(newValue);
+        break;
+      case 3:
+        setAgreeChecked3(newValue);
+        break;
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    // 개별 동의 항목이 변경될 때 전체 동의 상태를 업데이트
+    if (agreeChecked1 && agreeChecked2 && agreeChecked3) {
+      setAllAgreed(true);
+    } else {
+      setAllAgreed(false);
+    }
+  }, [agreeChecked1, agreeChecked2, agreeChecked3]);
+
+  const onClickAllAgreeHandler = () => {
+    // 전체 동의를 클릭했을 때의 이벤트 핸들러
+    const newValue = !allAgreed;
+    setAgreeChecked1(newValue);
+    setAgreeChecked2(newValue);
+    setAgreeChecked3(newValue);
+    setAllAgreed(newValue);
+  };
+
+  // 정보동의 모달 관련
+  const [agree1, setAgree1] = useState(false); // 모달 : 개인정보 수집 및 이용 동의
+  const [agree2, setAgree2] = useState(false); // 모달 : 위치정보 수집 및 이용 동의
+  const [agree3, setAgree3] = useState(false); // 모달 : 마케팅 수신 동의
+
+  const onClickAgree1 = () => {
+    setAgree1(true); // 모달 : 열기_개인정보 수집 및 이용 동의
+  };
+  const onClickAgree2 = () => {
+    setAgree2(true); // 모달 : 열기_위치정보 수집 및 이용 동의
+  };
+  const onClickAgreeHandler = () => {
+    setAgree1(false); // 모달 : 닫기_개인정보 수집 및 이용 동의
+    setAgree2(false); // 모달 : 닫기_위치정보 수집 및 이용 동의
+    setAgree3(false); // 모달 : 닫기_마케팅 수신 동의
+  };
+
   // 회원가입 Bar 색상변경
   useEffect(() => {
     if (
@@ -359,7 +374,13 @@ export default function SignUpPage() {
 
         <div className="mt-6 flex flex-col">
           <div className="flex justify-between">
-            <div className="text-sm/normal font-medium">이메일 주소</div>
+            <div className="flex flex-row items-center">
+              <div className="mr-1 text-sm/normal font-medium">이메일 주소</div>
+              <div className="text-sm/normal font-normal text-[#FF9900]">
+                (필수)
+              </div>
+            </div>
+
             <div
               onClick={onClickEmailAuthHandler}
               className="text-[#999999] underline cursor-pointer text-sm/normal font-medium"
@@ -385,7 +406,14 @@ export default function SignUpPage() {
           {/* 이메일 인증번호 Input창 */}
           {emailCordInput && (
             <div className="mt-6 flex flex-col">
-              <div className="text-sm/normal font-medium">이메일 인증번호</div>
+              <div className="flex flex-row items-center">
+                <div className="mr-1 text-sm/normal font-medium">
+                  이메일 인증번호
+                </div>
+                <div className="text-sm/normal font-normal text-[#FF9900]">
+                  (필수)
+                </div>
+              </div>
               <div className="flex flex-row justify-center items-center">
                 <input
                   type="text"
@@ -418,7 +446,12 @@ export default function SignUpPage() {
         </div>
 
         <div className="mt-6 flex flex-col">
-          <div className="text-sm/normal font-medium">비밀번호</div>
+          <div className="flex flex-row items-center">
+            <div className="mr-1 text-sm/normal font-medium">비밀번호</div>
+            <div className="text-sm/normal font-normal text-[#FF9900]">
+              (필수)
+            </div>
+          </div>
           <input
             type="password"
             placeholder="문자, 숫자, 특수문자(!@#$%^&*) 포함 8~15자"
@@ -437,7 +470,12 @@ export default function SignUpPage() {
         </div>
 
         <div className="mt-6 flex flex-col">
-          <div className="text-sm/normal font-medium">비밀번호 확인</div>
+          <div className="flex flex-row items-center">
+            <div className="mr-1 text-sm/normal font-medium">비밀번호 확인</div>
+            <div className="text-sm/normal font-normal text-[#FF9900]">
+              (필수)
+            </div>
+          </div>
           <input
             type="password"
             placeholder="비밀번호 재입력"
@@ -455,7 +493,7 @@ export default function SignUpPage() {
           )}
         </div>
 
-        {/* <div className="mt-[27px] flex flex-col">
+        <div className="mt-[27px] flex flex-col">
           <div className="flex flex-row items-center">
             <input
               type="checkbox"
@@ -466,17 +504,17 @@ export default function SignUpPage() {
             <div className="ml-3 text-sm/normal font-bold ">전체 동의하기</div>
           </div>
           <div className="mt-2 ml-8 text-[#999999] text-sm/normal font-normal">
-            선택정보에 대한 동의를 포함합니다.
+            모든 정보에 동의합니다.
           </div>
-        </div> */}
+        </div>
 
-        <div className="mt-6 flex mb-20">
+        <div className="mt-4 flex mb-20">
           <div className="border border-[#D9D9D9] rounded-lg w-full pt-[21px] pr-3 pb-[23px] pl-5">
             <div className="flex flex-row items-center">
               <input
                 type="checkbox"
                 checked={agreeChecked1}
-                onChange={onClickAgreeChecked1Handler}
+                onChange={() => onAgreeCheckedChange(1, !agreeChecked1)}
                 className="w-5 h-5 accent-[#FF9900] cursor-pointer"
               />
               <div className="ml-3 text-sm/normal font-normal">
@@ -488,7 +526,7 @@ export default function SignUpPage() {
               <input
                 type="checkbox"
                 checked={agreeChecked2}
-                onChange={onClickAgreeChecked2Handler}
+                onChange={() => onAgreeCheckedChange(2, !agreeChecked2)}
                 className="w-5 h-5 accent-[#FF9900] cursor-pointer"
               />
               <div className="ml-3 mr-auto text-sm/normal font-normal">
@@ -503,7 +541,7 @@ export default function SignUpPage() {
               <input
                 type="checkbox"
                 checked={agreeChecked3}
-                onChange={onClickAgreeChecked3Handler}
+                onChange={() => onAgreeCheckedChange(3, !agreeChecked3)}
                 className="w-5 h-5 accent-[#FF9900] cursor-pointer"
               />
               <div className="ml-3 mr-auto text-sm/normal font-normal">
@@ -513,21 +551,6 @@ export default function SignUpPage() {
                 <RightArrow />
               </div>
             </div>
-
-            {/* <div className="flex flex-row items-center mt-[10px]">
-              <input
-                type="checkbox"
-                checked={agreeChecked4}
-                onChange={onClickAgreeChecked4Handler}
-                className="w-5 h-5 accent-[#FF9900] cursor-pointer"
-              />
-              <div className="ml-3 mr-auto text-sm/normal font-normal">
-                [선택] 마케팅 수신 동의
-              </div>
-              <div onClick={onClickAgree3}>
-                <RightArrow />
-              </div>
-            </div> */}
           </div>
         </div>
       </div>
@@ -540,7 +563,7 @@ export default function SignUpPage() {
         회원가입 완료
       </div>
 
-      {/* 동의하기1 : 개인정보 수집 및 이용 동의 */}
+      {/* 필수동의1 : 개인정보 수집 및 이용 동의 */}
       {agree1 && (
         <div className="bg-white w-full h-full absolute top-0 left-0 z-20">
           <div className="mx-4 mt-3 flex justify-start items-center ">
@@ -631,7 +654,7 @@ export default function SignUpPage() {
         </div>
       )}
 
-      {/* 동의하기2 : 위치정보 수집 및 이용 동의 */}
+      {/* 필수동의2 : 위치정보 수집 및 이용 동의 */}
       {agree2 && (
         <div className="bg-white w-full h-full absolute top-0 left-0 z-20">
           <div className="mx-4 mt-3 flex justify-start items-center ">
@@ -679,7 +702,7 @@ export default function SignUpPage() {
         </div>
       )}
 
-      {/* 동의하기3 : 위치정보 수집 및 이용 동의 */}
+      {/* 필수동의3 : 위치정보 수집 및 이용 동의 */}
       {agree3 && (
         <div className="bg-white w-full h-full absolute top-0 left-0 z-20">
           <div className="mx-4 mt-3 flex justify-start items-center ">
