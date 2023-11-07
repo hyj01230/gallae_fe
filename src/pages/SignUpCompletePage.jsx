@@ -24,7 +24,7 @@ export default function SignUpCompletePage() {
         </div>
         <div className="flex flex-col justify-center items-center">
           <div className="mb-3 text-lg font-bold">
-            {nickName ? nickName : "익명"} 님
+            {nickName ? nickName : "여행자"} 님
           </div>
           <div className="text-lg">회원이 된 것을 축하드려요!</div>
         </div>

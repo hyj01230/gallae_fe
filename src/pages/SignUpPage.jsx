@@ -222,8 +222,8 @@ export default function SignUpPage() {
   // 회원가입 Bar 색상변경
   useEffect(() => {
     if (
-      nickName !== "" && // 닉네임 input에 값이 있음
-      checkNickName === true && // 닉네임 중복확인이 true = 사용가능 닉네임
+      (nickName === "" || nickNameMessage === true) && // 닉네임 빈값이거나, 중복확인이 통과
+      (nickName === "" || checkNickName === true) && // 닉네임 빈값이거나, 중복확인이 통과
       email !== "" && // 이메일 input에 겂이 있음
       emailMessage === true && // 이메일 유효성 문제없음
       emailAuthCompleted === true && // 이메일 인증 완료
@@ -241,6 +241,7 @@ export default function SignUpPage() {
     }
   }, [
     nickName,
+    nickNameMessage,
     checkNickName,
     email,
     emailMessage,
@@ -258,7 +259,7 @@ export default function SignUpPage() {
   const onClickSignUpCompleteHandler = async () => {
     // 에러메시지 있는지 확인
     if (
-      checkNickName === false || // 닉네임 중복확인이 false = 중복된 닉네임!
+      nickNameMessage !== true || // 닉네임 중복확인이 false = 중복된 닉네임!
       emailMessage !== true ||
       passwordMessage !== true ||
       checkPassWordMessage !== true
@@ -273,7 +274,7 @@ export default function SignUpPage() {
     ) {
       alert("필수 동의를 체크해주세요.");
       return;
-    } else if (checkNickName === "재확인") {
+    } else if (nickName !== "" && checkNickName === "재확인") {
       alert("닉네임 중복체크가 필요합니다.");
       return;
     } else if (emailAuthCompleted !== true) {
