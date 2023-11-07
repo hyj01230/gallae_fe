@@ -381,8 +381,8 @@ export default function Comments({
         onClick={handleCommentButtonClick}
       >
         <textarea
-          value={newComment.contents}
           ref={editedContentRef}
+          value={newComment.contents}
           onChange={(e) => {
             if (e.target.value.length <= 300) {
               // 입력 길이가 300자 이하일 때만 값을 업데이트합니다.
@@ -391,7 +391,13 @@ export default function Comments({
           }}
           maxLength={300} // 최대 입력 길이를 300으로 설정
           placeholder="댓글을 입력하세요."
-          className="w-full h-[57px] p-4 resize-none outline-none overflow-hidden"
+          style={{
+            width: "90%",
+
+            wordWrap: "break-word",
+            overflowWrap: "break-word",
+          }}
+          className="h-[57px] p-4 resize-none outline-none overflow-hidden"
         />
         <button
           onClick={async (e) => {
