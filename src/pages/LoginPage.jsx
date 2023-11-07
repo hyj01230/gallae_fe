@@ -1,17 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
 import { Logo } from "../assets/Icon";
 
 export default function LoginPage() {
-  const loginButtonRef = useRef();
-
   // 페이지 이동
   const navigate = useNavigate();
-  const onClickSkipHandler = () => {
-    navigate("/posts");
-  };
   const onClickSingUpHandler = () => {
     navigate("/signup");
   };
@@ -36,9 +31,9 @@ export default function LoginPage() {
   }, []);
 
   // 사용자가 Enter 키를 눌렀을 때 로그인 실행하는 함수
-  const handleEnterKey = (event) => {
+  const handleEnterKey = async (event) => {
     if (event.key === "Enter") {
-      loginButtonRef.current.click();
+      await onClickLoginHandler();
     }
   };
 
@@ -49,7 +44,7 @@ export default function LoginPage() {
         email,
         password,
       });
-      console.log("response", response);
+      // console.log("response", response);
 
       if (response.data.statusCode === 200) {
         localStorage.setItem("accessToken", response.headers.authorization); // accessToken 저장!
@@ -59,18 +54,10 @@ export default function LoginPage() {
         ); // refreshToken 저장!
 
         navigate("/");
-
-        // accessToken 만료시 로그아웃 - 임시로 사용! 수정예정!
-        setTimeout(() => {
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
-          alert("로그인 시간 만료! 재로그인이 필요합니다.");
-          navigate("/login");
-        }, 3600000); // 1시간
       }
-      alert(response.data.msg);
+      alert(response.data.msg); //토스트 적용!
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       if (email === "" || password === "") {
         alert("아이디와 비밀번호 모두 입력하세요.");
       } else {
@@ -93,7 +80,7 @@ export default function LoginPage() {
       <div className="mx-4 mb-10">
         <div
           className="flex justify-end mt-4 text-[#999999] text-base/normal font-normal cursor-pointer"
-          onClick={onClickSkipHandler}
+          onClick={() => navigate("/posts")}
         >
           건너뛰기
         </div>
@@ -131,7 +118,6 @@ export default function LoginPage() {
         </div>
 
         <div
-          ref={loginButtonRef}
           onClick={onClickLoginHandler}
           className="mt-4 rounded-lg w-full h-[50px] border-[#FF9900] border bg-[#FF9900] flex justify-center items-center text-white text-base/4 font-semibold cursor-pointer"
         >
