@@ -142,7 +142,12 @@ export default function SchedulesEditInfoPage() {
             }`,
           }}
           className="w-screen h-14 text-white"
-          onClick={() => editTagsMutation.mutate()}
+          onClick={() => {
+            if (formValidation() === false) {
+              return;
+            }
+            editTagsMutation.mutate();
+          }}
         >
           수정하기
         </button>

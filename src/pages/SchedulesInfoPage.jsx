@@ -174,7 +174,12 @@ export default function SchedulesInfoPage() {
             }`,
           }}
           className="w-screen h-14 bg-gray-300 text-white"
-          onClick={handleSubmitClick}
+          onClick={() => {
+            if (formValidation() === false) {
+              return;
+            }
+            handleSubmitClick();
+          }}
         >
           날짜 입력하기
         </button>
