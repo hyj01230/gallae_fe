@@ -29,7 +29,7 @@ export default function PostRanking({ rankingList, expanded, setExpanded }) {
                 style={{ width: "30px", color: "#FF9900" }}
               >
                 {index + 1}
-                <div className="border-t border-gray-300"></div>
+                <div className=" border-gray-300"></div>
               </div>
               <div
                 className=" mr-3 text-[14px]  font-medium w-[50px]"

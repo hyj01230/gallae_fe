@@ -61,7 +61,7 @@ export default function Comments({
   const handleEdit = (comment) => {
     setSelectedCommentForEdit(comment);
     setEditedContent(comment.contents);
-    editedContentRef.current.focus();
+    editedContentRef.current.focus(); // input 엘리먼트에 포커스를 주기
   };
 
   // 댓글 작성 버튼 클릭 핸들러
@@ -92,20 +92,28 @@ export default function Comments({
   // 댓글 저장 로직
   const handleSave = async (contents) => {
     try {
-      setIsUpdate(!isUpdate);
       await axiosInstance.put(`/api/comments/${selectedComment}`, contents, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
 
+      const updatedComments = comments.map((c) => {
+        if (c.commentId === selectedComment) {
+          return { ...c, contents: contents.contents };
+        }
+        return c;
+      });
+
       setIsUpdate(!isUpdate);
+      setComments(updatedComments);
       setNewComment({ contents: "" });
       setCommentType("normal");
     } catch (error) {
       console.error("댓글 수정 중 오류 발생:", error);
     }
   };
+
   // 대댓글 추가 로직
   const handleAddReply = async (contents) => {
     try {
@@ -258,6 +266,7 @@ export default function Comments({
                         setCommentType={setCommentType}
                         setNewComment={setNewComment}
                         handleDelete={handleDelete}
+                        editedContentRef={editedContentRef}
                       />
                     ) : (
                       <></>
@@ -365,6 +374,7 @@ export default function Comments({
       >
         <textarea
           value={newComment.contents}
+          ref={editedContentRef}
           onChange={(e) => {
             if (e.target.value.length <= 300) {
               // 입력 길이가 300자 이하일 때만 값을 업데이트합니다.

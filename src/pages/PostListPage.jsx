@@ -62,7 +62,7 @@ export default function PostListPage() {
 
         setLikedStatus(likedStatusMap);
       } catch (error) {
-        console.error("좋아요 정보 가져오기 오류:", error);
+        // console.error("좋아요 정보 가져오기 오류:", error);
       }
     }
   }, []);
@@ -243,7 +243,7 @@ export default function PostListPage() {
                 <div onClick={() => navigate(`/posts/${item.postId}`)}>
                   {item.postsPicturesList.length > 0 ? (
                     <img
-                      className="w-full h-[400px]  object-cover rounded-lg"
+                      className="w-full aspect-video object-cover   "
                       src={item.postsPicturesList[0].postsPicturesURL}
                     />
                   ) : (
