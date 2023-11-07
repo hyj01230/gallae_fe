@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Layout from "../components/common/Layout";
-import { axiosInstance } from "../api/axiosInstance";
 import { Logo } from "../assets/Icon";
+import { loginUser } from "../api";
 
 export default function LoginPage() {
   // 페이지 이동
@@ -40,10 +40,7 @@ export default function LoginPage() {
   // POST : 로그인 정보 보내기
   const onClickLoginHandler = async () => {
     try {
-      const response = await axiosInstance.post("/api/users/login", {
-        email,
-        password,
-      });
+      const response = await loginUser({ email, password });
       // console.log("response", response);
 
       if (response.data.statusCode === 200) {

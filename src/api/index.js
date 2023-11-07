@@ -98,3 +98,9 @@ export const uploadScheduleImage = async (schedulesId, file) => {
   );
   return response;
 };
+
+// <---------- 사용자 관련 API ---------->
+export const loginUser = async (data) => {
+  const response = await axiosInstance.post("/api/users/login", data);
+  return response;
+};
