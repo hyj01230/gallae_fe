@@ -13,13 +13,9 @@ import {
 import Layout from "../components/common/Layout";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import {
-  deleteScheduleDetail,
-  updateScheduleDetail,
-  uploadScheduleImage,
-} from "../api";
+import { updateScheduleDetail } from "../api";
 import { timeStringToMinutes } from "../util/formatDate";
-import { useMutation, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 import { formatDateString } from "../util/formatDate";
 import {
   DETAIL_SCHEDULES_CATEGORIES,
@@ -58,7 +54,7 @@ export default function SchedulesEditPage() {
 
   const [schedule, setSchedule] = useState({
     contents,
-    costs,
+    costs: costs.toLocaleString("ko-KR"),
     placeName,
     x,
     y,
@@ -75,32 +71,13 @@ export default function SchedulesEditPage() {
       await imageHandler.handleUpdateSheduleImage(picturesId);
     }
 
-    console.log(schedule);
-    const res = await updateScheduleDetail(schedulesId, schedule);
-    console.log({ res });
+    let costs = Number(schedule.costs.replaceAll(",", ""));
+    await updateScheduleDetail(schedulesId, { ...schedule, costs });
+
     navigate("/myschedules/details", {
       state: { postId, subTitle, tripDateId },
     });
   };
-
-  const updateScheduleMutation = useMutation(
-    async () => {
-      await updateScheduleDetail(schedulesId, schedule);
-      // await uploadScheduleImage(schedulesId);
-    },
-    {
-      onSuccess: async () => {
-        // await imageHandler.handleSubmitClick(
-        //   schedulesId,
-        //   imageHandler.uploadImage
-        // );
-        queryClient.invalidateQueries("schedulesDetail");
-        navigate("/myschedules/details", {
-          state: { postId, subTitle, tripDateId },
-        });
-      },
-    }
-  );
 
   const handleClick = (value) => {
     if (value === 0) {
@@ -138,6 +115,16 @@ export default function SchedulesEditPage() {
     setIsDelete(true);
   };
 
+  const handleCostChange = (e) => {
+    const enteredValue = e.target.value;
+    // 숫자 이외의 문자 제거
+    const numericValue = enteredValue.replace(/[^0-9]/g, "");
+
+    // 콤마 찍기
+    const formattedValue = Number(numericValue).toLocaleString("ko-KR");
+    setSchedule((prev) => ({ ...prev, costs: formattedValue }));
+  };
+
   const isValidate = () => {
     // 카테고리와 장소명이 정해지지 않으면 버튼 활성화 안되게 하기
     if (
@@ -167,11 +154,7 @@ export default function SchedulesEditPage() {
           </div>
         </div>
 
-        <button
-          className="cursor-pointer mr-2"
-          onClick={handleDelectClick}
-          // onClick={() => deleteScheduleMutation.mutate()}
-        >
+        <button className="cursor-pointer mr-2" onClick={handleDelectClick}>
           <Trash />
         </button>
       </div>
@@ -298,14 +281,11 @@ export default function SchedulesEditPage() {
         <Card />
         <input
           className="w-full border border-[#D9D9D9] rounded-lg px-3 py-2 text-sm"
-          defaultValue={schedule.costs}
+          // defaultValue={schedule.costs  }
+          // defaultValue={schedule.costs.toLocaleString("ko-KR")}
+          value={schedule.costs}
           placeholder="소요되는 비용을 입력해주세요."
-          onChange={(e) =>
-            setSchedule((schedule) => ({
-              ...schedule,
-              costs: Number(e.target.value),
-            }))
-          }
+          onChange={handleCostChange}
         />
       </div>
 
