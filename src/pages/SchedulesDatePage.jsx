@@ -16,6 +16,8 @@ export default function SchedulesDatePage() {
   const [tripDateRange, setTripDateRange] = useState(null);
   const [schedule, setSchedule] = useRecoilState(scheduleState);
 
+  console.log(tripDateRange);
+
   const getDateRange = (startDate, endDate) => {
     let dateArray = [];
     let currentDate = new Date(startDate);
@@ -59,34 +61,47 @@ export default function SchedulesDatePage() {
 
   return (
     <Layout>
-      <div className="flex items-center gap-x-1 p-2 ">
-        <div className="mr-2">
-          <LeftArrow />
+      <div style={{ height: "calc(100vh - 56px)" }} className="flex flex-col">
+        <div className="flex items-center gap-x-1 p-2 ">
+          <div className="mr-2">
+            <LeftArrow />
+          </div>
+          <div className="h-14 flex items-center text-xl">여행 일정</div>
         </div>
-        <div className="h-14 flex items-center text-xl">여행 일정</div>
+
+        <Calendar
+          formatDay={(locale, date) => moment(date).format("DD")}
+          onChange={changeDate}
+          selectRange={true}
+        />
+
+        {tripDateRange ? (
+          <div className="flex flex-1 justify-around mt-6 mx-4">
+            <div className="flex gap-1">
+              <div className="bg-[#F90] px-2 py-1 rounded-md font-medium text-white">
+                시작
+              </div>
+              {tripDateRange[0].chosenDate}
+            </div>
+
+            <div>
+              종료 : {tripDateRange[tripDateRange.length - 1].chosenDate}
+            </div>
+          </div>
+        ) : (
+          <div className="mt-8 ml-[17px]">
+            <span
+              className={`px-4 py-2 rounded-[40px] border ${
+                tripDateRange
+                  ? " border-[#FF9900] text-[#FF9900]"
+                  : "border-[#D9D9D9] text-[#D9D9D9]"
+              }`}
+            >
+              아직 날짜가 정해지지 않았어요
+            </span>
+          </div>
+        )}
       </div>
-
-      <Calendar
-        formatDay={(locale, date) => moment(date).format("DD")}
-        onChange={changeDate}
-        selectRange={true}
-      />
-
-      {tripDateRange ? (
-        <></>
-      ) : (
-        <div className="mt-8 ml-[17px]">
-          <span
-            className={`px-4 py-2 rounded-[40px] border ${
-              tripDateRange
-                ? " border-[#FF9900] text-[#FF9900]"
-                : "border-[#D9D9D9] text-[#D9D9D9]"
-            }`}
-          >
-            아직 날짜가 정해지지 않았어요
-          </span>
-        </div>
-      )}
 
       <div className="max-w-3xl	flex fixed bottom-0">
         <button
