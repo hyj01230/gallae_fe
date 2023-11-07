@@ -3,7 +3,6 @@ import SearchMap from "../schedulesDetail/SearchMap";
 import { LeftArrow, Search } from "../../assets/Icon";
 
 export default function SearchModal({
-  // placeName,
   schedule,
   setSchedule,
   handleCloseModal,
@@ -63,7 +62,6 @@ export default function SearchModal({
           onChange={(e) => setKeyword(e.target.value)}
           onKeyDown={handleSearchDown}
         />
-        {/* <button onClick={() => setIsSearch(!isSearch)}>검색</button> */}
       </div>
       {/* 지도 */}
       <>
@@ -99,7 +97,9 @@ export default function SearchModal({
         </div>
 
         <button
-          className="absolute bottom-0 w-full py-3 bg-[#F90] text-[white]"
+          className={`absolute bottom-0 w-full py-3 text-[white] ${
+            schedule.placeName ? "bg-[#F90]" : "bg-gray-300"
+          }`}
           onClick={handleSubmitClick}
         >
           장소 선택하기
