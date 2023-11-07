@@ -57,7 +57,13 @@ export default function SchedulesCreatePage() {
   };
 
   const createScheduleMutation = useMutation(
-    () => createScheduleDetail(tripDateId, { schedulesList: [schedule] }),
+    () => {
+      let costs = Number(schedule.costs.replaceAll(",", ""));
+      return createScheduleDetail(tripDateId, {
+        schedulesList: [{ ...schedule, costs }],
+      });
+    },
+
     {
       onSuccess: async () => {
         queryClient.invalidateQueries("schedulesDetail");
@@ -94,28 +100,14 @@ export default function SchedulesCreatePage() {
     });
   };
 
-  const handleSubmitClick = async () => {
-    /**
-     * 1. 세부일정 생성 api
-     * 2. 생성이 잘 되면, GET tripDate해서 가장 마지막에 생성된 애의 schedulesId를 가져온다
-     * 3. 그 아이디를 이용해 이미지를 업로드한다.
-     *
-     */
-    await createScheduleDetail(tripDateId, {
-      schedulesList: [schedule],
-    });
-    navigate("/myschedules/details", { state: { postId, tripDateId } });
-  };
-
   const handleCostChange = (e) => {
-    if (typeof e.target.value === "string") {
-      return;
-    }
+    const enteredValue = e.target.value;
+    // 숫자 이외의 문자 제거
+    const numericValue = enteredValue.replace(/[^0-9]/g, "");
 
-    setSchedule((schedule) => ({
-      ...schedule,
-      costs: Number(e.target.value),
-    }));
+    // 콤마 찍기
+    const formattedValue = Number(numericValue).toLocaleString("ko-KR");
+    setSchedule((prev) => ({ ...prev, costs: formattedValue }));
   };
 
   const isValidate = () => {
@@ -263,9 +255,9 @@ export default function SchedulesCreatePage() {
       <div className="flex items-center gap-4 mt-4 mx-7">
         <Card />
         <input
-          type="number"
           className="w-full border border-[#D9D9D9] rounded-lg px-3 py-2 text-sm outline-[#F90] appearance-none"
           placeholder="소요되는 비용을 입력해주세요."
+          value={schedule.costs}
           onChange={handleCostChange}
         />
       </div>
