@@ -49,6 +49,18 @@ export default function SchedulesInfoPage() {
     }
   };
 
+  const formValidation = () => {
+    if (
+      !CATEGORIES.includes(post.postCategory) ||
+      post.tagsList.length < 1 ||
+      !(post.subTitle && !(post.subTitle.trim() === ""))
+    ) {
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmitClick = () => {
     // 필요한 정보를 클릭 또는 입력하지 않는다면 다음 단계로 넘어가지 못한다.
     if (
@@ -155,8 +167,11 @@ export default function SchedulesInfoPage() {
       <div className="max-w-3xl	flex fixed bottom-0">
         <button
           style={{
-            background:
-              "linear-gradient(95deg, #F90 -39.5%, #FFB800 5.63%, #FF912C 109.35%, #FF912C 109.35%)",
+            background: `${
+              formValidation()
+                ? "linear-gradient(95deg, #F90 -39.5%, #FFB800 5.63%, #FF912C 109.35%, #FF912C 109.35%"
+                : "rgb(209 213 219)"
+            }`,
           }}
           className="w-screen h-14 bg-gray-300 text-white"
           onClick={handleSubmitClick}

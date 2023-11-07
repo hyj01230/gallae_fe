@@ -43,6 +43,18 @@ export default function SchedulesEditInfoPage() {
     },
   });
 
+  const formValidation = () => {
+    if (
+      !CATEGORIES.includes(editPost.postCategory) ||
+      editPost.tagsList.length < 1 ||
+      !(editPost.subTitle && !(editPost.subTitle.trim() === ""))
+    ) {
+      return false;
+    }
+
+    return true;
+  };
+
   const handleInputChange = (e) => {
     const inputText = e.target.value;
     if (inputText.length <= 20) {
@@ -122,7 +134,14 @@ export default function SchedulesEditInfoPage() {
 
       <div className="max-w-3xl	flex fixed bottom-0">
         <button
-          className="w-screen h-14 bg-gray-300 text-white"
+          style={{
+            background: `${
+              formValidation()
+                ? "linear-gradient(95deg, #F90 -39.5%, #FFB800 5.63%, #FF912C 109.35%, #FF912C 109.35%"
+                : "rgb(209 213 219)"
+            }`,
+          }}
+          className="w-screen h-14 text-white"
           onClick={() => editTagsMutation.mutate()}
         >
           수정하기
