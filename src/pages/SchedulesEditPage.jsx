@@ -138,6 +138,17 @@ export default function SchedulesEditPage() {
     setIsDelete(true);
   };
 
+  const handleCostChange = (e) => {
+    if (typeof e.target.value === "string") {
+      return;
+    }
+
+    setSchedule((schedule) => ({
+      ...schedule,
+      costs: Number(e.target.value),
+    }));
+  };
+
   const isValidate = () => {
     // 카테고리와 장소명이 정해지지 않으면 버튼 활성화 안되게 하기
     if (
@@ -300,12 +311,7 @@ export default function SchedulesEditPage() {
           className="w-full border border-[#D9D9D9] rounded-lg px-3 py-2 text-sm"
           defaultValue={schedule.costs}
           placeholder="소요되는 비용을 입력해주세요."
-          onChange={(e) =>
-            setSchedule((schedule) => ({
-              ...schedule,
-              costs: Number(e.target.value),
-            }))
-          }
+          onChange={handleCostChange}
         />
       </div>
 
