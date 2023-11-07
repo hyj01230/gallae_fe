@@ -273,8 +273,16 @@ export default function Comments({
                     )}
                   </div>
                 </div>
+
                 <div className="h-auto w-full text-sm/normal font-normal text-[#333333]">
-                  {value.contents}
+                  {value.contents.split("\n").map((line, lineIndex) => (
+                    <span key={lineIndex}>
+                      {line}
+                      {lineIndex < value.contents.split("\n").length - 1 && (
+                        <br />
+                      )}
+                    </span>
+                  ))}{" "}
                 </div>
                 <div className="flex flex-row justify-between">
                   <div className="text-xs/normal font-light text-[#999999] flex items-end">
