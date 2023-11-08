@@ -97,7 +97,7 @@ export default function MyPageCommentList() {
     <Layout isBottomNav={true}>
       <div
         onClick={onClickLeftArrowHandler}
-        className="mt-[61px] ml-4 flex justify-start items-center cursor-pointer"
+        className="mt-3 ml-4 flex justify-start items-center cursor-pointer"
       >
         <LeftArrow />
         <div className="ml-[18px] text-xl/8 font-semibold">나의 댓글 내역</div>
