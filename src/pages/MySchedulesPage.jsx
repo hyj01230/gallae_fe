@@ -15,7 +15,6 @@ export default function MySchedulesPage() {
   const { data, isLoading, error } = useQuery("mySchedule", getMySchedules, {
     retry: false,
     onError: (err) => {
-      console.log({ err });
       if (err.response.status === 500) {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
