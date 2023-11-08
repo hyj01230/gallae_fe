@@ -140,7 +140,7 @@ export default function Comments({
       );
       setComments(commentsResponse.data.content);
       setNewComment({ contents: "" });
-      setCommentType("normarl");
+      setCommentType("normal");
     } catch (error) {
       console.error("대댓글 삭제 중 오류 발생:", error);
     }
