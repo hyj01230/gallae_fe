@@ -10,7 +10,7 @@ export default function DetailsHeader() {
         <div
           className=" text-gray-400 cursor-pointer flex items-center"
           onClick={() => {
-            navigate(-1);
+            navigate("/posts");
           }}
         >
           <LeftArrow />
