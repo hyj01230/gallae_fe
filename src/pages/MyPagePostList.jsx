@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { LeftArrow } from "../assets/Icon";
-// ThreecIrcle
+import { LeftArrow, ThreecIrcle } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
+// import { deleteScheduleDetail } from "../api";
 
 export default function MyPagePostList() {
   // 페이지 이동
@@ -11,6 +11,39 @@ export default function MyPagePostList() {
   const onClickLeftArrowHandler = () => {
     navigate("/mypage");
   };
+  const onCilckMyPostHandler = (postId) => {
+    if (!openModal) {
+      navigate(`/posts/${postId}`);
+    }
+  };
+
+  const [openModal, setOpenModal] = useState(false);
+  const [modalPostId, setModalPostId] = useState("");
+  const onClickThreeCIrcleHandler = (e, postId) => {
+    e.stopPropagation();
+    if (modalPostId === postId && openModal) {
+      // 모달이 이미 열려 있을 때 누르면 모달 닫기
+      setOpenModal(false);
+    } else {
+      setModalPostId(postId);
+      setOpenModal(true);
+    }
+  };
+
+  const closeAllModals = () => {
+    setModalPostId(""); // 모달 상태 초기화
+    setOpenModal(false); // 모달 닫기
+  };
+
+  useEffect(() => {
+    // 모달이 열려 있을 때, 외부 영역 클릭 시 모달 닫기
+    window.addEventListener("click", closeAllModals);
+
+    return () => {
+      // 컴포넌트 언마운트 시에 리스너 제거
+      window.removeEventListener("click", closeAllModals);
+    };
+  }, []);
 
   // useState : get으로 가져온 사용자별 좋아요 게시글 데이터(getLikeList)
   const [postList, setPostList] = useState([]);
@@ -26,9 +59,16 @@ export default function MyPagePostList() {
     }
   };
 
-  const onCilckMyPostHandler = (postId) => {
-    navigate(`/posts/${postId}`);
-  };
+  // const onClickDeleteeHandler = async (schedulesId) => {
+  //   try {
+  //     const response = await deleteScheduleDetail(schedulesId);
+  //   } catch (error) {
+  //     // console.log("error", error);
+  // };
+
+  // const onClickEditHandler = () => {
+  //   navigate("/post/edit");
+  // };
 
   // useEffect : 렌더링되면 실행!
   useEffect(() => {
@@ -57,7 +97,7 @@ export default function MyPagePostList() {
       {/* <hr className="mt-3 border-[#F2F2F2] border-t-[1px]"></hr> */}
 
       <div className="mb-44">
-        {postList.length > 0 &&
+        {postList.length > 0 ? (
           postList
             .filter((item) => item.contents)
             .map((item) => (
@@ -83,7 +123,40 @@ export default function MyPagePostList() {
                     <div className="text-lg/normal font-semibold text-[#333333]">
                       {item.title}
                     </div>
-                    <div>{/* <ThreecIrcle /> */}</div>
+                    <div
+                      onClick={(e) => {
+                        onClickThreeCIrcleHandler(e, item.postId);
+                      }}
+                    >
+                      <ThreecIrcle />
+                      {/* 케밥 모달 */}
+                      {modalPostId === item.postId && openModal && (
+                        <div className="absolute right-6">
+                          <div className="w-[136px] h-[121px] bg-white shadow-[0_0_4px_4px_rgba(0,0,0,0.05)]">
+                            {/* <div
+                              onClick={() => onClickDeleteeHandler(item.postId)}
+                              className="pl-3 w-full h-10 border-b border-[#F2F2F2] flex justify-start items-center cursor-pointer"
+                            >
+                              삭제하기
+                            </div>
+                            <div
+                              onClick={() => navigate("/post/edit")}
+                              className="pl-3 w-full h-10 border-b border-[#F2F2F2] flex justify-start items-center cursor-pointer"
+                            >
+                              수정하기
+                            </div> */}
+                            <div
+                              // onClick={() =>
+                              //   shareKakao(item.title, item.postId)
+                              // }
+                              className="pl-3 w-full h-10 flex justify-start items-center cursor-pointer"
+                            >
+                              공유하기
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <div className="mt-[9px] px-3">
@@ -109,7 +182,14 @@ export default function MyPagePostList() {
                   </div>
                 </div>
               </div>
-            ))}
+            ))
+        ) : (
+          <div className="mx-4">
+            <div className="mt-4 flex w-full justify-center">
+              커뮤니티에 게시된 나의 글이 없습니다.
+            </div>
+          </div>
+        )}
       </div>
     </Layout>
   );
