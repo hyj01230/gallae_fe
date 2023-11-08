@@ -16,8 +16,6 @@ export default function SchedulesDatePage() {
   const [tripDateRange, setTripDateRange] = useState(null);
   const [schedule, setSchedule] = useRecoilState(scheduleState);
 
-  console.log(tripDateRange);
-
   const getDateRange = (startDate, endDate) => {
     let dateArray = [];
     let currentDate = new Date(startDate);
@@ -76,16 +74,21 @@ export default function SchedulesDatePage() {
         />
 
         {tripDateRange ? (
-          <div className="flex flex-1 justify-around mt-6 mx-4">
-            <div className="flex gap-1">
+          <div className="flex justify-around mt-6 mx-4">
+            <div className="flex gap-1 items-center">
               <div className="bg-[#F90] px-2 py-1 rounded-md font-medium text-white">
                 시작
               </div>
-              {tripDateRange[0].chosenDate}
+              <div className="px-1">{tripDateRange[0].chosenDate}</div>
             </div>
 
-            <div>
-              종료 : {tripDateRange[tripDateRange.length - 1].chosenDate}
+            <div className="flex gap-1 items-center">
+              <div className="bg-[#F90] px-2 py-1 rounded-md font-medium text-white">
+                종료
+              </div>
+              <div className="px-1">
+                {tripDateRange[tripDateRange.length - 1].chosenDate}
+              </div>
             </div>
           </div>
         ) : (
