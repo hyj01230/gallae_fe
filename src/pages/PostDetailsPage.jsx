@@ -6,8 +6,7 @@ import DetailsHeader from "../components/postDetailsPage/DetailsHeader";
 import Image from "../components/postDetailsPage/Image";
 import Comments from "../components/postDetailsPage/Comments";
 import DetailSchedules from "../components/postDetailsPage/DetailSchedules";
-import CommentsDisplay from "../components/postDetailsPage/PostCommentDisplay";
-import PostLine from "../components/post/PostLine";
+import PostCommentsDisplay from "../components/postDetailsPage/PostCommentDisplay";
 
 export default function PostDetailsPage() {
   const [postDetails, setPostDetails] = useState({
@@ -31,6 +30,9 @@ export default function PostDetailsPage() {
   const [commentNum, setCommentNum] = useState(0); // 댓글 개수 상태
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림/닫힘 상태 변수
   const [isUpdate, setIsUpdate] = useState(false);
+  const updateCommentNum = (num) => {
+    setCommentNum(num);
+  };
 
   const modalRef = useRef(null); // 모달 창 Ref
 
@@ -139,12 +141,16 @@ export default function PostDetailsPage() {
 
   const handleCloseModal = async () => {
     setIsModalOpen(false);
+
     // 모달 닫을 때 댓글 목록을 다시 불러와 렌더링
     const commentsResponse = await axiosInstance.get(
       `/api/posts/${postId}/comments`
     );
-    setPostComments(commentsResponse.data.content);
+    setComments(commentsResponse.data.content);
     setNewComment({ contents: "" });
+
+    // 이 부분에서 updateCommentNum 함수를 호출하여 commentNum 업데이트
+    updateCommentNum(commentsResponse.data.content.length);
   };
 
   // 모달 바깥 영역 클릭 시 닫히도록 하는 핸들러
@@ -211,14 +217,14 @@ export default function PostDetailsPage() {
 
           <DetailSchedules postId={postId} />
           <div className="fixed bottom-0 left-0 w-full bg-white ">
-            <PostLine />
-            <CommentsDisplay
+            <PostCommentsDisplay
               areCommentsVisible={areCommentsVisible}
               setCommentsVisible={setCommentsVisible}
               handleOpenModal={handleOpenModal}
               postDetails={postDetails}
               likedStatus={likedStatus}
               handleLikeClick={handleLikeClick}
+              commentNum={commentNum} // commentNum을 프롭으로 전달
             />
           </div>
         </div>
@@ -226,6 +232,7 @@ export default function PostDetailsPage() {
 
       {isModalOpen && (
         <Comments
+          postId={postId}
           isUpdate={isUpdate}
           setIsUpdate={setIsUpdate}
           comments={postComments}
@@ -234,6 +241,7 @@ export default function PostDetailsPage() {
           setNewComment={setNewComment}
           handleCommentSubmit={handleCommentSubmit}
           handleCloseModal={handleCloseModal}
+          updateCommentNum={setCommentNum} // commentNum을 업데이트할 함수 전달
         />
       )}
     </Layout>

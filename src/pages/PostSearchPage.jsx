@@ -97,24 +97,24 @@ export default function PostSearchPage() {
 
   // 입력 필드가 포커스 상태인지 여부에 따라 컨텐츠를 조건부로 렌더링
   const renderContent = inputFocused ? null : (
-    <div className="flex flex-wrap -mx-4  ">
+    <div className="flex flex-wrap ">
       {searchResults.length === 0 && keyword && (
         <p className="text-xl text-gray-600 mt-4 text-center p-4  bg-gray-100 border border-gray-300 rounded my-8 w-full ">
           <span className="text-yellow-500">{keyword}</span> 에 대한 검색 결과가
           없습니다.
         </p>
       )}
-      <div>
+      <div className="w-full">
         {searchResults.map((result) => (
           <div
             key={result.postId}
             style={{ height: "96px" }}
             onClick={() => navigate(`/posts/${result.postId}`)}
           >
-            <div className="mt-4 flex w-full h-[96px] ">
+            <div className="mt-4 flex w-full h-[96px] mr-2">
               {/* Image 컴포넌트 추가 */}
 
-              <div className="w-[120px] h-[96px] flex items-center justify-center ml-4">
+              <div className="w-[120px] h-[96px] flex items-center justify-center">
                 {result.postsPicturesList.length > 0 ? (
                   <img
                     className="w-[120px] h-[96px] rounded-md"
@@ -131,7 +131,7 @@ export default function PostSearchPage() {
                 <p className="text-[14px] ">
                   {highlightKeyword(truncateText(result.contents, 25), keyword)}
                 </p>
-                <div className="text-[12px] text-[#999] mr-2 text-right font-normal">
+                <div className="text-[12px] text-[#999] mr-3 text-right font-normal">
                   {result.nickName}
                 </div>
                 <div className="flex justify-between items-end">
@@ -166,7 +166,7 @@ export default function PostSearchPage() {
   // input창에 포커즈되면 보이는 부분
   return (
     <Layout>
-      <div className="mx-4 my-5">
+      <div className="mx-4 my-5 w-full">
         <div className="flex justify-center ">
           <div className="relative flex items-center">
             <div
@@ -187,7 +187,7 @@ export default function PostSearchPage() {
               onBlur={() => setInputFocused(false)}
               onKeyPress={handleKeyPress}
               ref={inputRef}
-              className="w-[321px] h-[40px] px-4 rounded-full focus:border-[#ff9900] bg-[#F2F2F2] ml-2 pl-[50px]"
+              className="w-full h-[40px] px-4 rounded-full focus:border-[#ff9900] bg-[#F2F2F2] ml-2 pl-[50px]"
             />
             <button
               onClick={() => handleSearch(keyword)}
