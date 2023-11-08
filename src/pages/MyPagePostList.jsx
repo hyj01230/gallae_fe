@@ -19,7 +19,7 @@ export default function MyPagePostList() {
   const getPostList = async () => {
     try {
       const response = await axiosInstance.get("/api/user/posts");
-      // console.log("response", response);
+      console.log("response", response);
       setPostList(response.data);
     } catch (error) {
       // console.log("error", error);
@@ -70,7 +70,7 @@ export default function MyPagePostList() {
                   <div>
                     {item.postsPicturesList.length > 0 ? (
                       <img
-                        className="w-full h-[167px] rounded-lg"
+                        className="w-full h-[167px] rounded-t-xl"
                         src={item.postsPicturesList[0].postsPicturesURL}
                       />
                     ) : (
@@ -100,9 +100,8 @@ export default function MyPagePostList() {
 
                   <div className="mt-8 mb-4 ml-3 mr-[14px] flex justify-between items-center">
                     <div className="flex flex-row text-xs/3 text-[#666666] font-normal">
-                      {/* <div>댓글 </div>
-                    <div>공유 </div>
-                    <div>좋아요 </div> */}
+                      <div className="mr-2">댓글 {item.commentNum}</div>
+                      <div>좋아요 {item.likeNum}</div>
                     </div>
                     <div className="text-xs/normal font-normal text-[#666666]">
                       게시일 {formatDate(item.createdAt)}
