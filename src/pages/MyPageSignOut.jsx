@@ -31,7 +31,7 @@ export default function MyPageSignOut() {
       alert("회원탈퇴");
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-      navigate("/");
+      navigate("/posts");
     } catch (error) {
       console.log("회원탈퇴 실패", error);
       alert(error.response.data.msg);

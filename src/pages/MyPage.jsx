@@ -4,13 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 // import defaultProfile from "../../public/img/defaultProfile.png";
 import { axiosInstance } from "../api/axiosInstance";
+import { removeCookie } from "../util/cookie";
 
 export default function MyPage() {
   // 페이지 이동
   const navigate = useNavigate(); // navigate 할당
   const onClickLogOutHandler = () => {
     localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
+    removeCookie("refreshToken");
     navigate("/posts"); // 로그아웃
   };
   const onClickModifyHandler = () => {

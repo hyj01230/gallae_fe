@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Layout from "../components/common/Layout";
 import { Logo } from "../assets/Icon";
 import { loginUser } from "../api";
+import { setCookie } from "../util/cookie";
 
 export default function LoginPage() {
   // 페이지 이동
@@ -41,17 +42,17 @@ export default function LoginPage() {
   const onClickLoginHandler = async () => {
     try {
       const response = await loginUser({ email, password });
-      // console.log("response", response);
+      console.log("response", response);
+      console.log("response", response.headers.authorization);
 
-      if (response.data.statusCode === 200) {
-        localStorage.setItem("accessToken", response.headers.authorization); // accessToken 저장!
-        localStorage.setItem(
-          "refreshToken",
-          response.headers.authorization_refresh
-        ); // refreshToken 저장!
+      localStorage.setItem("accessToken", response.headers.authorization); // accessToken 저장!
+      setCookie("refreshToken", response.headers.authorization_refresh, {
+        path: "/", // 모든 페이지에서 쿠키 접근 가능
+        secure: true, // https로 통신할때만 쿠키 저장됨
+        // httpOnly: true, // HttpOnly 속성을 적용(js 접근 불가) > 클라이언트에서 저장안됨
+      });
+      navigate("/");
 
-        navigate("/");
-      }
       alert(response.data.msg); //토스트 적용!
     } catch (error) {
       // console.log("error", error);
