@@ -173,9 +173,11 @@ export default function SchedulesCreatePage() {
           <div className="flex items-center gap-2 text-[14px]">
             <Marker />
             <div className="cursor-pointer" onClick={handleSearchClick}>
-              {schedule.placeName !== null
-                ? schedule.placeName
-                : "장소를 검색하세요"}
+              {schedule.placeName !== null ? (
+                schedule.placeName
+              ) : (
+                <span className="text-[#999]">장소를 검색하세요</span>
+              )}
             </div>
           </div>
           <DownArrow />

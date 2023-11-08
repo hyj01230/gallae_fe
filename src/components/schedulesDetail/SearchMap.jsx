@@ -10,7 +10,7 @@ export default function SearchMap({
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
-  const [list, setList] = useState([]);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
     if (!map) return;
@@ -22,9 +22,17 @@ export default function SearchMap({
     }
 
     ps.keywordSearch(keyword, (data, status, _pagination) => {
+      if (status === "ZERO_RESULT") {
+        setErrorMsg("검색 결과를 찾을 수 없습니다");
+        setSearchList([]);
+        return;
+      }
+
       if (status === kakao.maps.services.Status.OK) {
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
         // LatLngBounds 객체에 좌표를 추가합니다
+        setErrorMsg(null);
+
         const bounds = new kakao.maps.LatLngBounds();
         let markers = [];
 
@@ -65,19 +73,23 @@ export default function SearchMap({
       level={3}
       onCreate={setMap}
     >
-      {markers.map((marker) => (
-        <MapMarker
-          key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
-          position={marker.position}
-          onClick={() => setInfo(marker)}
-        >
-          {info && info.content === marker.content && (
-            <div style={{ color: "#000", visibility: "hidden" }}>
-              {marker.content}
-            </div>
-          )}
-        </MapMarker>
-      ))}
+      {errorMsg ? (
+        <div className="mt-5 mx-4 text-[18px] text-center ">{errorMsg}</div>
+      ) : (
+        markers.map((marker) => (
+          <MapMarker
+            key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
+            position={marker.position}
+            onClick={() => setInfo(marker)}
+          >
+            {info && info.content === marker.content && (
+              <div style={{ color: "#000", visibility: "hidden" }}>
+                {marker.content}
+              </div>
+            )}
+          </MapMarker>
+        ))
+      )}
     </Map>
   );
 }
