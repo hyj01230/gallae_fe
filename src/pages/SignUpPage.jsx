@@ -136,8 +136,6 @@ export default function SignUpPage() {
     if (emailMessage !== true) {
       alert("이메일을 올바르게 입력해주세요.");
       return;
-    } else {
-      alert("인증번호가 발송되었습니다.");
     }
 
     try {
