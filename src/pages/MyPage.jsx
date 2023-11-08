@@ -152,7 +152,7 @@ export default function MyPage() {
   return (
     <Layout isBottomNav={true}>
       <div className="mx-4">
-        <div className="mt-[60px] flex flex-row justify-end items-center">
+        <div className="mt-5 flex flex-row justify-end items-center">
           <div
             className="text-[#333333] mr-[7px] cursor-pointer text-sm/normal font-medium"
             onClick={onClickLogOutHandler}

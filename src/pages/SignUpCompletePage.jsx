@@ -4,9 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 export default function SignUpCompletePage() {
   // 페이지 이동
   const navigate = useNavigate();
-  const onClickHomeBtnHandler = () => {
-    navigate("/");
-  };
   const onClickLoginHandler = () => {
     navigate("/login");
   };
@@ -18,31 +15,26 @@ export default function SignUpCompletePage() {
 
   return (
     <Layout>
-      <div className="flex flex-col justify-center items-center mt-[292px] mb-[379px]">
-        <div className="w-[121px] h-[121px] mb-4 flex justify-center items-center">
-          <img src={"/img/welcome.png"} className="w-[121px] h-[121px]" />
+      <div className="flex flex-col justify-center items-center h-full">
+        <div className="w-[184px] h-[184px] flex justify-center items-center">
+          <img src={"/img/welcome.png"} className="w-[184px] h-[184px]" />
         </div>
         <div className="flex flex-col justify-center items-center">
-          <div className="mb-3 text-lg font-bold">
+          <div className="mt-3 text-xl/normal font-bold text-[#333333]">
             {nickName ? nickName : "여행자"} 님
           </div>
-          <div className="text-lg">회원이 된 것을 축하드려요!</div>
-        </div>
-        <div className="mt-6 flex justify-center items-center">
-          <div
-            onClick={onClickLoginHandler}
-            className="text-base/normal text-[#888888] cursor-pointer"
-          >
-            로그인 하러가기
+          <div className="mt-3 text-xl/normal font-medium text-[#333333]">
+            회원이 된 것을 축하드려요!
           </div>
         </div>
+        <div className="mb-[72px]"></div>
       </div>
 
       <div
-        className="fixed bottom-0 max-w-3xl w-full h-16 bg-[#FF9900] text-white flex items-center justify-center cursor-pointer"
-        onClick={onClickHomeBtnHandler}
+        className="fixed bottom-0 max-w-3xl w-full h-[72px] bg-[#FF9900] text-[#FFFFFF] flex items-center justify-center cursor-pointer"
+        onClick={onClickLoginHandler}
       >
-        홈화면 바로가기
+        로그인 바로가기
       </div>
     </Layout>
   );

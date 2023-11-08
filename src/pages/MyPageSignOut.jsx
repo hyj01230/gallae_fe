@@ -41,7 +41,7 @@ export default function MyPageSignOut() {
   return (
     <Layout>
       <div className="mx-4 mb-24">
-        <div className="flex items-center mt-16">
+        <div className="flex items-center mt-3">
           <div onClick={onClickLeftArrowHandler} className="cursor-pointer">
             <LeftArrow />
           </div>
