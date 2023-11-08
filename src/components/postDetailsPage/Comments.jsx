@@ -35,6 +35,8 @@ export default function Comments({
   handleCommentSubmit,
   setNewComment,
   handleCloseModal,
+  updateCommentNum,
+  postId,
 }) {
   const [selectedComment, setSelectedComment] = useState(null);
   const [selectedCommentForEdit, setSelectedCommentForEdit] = useState(null);
@@ -52,6 +54,13 @@ export default function Comments({
   const editedContentRef = useRef(null);
 
   const nickName = useRecoilValue(nickNameState);
+
+  // const addComment = (newComment) => {
+  //   // 새로운 댓글을 추가하고 commentNum을 업데이트
+  //   const updatedComments = [...comments, newComment];
+  //   setComments(updatedComments);
+  //   updateCommentNum(updatedComments.length);
+  // };
 
   // useEffect(() => {
   //   // ... (editedContent가 변경될 때의 로직)
@@ -122,12 +131,14 @@ export default function Comments({
         contents
       );
       setCommentType("normal");
+      console.log("response:", response);
 
-      // // 대댓글 작성 후 서버에서 대댓글 목록을 다시 가져옴
-      // const commentsResponse = await axiosInstance.get(
-      //   `/api/posts/${postId}/comments`
-      // );
-      // setComments(commentsResponse.data.content);
+      // 대댓글 작성 후 서버에서 대댓글 목록을 다시 가져옴
+      const commentsResponse = await axiosInstance.get(
+        `/api/posts/${postId}/comments`
+      );
+      setComments(commentsResponse.data.content);
+      setNewComment({ contents: "" });
 
       // setReplyContent("");
       // setSelectedCommentForReply(null);
@@ -274,7 +285,15 @@ export default function Comments({
                   </div>
                 </div>
                 <div className="h-auto w-full text-sm/normal font-normal text-[#333333]">
-                  {value.contents}
+                  {/* 컨텐츠 내용을 줄바꿈해서 나타나게 하기 */}
+                  {value.contents.split("\n").map((line, lineIndex) => (
+                    <span key={lineIndex}>
+                      {line}
+                      {lineIndex < value.contents.split("\n").length - 1 && (
+                        <br />
+                      )}
+                    </span>
+                  ))}
                 </div>
                 <div className="flex flex-row justify-between">
                   <div className="text-xs/normal font-light text-[#999999] flex items-end">
@@ -284,9 +303,15 @@ export default function Comments({
                     )}
                   </div>
                   <div className="flex flex-row">
-                    {/* <div className="mr-1 flex flex-row items-center h-6 w-[59px] text-center border rounded-[18px]">
+                    <div className="mr-1 flex flex-row items-center h-6 w-[59px] text-center border rounded-[18px] cursor-pointer">
                       <Reply />
-                      <div className="text-xs/normal text-[#D9D9D9] font-normal">
+                      <div
+                        className="text-xs/normal text-[#D9D9D9] font-normal"
+                        onClick={() => {
+                          setSelectedComment(value.commentId);
+                          setCommentType("reply");
+                        }}
+                      >
                         답글
                       </div>
                     </div>
@@ -297,41 +322,40 @@ export default function Comments({
                       <div className="text-xs/normal text-[#D9D9D9] font-normal">
                         1
                       </div>
-                    </div> */}
-                    {/* <button
-                      onClick={() => {
-                        setSelectedComment(value.commentId);
-                        setCommentType("reply");
-                      }}
-                    >
-                      답글
-                    </button> */}
+                    </div>
+                    {/* <button>답글</button> */}
                   </div>
                 </div>
               </div>
               {/* 대댓글 */}
-              {/* {value.repliesList.length > 1 &&
+
+              {value.repliesList.length >= 1 &&
                 value.repliesList.map((reply, index) => (
                   <div key={index}>
-                    <div className="bg-[#FAFAFA] px-4 py-[15px] h-[126px] border-b border-[#F2F2F2]"> */}
-              {/* 대댓글 내용 */}
-              {/* <div className="flex flex-row items-center">
+                    <div className="bg-[#FAFAFA] px-4 py-[15px] h-[126px] border-b border-[#F2F2F2] ">
+                      {/* 대댓글 내용 */}
+                      <div className="flex flex-row items-center w-full">
                         <Reply />
-                        <div className="ml-3 flex flex-row items-center w-full">
+                        <div className="ml-3 flex flex-row items-center justify-between w-full">
                           <div className="mr-2 text-base/normal font-semibold text-[#333333]">
-                            {reply.nickname}
+                            <span className="text-base/normal font-semibold text-[#333333]">
+                              {reply.nickname}
+                            </span>
+                            {reply.checkUser === "글쓴이" && (
+                              <span className="border border-orange-300 bg-white rounded-[12px] px-2 ml-2 text-yellow-400 text-[12px]">
+                                글쓴이
+                              </span>
+                            )}
                           </div>
-                          <div className="pr- border border-[#FF9900] rounded-xl w-[43px] h-4 text-[10px]/normal text-[#FF9900] font-normal text-center">
-                            글쓴이
-                          </div>
+
                           <div
                             onClick={() =>
                               handleOpenEditDeleteModal(reply.repliesId)
                             }
                           >
-                            <CommentThreeDots /> */}
-              {/* 케밥 메뉴를 눌렀을 때 작성자면 댓글 수정/삭제 모달을 띄운다 */}
-              {/* {selectedComment === reply.repliesId &&
+                            <CommentThreeDots />
+                            {/* 케밥 메뉴를 눌렀을 때 작성자면 댓글 수정/삭제 모달을 띄운다 */}
+                            {selectedComment === reply.repliesId &&
                             reply.nickname === nickName &&
                             isEditDelete ? (
                               <EditDeleteModal
@@ -358,8 +382,8 @@ export default function Comments({
                         </div>
                       </div>
                     </div>
-                  </div> */}
-              {/* ))} */}
+                  </div>
+                ))}
             </div>
           ))
         ) : (
@@ -369,7 +393,8 @@ export default function Comments({
 
       {/* [CSS] 댓글 입력창 고정 부분 */}
       <div
-        className="fixed left-0 right-0 bottom-0 max-w-screen-md mx-auto"
+        className="fixed left-0 right-0 bottom-0 max-w-screen-md mx-auto "
+        style={{ backgroundColor: "#F2F2F2" }}
         onClick={handleCommentButtonClick}
       >
         <textarea
@@ -383,8 +408,15 @@ export default function Comments({
           }}
           maxLength={300} // 최대 입력 길이를 300으로 설정
           placeholder="댓글을 입력하세요."
-          className="w-full h-[57px] p-4 resize-none outline-none  overflow-hidden"
+          className="w-full h-[57px] p-4 resize-none outline-none overflow-hidden"
+          style={{
+            backgroundColor: "#F2F2F2",
+            width: "100%",
+            wordWrap: "break-word",
+            overflowWrap: "break-word",
+          }}
         />
+
         <button
           onClick={async (e) => {
             if (newComment.contents.trim() === "") {
@@ -404,10 +436,11 @@ export default function Comments({
               await handleAddReply(newComment);
             }
           }}
-          className="bg-white font-[14px] absolute top-4 right-5 mx-0 rounded-md  text-[#666]"
+          className="bg-[#f2f2f2] font-[14px] absolute top-4 right-5 mx-0 rounded-md  text-[#666]"
         >
           {commentType === "normal" && "등록"}
           {commentType === "edit" && "수정"}
+          {commentType === "reply" && "등록"}
         </button>
       </div>
     </div>
