@@ -136,6 +136,8 @@ export default function SignUpPage() {
     if (emailMessage !== true) {
       alert("이메일을 올바르게 입력해주세요.");
       return;
+    } else {
+      alert("인증번호가 발송되었습니다.");
     }
 
     try {
@@ -145,7 +147,7 @@ export default function SignUpPage() {
       // console.log("response", response);
 
       if (response.data.statusCode === 200) {
-        alert(response.data.msg);
+        // alert(response.data.msg); // 인증번호 발송 완료 안내인데, 느려서 주석하고 위에 씀
         setEmailCordInput(true);
       }
     } catch (error) {
