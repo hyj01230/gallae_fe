@@ -230,7 +230,7 @@ export default function Comments({
 
       {/* [CSS] 댓글 및 대댓글 리스트 */}
       <div
-        className="grid divide-y overflow-auto overflow-y-auto mb-[80px] mr-4 w-[400px]"
+        className="grid divide-y overflow-auto overflow-y-auto mb-[80px] mr-4 w-full"
         style={{ overflowX: "hidden" }}
       >
         {Array.isArray(comments) && comments.length > 0 ? (
@@ -273,16 +273,8 @@ export default function Comments({
                     )}
                   </div>
                 </div>
-
                 <div className="h-auto w-full text-sm/normal font-normal text-[#333333]">
-                  {value.contents.split("\n").map((line, lineIndex) => (
-                    <span key={lineIndex}>
-                      {line}
-                      {lineIndex < value.contents.split("\n").length - 1 && (
-                        <br />
-                      )}
-                    </span>
-                  ))}{" "}
+                  {value.contents}
                 </div>
                 <div className="flex flex-row justify-between">
                   <div className="text-xs/normal font-light text-[#999999] flex items-end">
@@ -381,8 +373,8 @@ export default function Comments({
         onClick={handleCommentButtonClick}
       >
         <textarea
-          ref={editedContentRef}
           value={newComment.contents}
+          ref={editedContentRef}
           onChange={(e) => {
             if (e.target.value.length <= 300) {
               // 입력 길이가 300자 이하일 때만 값을 업데이트합니다.
@@ -391,13 +383,7 @@ export default function Comments({
           }}
           maxLength={300} // 최대 입력 길이를 300으로 설정
           placeholder="댓글을 입력하세요."
-          style={{
-            width: "90%",
-
-            wordWrap: "break-word",
-            overflowWrap: "break-word",
-          }}
-          className="h-[57px] p-4 resize-none outline-none overflow-hidden"
+          className="w-full h-[57px] p-4 resize-none outline-none  overflow-hidden"
         />
         <button
           onClick={async (e) => {
@@ -418,7 +404,7 @@ export default function Comments({
               await handleAddReply(newComment);
             }
           }}
-          className="bg-white font-[14px] absolute top-4 right-5 mx-0 rounded-md text-[#666]"
+          className="bg-white font-[14px] absolute top-4 right-5 mx-0 rounded-md  text-[#666]"
         >
           {commentType === "normal" && "등록"}
           {commentType === "edit" && "수정"}

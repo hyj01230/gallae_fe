@@ -21,8 +21,8 @@ export default function PostCategory({ onCategorySelect }) {
   };
 
   return (
-    <div className="bg-white mx-6 mb-2 sticky top-0 z-10 overflow-x-auto">
-      <div className="flex justify-between">
+    <div className="bg-white mx-auto mb-2 sticky top-0 z-10 overflow-x-auto  max-w-3xl ">
+      <div className="flex justify-center  w-full">
         <div className="whitespace-nowrap overflow-x-auto">
           <div
             style={getCategoryStyle("전체")}

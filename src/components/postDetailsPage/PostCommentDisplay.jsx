@@ -2,6 +2,7 @@
 
 import { LikeHeart, LikeFullHeart, CommentIcon } from "../../assets/Icon";
 import { useNavigate } from "react-router-dom";
+import Layout from "../common/Layout";
 
 export default function PostCommentsDisplay({
   areCommentsVisible,
@@ -13,8 +14,7 @@ export default function PostCommentsDisplay({
 }) {
   const navigate = useNavigate();
   return (
-    // h-50px뒤부터 레이아웃 컴포넌트 맞춤
-    <div className="flex items-center justify-between text-sm text-gray-500 h-[50px] border-b-2 relative overflow-auto max-w-3xl mx-auto ">
+    <div className="flex items-center justify-between text-sm text-gray-500 h-[50px] border-b-2 border-t-8 border-gray-100 relative overflow-auto max-w-3xl mx-auto bottom-0 w-full">
       <div
         className="flex items-center space-x-2 flex-1 justify-center p-3"
         onClick={() => setCommentsVisible(!areCommentsVisible)}
@@ -26,7 +26,7 @@ export default function PostCommentsDisplay({
           댓글 {postDetails.commentNum}
         </p>
       </div>
-      <div className="border border-gray-500"></div>
+      <div className="border border-gray-500 "></div>
       <div
         className="flex items-center space-x-2 flex-1 justify-center"
         onClick={() => {
