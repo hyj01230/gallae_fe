@@ -12,7 +12,18 @@ export default function MySchedulesPage() {
   const navigate = useNavigate();
   const modal = useModal();
   const [isSelect, setIsSelect] = useState(null);
-  const { data, isLoading, error } = useQuery("mySchedule", getMySchedules);
+  const { data, isLoading, error } = useQuery("mySchedule", getMySchedules, {
+    retry: false,
+    onError: (err) => {
+      console.log({ err });
+      if (err.response.status === 500) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        navigate("/posts");
+        return;
+      }
+    },
+  });
 
   const handleOpenModal = (data) => {
     setIsSelect(data);
