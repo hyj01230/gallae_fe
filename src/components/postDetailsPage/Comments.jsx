@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../api/axiosInstance";
 import { useRecoilValue } from "recoil";
@@ -7,7 +7,7 @@ import { CommentThreeDots, LeftArrow, Reply } from "../../assets/Icon";
 import EditDeleteModal from "./EditDeleteModal";
 
 // 날짜 시간 형식
-function formatDate(date, isModified) {
+function formatDate(date) {
   if (!date || isNaN(new Date(date).getTime())) {
     return "";
   }
@@ -27,51 +27,21 @@ function formatDate(date, isModified) {
 }
 
 export default function Comments({
-  isUpdate,
-  setIsUpdate,
   comments,
   setComments,
   newComment,
   handleCommentSubmit,
   setNewComment,
   handleCloseModal,
-  updateCommentNum,
   postId,
 }) {
-  const [selectedComment, setSelectedComment] = useState(null);
-  const [selectedCommentForEdit, setSelectedCommentForEdit] = useState(null);
-  const [editedContent, setEditedContent] = useState("");
-  const [editedCommentIds, setEditedCommentIds] = useState([]);
-  const [replyContent, setReplyContent] = useState(""); // 대댓글 입력 필드
-  const [selectedCommentForReply, setSelectedCommentForReply] = useState(null);
-  const [isReplyInputVisible, setIsReplyInputVisible] = useState(false);
-  const [selectedReplyForEdit, setSelectedReplyForEdit] = useState(null);
-  const [editedReplyContent, setEditedReplyContent] = useState("");
-  const editedReplyContentRef = useRef(null);
+  const [selectedId, setSelectedId] = useState(null);
   const [isEditDelete, setIsEditDelete] = useState(false); // 댓글 수정/삭제 모달 상태 관리
   const [commentType, setCommentType] = useState("normal"); // 댓글 상태관리 (댓글 입력, 댓글 수정, 대댓글 입력,대댓글 수정)
   const navigate = useNavigate();
   const editedContentRef = useRef(null);
 
   const nickName = useRecoilValue(nickNameState);
-
-  // const addComment = (newComment) => {
-  //   // 새로운 댓글을 추가하고 commentNum을 업데이트
-  //   const updatedComments = [...comments, newComment];
-  //   setComments(updatedComments);
-  //   updateCommentNum(updatedComments.length);
-  // };
-
-  // useEffect(() => {
-  //   // ... (editedContent가 변경될 때의 로직)
-  // }, [editedContent]);
-
-  // 이벤트 핸들러 함수들
-  const handleEdit = (comment) => {
-    setSelectedCommentForEdit(comment);
-    setEditedContent(comment.contents);
-    editedContentRef.current.focus(); // input 엘리먼트에 포커스를 주기
-  };
 
   // 댓글 작성 버튼 클릭 핸들러
   const handleCommentButtonClick = async () => {
@@ -83,17 +53,19 @@ export default function Comments({
   };
 
   // 댓글 삭제 로직
-  const handleDelete = async (commentId) => {
-    const updatedComments = comments.filter((c) => c.commentId !== commentId);
-
+  const handleDelete = async () => {
     try {
-      await axiosInstance.delete(`/api/comments/${commentId}`, {
+      await axiosInstance.delete(`/api/comments/${selectedId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
-      setIsEditDelete(false);
-      setComments(updatedComments);
+      // 대댓글 작성 후 서버에서 대댓글 목록을 다시 가져옴
+      const commentsResponse = await axiosInstance.get(
+        `/api/posts/${postId}/comments`
+      );
+      setComments(commentsResponse.data.content);
+      setNewComment({ contents: "" });
     } catch (error) {
       console.error("댓글 삭제 중 오류 발생:", error);
     }
@@ -101,21 +73,17 @@ export default function Comments({
   // 댓글 저장 로직
   const handleSave = async (contents) => {
     try {
-      await axiosInstance.put(`/api/comments/${selectedComment}`, contents, {
+      await axiosInstance.put(`/api/comments/${selectedId}`, contents, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
 
-      const updatedComments = comments.map((c) => {
-        if (c.commentId === selectedComment) {
-          return { ...c, contents: contents.contents };
-        }
-        return c;
-      });
-
-      setIsUpdate(!isUpdate);
-      setComments(updatedComments);
+      // 대댓글 작성 후 서버에서 대댓글 목록을 다시 가져옴
+      const commentsResponse = await axiosInstance.get(
+        `/api/posts/${postId}/comments`
+      );
+      setComments(commentsResponse.data.content);
       setNewComment({ contents: "" });
       setCommentType("normal");
     } catch (error) {
@@ -127,11 +95,44 @@ export default function Comments({
   const handleAddReply = async (contents) => {
     try {
       const response = await axiosInstance.post(
-        `/api/comments/${selectedComment}/replies`,
+        `/api/comments/${selectedId}/replies`,
         contents
       );
       setCommentType("normal");
       console.log("response:", response);
+    } catch (error) {
+      console.error("대댓글 작성 오류:", error);
+    }
+  };
+
+  // 대댓글 저장 로직
+  const handleSaveReply = async (comment) => {
+    try {
+      await axiosInstance.put(`/api/replies/${selectedId}`, comment, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
+      // 대댓글 작성 후 서버에서 대댓글 목록을 다시 가져옴
+      const commentsResponse = await axiosInstance.get(
+        `/api/posts/${postId}/comments`
+      );
+      setComments(commentsResponse.data.content);
+      setNewComment({ contents: "" });
+      setCommentType("normal");
+    } catch (error) {
+      console.error("대댓글 수정 중 오류 발생:", error);
+    }
+  };
+  // 대댓글 삭제 로직
+  const handleDeleteReply = async () => {
+    try {
+      // 대댓글을 삭제하는 API 호출
+      await axiosInstance.delete(`/api/replies/${selectedId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
 
       // 대댓글 작성 후 서버에서 대댓글 목록을 다시 가져옴
       const commentsResponse = await axiosInstance.get(
@@ -139,95 +140,16 @@ export default function Comments({
       );
       setComments(commentsResponse.data.content);
       setNewComment({ contents: "" });
-
-      // setReplyContent("");
-      // setSelectedCommentForReply(null);
-    } catch (error) {
-      console.error("대댓글 작성 오류:", error);
-    }
-  };
-
-  const isCommentEdited = (comment) =>
-    editedCommentIds.includes(comment.commentId);
-  // 대댓글 수정 로직
-  const handleEditReply = (comment, reply) => {
-    setSelectedCommentForEdit(comment);
-    setSelectedCommentForReply(reply);
-    setEditedContent(reply.contents);
-  };
-  // 대댓글 저장 로직
-  const handleSaveReply = async (comment, reply) => {
-    try {
-      await axiosInstance.put(
-        `/api/replies/${reply.repliesId}`,
-        { contents: editedReplyContent },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
-
-      const updatedReplies = comment.repliesList.map((r) => {
-        if (r.repliesId === reply.repliesId) {
-          setEditedCommentIds([...editedCommentIds, reply.repliesId]);
-          return { ...r, contents: editedReplyContent, modifiedAt: new Date() };
-        }
-        return r;
-      });
-
-      const updatedComments = comments.map((c) => {
-        if (c.commentId === comment.commentId) {
-          return { ...c, repliesList: updatedReplies };
-        }
-        return c;
-      });
-
-      setComments(updatedComments);
-      setEditedReplyContent("");
-    } catch (error) {
-      console.error("대댓글 수정 중 오류 발생:", error);
-    }
-  };
-  // 대댓글 삭제 로직
-  const handleDeleteReply = async (comment, reply) => {
-    try {
-      // 대댓글을 삭제하는 API 호출
-      await axiosInstance.delete(`/api/replies/${reply.repliesId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
-
-      // 대댓글 삭제 후, 대댓글 목록을 업데이트합니다.
-      const updatedReplies = comment.repliesList.filter(
-        (r) => r.repliesId !== reply.repliesId
-      );
-
-      const updatedComments = comments.map((c) => {
-        if (c.commentId === comment.commentId) {
-          return { ...c, repliesList: updatedReplies };
-        }
-        return c;
-      });
-
-      setComments(updatedComments);
+      setCommentType("normarl");
     } catch (error) {
       console.error("대댓글 삭제 중 오류 발생:", error);
     }
   };
 
-  const handleOriginalPost = async () => {
-    handleCloseModal();
-  };
-
   const handleOpenEditDeleteModal = (index) => {
-    setSelectedComment(index);
+    setSelectedId(index);
     setIsEditDelete(!isEditDelete);
   };
-
-  // console.log(comments);
-  // console.log(selectedComment);
 
   return (
     <div className="bg-white fixed top-0 left-0 right-0  h-screen  z-50 flex flex-col  overflow-auto max-w-3xl mx-auto">
@@ -264,14 +186,16 @@ export default function Comments({
                     )}
                   </div>
                   <div
+                    className="relative"
                     onClick={() => handleOpenEditDeleteModal(value.commentId)}
                   >
                     <CommentThreeDots />
                     {/* 케밥 메뉴를 눌렀을 때 작성자면 댓글 수정/삭제 모달을 띄운다 */}
-                    {selectedComment === value.commentId &&
+                    {selectedId === value.commentId &&
                     value.nickname === nickName &&
                     isEditDelete ? (
                       <EditDeleteModal
+                        isComment={true}
                         commentId={value.commentId}
                         contents={value.contents}
                         setCommentType={setCommentType}
@@ -308,7 +232,7 @@ export default function Comments({
                       <div
                         className="text-xs/normal text-[#D9D9D9] font-normal"
                         onClick={() => {
-                          setSelectedComment(value.commentId);
+                          setSelectedId(value.commentId);
                           setCommentType("reply");
                         }}
                       >
@@ -349,21 +273,23 @@ export default function Comments({
                           </div>
 
                           <div
+                            className="relative"
                             onClick={() =>
                               handleOpenEditDeleteModal(reply.repliesId)
                             }
                           >
                             <CommentThreeDots />
                             {/* 케밥 메뉴를 눌렀을 때 작성자면 댓글 수정/삭제 모달을 띄운다 */}
-                            {selectedComment === reply.repliesId &&
+                            {selectedId === reply.repliesId &&
                             reply.nickname === nickName &&
                             isEditDelete ? (
                               <EditDeleteModal
+                                isReplyComment={true}
                                 commentId={reply.repliesId}
                                 contents={reply.contents}
                                 setCommentType={setCommentType}
                                 setNewComment={setNewComment}
-                                handleDelete={handleDelete}
+                                handleDelete={handleDeleteReply}
                               />
                             ) : (
                               <></>
@@ -435,12 +361,17 @@ export default function Comments({
             if (commentType === "reply") {
               await handleAddReply(newComment);
             }
+
+            if (commentType === "replyEdit") {
+              await handleSaveReply(newComment);
+            }
           }}
           className="bg-[#f2f2f2] font-[14px] absolute top-4 right-5 mx-0 rounded-md  text-[#666]"
         >
           {commentType === "normal" && "등록"}
           {commentType === "edit" && "수정"}
           {commentType === "reply" && "등록"}
+          {commentType === "replyEdit" && "수정"}
         </button>
       </div>
     </div>
