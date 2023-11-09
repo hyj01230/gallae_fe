@@ -5,13 +5,11 @@ import { useRecoilValue } from "recoil";
 import { nickNameState } from "../../store/atom";
 import { CommentThreeDots, LeftArrow, Reply } from "../../assets/Icon";
 import EditDeleteModal from "./EditDeleteModal";
-
 // 날짜 시간 형식
 function formatDate(date) {
   if (!date || isNaN(new Date(date).getTime())) {
     return "";
   }
-
   const options = {
     year: "numeric",
     month: "2-digit",
@@ -20,12 +18,9 @@ function formatDate(date) {
     minute: "2-digit",
     hour12: false,
   };
-
   const formattedDate = new Date(date).toLocaleString("ko-KR", options);
-
   return formattedDate.replace("오전", "").replace("오후", "");
 }
-
 export default function Comments({
   comments,
   setComments,
@@ -40,9 +35,7 @@ export default function Comments({
   const [commentType, setCommentType] = useState("normal"); // 댓글 상태관리 (댓글 입력, 댓글 수정, 대댓글 입력,대댓글 수정)
   const navigate = useNavigate();
   const editedContentRef = useRef(null);
-
   const nickName = useRecoilValue(nickNameState);
-
   // 댓글 작성 버튼 클릭 핸들러
   const handleCommentButtonClick = async () => {
     if (!localStorage.getItem("accessToken")) {
@@ -51,7 +44,6 @@ export default function Comments({
       return;
     }
   };
-
   // 댓글 삭제 로직
   const handleDelete = async () => {
     try {
@@ -78,7 +70,6 @@ export default function Comments({
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
-
       // 대댓글 작성 후 서버에서 대댓글 목록을 다시 가져옴
       const commentsResponse = await axiosInstance.get(
         `/api/posts/${postId}/comments`
@@ -90,7 +81,6 @@ export default function Comments({
       console.error("댓글 수정 중 오류 발생:", error);
     }
   };
-
   // 대댓글 추가 로직
   const handleAddReply = async (contents) => {
     try {
@@ -110,7 +100,6 @@ export default function Comments({
       console.error("대댓글 작성 오류:", error);
     }
   };
-
   // 대댓글 저장 로직
   const handleSaveReply = async (comment) => {
     try {
@@ -139,7 +128,6 @@ export default function Comments({
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
-
       // 대댓글 작성 후 서버에서 대댓글 목록을 다시 가져옴
       const commentsResponse = await axiosInstance.get(
         `/api/posts/${postId}/comments`
@@ -151,12 +139,10 @@ export default function Comments({
       console.error("대댓글 삭제 중 오류 발생:", error);
     }
   };
-
   const handleOpenEditDeleteModal = (index) => {
     setSelectedId(index);
     setIsEditDelete(!isEditDelete);
   };
-
   return (
     <div className="bg-white fixed top-0 left-0 right-0  h-screen  flex flex-col  overflow-auto max-w-3xl mx-auto">
       {/* [CSS] 헤더 */}
@@ -166,7 +152,6 @@ export default function Comments({
         </div>
         <div className="text-[20px] text-[#333] font-semibold py-3">댓글</div>
       </div>
-
       {/* [CSS] 댓글 및 대댓글 리스트 */}
       <div
         className="grid divide-y overflow-auto overflow-y-auto mb-[80px] mr-4 w-full"
@@ -216,7 +201,6 @@ export default function Comments({
                 </div>
                 <div className="h-auto w-full text-sm/normal font-normal text-[#333333]">
                   {/* 컨텐츠 내용을 줄바꿈해서 나타나게 하기 */}
-
                   {value.contents &&
                     value.contents.split("\n").map((line, lineIndex) => (
                       <span key={lineIndex}>
@@ -253,7 +237,6 @@ export default function Comments({
                 </div>
               </div>
               {/* 대댓글 */}
-
               {value.repliesList &&
                 value.repliesList.length >= 1 &&
                 value.repliesList.map((reply, index) => (
@@ -273,7 +256,6 @@ export default function Comments({
                               </span>
                             )}
                           </div>
-
                           <div
                             className="relative"
                             onClick={() =>
@@ -299,11 +281,9 @@ export default function Comments({
                           </div>
                         </div>
                       </div>
-
                       <div className="ml-9 h-9 w-full text-sm/normal font-normal text-[#333333]">
                         {reply.contents}
                       </div>
-
                       <div className="ml-9 flex flex-row justify-between">
                         <div className="text-xs/normal font-light text-[#999999] flex items-end">
                           {formatDate(reply.createAt)}
@@ -321,7 +301,6 @@ export default function Comments({
           </div>
         )}
       </div>
-
       {/* [CSS] 댓글 입력창 고정 부분 */}
       <div
         className="fixed left-0 right-0 bottom-0 max-w-screen-md mx-auto "
@@ -347,26 +326,21 @@ export default function Comments({
             overflowWrap: "break-word",
           }}
         />
-
         <button
           onClick={async (e) => {
             if (newComment.contents.trim() === "") {
               alert("댓글 내용을 입력하세요.");
               return;
             }
-
             if (commentType === "normal") {
               await handleCommentSubmit(e);
             }
-
             if (commentType === "edit") {
               await handleSave(newComment);
             }
-
             if (commentType === "reply") {
               await handleAddReply(newComment);
             }
-
             if (commentType === "replyEdit") {
               await handleSaveReply(newComment);
             }
