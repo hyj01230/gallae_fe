@@ -22,7 +22,7 @@ export default function PostDetailsPage() {
     // 다른 속성들 초기값 설정
   });
   const [comments, setComments] = useState([]);
-  const [postComments, setPostComments] = useState([{}]);
+  const [postComments, setPostComments] = useState([]);
   const [newComment, setNewComment] = useState({ contents: "" });
   const { postId } = useParams();
   const [likedStatus, setLikedStatus] = useState({});

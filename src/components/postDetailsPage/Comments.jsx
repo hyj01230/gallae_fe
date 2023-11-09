@@ -98,6 +98,12 @@ export default function Comments({
         `/api/comments/${selectedId}/replies`,
         contents
       );
+      // 대댓글 작성 후 서버에서 대댓글 목록을 다시 가져옴
+      const commentsResponse = await axiosInstance.get(
+        `/api/posts/${postId}/comments`
+      );
+      setComments(commentsResponse.data.content);
+      setNewComment({ contents: "" });
       setCommentType("normal");
       console.log("response:", response);
     } catch (error) {
@@ -152,7 +158,7 @@ export default function Comments({
   };
 
   return (
-    <div className="bg-white fixed top-0 left-0 right-0  h-screen  z-50 flex flex-col  overflow-auto max-w-3xl mx-auto">
+    <div className="bg-white fixed top-0 left-0 right-0  h-screen  flex flex-col  overflow-auto max-w-3xl mx-auto">
       {/* [CSS] 헤더 */}
       <div className="flex items-center gap-4">
         <div className="ml-4" onClick={handleCloseModal}>
@@ -166,7 +172,7 @@ export default function Comments({
         className="grid divide-y overflow-auto overflow-y-auto mb-[80px] mr-4 w-full"
         style={{ overflowX: "hidden" }}
       >
-        {Array.isArray(comments) && comments.length > 0 ? (
+        {comments.length > 0 && Array.isArray(comments) ? (
           comments.map((value, index) => (
             <div key={index} style={{ maxWidth: "100%" }}>
               {/* 댓글 */}
@@ -255,7 +261,8 @@ export default function Comments({
               </div>
               {/* 대댓글 */}
 
-              {value.repliesList.length >= 1 &&
+              {value.repliesList &&
+                value.repliesList.length >= 1 &&
                 value.repliesList.map((reply, index) => (
                   <div key={index}>
                     <div className="bg-[#FAFAFA] px-4 py-[15px] h-[126px] border-b border-[#F2F2F2] ">
@@ -315,7 +322,10 @@ export default function Comments({
             </div>
           ))
         ) : (
-          <>작성된 댓글이 없습니다</>
+          // 댓글이 없을 때 메시지 표시
+          <div className="text-center py-4">
+            댓글이 없습니다. 첫 댓글을 작성해보세요.
+          </div>
         )}
       </div>
 
@@ -339,7 +349,7 @@ export default function Comments({
           className="w-full h-[57px] p-4 resize-none outline-none overflow-hidden"
           style={{
             backgroundColor: "#F2F2F2",
-            width: "100%",
+            width: "90%",
             wordWrap: "break-word",
             overflowWrap: "break-word",
           }}
