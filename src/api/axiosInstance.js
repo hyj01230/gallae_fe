@@ -1,6 +1,5 @@
 import axios from "axios";
 import { getCookie, removeCookie, setCookie } from "../util/cookie";
-import { useNavigate } from "react-router-dom";
 
 // Axios 인스턴스를 생성하고 설정
 export const axiosInstance = axios.create({
@@ -35,7 +34,7 @@ axiosInstance.interceptors.request.use((config) => {
   return config; // 설정된 요청(config)을 반환
 });
 
-// accessToken 재발급
+// // accessToken 재발급
 axiosInstance.interceptors.response.use(
   (response) => {
     return response;
@@ -80,13 +79,19 @@ axiosInstance.interceptors.response.use(
           // 2. 리프레시 토큰 에러면,
         } catch (refreshError) {
           console.log("리프레시 에러 refreshError", refreshError);
-          const navigate = useNavigate();
 
           // 토큰(액세스/리프레시) 지우고, 재로그인 시키기
           localStorage.removeItem("accessToken");
           removeCookie("refreshToken");
-          navigate("/login");
+          window.location.href = "/login";
+          alert("재로그인이 필요합니다.");
         }
+      } else {
+        // 토큰(액세스/리프레시) 지우고, 재로그인 시키기
+        localStorage.removeItem("accessToken");
+        removeCookie("refreshToken");
+        window.location.href = "/login";
+        alert("재로그인이 필요합니다.");
       }
     }
 
