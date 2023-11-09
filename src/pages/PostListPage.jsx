@@ -237,7 +237,6 @@ export default function PostListPage() {
                   </div>
                   <span className="text-xs text-gray-500 mr-4 mt-7">
                     {formatDateDifference(item.createdAt)}
-                    <p className="w-2 h-2 ml-[11px] mr-[15px] bg-gray-400 rounded-full inline-block"></p>
                   </span>
                 </div>
                 <div onClick={() => navigate(`/posts/${item.postId}`)}>
