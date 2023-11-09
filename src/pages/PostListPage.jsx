@@ -295,7 +295,7 @@ export default function PostListPage() {
                       }
                     }}
                   >
-                    <div>
+                    <div className="cursor-pointer">
                       <PostListComment />
                     </div>
                     <p className="cursor-pointer  text-[14px]">
@@ -304,7 +304,7 @@ export default function PostListPage() {
                     </p>
                   </div>
                   <div
-                    className="flex items-center space-x-2 flex-1 justify-center  h-[40px]"
+                    className="flex items-center space-x-2 flex-1 justify-center  h-[40px] "
                     onClick={() => {
                       if (!localStorage.getItem("accessToken")) {
                         alert("로그인이 필요한 서비스입니다.");
@@ -314,7 +314,7 @@ export default function PostListPage() {
                       }
                     }}
                   >
-                    <div>
+                    <div className="cursor-pointer">
                       {likedStatus[item.postId] ? (
                         <LikeFullHeart />
                       ) : (
