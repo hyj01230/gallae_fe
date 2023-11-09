@@ -83,14 +83,14 @@ export default function PostListPage() {
       return;
     }
 
-    // console.log("getPostList 함수 호출");
+    console.log("getPostList 함수 호출");
     const response = await axiosInstance.get("/api/posts", { params });
 
     try {
       const newPosts = response.data.content;
       if (newPosts.length === 0) {
         // 만약 응답으로 받은 데이터가 빈 배열이라면, 스크롤을 멈춥니다.
-        // console.log("마지막 페이지입니다. 스크롤을 멈춥니다.");
+        console.log("마지막 페이지입니다. 스크롤을 멈춥니다.");
         return;
       }
 
@@ -98,7 +98,7 @@ export default function PostListPage() {
       setPostList([...postList, ...newPosts]);
 
       // 응답에서 페이지 번호를 확인
-      // console.log("페이지 번호 (응답):", response.data.pageable.pageNumber);
+      console.log("페이지 번호 (응답):", response.data.pageable.pageNumber);
 
       // 요청 성공 시에 페이지에 1 카운트 해주기
       // 라스트불린값이 트루면 끝 아니면 +1
@@ -110,7 +110,7 @@ export default function PostListPage() {
 
   useEffect(() => {
     if (inView) {
-      // console.log(inView, "무한 스크롤 요청 ✌️");
+      console.log(inView, "무한 스크롤 요청 ✌️");
       getPostList();
     }
   }, [inView, postList]);
