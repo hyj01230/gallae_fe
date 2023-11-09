@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 // import defaultProfile from "../../public/img/defaultProfile.png";
 import { axiosInstance } from "../api/axiosInstance";
 import { removeCookie } from "../util/cookie";
+import { toast } from "react-toastify";
 
 export default function MyPage() {
   // 페이지 이동
@@ -141,7 +142,7 @@ export default function MyPage() {
         }
       );
       // console.log("소개글 put 성공 :", response);
-      alert(response.data.msg);
+      toast(response.data.msg);
       setAboutMeModal(false); // 모달창 닫기
       setMyPageInfo({ ...myPageInfo, aboutMe }); // 마이페이지 소개글에 바로 적용되게!
     } catch (error) {
