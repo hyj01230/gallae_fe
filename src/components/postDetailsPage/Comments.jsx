@@ -57,12 +57,16 @@ export default function Comments({
       return;
     }
 
-    console.log("getCommentList 함수 호출");
-    const response = await axiosInstance.get(`/api/posts/${postId}/comments`, {
-      params,
-    });
+    console.log("getCommentList 함수 호출 🐰");
 
     try {
+      const response = await axiosInstance.get(
+        `/api/posts/${postId}/comments`,
+        {
+          params,
+        }
+      );
+
       const newComment = response.data.content;
       if (newComment.length === 0) {
         // 만약 응답으로 받은 데이터가 빈 배열이라면, 스크롤을 멈춥니다.
@@ -71,16 +75,23 @@ export default function Comments({
       }
 
       // 이제 newPosts를 기존 postList에 추가합니다.
-      setCommentList([...commentList, ...newComment]);
+      setCommentList((prevCommentList) => {
+        const updatedList = [...prevCommentList, ...newComment];
+        console.log("댓글 리스트:", updatedList);
+        return updatedList;
+      });
 
       // 응답에서 페이지 번호를 확인
-      console.log("페이지 번호 (응답):", response.data.pageable.pageNumber);
+      console.log("페이지 번호 🐽 :", response.data.pageable.pageNumber);
+      console.log("API 응답:", response.data);
+      console.log("새로운 댓글:", newComment);
+      console.log("댓글 리스트:", commentList);
 
       // 요청 성공 시에 페이지에 1 카운트 해주기
       // 라스트불린값이 트루면 끝 아니면 +1
       setPage((prevPage) => prevPage + 1);
     } catch (err) {
-      console.log(err);
+      console.log("에러 발생:", err);
     }
   };
 
@@ -90,13 +101,6 @@ export default function Comments({
       getCommentList();
     }
   }, [inView, commentList]);
-
-  // useEffect(() => {
-  //   if (inView && commentList.length > 0) {
-  //     // console.log(inView, “무한 스크롤 요청 :선글라스:”);
-  //     getPostList();
-  //   }
-  // }, [inView, commentList]);
 
   // 댓글 작성 버튼 클릭 핸들러
   const handleCommentButtonClick = async () => {
