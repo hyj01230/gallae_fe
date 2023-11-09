@@ -247,14 +247,7 @@ export default function Comments({
                         답글
                       </div>
                     </div>
-                    <div className="h-6 w-[50px] text-center border rounded-[18px] flex flex-row items-center justify-center">
-                      <div className="text-xs/normal text-[#D9D9D9] font-normal mr-[2px]">
-                        ♡
-                      </div>
-                      <div className="text-xs/normal text-[#D9D9D9] font-normal">
-                        1
-                      </div>
-                    </div>
+
                     {/* <button>답글</button> */}
                   </div>
                 </div>

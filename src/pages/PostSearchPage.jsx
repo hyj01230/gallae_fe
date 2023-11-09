@@ -97,13 +97,14 @@ export default function PostSearchPage() {
 
   // 입력 필드가 포커스 상태인지 여부에 따라 컨텐츠를 조건부로 렌더링
   const renderContent = inputFocused ? null : (
-    <div className="flex flex-wrap ">
+    <div className="mr-[10px]">
       {searchResults.length === 0 && keyword && (
-        <p className="text-xl text-gray-600 mt-4 text-center p-4  bg-gray-100 border border-gray-300 rounded my-8 w-full ">
+        <p className="text-xl text-gray-600 mt-4 text-center p-4  bg-gray-100 border border-gray-300 rounded my-8 w-full  ">
           <span className="text-yellow-500">{keyword}</span> 에 대한 검색 결과가
           없습니다.
         </p>
       )}
+
       <div className="w-full">
         {searchResults.map((result) => (
           <div

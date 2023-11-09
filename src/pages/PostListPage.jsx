@@ -1,12 +1,7 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
-import {
-  LikeHeart,
-  LikeFullHeart,
-  PostListComment,
-  ShareIcon,
-} from "../assets/Icon";
+import { LikeHeart, LikeFullHeart, PostListComment } from "../assets/Icon";
 import PostHeader from "../components/post/PostHeader";
 import Layout from "../components/common/Layout";
 import PostCategory from "../components/post/PostCategory";
@@ -21,7 +16,6 @@ export default function PostListPage() {
   const navigate = useNavigate();
   const [page, setPage] = useState(0); // 현재 페이지 번호 (페이지네이션)
   const [ref, inView] = useInView();
-  const commentInputRef = useRef(null);
   const getaccessToken = () => {
     return localStorage.getItem("accessToken"); // 로그인 후 토큰을 저장한 방식에 따라 가져옵니다.
   };
@@ -83,14 +77,14 @@ export default function PostListPage() {
       return;
     }
 
-    // console.log("getPostList 함수 호출");
+    console.log("getPostList 함수 호출");
     const response = await axiosInstance.get("/api/posts", { params });
 
     try {
       const newPosts = response.data.content;
       if (newPosts.length === 0) {
         // 만약 응답으로 받은 데이터가 빈 배열이라면, 스크롤을 멈춥니다.
-        // console.log("마지막 페이지입니다. 스크롤을 멈춥니다.");
+        console.log("마지막 페이지입니다. 스크롤을 멈춥니다.");
         return;
       }
 
@@ -98,7 +92,7 @@ export default function PostListPage() {
       setPostList([...postList, ...newPosts]);
 
       // 응답에서 페이지 번호를 확인
-      // console.log("페이지 번호 (응답):", response.data.pageable.pageNumber);
+      console.log("페이지 번호 (응답):", response.data.pageable.pageNumber);
 
       // 요청 성공 시에 페이지에 1 카운트 해주기
       // 라스트불린값이 트루면 끝 아니면 +1
@@ -110,17 +104,10 @@ export default function PostListPage() {
 
   useEffect(() => {
     if (inView) {
-      // console.log(inView, "무한 스크롤 요청 ✌️");
+      console.log(inView, "무한 스크롤 요청 ✌️");
       getPostList();
     }
   }, [inView, postList]);
-
-  // useEffect(() => {
-  //   if (inView && postList.length > 0) {
-  //     // console.log(inView, “무한 스크롤 요청 :선글라스:”);
-  //     getPostList();
-  //   }
-  // }, [inView, postList]);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -218,7 +205,7 @@ export default function PostListPage() {
                 <div className="flex items-center justify-between mb-2 mt-5">
                   <div className="flex items-center">
                     <img
-                      className="w-12 h-12 bg-gray-300 rounded-full ml-4 cursor-pointer"
+                      className="w-12 h-12 bg-gray-300 rounded-full ml-4 "
                       src={item.profileImage}
                     />
                     <div className="flex flex-col ml-[13px]">
@@ -230,14 +217,13 @@ export default function PostListPage() {
                           ? item.title.slice(0, 17) + "..."
                           : item.title}
                       </span>
-                      <span className="text-[12px]  text-gray-500 mt-1 cursor-pointer">
+                      <span className="text-[12px]  text-gray-500 mt-1 ">
                         {item.nickName}
                       </span>
                     </div>
                   </div>
                   <span className="text-xs text-gray-500 mr-4 mt-7">
                     {formatDateDifference(item.createdAt)}
-                    <p className="w-2 h-2 ml-[11px] mr-[15px] bg-gray-400 rounded-full inline-block"></p>
                   </span>
                 </div>
                 <div onClick={() => navigate(`/posts/${item.postId}`)}>
@@ -273,15 +259,6 @@ export default function PostListPage() {
                       <p>Loading tags...</p>
                     )}
                   </div>
-                  {/* <div>
-                    <p className="ml-1">좋아요 {item.likeNum} · </p>
-                  </div>
-                  <div>
-                    <p className="ml-1">댓글 {item.commentNum} · </p>
-                  </div>
-                  <div>
-                    <p className="ml-1">조회수 {item.viewNum}</p>
-                  </div> */}
                 </div>
                 <div className="flex items-center justify-between text-sm text-gray-500 h-[40px] bordertop-solid border-t-2">
                   <div
@@ -296,7 +273,7 @@ export default function PostListPage() {
                       }
                     }}
                   >
-                    <div>
+                    <div className="cursor-pointer">
                       <PostListComment />
                     </div>
                     <p className="cursor-pointer  text-[14px]">
@@ -305,7 +282,7 @@ export default function PostListPage() {
                     </p>
                   </div>
                   <div
-                    className="flex items-center space-x-2 flex-1 justify-center  h-[40px]"
+                    className="flex items-center space-x-2 flex-1 justify-center  h-[40px] "
                     onClick={() => {
                       if (!localStorage.getItem("accessToken")) {
                         alert("로그인이 필요한 서비스입니다.");
@@ -315,7 +292,7 @@ export default function PostListPage() {
                       }
                     }}
                   >
-                    <div>
+                    <div className="cursor-pointer">
                       {likedStatus[item.postId] ? (
                         <LikeFullHeart />
                       ) : (
