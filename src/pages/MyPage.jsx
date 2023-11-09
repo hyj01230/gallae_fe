@@ -35,6 +35,7 @@ export default function MyPage() {
   const [uploadImage, setUploadImage] = useState(null); // 프로필 사진 데이터
   const [aboutMe, setAboutMe] = useState(""); // 소개글 데이터
   const [characterCount, setCharacterCount] = useState(0); // 소개글 입력 글자수
+  const [isUpdate, setIsUpdate] = useState(false); // 사진 업데이트 상태
 
   // 모달
   const onClickProfileOpenHandler = () => {
@@ -83,19 +84,25 @@ export default function MyPage() {
   };
 
   // 프로필 사진 : 이미지 선택창 나옴
-  const uploadImageHandler = async (e) => {
+  const uploadImageHandler = (e) => {
     const selectImage = e.target.files[0]; // 선택된 파일 가져오기
     // console.log(`선택된 파일 이름: ${selectImage.name}`);
     // console.log(`선택된 파일 크기: ${selectImage.size} bytes`);
 
     setUploadImage(selectImage); // 선택한 사진은 프로필 사진 state에 저장
+    setIsUpdate(true);
     // console.log("useState로 넘어간 선택된 파일", uploadImage); // 🚨사진이 바로 안넘어가고, 원래 있던 사진이 콘솔에 찍힘
-    putUpdateProfileHandler(); // 사진 변경 PUT 시작!
+    // await putUpdateProfileHandler(); // 사진 변경 PUT 시작!
   };
 
   // useEffect : 렌더링되면 실행!
   useEffect(() => {
-    putUpdateProfileHandler();
+    // 컴포넌트가 마운트 될 떄
+    // upLoadImage가 변경될 떄
+    if (isUpdate) {
+      putUpdateProfileHandler();
+    }
+    setIsUpdate(false);
   }, [uploadImage]);
 
   // PUT : 프로필 사진 - 앨범에서 선택
