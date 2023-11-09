@@ -98,6 +98,12 @@ export default function Comments({
         `/api/comments/${selectedId}/replies`,
         contents
       );
+      // 대댓글 작성 후 서버에서 대댓글 목록을 다시 가져옴
+      const commentsResponse = await axiosInstance.get(
+        `/api/posts/${postId}/comments`
+      );
+      setComments(commentsResponse.data.content);
+      setNewComment({ contents: "" });
       setCommentType("normal");
       console.log("response:", response);
     } catch (error) {
