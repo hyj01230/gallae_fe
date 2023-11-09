@@ -34,7 +34,7 @@ axiosInstance.interceptors.request.use((config) => {
   return config; // 설정된 요청(config)을 반환
 });
 
-// // accessToken 재발급
+// accessToken 재발급
 axiosInstance.interceptors.response.use(
   (response) => {
     return response;
