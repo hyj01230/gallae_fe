@@ -2,7 +2,6 @@ import Layout from "../components/common/Layout";
 import { GearIcon, Heart, MyCommentList, MyWriting } from "../assets/Icon";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-// import defaultProfile from "../../public/img/defaultProfile.png";
 import { axiosInstance } from "../api/axiosInstance";
 import { removeCookie } from "../util/cookie";
 import { toast } from "react-toastify";
@@ -66,6 +65,9 @@ export default function MyPage() {
 
       setMyPageInfo(response.data); // 마이페이지 데이터 저장
       setAboutMe(response.data.aboutMe); // 소개글 저장
+      setCharacterCount(
+        response.data.aboutMe ? response.data.aboutMe.length : 0
+      ); // response.data.aboutMe가 null이거나 비어있으면 초기값을 0으로 설정, 그렇지 않으면 해당 소개글의 길이를 초기값으로 설정
       setUploadImage(response.data.profileImg); // 프로필 사진 저장
     } catch (error) {
       // console.log("마이페이지 데이터 get 실패 :", error.response);
@@ -259,9 +261,6 @@ export default function MyPage() {
             onClick={(e) => e.stopPropagation()} // 외부영역만 클릭했을때 모달 닫히게!
             className=" w-full flex flex-col mt-auto mb-24"
           >
-            <div className="mx-6 text-white font-normal text-lg/normal text-center">
-              사진 업로드는 개당 1MB 내외로 업로드 가능합니다.
-            </div>
             <div className="mt-4 mx-4 bg-[#F2F2F2] text-center h-[45px] flex items-center justify-center rounded-t-xl text-[#333333] text-[14px] leading-[100%] font-medium">
               프로필 사진 설정
             </div>
@@ -313,7 +312,7 @@ export default function MyPage() {
               onChange={onChangeAboutMeHandler}
               maxLength={80}
               rows={2}
-              className="w-full bg-transparent text-center text-white placeholder:text-white border-b-[0.5px] border-[#D9D9D9] outline-none resize-none"
+              className="w-full bg-transparent text-center text-white placeholder:text-white border-b border-[#D9D9D9] outline-none resize-none"
             />
           </div>
           <div className="mt-2 text-[#D9D9D9] text-xs/5 font-normal">
