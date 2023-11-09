@@ -1,10 +1,9 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../api/axiosInstance";
 import { useRecoilValue } from "recoil";
 import { nickNameState } from "../../store/atom";
 import { CommentThreeDots, LeftArrow, Reply } from "../../assets/Icon";
-import { useInView } from "react-intersection-observer";
 import EditDeleteModal from "./EditDeleteModal";
 
 // 날짜 시간 형식
@@ -41,66 +40,8 @@ export default function Comments({
   const [commentType, setCommentType] = useState("normal"); // 댓글 상태관리 (댓글 입력, 댓글 수정, 대댓글 입력,대댓글 수정)
   const navigate = useNavigate();
   const editedContentRef = useRef(null);
-  const [page, setPage] = useState(0); // 현재 페이지 번호 (페이지네이션)
-  const [commentList, setCommentList] = useState([]);
-  const [ref, inView] = useInView();
+
   const nickName = useRecoilValue(nickNameState);
-
-  const params = {
-    page: `${page}`, // 백틱으로 변수를 문자열로 변환
-    size: "10",
-  };
-
-  const getCommentList = async () => {
-    if (!inView) {
-      // inView가 false이면 데이터 가져오지 않음
-      return;
-    }
-
-    console.log("getCommentList 함수 호출 🐰");
-
-    try {
-      const response = await axiosInstance.get(
-        `/api/posts/${postId}/comments`,
-        {
-          params,
-        }
-      );
-
-      const newComment = response.data.content;
-      if (newComment.length === 0) {
-        // 만약 응답으로 받은 데이터가 빈 배열이라면, 스크롤을 멈춥니다.
-        console.log("마지막 페이지입니다. 스크롤을 멈춥니다.");
-        return;
-      }
-
-      // 이제 newPosts를 기존 postList에 추가합니다.
-      setCommentList((prevCommentList) => {
-        const updatedList = [...prevCommentList, ...newComment];
-        console.log("댓글 리스트:", updatedList);
-        return updatedList;
-      });
-
-      // 응답에서 페이지 번호를 확인
-      console.log("페이지 번호 🐽 :", response.data.pageable.pageNumber);
-      console.log("API 응답:", response.data);
-      console.log("새로운 댓글:", newComment);
-      console.log("댓글 리스트:", commentList);
-
-      // 요청 성공 시에 페이지에 1 카운트 해주기
-      // 라스트불린값이 트루면 끝 아니면 +1
-      setPage((prevPage) => prevPage + 1);
-    } catch (err) {
-      console.log("에러 발생:", err);
-    }
-  };
-
-  useEffect(() => {
-    if (inView) {
-      console.log(inView, "무한 스크롤 요청 ✌️");
-      getCommentList();
-    }
-  }, [inView, commentList]);
 
   // 댓글 작성 버튼 클릭 핸들러
   const handleCommentButtonClick = async () => {
@@ -228,7 +169,6 @@ export default function Comments({
 
       {/* [CSS] 댓글 및 대댓글 리스트 */}
       <div
-        ref={ref}
         className="grid divide-y overflow-auto overflow-y-auto mb-[80px] mr-4 w-full"
         style={{ overflowX: "hidden" }}
       >
@@ -307,14 +247,7 @@ export default function Comments({
                         답글
                       </div>
                     </div>
-                    <div className="h-6 w-[50px] text-center border rounded-[18px] flex flex-row items-center justify-center">
-                      <div className="text-xs/normal text-[#D9D9D9] font-normal mr-[2px]">
-                        ♡
-                      </div>
-                      <div className="text-xs/normal text-[#D9D9D9] font-normal">
-                        1
-                      </div>
-                    </div>
+
                     {/* <button>답글</button> */}
                   </div>
                 </div>
