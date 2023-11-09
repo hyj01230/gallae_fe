@@ -218,7 +218,7 @@ export default function PostListPage() {
                 <div className="flex items-center justify-between mb-2 mt-5">
                   <div className="flex items-center">
                     <img
-                      className="w-12 h-12 bg-gray-300 rounded-full ml-4 cursor-pointer"
+                      className="w-12 h-12 bg-gray-300 rounded-full ml-4 "
                       src={item.profileImage}
                     />
                     <div className="flex flex-col ml-[13px]">
@@ -230,7 +230,7 @@ export default function PostListPage() {
                           ? item.title.slice(0, 17) + "..."
                           : item.title}
                       </span>
-                      <span className="text-[12px]  text-gray-500 mt-1 cursor-pointer">
+                      <span className="text-[12px]  text-gray-500 mt-1 ">
                         {item.nickName}
                       </span>
                     </div>
