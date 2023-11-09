@@ -69,10 +69,10 @@ export default function MyPageLikeList() {
   const onClickLikeCancleHandler = async (postId) => {
     try {
       const response = await axiosInstance.get(`/api/posts/like/${postId}`);
-      // console.log("response", response);
+      console.log("response", response);
       getLikeList();
     } catch (error) {
-      // console.log("error", error);
+      console.log("error", error);
     }
   };
 
@@ -139,7 +139,7 @@ export default function MyPageLikeList() {
       <hr className="mt-3 border-[#F2F2F2] border-t-[1px]"></hr>
 
       <div className="mb-44">
-        {likeList.length > 0 &&
+        {likeList.length > 0 ? (
           likeList.map((item) => (
             <div
               key={item.postId}
@@ -207,7 +207,14 @@ export default function MyPageLikeList() {
                 </div>
               </div>
             </div>
-          ))}
+          ))
+        ) : (
+          <div className="mx-4">
+            <div className="mt-4 flex w-full justify-center">
+              좋아요 목록이 없습니다.
+            </div>
+          </div>
+        )}
       </div>
     </Layout>
   );

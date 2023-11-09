@@ -105,7 +105,7 @@ export default function MyPageCommentList() {
       <hr className="mt-[11px] border-[#F2F2F2] border-t-[1px]"></hr>
 
       <div className="mb-24">
-        {sortedLists.length > 0 &&
+        {sortedLists.length > 0 ? (
           sortedLists.map((item) => (
             <div
               key={
@@ -139,7 +139,14 @@ export default function MyPageCommentList() {
                 </div>
               </div>
             </div>
-          ))}
+          ))
+        ) : (
+          <div className="mx-4">
+            <div className="mt-4 flex w-full justify-center">
+              나의 댓글 내역이 없습니다.
+            </div>
+          </div>
+        )}
 
         {/* {Lists.length > 0 &&
         Lists.map((item) => (
