@@ -1,6 +1,5 @@
 import axios from "axios";
 import { getCookie, removeCookie, setCookie } from "../util/cookie";
-import { useNavigate } from "react-router-dom";
 
 // Axios 인스턴스를 생성하고 설정
 export const axiosInstance = axios.create({
@@ -46,8 +45,8 @@ axiosInstance.interceptors.response.use(
       const refreshToken = getCookie("refreshToken"); // 리프레시 토큰 가져오고,
       localStorage.removeItem("accessToken"); // 엑세스 토큰은 지우기(axiosInstance 기본설정 때문에 post 보낼때 같이 보내지는데, 403 에러남!)
 
-      console.log("액세스 토큰 만료", error);
-      console.log("refreshToken 있니?", refreshToken);
+      // console.log("액세스 토큰 만료", error);
+      // console.log("refreshToken 있니?", refreshToken);
 
       // 1. 리프레시 토큰이 있으면,
       if (refreshToken) {
@@ -62,7 +61,7 @@ axiosInstance.interceptors.response.use(
               },
             }
           );
-          console.log("리프레시 있을 때 response", response);
+          // console.log("리프레시 있을 때 response", response);
 
           // 새로운 토큰(액세스/리프레시) 받고, 저장하기
           const newAccessToken = response.data.accessToken;
@@ -79,14 +78,20 @@ axiosInstance.interceptors.response.use(
 
           // 2. 리프레시 토큰 에러면,
         } catch (refreshError) {
-          console.log("리프레시 에러 refreshError", refreshError);
-          const navigate = useNavigate();
+          // console.log("리프레시 에러 refreshError", refreshError);
 
           // 토큰(액세스/리프레시) 지우고, 재로그인 시키기
           localStorage.removeItem("accessToken");
           removeCookie("refreshToken");
-          navigate("/login");
+          window.location.href = "/login";
+          alert("재로그인이 필요합니다.");
         }
+      } else {
+        // 토큰(액세스/리프레시) 지우고, 재로그인 시키기
+        localStorage.removeItem("accessToken");
+        removeCookie("refreshToken");
+        window.location.href = "/login";
+        alert("재로그인이 필요합니다.");
       }
     }
 

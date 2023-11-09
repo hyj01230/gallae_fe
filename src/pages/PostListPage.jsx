@@ -1,12 +1,7 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
-import {
-  LikeHeart,
-  LikeFullHeart,
-  PostListComment,
-  ShareIcon,
-} from "../assets/Icon";
+import { LikeHeart, LikeFullHeart, PostListComment } from "../assets/Icon";
 import PostHeader from "../components/post/PostHeader";
 import Layout from "../components/common/Layout";
 import PostCategory from "../components/post/PostCategory";
@@ -21,7 +16,6 @@ export default function PostListPage() {
   const navigate = useNavigate();
   const [page, setPage] = useState(0); // 현재 페이지 번호 (페이지네이션)
   const [ref, inView] = useInView();
-  const commentInputRef = useRef(null);
   const getaccessToken = () => {
     return localStorage.getItem("accessToken"); // 로그인 후 토큰을 저장한 방식에 따라 가져옵니다.
   };
@@ -114,13 +108,6 @@ export default function PostListPage() {
       getPostList();
     }
   }, [inView, postList]);
-
-  // useEffect(() => {
-  //   if (inView && postList.length > 0) {
-  //     // console.log(inView, “무한 스크롤 요청 :선글라스:”);
-  //     getPostList();
-  //   }
-  // }, [inView, postList]);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -272,15 +259,6 @@ export default function PostListPage() {
                       <p>Loading tags...</p>
                     )}
                   </div>
-                  {/* <div>
-                    <p className="ml-1">좋아요 {item.likeNum} · </p>
-                  </div>
-                  <div>
-                    <p className="ml-1">댓글 {item.commentNum} · </p>
-                  </div>
-                  <div>
-                    <p className="ml-1">조회수 {item.viewNum}</p>
-                  </div> */}
                 </div>
                 <div className="flex items-center justify-between text-sm text-gray-500 h-[40px] bordertop-solid border-t-2">
                   <div

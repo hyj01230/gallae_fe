@@ -4,6 +4,7 @@ import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { shareKakao } from "../util/shareKakaoLink";
+import { useInView } from "react-intersection-observer";
 
 export default function MyPageLikeList() {
   // 페이지 이동
@@ -19,6 +20,7 @@ export default function MyPageLikeList() {
     }
   };
 
+  // 케밥 모달
   const [openModal, setOpenModal] = useState(false);
   const [modalPostId, setModalPostId] = useState("");
   const onClickThreeDotsHandler = (e, postId) => {
@@ -47,24 +49,46 @@ export default function MyPageLikeList() {
     };
   }, []);
 
-  // useState : get으로 가져온 사용자별 좋아요 게시글 데이터(getLikeList)
-  const [likeList, setLikeList] = useState([]);
+  // 무한스크롤
+  // ref : 관찰할 객체
+  // inView : ref가 화면에 보이면 true로 변경됨
+  const [ref, inView] = useInView();
+  const [page, setPage] = useState(0); // 페이지 수 관리
+  const [likeList, setLikeList] = useState([]); //get으로 가져온 사용자별 좋아요 게시글 데이터(getLikeList)
 
   // GET : 사용자별 좋아요 게시글 가져오기
   const getLikeList = async () => {
     try {
       const response = await axiosInstance.get("/api/posts/like", {
         params: {
-          page: 0, // 원하는 페이지 번호
-          size: 20, // 원하는 페이지 크기
+          page: `${page}`, // 현재 페이지 번호
+          size: 5, // 원하는 페이지 크기(게시물 수)
         },
       });
       // console.log("response", response);
-      setLikeList(response.data.content);
+
+      setLikeList((likeList) => [...likeList, ...response.data.content]); // 기존 데이터에 새 데이터 추가
+      setPage((page) => page + 1); // 페이지 번호 +1 시킴
     } catch (error) {
       // console.log("error", error);
     }
   };
+
+  // useEffect : 렌더링되면 getLikeList 데이터 가져오기!
+  useEffect(() => {
+    getLikeList();
+  }, []);
+
+  // inView 상태가 true일 때(= 관찰한 게시물 ref가 화면에 보일 때 = 마지막)
+  // 좋아요한 게시물 목록을 추가로 가져오기
+  useEffect(() => {
+    if (inView) {
+      getLikeList();
+      console.log(inView, "📢 데이터를 더 가져와랏!!");
+      console.log("page 번호", page);
+      console.log("로드된 데이터", likeList);
+    }
+  }, [inView]);
 
   const onClickLikeCancleHandler = async (postId) => {
     try {
@@ -75,11 +99,6 @@ export default function MyPageLikeList() {
       console.log("error", error);
     }
   };
-
-  // useEffect : 렌더링되면 실행!
-  useEffect(() => {
-    getLikeList();
-  }, []);
 
   // 입력 시간 표시
   const getTimeAgo = (timestamp) => {
@@ -142,6 +161,7 @@ export default function MyPageLikeList() {
         {likeList.length > 0 ? (
           likeList.map((item) => (
             <div
+              ref={ref}
               key={item.postId}
               onClick={() => onCilckLikePostHandler(item.postId)}
               className="mx-4 cursor-pointer"

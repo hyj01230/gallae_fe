@@ -133,18 +133,18 @@ export default function MyPagePostList() {
                       {modalPostId === item.postId && openModal && (
                         <div className="absolute right-6">
                           <div className="w-[136px] h-[121px] bg-white shadow-[0_0_4px_4px_rgba(0,0,0,0.05)]">
-                            {/* <div
-                              onClick={() => onClickDeleteeHandler(item.postId)}
+                            <div
+                              // onClick={() => onClickDeleteeHandler(item.postId)}
                               className="pl-3 w-full h-10 border-b border-[#F2F2F2] flex justify-start items-center cursor-pointer"
                             >
                               삭제하기
                             </div>
                             <div
-                              onClick={() => navigate("/post/edit")}
+                              // onClick={() => navigate("/post/edit")}
                               className="pl-3 w-full h-10 border-b border-[#F2F2F2] flex justify-start items-center cursor-pointer"
                             >
                               수정하기
-                            </div> */}
+                            </div>
                             <div
                               // onClick={() =>
                               //   shareKakao(item.title, item.postId)
