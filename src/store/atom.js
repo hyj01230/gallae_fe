@@ -10,23 +10,3 @@ export const nickNameState = atom({
   key: "nickNameState",
   default: "",
 });
-
-// 여행 일정 생성/수정 시 사용되는 state
-export const searchPlaceInfoState = atom({
-  key: "searchPlaceInfoState",
-  default: { placeName: "", x: "", y: "" },
-});
-
-export const scheduleDataState = atom({
-  key: "scheduleDataState",
-  default: {
-    schedulesCategory: "",
-    costs: 0,
-    placeName: null,
-    x: "",
-    y: "",
-    contents: "",
-    timeSpent: "",
-    referenceURL: "",
-  },
-});

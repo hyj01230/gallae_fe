@@ -1,5 +1,5 @@
 export const DETAIL_SCHEDULES_CATEGORIES = [
-  "카테고리",
+  "카테고리 (필수)",
   "식당",
   "숙소",
   "카페",
