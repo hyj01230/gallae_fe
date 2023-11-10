@@ -22,39 +22,47 @@ import useImage from "../hooks/useImage";
 import { useMutation, useQueryClient } from "react-query";
 import useModal from "../hooks/useModal";
 import SearchModal from "../components/scheduleCreate/SearchModal";
-import { useRecoilState } from "recoil";
-import { scheduleDataState } from "../store/atom";
 
 export default function SchedulesCreatePage() {
   const modal = useModal();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [timeSpent, setTimeSpent] = useState({ time: 0, text: "" });
-  const [schedule, setSchedule] = useRecoilState(scheduleDataState);
+  const [schedule, setSchedule] = useState({
+    schedulesCategory: "",
+    costs: "",
+    placeName: null,
+    x: "",
+    y: "",
+    contents: "",
+    timeSpent: "",
+    referenceURL: "",
+  });
   const { subTitle, chosenDate, tripDateId, postId } = useLocation().state;
   const imageHandler = useImage();
 
   const handleClick = (value) => {
     if (value === 0) {
       setTimeSpent({ time: 0, text: "" });
-      setSchedule((prev) => ({ ...prev, timeSpent: timeSpent.text }));
       return;
     }
 
-    const number = timeSpent.time + value;
-    if (number >= 60) {
-      setTimeSpent({
-        time: number,
-        text: `${Math.floor(number / 60)}시간  ${number % 60}분`,
-      });
-    } else {
-      setTimeSpent({
-        time: number,
-        text: `${number}분`,
-      });
-    }
-    setSchedule((prev) => ({ ...prev, timeSpent: timeSpent.text }));
+    setTimeSpent((prevTimeSpent) => {
+      const number = prevTimeSpent.time + value;
+      if (number >= 60) {
+        return {
+          time: number,
+          text: `${Math.floor(number / 60)}시간  ${number % 60}분`,
+        };
+      } else {
+        return { time: number, text: `${number}분` };
+      }
+    });
   };
+
+  useEffect(() => {
+    setSchedule({ ...schedule, timeSpent: timeSpent.text });
+  }, [timeSpent]);
 
   const createScheduleMutation = useMutation(
     () => {
@@ -67,7 +75,6 @@ export default function SchedulesCreatePage() {
     {
       onSuccess: async () => {
         queryClient.invalidateQueries("schedulesDetail");
-        initRecoilState();
         const response = await getScheduleDetail(tripDateId);
         const schedulesId = response.data.schedulesList.at(-1).schedulesId;
         // 이미지 업로드 하는 것
@@ -86,20 +93,6 @@ export default function SchedulesCreatePage() {
     modal.handleOpenModal();
   };
 
-  // 뒤로 가기 또는 게시글 생성 시 전역 상태 초기화
-  const initRecoilState = () => {
-    setSchedule({
-      schedulesCategory: "",
-      costs: 0,
-      placeName: null,
-      x: "",
-      y: "",
-      contents: "",
-      timeSpent: "",
-      referenceURL: "",
-    });
-  };
-
   const handleCostChange = (e) => {
     const enteredValue = e.target.value;
     // 숫자 이외의 문자 제거
@@ -115,7 +108,10 @@ export default function SchedulesCreatePage() {
     if (
       DETAIL_SCHEDULES_CATEGORIES.includes(schedule.schedulesCategory) &&
       schedule.placeName &&
-      schedule.placeName.trim() !== ""
+      schedule.placeName.trim() !== "" &&
+      schedule.timeSpent !== "" &&
+      schedule.costs !== "" &&
+      schedule.contents !== ""
     ) {
       return true;
     }
@@ -127,7 +123,6 @@ export default function SchedulesCreatePage() {
       <div
         className="flex items-center gap-x-1 p-2"
         onClick={() => {
-          initRecoilState();
           navigate("/myschedules/details", {
             state: { postId, subTitle, tripDateId },
           });
@@ -176,7 +171,7 @@ export default function SchedulesCreatePage() {
               {schedule.placeName !== null ? (
                 schedule.placeName
               ) : (
-                <span className="text-[#999]">장소를 검색하세요</span>
+                <span className="text-[#999]">장소를 검색하세요 (필수)</span>
               )}
             </div>
           </div>
@@ -221,8 +216,16 @@ export default function SchedulesCreatePage() {
 
           <div className="w-full">
             <div className="w-full flex items-center gap-8 border border-[#D9D9D9] rounded-lg px-3 py-2">
-              <span className="text-sm text-[#999]">소요시간</span>
-              <span className="text-sm text-[#999]">{timeSpent.text}</span>
+              {timeSpent.text === "" ? (
+                <span className="text-sm text-[#999]">
+                  아래의 버튼을 눌러 소요시간을 선택해주세요 (필수)
+                </span>
+              ) : (
+                <>
+                  <span className="text-sm text-[#999]">소요시간</span>
+                  <span className="text-sm text-[#999]">{timeSpent.text}</span>
+                </>
+              )}
             </div>
 
             <div className="flex justify-between text-[#999]">
@@ -258,8 +261,8 @@ export default function SchedulesCreatePage() {
         <Card />
         <input
           className="w-full border border-[#D9D9D9] rounded-lg px-3 py-2 text-sm outline-[#F90] appearance-none"
-          placeholder="소요되는 비용을 입력해주세요."
-          value={schedule.costs}
+          placeholder="소요되는 비용을 입력해주세요 (필수)"
+          value={schedule.costs !== null ? schedule.costs : ""}
           onChange={handleCostChange}
         />
       </div>
@@ -268,7 +271,7 @@ export default function SchedulesCreatePage() {
         <Memo />
         <textarea
           className="w-full border border-[#D9D9D9] rounded-lg px-3 py-2 text-sm resize-none outline-[#F90]"
-          placeholder="메모를 해주세요."
+          placeholder="메모를 입력해주세요 (필수)"
           onChange={(e) =>
             setSchedule((schedule) => ({
               ...schedule,

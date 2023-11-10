@@ -85,23 +85,19 @@ export default function SchedulesEditPage() {
       return;
     }
 
-    const number = timeSpentState.time + value;
-
-    if (number >= 60) {
-      setTimeSpent({
-        time: number,
-        text: `${Math.floor(number / 60)}시간 ${number % 60}분`,
-      });
-    } else {
-      setTimeSpent({
-        time: number,
-        text: `${number}분`,
-      });
-    }
+    setTimeSpent((prevTimeSpent) => {
+      const number = prevTimeSpent.time + value;
+      if (number >= 60) {
+        return {
+          time: number,
+          text: `${Math.floor(number / 60)}시간  ${number % 60}분`,
+        };
+      } else {
+        return { time: number, text: `${number}분` };
+      }
+    });
   };
 
-  // useState는 비동기로 동작하기때문에
-  // setSchedule을 handleClick보다 useEffect에서 실행
   useEffect(() => {
     setSchedule((prev) => ({ ...prev, timeSpent: timeSpentState.text }));
   }, [timeSpentState]);
@@ -130,7 +126,10 @@ export default function SchedulesEditPage() {
     if (
       DETAIL_SCHEDULES_CATEGORIES.includes(schedule.schedulesCategory) &&
       schedule.placeName &&
-      schedule.placeName.trim() !== ""
+      schedule.placeName.trim() !== "" &&
+      schedule.timeSpent !== "" &&
+      schedule.costs !== "" &&
+      schedule.contents !== ""
     ) {
       return true;
     }
@@ -192,12 +191,13 @@ export default function SchedulesEditPage() {
           <div className="flex items-center gap-2 text-[14px]">
             <Marker />
             <div className="cursor-pointer" onClick={handleSearchClick}>
-              {schedule.placeName !== null
-                ? schedule.placeName
-                : "장소를 검색하세요"}
+              {schedule.placeName !== null ? (
+                schedule.placeName
+              ) : (
+                <span className="text-[#999]">장소를 검색하세요 (필수)</span>
+              )}
             </div>
           </div>
-          <DownArrow />
         </div>
       </div>
 
@@ -235,6 +235,7 @@ export default function SchedulesEditPage() {
         <p>사진 업로드는 개당 1MB내외로 업로드 가능합니다.</p>
       </div>
 
+      {/* 소요시간, 참고링크, 바용, 메모 작성 */}
       <div className="flex flex-col mt-7 mx-7">
         <div className="flex gap-4">
           <div className="flex justify-center">
@@ -243,8 +244,16 @@ export default function SchedulesEditPage() {
 
           <div className="w-full">
             <div className="w-full flex items-center gap-8 border border-[#D9D9D9] rounded-lg px-3 py-2">
-              <span className="text-sm text-[#999]">소요시간</span>
-              <span className="text-sm">{timeSpentState.text}</span>
+              {timeSpentState.text === "" ? (
+                <span className="text-sm text-[#999]">
+                  아래의 버튼을 눌러 소요시간을 선택해주세요 (필수)
+                </span>
+              ) : (
+                <>
+                  <span className="text-sm text-[#999]">소요시간</span>
+                  <span className="text-sm">{timeSpentState.text}</span>
+                </>
+              )}
             </div>
 
             <div className="flex justify-between">
@@ -281,10 +290,8 @@ export default function SchedulesEditPage() {
         <Card />
         <input
           className="w-full border border-[#D9D9D9] rounded-lg px-3 py-2 text-sm"
-          // defaultValue={schedule.costs  }
-          // defaultValue={schedule.costs.toLocaleString("ko-KR")}
-          value={schedule.costs}
-          placeholder="소요되는 비용을 입력해주세요."
+          placeholder="소요되는 비용을 입력해주세요 (필수)"
+          value={schedule.costs !== null ? schedule.costs : ""}
           onChange={handleCostChange}
         />
       </div>
@@ -294,7 +301,7 @@ export default function SchedulesEditPage() {
         <textarea
           className="w-full border border-[#D9D9D9] rounded-lg px-3 py-2 text-sm resize-none"
           defaultValue={schedule.contents}
-          placeholder="메모를 해주세요."
+          placeholder="메모를 입력해주세요 (필수)"
           onChange={(e) =>
             setSchedule((schedule) => ({
               ...schedule,
