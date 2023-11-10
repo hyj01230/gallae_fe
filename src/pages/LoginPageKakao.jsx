@@ -25,7 +25,7 @@ export default function LoginPageKakao() {
         );
         console.log("response", response);
         const accessToken = response.headers.authorization;
-        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("accessToken", `Bearer ${accessToken}`);
         navigate("/");
       } catch (error) {
         console.log("error", error);
