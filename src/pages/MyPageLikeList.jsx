@@ -209,9 +209,15 @@ export default function MyPageLikeList() {
             </div>
           ))
         ) : (
-          <div className="mx-4">
-            <div className="mt-4 flex w-full justify-center">
+          <div className="mt-60 mb-44">
+            <div className=" flex w-full justify-center text-xl/normal text-[#333333] font-normal">
               좋아요 목록이 없습니다.
+            </div>
+            <div
+              onClick={() => navigate(`/posts`)}
+              className="mt-5 flex w-full justify-center text-lg/normal text-[#FF9900] font-normal"
+            >
+              좋아요 하러 가기
             </div>
           </div>
         )}

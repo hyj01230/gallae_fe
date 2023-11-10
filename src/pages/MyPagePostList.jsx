@@ -224,9 +224,15 @@ export default function MyPagePostList() {
               </div>
             ))
         ) : (
-          <div className="mx-4">
-            <div className="mt-4 flex w-full justify-center">
-              커뮤니티에 게시된 나의 글이 없습니다.
+          <div className="mt-60 mb-44">
+            <div className=" flex w-full justify-center text-xl/normal text-[#333333] font-normal">
+              커뮤니티에 게시된 나의 일정이 없습니다.
+            </div>
+            <div
+              onClick={() => navigate(`/`)}
+              className="mt-5 flex w-full justify-center text-lg/normal text-[#FF9900] font-normal"
+            >
+              게시하러 가기
             </div>
           </div>
         )}
