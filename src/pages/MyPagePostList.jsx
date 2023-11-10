@@ -3,11 +3,16 @@ import { LeftArrow, ThreecIrcle } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
+import { getDetailPost, updatePost } from "../api";
 // import { deleteScheduleDetail } from "../api";
 
 export default function MyPagePostList() {
   // 페이지 이동
   const navigate = useNavigate();
+
+  // 게시글 삭제 후 페이지 업데이트
+  const [isUpdate, setIsUpdate] = useState(false);
+
   const onClickLeftArrowHandler = () => {
     navigate("/mypage");
   };
@@ -59,12 +64,31 @@ export default function MyPagePostList() {
     }
   };
 
-  // const onClickDeleteeHandler = async (schedulesId) => {
-  //   try {
-  //     const response = await deleteScheduleDetail(schedulesId);
-  //   } catch (error) {
-  //     // console.log("error", error);
-  // };
+  const onClickDeleteeHandler = async (item) => {
+    try {
+      const { postId, postCategory, tagsList, subTitle } = item;
+
+      // 여행일정은 남겨두고 게시글만 삭제하기 위해서
+      // title과 contents에 null 값을 할당한다.
+      const updatePostData = {
+        title: null,
+        contents: null,
+        postCategory,
+        tagsList,
+        subTitle,
+      };
+
+      await updatePost(postId, updatePostData);
+
+      // 게시글이 삭제되면 모달을 닫는다.
+      setOpenModal(false);
+
+      // 페이지를 업데이트하기 위해 useState 상태를 변경한다.
+      setIsUpdate(!isUpdate);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   // const onClickEditHandler = () => {
   //   navigate("/post/edit");
@@ -73,7 +97,7 @@ export default function MyPagePostList() {
   // useEffect : 렌더링되면 실행!
   useEffect(() => {
     getPostList();
-  }, []);
+  }, [isUpdate]);
 
   // 시간 표시
   const formatDate = (timestamp) => {
@@ -134,7 +158,7 @@ export default function MyPagePostList() {
                         <div className="absolute right-6">
                           <div className="w-[136px] h-[121px] bg-white shadow-[0_0_4px_4px_rgba(0,0,0,0.05)]">
                             <div
-                              // onClick={() => onClickDeleteeHandler(item.postId)}
+                              onClick={() => onClickDeleteeHandler(item)}
                               className="pl-3 w-full h-10 border-b border-[#F2F2F2] flex justify-start items-center cursor-pointer"
                             >
                               삭제하기
