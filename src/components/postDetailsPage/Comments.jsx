@@ -41,6 +41,7 @@ export default function Comments({
   const [commentType, setCommentType] = useState("normal"); // 댓글 상태관리 (댓글 입력, 댓글 수정, 대댓글 입력,대댓글 수정)
   const navigate = useNavigate();
   const editedContentRef = useRef(null);
+  const [last, setLast] = useState(false); // 마지막 페이지 확인
 
   const nickName = useRecoilValue(nickNameState);
 
@@ -70,20 +71,27 @@ export default function Comments({
       // 요청 성공 시에 페이지에 1 카운트 해주기
       // 라스트불린값이 트루면 끝 아니면 +1
       setPage((page) => page + 1);
+      setLast(response.data.last); // 마지막 페이지 확인값
     } catch (err) {
       console.log("에러 발생:", err);
     }
   };
 
   useEffect(() => {
-    if (inView || !commentList.length) {
+    getCommentList();
+  }, []);
+
+  // inView 상태가 true일 때(= 관찰한 게시물 ref가 화면에 보일 때 = 마지막)
+  // 좋아요한 게시물 목록을 추가로 가져오기
+  useEffect(() => {
+    if (inView) {
       getCommentList();
       console.log("📢 데이터를 더 가져와랏!!", inView);
       console.log("page 번호", page);
       console.log("로드된 데이터", commentList);
+      console.log("🔍 막지막 페이지 확인", last);
     }
-  }, [inView, commentList]);
-
+  }, [inView]);
   // 댓글 작성 버튼 클릭 핸들러
   const handleCommentButtonClick = async () => {
     if (!localStorage.getItem("accessToken")) {
