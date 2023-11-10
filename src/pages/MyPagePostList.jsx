@@ -64,6 +64,7 @@ export default function MyPagePostList() {
     }
   };
 
+  // 게시글 삭제하기 (여행일정은 남겨두고 게시글만 삭제하기)
   const onClickDeleteeHandler = async (item) => {
     try {
       const { postId, postCategory, tagsList, subTitle } = item;
@@ -164,7 +165,9 @@ export default function MyPagePostList() {
                               삭제하기
                             </div>
                             <div
-                              // onClick={() => navigate("/post/edit")}
+                              onClick={() =>
+                                navigate("/post/edit", { state: item })
+                              }
                               className="pl-3 w-full h-10 border-b border-[#F2F2F2] flex justify-start items-center cursor-pointer"
                             >
                               수정하기
