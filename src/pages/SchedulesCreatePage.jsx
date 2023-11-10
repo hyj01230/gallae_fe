@@ -203,8 +203,7 @@ export default function SchedulesCreatePage() {
       </div>
 
       <div className="text-xs text-[#999] mx-4 mt-3">
-        <p>사진 업로드는 개당 1MB내외로 업로드 가능합니다.</p>
-        {/* 사진 업로드는 개당 1MB내외로 업로드 가능합니다. */}
+        <p>사진 업로드는 개당 10MB내외로 업로드 가능합니다.</p>
       </div>
 
       {/* 소요시간, 참고링크, 바용, 메모 작성 */}
