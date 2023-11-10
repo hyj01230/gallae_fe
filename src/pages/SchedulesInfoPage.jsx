@@ -12,13 +12,13 @@ export default function SchedulesInfoPage() {
   const [schedule, setSchedule] = useRecoilState(scheduleState);
   const [isModal, setisModal] = useState(false);
   const [post, setPost] = useState({
-    location: null,
+    location: schedule.location || null,
     title: null,
     contents: null,
-    postCategory: "",
-    subTitle: "",
-    tagsList: [],
-    tripDateList: [
+    postCategory: schedule.postCategory || "",
+    subTitle: schedule.subTitle || "",
+    tagsList: schedule.tagsList || [],
+    tripDateList: schedule.tripDateList || [
       {
         chosenDate: "",
       },
@@ -27,7 +27,7 @@ export default function SchedulesInfoPage() {
 
   const handleTagsClick = (event) => {
     const { textContent } = event.currentTarget;
-    const tagsList = post.tagsList;
+    const tagsList = [...post.tagsList];
     const index = tagsList.indexOf(textContent);
 
     if (index === -1) {
