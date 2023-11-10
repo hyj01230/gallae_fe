@@ -55,7 +55,7 @@ export default function PostDetailsPage() {
 
         setPostComments(commentsResponse.data.content);
       } catch (error) {
-        // console.error("데이터 가져오기 오류:", error);
+        console.error("데이터 가져오기 오류:", error);
       }
     };
 
