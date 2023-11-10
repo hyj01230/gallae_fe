@@ -10,6 +10,7 @@ export default function PostCommentsDisplay({
   postDetails,
   likedStatus,
   handleLikeClick,
+  commentNum, // commentNum을 프롭으로 받아옴
 }) {
   const navigate = useNavigate();
   return (
@@ -33,9 +34,7 @@ export default function PostCommentsDisplay({
             alert("로그인이 필요한 서비스입니다.");
             navigate("/login");
           } else {
-            {
-              handleLikeClick();
-            }
+            handleLikeClick();
           }
         }}
       >

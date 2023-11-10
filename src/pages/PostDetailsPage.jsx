@@ -30,18 +30,8 @@ export default function PostDetailsPage() {
   const [commentNum, setCommentNum] = useState(0); // 댓글 개수 상태
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림/닫힘 상태 변수
   const [isUpdate, setIsUpdate] = useState(false);
-  const updateCommentNum = (num) => {
-    setCommentNum(num);
-  };
 
   const modalRef = useRef(null); // 모달 창 Ref
-
-  const addComment = (newComment) => {
-    // 새 댓글을 추가하는 로직
-    const updatedComments = [...comments, newComment];
-    setComments(updatedComments);
-    setCommentNum(updatedComments.length); // 댓글 개수 갱신
-  };
 
   useEffect(() => {
     const getPostDetails = async () => {
@@ -169,6 +159,10 @@ export default function PostDetailsPage() {
     };
   }, [isUpdate]);
 
+  const updateCommentNum = (num) => {
+    setCommentNum(num);
+  };
+
   // console.log(postDetails.postsPicturesList);
 
   return (
@@ -226,7 +220,7 @@ export default function PostDetailsPage() {
               postDetails={postDetails}
               likedStatus={likedStatus}
               handleLikeClick={handleLikeClick}
-              commentNum={commentNum} // commentNum을 프롭으로 전달
+              commentNum={commentNum}
             />
           </div>
         </div>
@@ -243,7 +237,6 @@ export default function PostDetailsPage() {
           setNewComment={setNewComment}
           handleCommentSubmit={handleCommentSubmit}
           handleCloseModal={handleCloseModal}
-          updateCommentNum={setCommentNum} // commentNum을 업데이트할 함수 전달
         />
       )}
     </Layout>

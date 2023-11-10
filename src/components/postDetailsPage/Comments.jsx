@@ -35,6 +35,7 @@ export default function Comments({
   setNewComment,
   handleCloseModal,
   postId,
+  updateCommentNum,
 }) {
   const [selectedId, setSelectedId] = useState(null);
   const [isEditDelete, setIsEditDelete] = useState(false); // 댓글 수정/삭제 모달 상태 관리
@@ -61,12 +62,9 @@ export default function Comments({
           },
         }
       );
-
-      // 이제 newPosts를 기존 postList에 추가합니다.
-      setCommentList((commentList) => [
-        ...commentList,
-        ...response.data.content,
-      ]);
+      const newComment = response.data.content;
+      // 이제 newComment를 기존 commentList에 추가합니다.
+      setCommentList((commentList) => [...commentList, ...newComment]);
 
       // 요청 성공 시에 페이지에 1 카운트 해주기
       // 라스트불린값이 트루면 끝 아니면 +1
@@ -153,6 +151,7 @@ export default function Comments({
       setNewComment({ contents: "" });
       setCommentType("normal");
       console.log("response:", response);
+      setComments(commentsResponse.data.content);
     } catch (error) {
       console.error("대댓글 작성 오류:", error);
     }
@@ -196,6 +195,7 @@ export default function Comments({
       console.error("대댓글 삭제 중 오류 발생:", error);
     }
   };
+
   const handleOpenEditDeleteModal = (index) => {
     setSelectedId(index);
     setIsEditDelete(!isEditDelete);
@@ -308,12 +308,15 @@ export default function Comments({
                       <div className="flex flex-row items-center w-full">
                         <Reply />
                         <div className="ml-3 flex flex-row items-center justify-between w-full">
-                          <div className="mr-2 text-base/normal font-semibold text-[#333333]">
+                          <div className="mr-2 text-base/normal  text-[#333333]">
                             <span className="text-base/normal font-semibold text-[#333333]">
                               {reply.nickname}
                             </span>
                             {reply.checkUser === "글쓴이" && (
-                              <span className="border border-orange-300 bg-white rounded-[12px] px-2 py-[3px] ml-2 text-yellow-400 text-[12px]">
+                              <span
+                                className="border border-orange-300 bg-white 
+                              rounded-[12px] px-2 py-[2px] ml-2 text-yellow-400 text-[12px]"
+                              >
                                 글쓴이
                               </span>
                             )}
@@ -336,6 +339,7 @@ export default function Comments({
                                 setCommentType={setCommentType}
                                 setNewComment={setNewComment}
                                 handleDelete={handleDeleteReply}
+                                editedContentRef={editedContentRef}
                               />
                             ) : (
                               <></>
@@ -348,7 +352,12 @@ export default function Comments({
                       </div>
                       <div className="ml-9 flex flex-row justify-between">
                         <div className="text-xs/normal font-light text-[#999999] flex items-end">
-                          {formatDate(reply.createAt)}
+                          {formatDate(
+                            reply.modifiedAt
+                              ? reply.modifiedAt
+                              : reply.createAt,
+                            reply.modifiedAt !== null
+                          )}
                         </div>
                       </div>
                     </div>
