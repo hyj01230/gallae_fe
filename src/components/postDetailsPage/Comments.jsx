@@ -44,6 +44,47 @@ export default function Comments({
       return;
     }
   };
+
+  const getCommentList = async () => {
+    if (!inView) {
+      // inView가 false이면 데이터 가져오지 않음
+      return;
+    }
+
+    console.log("getCommentList 함수 호출"); // 추가된 로그
+
+    try {
+      const response = await axiosInstance.get(
+        `/api/posts/${postId}/comments`,
+        {
+          params,
+        }
+      );
+
+      const newComment = response.data.content;
+      if (newComment.length === 0) {
+        // 만약 응답으로 받은 데이터가 빈 배열이라면, 스크롤을 멈춥니다.
+        console.log("마지막 페이지입니다. 스크롤을 멈춥니다.");
+        return;
+      }
+
+      // 이제 newPosts를 기존 postList에 추가합니다.
+      setCommentList((prevCommentList) => [...prevCommentList, ...newComment]);
+
+      // 응답에서 페이지 번호를 확인
+      console.log("페이지 번호 (응답):", response.data.pageable.pageNumber);
+      console.log("API 응답:", response.data);
+      console.log("새로운 댓글:", newComment);
+      console.log("댓글 리스트:", commentList);
+
+      // 요청 성공 시에 페이지에 1 카운트 해주기
+      // 라스트불린값이 트루면 끝 아니면 +1
+      setPage((prevPage) => prevPage + 1);
+    } catch (err) {
+      console.log("에러 발생:", err); // 추가된 로그
+    }
+  };
+
   // 댓글 삭제 로직
   const handleDelete = async () => {
     try {
@@ -219,7 +260,7 @@ export default function Comments({
                     )}
                   </div>
                   <div className="flex flex-row">
-                    <div className="mr-1 flex flex-row items-center h-6 w-[59px] text-center border rounded-[18px] cursor-pointer">
+                    <div className="mr-1 mt-4 flex flex-row items-center h-6 w-[59px] text-center border rounded-[18px] cursor-pointer">
                       <Reply />
                       <div
                         className="text-xs/normal text-[#D9D9D9] font-normal"
@@ -251,7 +292,7 @@ export default function Comments({
                               {reply.nickname}
                             </span>
                             {reply.checkUser === "글쓴이" && (
-                              <span className="border border-orange-300 bg-white rounded-[12px] px-2 ml-2 text-yellow-400 text-[12px]">
+                              <span className="border border-orange-300 bg-white rounded-[12px] px-2 py-[3px] ml-2 text-yellow-400 text-[12px]">
                                 글쓴이
                               </span>
                             )}

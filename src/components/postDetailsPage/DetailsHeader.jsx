@@ -6,7 +6,7 @@ export default function DetailsHeader() {
 
   return (
     <div>
-      <header className="bg-[#ffffff] p-4 flex justify-between items-center sticky top-0 z-10">
+      <header className="bg-[#ffffff] p-4 flex justify-between items-center  sticky top-0  z-50">
         <div
           className=" text-gray-400 cursor-pointer flex items-center"
           onClick={() => {

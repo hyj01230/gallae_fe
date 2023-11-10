@@ -1,7 +1,12 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
-import { LikeHeart, LikeFullHeart, PostListComment } from "../assets/Icon";
+import {
+  LikeHeart,
+  LikeFullHeart,
+  PostListComment,
+  ShareIcon,
+} from "../assets/Icon";
 import PostHeader from "../components/post/PostHeader";
 import Layout from "../components/common/Layout";
 import PostCategory from "../components/post/PostCategory";
@@ -16,6 +21,7 @@ export default function PostListPage() {
   const navigate = useNavigate();
   const [page, setPage] = useState(0); // 현재 페이지 번호 (페이지네이션)
   const [ref, inView] = useInView();
+  const commentInputRef = useRef(null);
   const getaccessToken = () => {
     return localStorage.getItem("accessToken"); // 로그인 후 토큰을 저장한 방식에 따라 가져옵니다.
   };
@@ -66,30 +72,34 @@ export default function PostListPage() {
     fetchLikedPosts();
   }, []);
 
-  const params = {
-    page: `${page}`, // 백틱으로 변수를 문자열로 변환
-    size: "3",
-  };
+  // const params = {
+  //   page: `${page}`, // 백틱으로 변수를 문자열로 변환
+  //   size: "3",
+  // };
 
   const getPostList = async () => {
-    if (!inView) {
-      // inView가 false이면 데이터 가져오지 않음
-      return;
-    }
-
-    console.log("getPostList 함수 호출");
-    const response = await axiosInstance.get("/api/posts", { params });
+    // if (!inView) {
+    //   // inView가 false이면 데이터 가져오지 않음
+    //   return;
+    // }
 
     try {
+      console.log("getPostList 함수 호출");
+      const response = await axiosInstance.get("/api/posts", {
+        params: {
+          page: `${page}`, // 현재 페이지 번호
+          size: 5, // 원하는 페이지 크기(게시물 수)
+        },
+      });
       const newPosts = response.data.content;
-      if (newPosts.length === 0) {
-        // 만약 응답으로 받은 데이터가 빈 배열이라면, 스크롤을 멈춥니다.
-        console.log("마지막 페이지입니다. 스크롤을 멈춥니다.");
-        return;
-      }
+      // if (newPosts.length === 0) {
+      //   // 만약 응답으로 받은 데이터가 빈 배열이라면, 스크롤을 멈춥니다.
+      //   // console.log("마지막 페이지입니다. 스크롤을 멈춥니다.");
+      //   return;
+      // }
 
       // 이제 newPosts를 기존 postList에 추가합니다.
-      setPostList([...postList, ...newPosts]);
+      setPostList((postList) => [...postList, ...newPosts]);
 
       // 응답에서 페이지 번호를 확인
       console.log("페이지 번호 (응답):", response.data.pageable.pageNumber);
@@ -103,11 +113,21 @@ export default function PostListPage() {
   };
 
   useEffect(() => {
+    getPostList();
+  }, []);
+
+  useEffect(() => {
     if (inView) {
-      console.log(inView, "무한 스크롤 요청 ✌️");
       getPostList();
     }
-  }, [inView, postList]);
+  }, [inView]);
+
+  // useEffect(() => {
+  //   if (inView && postList.length > 0) {
+  //     // console.log(inView, "무한 스크롤 요청 :선글라스:");
+  //     getPostList();
+  //   }
+  // }, [inView, postList]);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -187,7 +207,7 @@ export default function PostListPage() {
         <PostHeader />
         <PostCategory onCategorySelect={handleCategorySelect} />
       </div>
-      <div ref={ref} className="overflow-y-auto mb-20">
+      <div className="overflow-y-auto mb-20">
         <div className="border-b-2 border-gray-100"></div>
         <PostRanking
           rankingList={rankingList}
@@ -199,6 +219,7 @@ export default function PostListPage() {
           {filteredPostList && filteredPostList.length > 0 ? (
             filteredPostList.map((item) => (
               <div
+                ref={ref}
                 key={item.postId}
                 className="w-393 h-275 bg-white flex flex-col relative"
               >
