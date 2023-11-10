@@ -1,5 +1,10 @@
 import { useEffect, useRef, useMemo, useState } from "react";
-import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
+import {
+  CustomOverlayMap,
+  Map,
+  MapMarker,
+  Polyline,
+} from "react-kakao-maps-sdk";
 
 export default function ScheduleMap({
   keyword,
@@ -77,12 +82,17 @@ export default function ScheduleMap({
     >
       {placeList.length > 0 &&
         placeList.map((point) => (
-          <MapMarker
+          <CustomOverlayMap
             key={`${point.lat}-${point.lng}`}
             position={{ lat: point.lat, lng: point.lng }}
           >
-            <span>{point.placeName}</span>
-          </MapMarker>
+            <div className="flex flex-col items-center">
+              <span className="bg-white py-1 px-1 rounded-md text-[14px]">
+                {point.placeName}
+              </span>
+              <img src="/img/location.png" className="w-[40px]" />
+            </div>
+          </CustomOverlayMap>
         ))}
 
       {placeList.length > 0 && (
