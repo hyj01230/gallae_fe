@@ -130,7 +130,7 @@ export default function MyPagePostList() {
         <div className="ml-[18px] text-xl/8 font-semibold">나의 게시글</div>
       </div>
 
-      <div className="mt-16 mb-44">
+      <div className="mt-[73px] mb-44">
         {postList.length > 0 ? (
           postList
             .filter((item) => item.contents)

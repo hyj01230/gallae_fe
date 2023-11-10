@@ -147,7 +147,7 @@ export default function MyPageCommentList() {
         <div className="ml-[18px] text-xl/8 font-semibold">나의 댓글 내역</div>
       </div>
 
-      <div className="mt-16 mb-24">
+      <div className="mt-[73px] mb-24">
         {sortedLists.length > 0 ? (
           sortedLists.map((item) => (
             <div

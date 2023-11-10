@@ -133,7 +133,7 @@ export default function MyPageLikeList() {
         <div className="ml-[18px] text-xl/8 font-semibold">좋아요 목록</div>
       </div>
 
-      <div className="mt-16 mb-44">
+      <div className="mt-[73px] mb-44">
         {likeList.length > 0 ? (
           likeList.map((item) => (
             <div
