@@ -21,7 +21,6 @@ export default function PostListPage() {
   const navigate = useNavigate();
   const [page, setPage] = useState(0); // 현재 페이지 번호 (페이지네이션)
   const [ref, inView] = useInView();
-  const commentInputRef = useRef(null);
   const getaccessToken = () => {
     return localStorage.getItem("accessToken"); // 로그인 후 토큰을 저장한 방식에 따라 가져옵니다.
   };

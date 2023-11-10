@@ -76,17 +76,13 @@ export default function Comments({
   };
 
   useEffect(() => {
-    getCommentList();
-  }, []);
-
-  useEffect(() => {
-    if (inView) {
+    if (inView || !commentList.length) {
       getCommentList();
       console.log("📢 데이터를 더 가져와랏!!", inView);
       console.log("page 번호", page);
       console.log("로드된 데이터", commentList);
     }
-  }, [inView]);
+  }, [inView, commentList]);
 
   // 댓글 작성 버튼 클릭 핸들러
   const handleCommentButtonClick = async () => {
@@ -196,6 +192,7 @@ export default function Comments({
     setSelectedId(index);
     setIsEditDelete(!isEditDelete);
   };
+
   return (
     <div className="bg-white fixed top-0 left-0 right-0  h-screen  flex flex-col  overflow-auto max-w-3xl mx-auto">
       {/* [CSS] 헤더 */}
@@ -280,6 +277,9 @@ export default function Comments({
                         onClick={() => {
                           setSelectedId(value.commentId);
                           setCommentType("reply");
+                          if (editedContentRef && editedContentRef.current) {
+                            editedContentRef.current.focus();
+                          }
                         }}
                       >
                         답글
@@ -403,8 +403,8 @@ export default function Comments({
         >
           {commentType === "normal" && "등록"}
           {commentType === "edit" && "수정"}
-          {commentType === "reply" && "등록"}
-          {commentType === "replyEdit" && "수정"}
+          {commentType === "reply" && "답글 등록"}
+          {commentType === "replyEdit" && "답글 수정"}
         </button>
       </div>
     </div>

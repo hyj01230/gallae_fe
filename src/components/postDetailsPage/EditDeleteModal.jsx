@@ -7,7 +7,6 @@ export default function EditDeleteModal({
   setCommentType,
   setNewComment,
   editedContentRef,
-  repliesContentRef,
 }) {
   return (
     <div className="absolute right-4 w-[100px] flex flex-col bg-white ml-10 border cursor-pointer  ">
@@ -27,10 +26,6 @@ export default function EditDeleteModal({
           // 모달 내의 입력 창에 포커스
           if (editedContentRef && editedContentRef.current) {
             editedContentRef.current.focus();
-          }
-
-          if (repliesContentRef && repliesContentRef.current) {
-            repliesContentRef.current.focus();
           }
         }}
       >
