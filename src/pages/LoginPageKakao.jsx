@@ -19,7 +19,7 @@ export default function LoginPageKakao() {
           `/kakao/callback?code=${code}`,
           {
             headers: {
-              "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+              "Content-type": "application/x-www-form-urlencoded;",
             },
           }
         );
