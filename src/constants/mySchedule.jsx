@@ -1,3 +1,5 @@
+import * as AccountIcon from "../assets/Account";
+
 export const DETAIL_SCHEDULES_CATEGORIES = [
   "카테고리 (필수)",
   "식당",
@@ -9,15 +11,25 @@ export const DETAIL_SCHEDULES_CATEGORIES = [
   "쇼핑",
 ];
 
+// export const ACCOUNT_ICON = [
+//   "",
+//   "Restaurant",
+//   "Accommdation",
+//   "Cafe",
+//   "Landmark",
+//   "Transportation",
+//   "Mart",
+//   "Shopping",
+// ];
 export const ACCOUNT_ICON = [
   "",
-  "Restaurant",
-  "Accommdation",
-  "Cafe",
-  "Landmark",
-  "Transportation",
-  "Mart",
-  "Shopping",
+  <AccountIcon.Restaurant />,
+  <AccountIcon.Accommodation />,
+  <AccountIcon.Cafe />,
+  <AccountIcon.Landmark />,
+  <AccountIcon.Transportation />,
+  <AccountIcon.Mart />,
+  <AccountIcon.Shopping />,
 ];
 
 export const SPENT_TIME_LIST = [

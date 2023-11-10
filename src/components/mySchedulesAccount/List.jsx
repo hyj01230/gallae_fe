@@ -3,7 +3,6 @@ import {
   DETAIL_SCHEDULES_CATEGORIES,
   ACCOUNT_ICON,
 } from "../../constants/mySchedule";
-import AccountIcon from "../../assets/Account";
 
 export default function List({ data, day }) {
   return (
@@ -25,12 +24,10 @@ export default function List({ data, day }) {
           <div className="flex items-center py-5">
             <div className="mr-[9px]">
               {
-                AccountIcon[
-                  ACCOUNT_ICON[
-                    DETAIL_SCHEDULES_CATEGORIES.indexOf(
-                      schedule.schedulesCategory
-                    )
-                  ]
+                ACCOUNT_ICON[
+                  DETAIL_SCHEDULES_CATEGORIES.indexOf(
+                    schedule.schedulesCategory
+                  )
                 ]
               }
             </div>
