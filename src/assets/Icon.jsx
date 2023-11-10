@@ -1274,3 +1274,68 @@ export const CommentThreeDots = () => {
     </svg>
   );
 };
+
+// 마이페이지 프로필 연필
+export const MypageProfileEdit = () => {
+  return (
+    <svg
+      width="44"
+      height="44"
+      viewBox="0 0 44 44"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g filter="url(#filter0_d_1666_10959)">
+        <circle cx="22" cy="22" r="16" fill="white" />
+      </g>
+      <path
+        d="M25.3785 15.0583L15.7471 25.3506L14.9533 29.3979C14.9442 29.4442 14.9396 29.4914 14.9396 29.5387C14.9396 29.9662 15.3014 30.2897 15.6952 30.2144L19.5996 29.4675L29.2311 19.1752C30.2949 18.0383 30.2949 16.1951 29.2311 15.0583C28.1672 13.9214 26.4424 13.9214 25.3785 15.0583Z"
+        fill="#666666"
+      />
+      <path d="M23 16.8882L28.5 21.8882" stroke="white" />
+      <defs>
+        <filter
+          id="filter0_d_1666_10959"
+          x="0"
+          y="0"
+          width="44"
+          height="44"
+          filterUnits="userSpaceOnUse"
+          colorInterpolationFilters="sRGB"
+        >
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="hardAlpha"
+          />
+          <feMorphology
+            radius="1"
+            operator="dilate"
+            in="SourceAlpha"
+            result="effect1_dropShadow_1666_10959"
+          />
+          <feOffset />
+          <feGaussianBlur stdDeviation="2.5" />
+          <feComposite in2="hardAlpha" operator="out" />
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+          />
+          <feBlend
+            mode="normal"
+            in2="BackgroundImageFix"
+            result="effect1_dropShadow_1666_10959"
+          />
+          <feBlend
+            mode="normal"
+            in="SourceGraphic"
+            in2="effect1_dropShadow_1666_10959"
+            result="shape"
+          />
+        </filter>
+      </defs>
+    </svg>
+  );
+};

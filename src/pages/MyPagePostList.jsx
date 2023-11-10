@@ -4,6 +4,7 @@ import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { getDetailPost, updatePost } from "../api";
+import { shareKakao } from "../util/shareKakaoLink";
 // import { deleteScheduleDetail } from "../api";
 
 export default function MyPagePostList() {
@@ -110,18 +111,26 @@ export default function MyPagePostList() {
     return `${year}.${month}.${day}`;
   };
 
+  // 카카오 공유하기
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://developers.kakao.com/sdk/js/kakao.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => document.body.removeChild(script);
+  }, []);
+
   return (
     <Layout isBottomNav={true}>
-      <div className="mt-3 ml-4 mb-[10px] flex justify-start items-center">
+      <div className="bg-white fixed max-w-3xl w-full pt-3 l-4 mb-[10px] flex justify-start items-center">
         <div onClick={onClickLeftArrowHandler} className="cursor-pointer">
           <LeftArrow />
         </div>
 
         <div className="ml-[18px] text-xl/8 font-semibold">나의 게시글</div>
       </div>
-      {/* <hr className="mt-3 border-[#F2F2F2] border-t-[1px]"></hr> */}
 
-      <div className="mb-44">
+      <div className="mt-16 mb-44">
         {postList.length > 0 ? (
           postList
             .filter((item) => item.contents)
@@ -173,9 +182,9 @@ export default function MyPagePostList() {
                               수정하기
                             </div>
                             <div
-                              // onClick={() =>
-                              //   shareKakao(item.title, item.postId)
-                              // }
+                              onClick={() =>
+                                shareKakao(item.title, item.postId)
+                              }
                               className="pl-3 w-full h-10 flex justify-start items-center cursor-pointer"
                             >
                               공유하기

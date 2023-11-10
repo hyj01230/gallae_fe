@@ -77,7 +77,7 @@ export default function LoginPage() {
     <Layout isBottomNav={false}>
       <div className="mx-4 mb-10">
         <div
-          className="flex justify-end mt-4 text-[#999999] text-base/normal font-normal cursor-pointer"
+          className="flex justify-end mt-3 text-[#999999] text-base/normal font-normal cursor-pointer"
           onClick={() => navigate("/posts")}
         >
           건너뛰기
@@ -117,7 +117,7 @@ export default function LoginPage() {
 
         <div
           onClick={onClickLoginHandler}
-          className="mt-4 rounded-lg w-full h-[50px] border-[#FF9900] border bg-[#FF9900] flex justify-center items-center text-white text-base/4 font-semibold cursor-pointer"
+          className="mt-4 rounded-lg w-full h-[50px] border-[#FF9900] border bg-[#FFFFFF] flex justify-center items-center text-[#FF9900] text-base/4 font-semibold cursor-pointer"
         >
           로그인하기
         </div>
@@ -135,7 +135,7 @@ export default function LoginPage() {
         <div className="mt-6 flex justify-center items-center">
           <div
             onClick={onClickSingUpHandler}
-            className="text-base/normal text-[#888888] cursor-pointer"
+            className="text-base/normal text-[#888888] cursor-pointer font-normal"
           >
             회원가입
           </div>

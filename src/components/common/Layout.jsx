@@ -29,7 +29,7 @@ export default function Layout(prop) {
   }, []);
 
   return (
-    <div className="relative overflow-scroll overflow-y-auto h-100% max-w-3xl mx-auto ">
+    <div className="relative overflow-scroll overflow-y-auto min-h-screen max-w-3xl mx-auto ">
       {prop.children}
       {prop.isBottomNav && <BottomNav />}
     </div>

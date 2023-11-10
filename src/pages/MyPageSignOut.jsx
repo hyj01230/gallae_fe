@@ -51,9 +51,10 @@ export default function MyPageSignOut() {
           </div>
           <div
             onClick={onClickDeleteSignOutHandler}
-            className={
-              "text-[#FF9900] ml-auto  text-xl/8 font-medium cursor-pointer"
+            className={`${
+              email && password ? "text-[#FF9900]" : "text-[#D9D9D9]"
             }
+              ml-auto  text-xl/8 font-medium cursor-pointer`}
           >
             확인
           </div>

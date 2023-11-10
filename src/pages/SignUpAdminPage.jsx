@@ -74,7 +74,7 @@ export default function SignUpPage() {
     if (email.length === 0) {
       setEmailMessage("");
     } else if (!emailRegex.test(email)) {
-      setEmailMessage("이메일 형태를 지켜주세요");
+      setEmailMessage("이메일 형태를 지켜주세요.");
     } else {
       setEmailMessage(true);
     }
@@ -323,7 +323,7 @@ export default function SignUpPage() {
           <div onClick={onClickLeftArrowHandler} className="cursor-pointer">
             <LeftArrow />
           </div>
-          <div className="mx-auto text-xl/normal font-medium">
+          <div className="mx-auto text-xl/normal font-medium text-[#333333]">
             관리자 회원가입
           </div>
           {/* 우측도 <LeftArrow />만큼 들어가게! */}
@@ -332,7 +332,9 @@ export default function SignUpPage() {
 
         <div className="mt-10 flex flex-col">
           <div className="flex justify-between">
-            <div className="text-sm/normal font-medium">닉네임</div>
+            <div className="text-sm/normal font-medium text-[#333333]">
+              닉네임
+            </div>
             <div
               onClick={onClickCheckNickNameHandler}
               className="text-[#999999] underline cursor-pointer text-sm/normal font-medium"
@@ -376,7 +378,9 @@ export default function SignUpPage() {
         <div className="mt-6 flex flex-col">
           <div className="flex justify-between">
             <div className="flex flex-row items-center">
-              <div className="mr-1 text-sm/normal font-medium">이메일 주소</div>
+              <div className="mr-1 text-sm/normal font-medium text-[#333333]">
+                이메일 주소
+              </div>
               <div className="text-sm/normal font-normal text-[#FF9900]">
                 (필수)
               </div>
@@ -408,7 +412,7 @@ export default function SignUpPage() {
           {emailCordInput && (
             <div className="mt-6 flex flex-col">
               <div className="flex flex-row items-center">
-                <div className="mr-1 text-sm/normal font-medium">
+                <div className="mr-1 text-sm/normal font-medium text-[#333333]">
                   이메일 인증번호
                 </div>
                 <div className="text-sm/normal font-normal text-[#FF9900]">
@@ -448,7 +452,9 @@ export default function SignUpPage() {
 
         <div className="mt-6 flex flex-col">
           <div className="flex flex-row items-center">
-            <div className="mr-1 text-sm/normal font-medium">비밀번호</div>
+            <div className="mr-1 text-sm/normal font-medium text-[#333333]">
+              비밀번호
+            </div>
             <div className="text-sm/normal font-normal text-[#FF9900]">
               (필수)
             </div>
@@ -472,7 +478,9 @@ export default function SignUpPage() {
 
         <div className="mt-6 flex flex-col">
           <div className="flex flex-row items-center">
-            <div className="mr-1 text-sm/normal font-medium">비밀번호 확인</div>
+            <div className="mr-1 text-sm/normal font-medium text-[#333333]">
+              비밀번호 확인
+            </div>
             <div className="text-sm/normal font-normal text-[#FF9900]">
               (필수)
             </div>
@@ -502,9 +510,11 @@ export default function SignUpPage() {
               onChange={onClickAllAgreeHandler}
               className="w-5 h-5 accent-[#FF9900] cursor-pointer"
             />
-            <div className="ml-3 text-sm/normal font-bold ">전체 동의하기</div>
+            <div className="ml-3 text-sm/normal font-bold text-[#333333]">
+              전체 동의하기
+            </div>
           </div>
-          <div className="mt-2 ml-8 text-[#999999] text-sm/normal font-normal">
+          <div className="mt-2 ml-8 text-[#888888] text-sm/normal font-normal">
             모든 정보에 동의합니다.
           </div>
         </div>
@@ -518,7 +528,7 @@ export default function SignUpPage() {
                 onChange={() => onAgreeCheckedChange(1, !agreeChecked1)}
                 className="w-5 h-5 accent-[#FF9900] cursor-pointer"
               />
-              <div className="ml-3 text-sm/normal font-normal">
+              <div className="ml-3 text-sm/normal font-normal text-[#333333]">
                 [필수] 만 14세 이상입니다.
               </div>
             </div>
@@ -530,7 +540,7 @@ export default function SignUpPage() {
                 onChange={() => onAgreeCheckedChange(2, !agreeChecked2)}
                 className="w-5 h-5 accent-[#FF9900] cursor-pointer"
               />
-              <div className="ml-3 mr-auto text-sm/normal font-normal">
+              <div className="ml-3 mr-auto text-sm/normal font-normal text-[#333333]">
                 [필수] 개인정보 수집 및 이용 동의
               </div>
               <div onClick={onClickAgree1}>
@@ -545,7 +555,7 @@ export default function SignUpPage() {
                 onChange={() => onAgreeCheckedChange(3, !agreeChecked3)}
                 className="w-5 h-5 accent-[#FF9900] cursor-pointer"
               />
-              <div className="ml-3 mr-auto text-sm/normal font-normal">
+              <div className="ml-3 mr-auto text-sm/normal font-normal text-[#333333]">
                 [필수] 위치정보 수집 및 이용 동의
               </div>
               <div onClick={onClickAgree2}>

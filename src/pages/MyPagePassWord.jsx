@@ -150,13 +150,17 @@ export default function MyPagePassWord() {
           </div>
         )}
 
-        <div className="mt-5 text-[#FF9900] text-xs/5 font-medium">
-          • 영문, 숫자, 특수문자(!@#$%^&*) 포함 8자~15자를 입력해주세요
+        <div className="mt-5 text-[#FF9900] text-xs/5 font-medium flex">
+          <div className="mr-1">•</div>
+          <div>영문, 숫자, 특수문자(!@#$%^&*) 포함 8자~15자를 입력해주세요</div>
         </div>
 
-        <div className="mt-1 text-[#999999] text-xs/5 font-medium">
-          • 개인정보(연락처,생일)와 관련된 숫자 등 다른 사람이 알아낼 수 있는
-          비밀번호를 사용하지 마세요.
+        <div className="mt-1 text-[#999999] text-xs/5 font-medium flex">
+          <div className="mr-1">•</div>
+          <div>
+            개인정보(연락처,생일)와 관련된 숫자 등 다른 사람이 알아낼 수 있는
+            비밀번호를 사용하지 마세요.
+          </div>
         </div>
       </div>
     </Layout>

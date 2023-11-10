@@ -103,41 +103,15 @@ export default function MyPageLikeList() {
     }
   };
 
-  // 입력 시간 표시
+  // 입력 일자 표시
   const getTimeAgo = (timestamp) => {
-    const now = new Date();
-    const createAt = new Date(timestamp);
-    const timeDiff = now - createAt;
-    const hoursAgo = Math.floor(timeDiff / (1000 * 60 * 60));
+    const createdAtDate = new Date(timestamp); // 날짜 객체 생성
 
-    if (hoursAgo < 1) {
-      const minutesAgo = Math.floor(timeDiff / (1000 * 60));
-      if (minutesAgo < 1) {
-        return "방금 전";
-      }
-      return `${minutesAgo}분 전`;
-    }
+    const year = createdAtDate.getFullYear(); // 년, 월, 일 추출
+    const month = (createdAtDate.getMonth() + 1).toString().padStart(2, "0");
+    const day = createdAtDate.getDate().toString().padStart(2, "0");
 
-    if (hoursAgo < 24) {
-      return `${hoursAgo}시간 전`;
-    }
-
-    const daysAgo = Math.floor(hoursAgo / 24);
-    if (daysAgo === 1) {
-      return "어제";
-    }
-
-    // 년-월-일 시간:분 형식으로 날짜 및 시간 표시
-    const formattedDate = `${createAt.getFullYear()}-${(createAt.getMonth() + 1)
-      .toString()
-      .padStart(2, "0")}-${createAt
-      .getDate()
-      .toString()
-      .padStart(2, "0")} ${createAt
-      .getHours()
-      .toString()
-      .padStart(2, "0")}:${createAt.getMinutes().toString().padStart(2, "0")}`;
-    return formattedDate;
+    return `${year}.${month}.${day}`; // 변경된 날짜 형식 반환
   };
 
   // 카카오 공유하기
@@ -151,16 +125,15 @@ export default function MyPageLikeList() {
 
   return (
     <Layout isBottomNav={true}>
-      <div className="mt-3 ml-4 flex justify-start items-center">
+      <div className="bg-white fixed max-w-3xl w-full pt-3 pl-4 pb-[10px] flex justify-start items-center">
         <div onClick={onClickLeftArrowHandler} className="cursor-pointer">
           <LeftArrow />
         </div>
 
         <div className="ml-[18px] text-xl/8 font-semibold">좋아요 목록</div>
       </div>
-      <hr className="mt-3 border-[#F2F2F2] border-t-[1px]"></hr>
 
-      <div className="mb-44">
+      <div className="mt-16 mb-44">
         {likeList.length > 0 ? (
           likeList.map((item) => (
             <div

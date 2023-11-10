@@ -1,5 +1,11 @@
 import Layout from "../components/common/Layout";
-import { GearIcon, Heart, MyCommentList, MyWriting } from "../assets/Icon";
+import {
+  GearIcon,
+  Heart,
+  MyCommentList,
+  MyWriting,
+  MypageProfileEdit,
+} from "../assets/Icon";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { axiosInstance } from "../api/axiosInstance";
@@ -191,6 +197,9 @@ export default function MyPage() {
             // src={myPageInfo.profileImg ? myPageInfo.profileImg : defaultProfile}
             src={myPageInfo.profileImg}
           />
+          <div className="absolute mt-[86px] ml-16">
+            <MypageProfileEdit />
+          </div>
         </div>
 
         <div className="flex justify-center mt-3 text-xl/normal font-semibold">
@@ -199,27 +208,24 @@ export default function MyPage() {
 
         <div
           onClick={onClickAboutMeOpenHandler}
-          className="mt-5 w-full h-[94px] rounded-xl border border-[#F2F2F2] cursor-pointer"
+          className="mt-5 w-full min-h-[94px] rounded-xl border border-[#F2F2F2] cursor-pointer"
         >
-          <div className="mt-4 ml-4">
+          <div className="my-4 ml-4">
             {myPageInfo.aboutMe === null || myPageInfo.aboutMe === "" ? (
               <div>
-                <div className="text-[14px] text-[#D9D9D9] font-medium leading-5">
+                <div className="text-[14px]/5 text-[#D9D9D9] font-medium leading-5">
                   아직 작성된 소개가 없어요.
                 </div>
-                <div className="text-[14px] text-[#D9D9D9] font-medium leading-5">
+                <div className="mt-1 text-[14px]/5 text-[#D9D9D9] font-medium leading-5">
                   클릭해서 자기소개를 입력해주세요.
                 </div>
               </div>
             ) : (
-              myPageInfo.aboutMe
+              <div className="whitespace-pre-line">{myPageInfo.aboutMe}</div>
             )}
           </div>
         </div>
 
-        <div className="mt-10 font-semibold text-base/normal text-[#333333">
-          나의 여행계획
-        </div>
         <div
           onClick={onClickLikeListHandler}
           className="mt-5 flex flex-row items-center cursor-pointer"
@@ -231,7 +237,7 @@ export default function MyPage() {
         </div>
         <div
           onClick={onClickPostListHandler}
-          className="mt-4 flex flex-row items-center cursor-pointer"
+          className="mt-5 flex flex-row items-center cursor-pointer"
         >
           <MyWriting />
           <div className="ml-3 font-medium text-base/normal text-[#666666]">
@@ -240,7 +246,7 @@ export default function MyPage() {
         </div>
         <div
           onClick={onClickCommentListHandler}
-          className="mt-4 mb-28 flex flex-row items-center cursor-pointer"
+          className="mt-5 mb-28 flex flex-row items-center cursor-pointer"
         >
           <div className="mx-[2px]">
             <MyCommentList />
@@ -311,7 +317,7 @@ export default function MyPage() {
               value={aboutMe}
               onChange={onChangeAboutMeHandler}
               maxLength={80}
-              rows={2}
+              rows={3}
               className="w-full bg-transparent text-center text-white placeholder:text-white border-b border-[#D9D9D9] outline-none resize-none"
             />
           </div>

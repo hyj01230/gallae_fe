@@ -139,16 +139,15 @@ export default function MyPageCommentList() {
 
   return (
     <Layout isBottomNav={true}>
-      <div
-        onClick={onClickLeftArrowHandler}
-        className="mt-3 ml-4 flex justify-start items-center cursor-pointer"
-      >
-        <LeftArrow />
+      <div className="bg-white fixed max-w-3xl w-full pt-3 pl-4 pb-[10px] flex justify-start items-center">
+        <div onClick={onClickLeftArrowHandler} className="cursor-pointer">
+          <LeftArrow />
+        </div>
+
         <div className="ml-[18px] text-xl/8 font-semibold">나의 댓글 내역</div>
       </div>
-      <hr className="mt-[11px] border-[#F2F2F2] border-t-[1px]"></hr>
 
-      <div className="mb-24">
+      <div className="mt-16 mb-24">
         {sortedLists.length > 0 ? (
           sortedLists.map((item) => (
             <div

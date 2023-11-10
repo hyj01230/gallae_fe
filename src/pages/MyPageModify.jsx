@@ -1,6 +1,8 @@
 import Layout from "../components/common/Layout";
 import { LeftArrow } from "../assets/Icon";
 import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "../api/axiosInstance";
+import { useEffect, useState } from "react";
 
 export default function MyPageModify() {
   // 페이지 이동
@@ -18,6 +20,24 @@ export default function MyPageModify() {
     navigate("/mypage/modify/signout");
   };
 
+  // useStat
+  const [nickName, setNickName] = useState("");
+
+  // GET : 닉네임 가져오기
+  const getMyPageInfo = async () => {
+    try {
+      const response = await axiosInstance.get("/api/users/profile");
+      // console.log("닉네임 response :", response.data.nickName);
+      setNickName(response.data.nickName);
+    } catch (error) {
+      // console.log("error :", error);
+    }
+  };
+
+  useEffect(() => {
+    getMyPageInfo();
+  }, []);
+
   return (
     <Layout isBottomNav={true}>
       <div className="mx-4">
@@ -25,24 +45,31 @@ export default function MyPageModify() {
           <div onClick={onClickLeftArrowHandler} className="cursor-pointer">
             <LeftArrow />
           </div>
-          <div className="ml-4 text-xl/normal font-semibold">개인정보 설정</div>
+          <div className="ml-4 text-xl/8 font-semibold text-[#333333]">
+            개인정보 설정
+          </div>
+        </div>
+        <div
+          onClick={onClickModifyNickNameHandler}
+          className="flex items-center mt-6 pb-3 border-b border-[#F2F2F2] cursor-pointer"
+        >
+          <div className="text-[18px]/8 mr-auto text-[#333333]">
+            닉네임 수정
+          </div>
+          <div className="text-[18px]/8 font-medium text-[#999999]">
+            {nickName}
+          </div>
         </div>
 
         <div
-          onClick={onClickModifyNickNameHandler}
-          className="mt-6 pb-3 border-b border-[#F2F2F2] cursor-pointer"
-        >
-          닉네임 수정
-        </div>
-        <div
           onClick={onClickModifyPassWordHandler}
-          className="mt-4 pb-3 border-b border-[#F2F2F2] cursor-pointer"
+          className="mt-4 pb-3 border-b border-[#F2F2F2] cursor-pointer text-[#333333] text-[18px]/8"
         >
           비밀번호 변경
         </div>
         <div
           onClick={onClickModifySignOutHandler}
-          className="mt-4 pb-3 border-b border-[#F2F2F2] cursor-pointer"
+          className="mt-4 pb-3 border-b border-[#F2F2F2] cursor-pointer text-[#333333] text-[18px]/8"
         >
           탈퇴하기
         </div>
