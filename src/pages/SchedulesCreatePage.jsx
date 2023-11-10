@@ -105,7 +105,6 @@ export default function SchedulesCreatePage() {
 
   const isValidate = () => {
     // 카테고리와 장소명이 정해지지 않으면 버튼 활성화 안되게 하기
-    console.log(schedule);
     if (
       DETAIL_SCHEDULES_CATEGORIES.includes(schedule.schedulesCategory) &&
       schedule.placeName &&
