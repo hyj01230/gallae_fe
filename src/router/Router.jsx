@@ -30,7 +30,6 @@ export const router = createBrowserRouter([
   { path: "/myschedules/edit/date", element: <Page.SchedulesEditDatePage /> },
   { path: "/myschedules/edit/info", element: <Page.SchedulesEditInfoPage /> },
   { path: "/myschedules/details", element: <Page.SchedulesDetailPage /> },
-  { path: "/myschedules/search", element: <Page.SchedulesPlaceSearch /> },
   { path: "/mypage", element: <Page.MyPage /> },
   { path: "/mypage/modify", element: <Page.MyPageModify /> },
   { path: "/mypage/modify/nickname", element: <Page.MyPageNickName /> },
