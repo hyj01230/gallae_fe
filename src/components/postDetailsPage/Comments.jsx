@@ -62,12 +62,9 @@ export default function Comments({
           },
         }
       );
-
-      // 이제 newPosts를 기존 postList에 추가합니다.
-      setCommentList((commentList) => [
-        ...commentList,
-        ...response.data.content,
-      ]);
+      const newComment = response.data.content;
+      // 이제 newComment를 기존 commentList에 추가합니다.
+      setCommentList((commentList) => [...commentList, ...newComment]);
 
       // 요청 성공 시에 페이지에 1 카운트 해주기
       // 라스트불린값이 트루면 끝 아니면 +1
@@ -351,7 +348,12 @@ export default function Comments({
                       </div>
                       <div className="ml-9 flex flex-row justify-between">
                         <div className="text-xs/normal font-light text-[#999999] flex items-end">
-                          {formatDate(reply.createAt)}
+                          {formatDate(
+                            reply.modifiedAt
+                              ? reply.modifiedAt
+                              : reply.createAt,
+                            reply.modifiedAt !== null
+                          )}
                         </div>
                       </div>
                     </div>

@@ -3,10 +3,6 @@
 import { LikeHeart, LikeFullHeart, CommentIcon } from "../../assets/Icon";
 import { useNavigate } from "react-router-dom";
 
-// PostCommentsDisplay.js
-
-// ...
-
 export default function PostCommentsDisplay({
   areCommentsVisible,
   setCommentsVisible,
