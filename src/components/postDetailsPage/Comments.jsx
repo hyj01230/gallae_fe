@@ -308,12 +308,15 @@ export default function Comments({
                       <div className="flex flex-row items-center w-full">
                         <Reply />
                         <div className="ml-3 flex flex-row items-center justify-between w-full">
-                          <div className="mr-2 text-base/normal font-semibold text-[#333333]">
+                          <div className="mr-2 text-base/normal  text-[#333333]">
                             <span className="text-base/normal font-semibold text-[#333333]">
                               {reply.nickname}
                             </span>
                             {reply.checkUser === "글쓴이" && (
-                              <span className="border border-orange-300 bg-white rounded-[12px] px-2 py-[3px] ml-2 text-yellow-400 text-[12px]">
+                              <span
+                                className="border border-orange-300 bg-white 
+                              rounded-[12px] px-2 py-[2px] ml-2 text-yellow-400 text-[12px]"
+                              >
                                 글쓴이
                               </span>
                             )}
