@@ -3,6 +3,7 @@ import { LeftArrow } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { useState } from "react";
 import { axiosInstance } from "../api/axiosInstance";
+import { removeCookie } from "../util/cookie";
 
 export default function MyPageSignOut() {
   // 페이지 이동
@@ -30,7 +31,7 @@ export default function MyPageSignOut() {
       // console.log("회원탈퇴 성공", response);
       alert("회원탈퇴");
       localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
+      removeCookie("refreshToken");
       navigate("/posts");
     } catch (error) {
       console.log("회원탈퇴 실패", error);
