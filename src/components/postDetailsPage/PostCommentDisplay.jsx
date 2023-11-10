@@ -27,7 +27,7 @@ export default function PostCommentsDisplay({
           {areCommentsVisible ? <CommentIcon /> : <CommentIcon />}
         </div>
         <p className="cursor-pointer" onClick={handleOpenModal}>
-          댓글 {commentNum}
+          댓글 {postDetails.commentNum}
         </p>
       </div>
       <div className="border border-gray-500 "></div>
