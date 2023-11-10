@@ -19,13 +19,13 @@ export default function LoginPageKakao() {
           `/kakao/callback?code=${code}`,
           {
             headers: {
-              "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+              "Content-type": "application/x-www-form-urlencoded;",
             },
           }
         );
         console.log("response", response);
         const accessToken = response.headers.authorization;
-        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("accessToken", `Bearer ${accessToken}`);
         navigate("/");
       } catch (error) {
         console.log("error", error);
