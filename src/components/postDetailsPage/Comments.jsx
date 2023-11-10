@@ -339,6 +339,7 @@ export default function Comments({
                                 setCommentType={setCommentType}
                                 setNewComment={setNewComment}
                                 handleDelete={handleDeleteReply}
+                                editedContentRef={editedContentRef}
                               />
                             ) : (
                               <></>
