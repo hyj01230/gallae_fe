@@ -11,7 +11,7 @@ import {
   Url,
 } from "../assets/Icon";
 import Layout from "../components/common/Layout";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createScheduleDetail, getScheduleDetail } from "../api";
 import { formatDateString } from "../util/formatDate";
 import {
