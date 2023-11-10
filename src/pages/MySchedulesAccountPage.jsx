@@ -38,7 +38,7 @@ export default function MySchedulesAccountPage() {
         <List key={index} data={value} day={index + 1} />
       ))}
 
-      <div>
+      <div className="fixed bottom-0 left-0 right-0 mx-auto max-w-screen-md">
         <div
           style={{
             background:

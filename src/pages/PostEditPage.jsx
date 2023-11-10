@@ -43,15 +43,15 @@ export default function PostEditPage() {
     const { textContent } = e.currentTarget;
     const tagsList = postData.tagsList;
     const index = tagsList.indexOf(textContent);
+
     if (index === -1) {
+      if (tagsList.length + 1 > 3) return;
       tagsList.push(textContent);
-      if (tagsList.length > 3) {
-        return;
-      }
     } else {
       tagsList.splice(index, 1);
     }
-    setPostData((data) => ({ ...data, tagsList }));
+
+    setPostData({ ...postData, tagsList });
   };
 
   // 일정 설정 (일정 선택 후 useEffect 동작)
@@ -110,7 +110,7 @@ export default function PostEditPage() {
           className="border-b border-gray-300 pl-10"
           onClick={() => setIsCategoryDrop(!isCategoryDrop)}
         >
-          <div className="h-12 flex items-center gap-x-4 text-base text-gray-300 cursor-pointer select-none">
+          <div className="h-12 flex items-center gap-x-4 text-base text-[#999] cursor-pointer select-none">
             카테고리
             <DownArrow />
             <span className="text-[black]">{postData.postCategory}</span>
@@ -130,7 +130,7 @@ export default function PostEditPage() {
           className="border-b border-gray-300 pl-10"
           onClick={() => setIsPurposeDrop(!isPurposeDrop)}
         >
-          <div className="h-12 flex items-center gap-x-4 text-base text-gray-300 cursor-pointer select-none">
+          <div className="h-12 flex items-center gap-x-4 text-base text-[#999] cursor-pointer select-none">
             목적
             <DownArrow />
             {postData.tagsList.map((value, index) => (
@@ -146,7 +146,11 @@ export default function PostEditPage() {
             {TAGS.map((tag, index) => (
               <div
                 key={index}
-                className="h-10 flex justify-center items-center cursor-pointer text-sm"
+                className={`h-10 flex justify-center items-center cursor-pointer text-sm ${
+                  postData.tagsList.includes(tag)
+                    ? "text-[#F90] font-semibold"
+                    : "text-[#999]"
+                }`}
                 onClick={handlePurposeClick}
               >
                 {tag}

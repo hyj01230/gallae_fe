@@ -1,16 +1,29 @@
-import { useState, useEffect } from "react";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
+import React, { useState, useEffect } from "react";
+import { CustomOverlayMap, Map, MapMarker } from "react-kakao-maps-sdk";
 
 export default function SearchMap({
   height = "150px",
   keyword = "",
   isSearch,
   setSearchList,
+  schedule,
+  setSchedule,
 }) {
-  const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
+  const [isOpen, setIsOpen] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
+
+  const handleMarkerClick = (marker) => {
+    // 마커클릭 시 인포윈도우 Open, 장소 선택
+    setIsOpen(true);
+    setSchedule({
+      ...schedule,
+      placeName: marker.content,
+      x: marker.position.lng,
+      y: marker.position.lat,
+    });
+  };
 
   useEffect(() => {
     if (!map) return;
@@ -62,10 +75,14 @@ export default function SearchMap({
 
   return (
     <Map // 로드뷰를 표시할 Container
-      center={{
-        lat: 37.566826,
-        lng: 126.9786567,
-      }}
+      center={
+        schedule && schedule.x && schedule.y
+          ? { lat: schedule.y, lng: schedule.x }
+          : {
+              lat: 37.566826,
+              lng: 126.9786567,
+            }
+      }
       style={{
         width: "100%",
         height: `${height}`,
@@ -76,18 +93,26 @@ export default function SearchMap({
       {errorMsg ? (
         <div className="mt-5 mx-4 text-[18px] text-center ">{errorMsg}</div>
       ) : (
-        markers.map((marker) => (
-          <MapMarker
-            key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
-            position={marker.position}
-            onClick={() => setInfo(marker)}
-          >
-            {info && info.content === marker.content && (
-              <div style={{ color: "#000", visibility: "hidden" }}>
-                {marker.content}
-              </div>
+        markers.map((marker, index) => (
+          <React.Fragment key={index}>
+            <MapMarker
+              key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
+              position={marker.position}
+              onClick={() => handleMarkerClick(marker)}
+            />
+            {isOpen && (schedule && schedule.placeName) === marker.content && (
+              <CustomOverlayMap
+                key={`${marker.content}-${marker.position.lat},${marker.position.lng}`}
+                position={marker.position}
+              >
+                {schedule && schedule.placeName === marker.content && (
+                  <div className="text-[black] bg-[white] text-center p-1 mt-6 rounded-md opacity-90">
+                    {schedule.placeName}
+                  </div>
+                )}
+              </CustomOverlayMap>
             )}
-          </MapMarker>
+          </React.Fragment>
         ))
       )}
     </Map>

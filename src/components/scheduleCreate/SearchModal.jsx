@@ -25,12 +25,7 @@ export default function SearchModal({
   };
 
   const handleSelectClick = (placeName, x, y) => {
-    // 장소를 클릭하면
-    // 장소명이 placeName에 저장되고
-    // 마커의 info가 나타나고, 목록의 border가 #F90, border-3된다.
-    // setSchedule((prev) => ({ ...prev, placeName }));
-    // setPlaceInfo({ placeName, x, y });
-    setSchedule((prev) => ({ ...prev, placeName, x, y }));
+    setSchedule({ ...schedule, placeName, x, y });
   };
 
   const handleSubmitClick = () => {
@@ -71,6 +66,8 @@ export default function SearchModal({
             keyword={keyword}
             isSearch={isSearch}
             setSearchList={setSearchList}
+            schedule={schedule}
+            setSchedule={setSchedule}
           />
         </div>
 
@@ -83,7 +80,7 @@ export default function SearchModal({
                 schedule.placeName === list.place_name &&
                 schedule.x === list.x &&
                 schedule.y === list.y
-                  ? "border-3 border-[#F90]"
+                  ? "border-2 border-[#F90]"
                   : " "
               }`}
               onClick={() => handleSelectClick(list.place_name, list.x, list.y)}
