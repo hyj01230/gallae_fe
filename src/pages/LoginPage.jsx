@@ -42,8 +42,8 @@ export default function LoginPage() {
   const onClickLoginHandler = async () => {
     try {
       const response = await loginUser({ email, password });
-      console.log("response", response);
-      console.log("response", response.headers.authorization);
+      // console.log("response", response);
+      // console.log("response", response.headers.authorization);
 
       localStorage.setItem("accessToken", response.headers.authorization); // accessToken 저장!
       setCookie("refreshToken", response.headers.authorization_refresh, {

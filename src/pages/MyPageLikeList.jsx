@@ -86,20 +86,20 @@ export default function MyPageLikeList() {
   useEffect(() => {
     if (inView) {
       getLikeList();
-      console.log("📢 데이터를 더 가져와랏!!", inView);
-      console.log("page 번호", page);
-      console.log("로드된 데이터", likeList);
-      console.log("🔍 막지막 페이지 확인", last);
+      // console.log("📢 데이터를 더 가져와랏!!", inView);
+      // console.log("page 번호", page);
+      // console.log("로드된 데이터", likeList);
+      // console.log("🔍 막지막 페이지 확인", last);
     }
   }, [inView]);
 
   const onClickLikeCancleHandler = async (postId) => {
     try {
       const response = await axiosInstance.get(`/api/posts/like/${postId}`);
-      console.log("response", response);
+      // console.log("response", response);
       getLikeList();
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
     }
   };
 

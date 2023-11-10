@@ -3,6 +3,7 @@ import { LeftArrow, CommentIcon, ReplyIcon } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
+import { useInView } from "react-intersection-observer";
 
 export default function MyPageCommentList() {
   // 페이지 이동
@@ -11,9 +12,16 @@ export default function MyPageCommentList() {
     navigate("/mypage");
   };
 
-  // useState
+  // 무한스크롤
+  // ref : 관찰할 객체
+  // inView : ref가 화면에 보이면 true로 변경됨
+  const [ref, inView] = useInView();
+  const [myCommentspage, setMyCommentsPage] = useState(0); // 댓글 페이지 수 관리
+  const [myRepliespage, setMyRepliesPage] = useState(0); // 대댓글 페이지 수 관리
   const [myCommentsList, setMyCommentsList] = useState([]); // get : 사용자별 댓글 조회
   const [myRepliesList, setMyRepliesList] = useState([]); // get : 사용자별 대댓글 조회
+  const [myCommentslast, setMyCommentsLast] = useState(false); // 댓글 마지막 페이지 확인
+  const [myReplieslast, setMyRepliesLast] = useState(false); // 대댓글 마지막 페이지 확인
   const myCommentsRepliesList = [...myCommentsList, ...myRepliesList];
   const sortedLists = myCommentsRepliesList.sort(
     (a, b) => new Date(b.createAt) - new Date(a.createAt)
@@ -22,9 +30,19 @@ export default function MyPageCommentList() {
   // GET : 사용자별 댓글 가져오기
   const getMyCommentsList = async () => {
     try {
-      const response = await axiosInstance.get("/api/commentsme");
+      const response = await axiosInstance.get("/api/commentsme", {
+        params: {
+          page: `${myCommentspage}`, // 현재 페이지 번호
+          size: 5, // 원하는 페이지 크기(게시물 수)
+        },
+      });
       // console.log("댓글 response :", response);
-      setMyCommentsList(response.data.content);
+      setMyCommentsList((myCommentsList) => [
+        ...myCommentsList,
+        ...response.data.content,
+      ]);
+      setMyCommentsPage((myCommentspage) => myCommentspage + 1); // 페이지 번호 +1 시킴
+      setMyCommentsLast(response.data.last);
     } catch (error) {
       // console.log("댓글 error :", error);
     }
@@ -38,9 +56,19 @@ export default function MyPageCommentList() {
   // GET : 사용자별 대댓글 가져오기
   const getMyRepliesList = async () => {
     try {
-      const response = await axiosInstance.get("/api/repliesme");
+      const response = await axiosInstance.get("/api/repliesme", {
+        params: {
+          page: `${myRepliespage}`, // 현재 페이지 번호
+          size: 5, // 원하는 페이지 크기(게시물 수)
+        },
+      });
       // console.log("대댓글 response :", response);
-      setMyRepliesList(response.data.content);
+      setMyRepliesList((myRepliesList) => [
+        ...myRepliesList,
+        ...response.data.content,
+      ]);
+      setMyRepliesPage((myRepliespage) => myRepliespage + 1); // 페이지 번호 +1 시킴
+      setMyRepliesLast(response.data.last);
     } catch (error) {
       // console.log("대댓글 error :", error);
     }
@@ -50,6 +78,22 @@ export default function MyPageCommentList() {
   useEffect(() => {
     getMyRepliesList();
   }, []);
+
+  // inView 상태가 true일 때(= 관찰한 게시물 ref가 화면에 보일 때 = 마지막)
+  // 좋아요한 게시물 목록을 추가로 가져오기
+  useEffect(() => {
+    if (inView) {
+      getMyCommentsList();
+      getMyRepliesList();
+      // console.log("📢 데이터를 더 가져와랏!!", inView);
+      // console.log("로드된 데이터", myCommentsRepliesList);
+      // console.log("💬 댓글 page 번호", myCommentspage);
+      // console.log("💬 댓글 막지막 페이지 확인", myCommentslast);
+      // console.log("➡️ 대댓글 page 번호", myRepliespage);
+      // console.log("➡️ 대댓글 막지막 페이지 확인", myReplieslast);
+      // console.log("-------------------------");
+    }
+  }, [inView]);
 
   // 댓글/대댓글 클릭해서 이동
   // const onClickCommentReplyHandler = (commentId) => {
@@ -108,6 +152,7 @@ export default function MyPageCommentList() {
         {sortedLists.length > 0 ? (
           sortedLists.map((item) => (
             <div
+              ref={ref}
               key={
                 item.commentId
                   ? `comment_${item.commentId}`
@@ -147,79 +192,6 @@ export default function MyPageCommentList() {
             </div>
           </div>
         )}
-
-        {/* {Lists.length > 0 &&
-        Lists.map((item) => (
-          <div key={item.Id}> map으로 생성할 내용 작성하기 </div>
-        ))}
-
-      {Lists.length &&
-        Lists.map((item) => (
-          <div key={item.Id}> map으로 생성할 내용 작성하기 </div>
-        ))}
-      
-      {Lists &&
-        Lists.map((item) => (
-          <div key={item.Id}> map으로 생성할 내용 작성하기 </div>
-        ))} */}
-
-        {/* 댓글 */}
-        {/* {myCommentsList.length > 0 &&
-        myCommentsList.map((item) => (
-          <div key={item.commentId} className="ml-4 mt-4 flex flex-row">
-            <div className="flex justify-start">
-              <div className="w-6 flex flex-col justify-center items-center">
-                <CommentIcon />
-                <div className="text-xs/[18px] font-normal text-[#999999]">
-                  댓글
-                </div>
-              </div>
-            </div>
-
-            <div className="ml-[23px] w-full border-[#F2F2F2] pl-[7px] flex flex-row border-b-[1px]">
-              <div className="w-full">
-                <div className="text-sm/[22px] font-semibold text-[#333333]">
-                  {item.title}
-                </div>
-                <div className="mt-1 text-sm/[18px] font-normal text-[#999999]">
-                  {item.contents}
-                </div>
-                <div className="mb-4 mt-1 text-xs/[18px] font-normal text-[#999999]">
-                  {item.createAt}
-                </div>
-              </div>
-            </div>
-          </div>
-        ))} */}
-
-        {/* 대댓글 */}
-        {/* {myRepliesList.length > 0 &&
-        myRepliesList.map((item) => (
-          <div key={item.repliesId} className="ml-4 mt-4 flex flex-row">
-            <div className="flex justify-start">
-              <div className="w-6 flex flex-col justify-center items-center">
-                <ReplyIcon />
-                <div className="text-xs/[18px] font-normal text-[#999999]">
-                  답글
-                </div>
-              </div>
-            </div>
-
-            <div className="ml-[23px] w-full border-[#F2F2F2] pl-[7px] flex flex-row border-b-[1px]">
-              <div className="w-full">
-                <div className="text-sm/[22px] font-semibold text-[#333333]">
-                  {item.title}
-                </div>
-                <div className="mt-1 text-sm/[18px] font-normal text-[#999999]">
-                  {item.contents}
-                </div>
-                <div className="mb-4 mt-1 text-xs/[18px] font-normal text-[#999999]">
-                  {item.createAt}
-                </div>
-              </div>
-            </div>
-          </div>
-        ))} */}
       </div>
     </Layout>
   );
