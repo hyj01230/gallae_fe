@@ -122,7 +122,7 @@ export default function MyPagePostList() {
 
   return (
     <Layout isBottomNav={true}>
-      <div className="bg-white fixed max-w-3xl w-full pt-3 l-4 mb-[10px] flex justify-start items-center">
+      <div className="bg-white fixed max-w-3xl w-full pt-3 pl-4 pb-[10px] flex justify-start items-center">
         <div onClick={onClickLeftArrowHandler} className="cursor-pointer">
           <LeftArrow />
         </div>
@@ -209,8 +209,12 @@ export default function MyPagePostList() {
 
                   <div className="mt-8 mb-4 ml-3 mr-[14px] flex justify-between items-center">
                     <div className="flex flex-row text-xs/3 text-[#666666] font-normal">
-                      <div className="mr-2">댓글 {item.commentNum}</div>
-                      <div>좋아요 {item.likeNum}</div>
+                      <div className="mr-2 text-[#666666]">
+                        댓글 {item.commentNum}
+                      </div>
+                      <div className="text-[#666666]">
+                        좋아요 {item.likeNum}
+                      </div>
                     </div>
                     <div className="text-xs/normal font-normal text-[#666666]">
                       게시일 {formatDate(item.createdAt)}

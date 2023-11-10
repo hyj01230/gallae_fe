@@ -97,7 +97,11 @@ export default function MyPageLikeList() {
     try {
       const response = await axiosInstance.get(`/api/posts/like/${postId}`);
       // console.log("response", response);
-      getLikeList();
+
+      // 상태 업데이트: postId와 일치하지 않는 항목만 남김
+      setLikeList((prevLikeList) =>
+        prevLikeList.filter((item) => item.postId !== postId)
+      );
     } catch (error) {
       // console.log("error", error);
     }
