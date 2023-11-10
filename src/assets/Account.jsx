@@ -1,12 +1,12 @@
 // 사용하는 곳 : 가계부
 // 생김새 : 햄버거랑 주스
-const Restaurant = () => {
+export const Restaurant = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="32"
-      height="32"
-      viewBox="0 0 32 32"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
       fill="none"
     >
       <path
@@ -19,13 +19,13 @@ const Restaurant = () => {
 
 // 사용하는 곳 : 가계부
 // 생김새 : 집과 건물
-const Accommodation = () => {
+export const Accommodation = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="23"
-      height="23"
-      viewBox="0 0 23 23"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
       fill="none"
     >
       <path
@@ -42,13 +42,13 @@ const Accommodation = () => {
 
 // 사용하는 곳 : 가계부
 // 생김새 : 커피
-const Cafe = () => {
+export const Cafe = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="26"
-      height="23"
-      viewBox="0 0 26 23"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
       fill="none"
     >
       <path
@@ -61,13 +61,13 @@ const Cafe = () => {
 
 // 사용하는 곳 : 가계부
 // 생김새 : 산과 돌
-const Landmark = () => {
+export const Landmark = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="32"
-      height="32"
-      viewBox="0 0 32 32"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
       fill="none"
     >
       <path
@@ -89,13 +89,13 @@ const Landmark = () => {
 
 // 사용하는 곳 : 가계부
 // 생김새 : 자동차
-const Transportation = () => {
+export const Transportation = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="23"
-      height="20"
-      viewBox="0 0 23 20"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
       fill="none"
     >
       <path
@@ -108,13 +108,13 @@ const Transportation = () => {
 
 // 사용하는 곳 : 가계부
 // 생김새 : 쇼핑 카트
-const Mart = () => {
+export const Mart = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="23"
-      height="22"
-      viewBox="0 0 23 22"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
       fill="none"
     >
       <path
@@ -127,13 +127,13 @@ const Mart = () => {
 
 // 사용하는 곳 : 가계부
 // 생김새 : 핸드백
-const Shopping = () => {
+export const Shopping = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="32"
-      height="32"
-      viewBox="0 0 32 32"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
       fill="none"
     >
       <path
@@ -142,14 +142,4 @@ const Shopping = () => {
       />
     </svg>
   );
-};
-
-export default {
-  Restaurant,
-  Accommodation,
-  Cafe,
-  Landmark,
-  Transportation,
-  Mart,
-  Shopping,
 };

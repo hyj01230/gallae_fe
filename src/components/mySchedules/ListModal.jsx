@@ -33,10 +33,6 @@ export default function ListModal({ scheduleData, handleClick }) {
     }
   };
 
-  const handleShareKakaoClick = () => {
-    // 카카오톡 공유
-  };
-
   const handleEditClick = () => {
     // 이름 및 태그 수정하기
     navigate("/myschedules/edit/info", {
@@ -58,7 +54,7 @@ export default function ListModal({ scheduleData, handleClick }) {
         onClick={handleClick}
       ></div>
 
-      <div className="absolute bottom-0 w-full z-50">
+      <div className="fixed bottom-0 left-0 right-0 mx-auto max-w-screen-md z-50">
         <div className="bg-[#F2F2F2] rounded-xl divide-y divide-[#666] mx-4 z-50">
           <div className="flex justify-center">
             <button className="my-[19px] text-sm">일정 더보기</button>
@@ -71,11 +67,7 @@ export default function ListModal({ scheduleData, handleClick }) {
               {title ? "게시글 수정하기" : "커뮤니티에 공유하기"}
             </button>
           </div>
-          {/* <div>
-            <button className="ml-8 my-[19px] text-lg">
-              카카오톡으로 공유하기
-            </button>
-          </div> */}
+
           <div onClick={handleEditClick}>
             <button className="ml-8 my-[19px] text-lg">
               이름 및 태그 수정하기
