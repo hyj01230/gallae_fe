@@ -13,8 +13,10 @@ import { QueryClient, useMutation } from "react-query";
 export default function SchedulesDatePage() {
   const queryClient = new QueryClient();
   const navigate = useNavigate();
-  const [tripDateRange, setTripDateRange] = useState(null);
   const [schedule, setSchedule] = useRecoilState(scheduleState);
+  const [tripDateRange, setTripDateRange] = useState(
+    schedule.tripDateList || null
+  );
 
   const getDateRange = (startDate, endDate) => {
     let dateArray = [];
@@ -61,7 +63,7 @@ export default function SchedulesDatePage() {
     <Layout>
       <div style={{ height: "calc(100vh - 56px)" }} className="flex flex-col">
         <div className="flex items-center gap-x-1 p-2 ">
-          <div className="mr-2">
+          <div className="mr-2 cursor-pointer" onClick={() => navigate(-1)}>
             <LeftArrow />
           </div>
           <div className="h-14 flex items-center text-xl">여행 일정</div>
