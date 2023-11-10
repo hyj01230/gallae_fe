@@ -54,7 +54,8 @@ export default function MyPageLikeList() {
   // inView : ref가 화면에 보이면 true로 변경됨
   const [ref, inView] = useInView();
   const [page, setPage] = useState(0); // 페이지 수 관리
-  const [likeList, setLikeList] = useState([]); //get으로 가져온 사용자별 좋아요 게시글 데이터(getLikeList)
+  const [likeList, setLikeList] = useState([]); // get으로 가져온 사용자별 좋아요 게시글 데이터(getLikeList)
+  const [last, setLast] = useState(false); // 마지막 페이지 확인
 
   // GET : 사용자별 좋아요 게시글 가져오기
   const getLikeList = async () => {
@@ -69,6 +70,7 @@ export default function MyPageLikeList() {
 
       setLikeList((likeList) => [...likeList, ...response.data.content]); // 기존 데이터에 새 데이터 추가
       setPage((page) => page + 1); // 페이지 번호 +1 시킴
+      setLast(response.data.last); // 마지막 페이지 확인값
     } catch (error) {
       // console.log("error", error);
     }
@@ -84,9 +86,10 @@ export default function MyPageLikeList() {
   useEffect(() => {
     if (inView) {
       getLikeList();
-      console.log(inView, "📢 데이터를 더 가져와랏!!");
+      console.log("📢 데이터를 더 가져와랏!!", inView);
       console.log("page 번호", page);
       console.log("로드된 데이터", likeList);
+      console.log("🔍 막지막 페이지 확인", last);
     }
   }, [inView]);
 
