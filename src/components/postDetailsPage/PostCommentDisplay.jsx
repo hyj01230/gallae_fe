@@ -3,6 +3,10 @@
 import { LikeHeart, LikeFullHeart, CommentIcon } from "../../assets/Icon";
 import { useNavigate } from "react-router-dom";
 
+// PostCommentsDisplay.js
+
+// ...
+
 export default function PostCommentsDisplay({
   areCommentsVisible,
   setCommentsVisible,
@@ -10,6 +14,7 @@ export default function PostCommentsDisplay({
   postDetails,
   likedStatus,
   handleLikeClick,
+  commentNum, // commentNum을 프롭으로 받아옴
 }) {
   const navigate = useNavigate();
   return (
@@ -22,7 +27,7 @@ export default function PostCommentsDisplay({
           {areCommentsVisible ? <CommentIcon /> : <CommentIcon />}
         </div>
         <p className="cursor-pointer" onClick={handleOpenModal}>
-          댓글 {postDetails.commentNum}
+          댓글 {commentNum}
         </p>
       </div>
       <div className="border border-gray-500 "></div>
@@ -33,9 +38,7 @@ export default function PostCommentsDisplay({
             alert("로그인이 필요한 서비스입니다.");
             navigate("/login");
           } else {
-            {
-              handleLikeClick();
-            }
+            handleLikeClick();
           }
         }}
       >

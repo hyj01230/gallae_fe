@@ -1,12 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
-import {
-  LikeHeart,
-  LikeFullHeart,
-  PostListComment,
-  ShareIcon,
-} from "../assets/Icon";
+import { LikeHeart, LikeFullHeart, PostListComment } from "../assets/Icon";
 import PostHeader from "../components/post/PostHeader";
 import Layout from "../components/common/Layout";
 import PostCategory from "../components/post/PostCategory";
@@ -19,10 +14,10 @@ export default function PostListPage() {
   const [selectedCategory, setSelectedCategory] = useState("전체");
   const [likedStatus, setLikedStatus] = useState({});
   const navigate = useNavigate();
-  const [page, setPage] = useState(0); // 현재 페이지 번호 (페이지네이션)
+  const [page, setPage] = useState(0); // 현재 페이지 번호
   const [ref, inView] = useInView();
   const getaccessToken = () => {
-    return localStorage.getItem("accessToken"); // 로그인 후 토큰을 저장한 방식에 따라 가져옵니다.
+    return localStorage.getItem("accessToken");
   };
   const [rankingList, setRankingList] = useState([]);
   const [expanded, setExpanded] = useState(false);
@@ -41,7 +36,7 @@ export default function PostListPage() {
   };
 
   useEffect(() => {
-    // 컴포넌트가 마운트될 때 순위 목록을 가져옵니다.
+    // 랭킹 가져오기
     fetchRankingPosts();
   }, []);
 
@@ -53,7 +48,7 @@ export default function PostListPage() {
         const response = await axiosInstance.get("/api/postlike/id");
         const likedPosts = response.data;
 
-        // 서버에서 가져온 정보를 likedStatus 상태로 설정합니다.
+        // 서버에서 가져온 정보를 likedStatus 상태로 설정.
         const likedStatusMap = {};
         likedPosts.forEach((postId) => {
           likedStatusMap[postId] = true;
@@ -67,21 +62,11 @@ export default function PostListPage() {
   }, []);
 
   useEffect(() => {
-    // 컴포넌트가 마운트될 때 사용자의 좋아요 상태를 가져옵니다.
+    // 좋아요 상태 가져오기
     fetchLikedPosts();
   }, []);
 
-  // const params = {
-  //   page: `${page}`, // 백틱으로 변수를 문자열로 변환
-  //   size: "3",
-  // };
-
   const getPostList = async () => {
-    // if (!inView) {
-    //   // inView가 false이면 데이터 가져오지 않음
-    //   return;
-    // }
-
     try {
       console.log("getPostList 함수 호출");
       const response = await axiosInstance.get("/api/posts", {
@@ -91,13 +76,8 @@ export default function PostListPage() {
         },
       });
       const newPosts = response.data.content;
-      // if (newPosts.length === 0) {
-      //   // 만약 응답으로 받은 데이터가 빈 배열이라면, 스크롤을 멈춥니다.
-      //   // console.log("마지막 페이지입니다. 스크롤을 멈춥니다.");
-      //   return;
-      // }
 
-      // 이제 newPosts를 기존 postList에 추가합니다.
+      // newPosts를 기존 postList에 추가.
       setPostList((postList) => [...postList, ...newPosts]);
 
       // 응답에서 페이지 번호를 확인
@@ -120,13 +100,6 @@ export default function PostListPage() {
       getPostList();
     }
   }, [inView]);
-
-  // useEffect(() => {
-  //   if (inView && postList.length > 0) {
-  //     // console.log(inView, "무한 스크롤 요청 :선글라스:");
-  //     getPostList();
-  //   }
-  // }, [inView, postList]);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -162,7 +135,7 @@ export default function PostListPage() {
         );
       }
 
-      // 좋아요 상태가 변경되면 랭킹을 다시 가져옵니다.
+      // 좋아요 상태가 변경되면 랭킹 다시 업데이트
       fetchRankingPosts();
     } catch (error) {
       console.error("좋아요 토글 오류:", error);
@@ -178,7 +151,7 @@ export default function PostListPage() {
     : [];
 
   function formatDateDifference(createdAt) {
-    const createdAtDate = new Date(createdAt); // createdAt는 ISO 8601 형식의 문자열이어야 합니다.
+    const createdAtDate = new Date(createdAt);
     const now = new Date();
     const timeDifference = now - createdAtDate;
     const minutesDifference = Math.floor(timeDifference / (1000 * 60)); // 분 단위
@@ -288,7 +261,6 @@ export default function PostListPage() {
                         alert("로그인이 필요한 서비스입니다.");
                         navigate("/login");
                       } else {
-                        // 댓글 모달 창으로 가는 코드 추가하기
                         navigate(`/posts/${item.postId}/`);
                       }
                     }}
@@ -323,22 +295,6 @@ export default function PostListPage() {
                       좋아요 {item.likeNum}
                     </p>
                   </div>
-                  {/* <div
-                    className="flex items-center space-x-2 flex-1 justify-center border-r-2 h-[40px]"
-                    onClick={() => {
-                      if (!localStorage.getItem("accessToken")) {
-                        alert("로그인이 필요한 서비스입니다.");
-                        navigate("/login");
-                      } else {
-                        handleLikeClick(item.postId);
-                      }
-                    }}
-                  >
-                    <div>
-                      <ShareIcon />
-                    </div>
-                    <p className="cursor-pointer text-[14px]">공유하기</p>
-                  </div> */}
                 </div>
                 <PostLine />
               </div>

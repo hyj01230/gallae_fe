@@ -35,6 +35,7 @@ export default function Comments({
   setNewComment,
   handleCloseModal,
   postId,
+  updateCommentNum,
 }) {
   const [selectedId, setSelectedId] = useState(null);
   const [isEditDelete, setIsEditDelete] = useState(false); // 댓글 수정/삭제 모달 상태 관리
@@ -153,6 +154,7 @@ export default function Comments({
       setNewComment({ contents: "" });
       setCommentType("normal");
       console.log("response:", response);
+      setComments(commentsResponse.data.content);
     } catch (error) {
       console.error("대댓글 작성 오류:", error);
     }
@@ -196,6 +198,7 @@ export default function Comments({
       console.error("대댓글 삭제 중 오류 발생:", error);
     }
   };
+
   const handleOpenEditDeleteModal = (index) => {
     setSelectedId(index);
     setIsEditDelete(!isEditDelete);
