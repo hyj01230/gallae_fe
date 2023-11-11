@@ -220,7 +220,7 @@ export default function Comments({ handleCloseModal, postId }) {
         <div className="ml-4" onClick={handleCloseModal}>
           <LeftArrow />
         </div>
-        <div className="text-[20px] text-[#333] font-semibold py-3">댓글</div>
+        <div className="text-[20px] text-[#333] font-semibold py-2">댓글</div>
       </div>
       {/* [CSS] 댓글 및 대댓글 리스트 */}
       <div

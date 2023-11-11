@@ -138,8 +138,9 @@ export default function PostDetailsPage() {
 
   return (
     <Layout>
-      <DetailsHeader />
-      <div className="fixed top-0 left-0 w-full bg-white "></div>
+      <div className="fixed top-0 left-0 w-full bg-white ">
+        <DetailsHeader />
+      </div>
       <div>
         <Image url={postDetails.postsPicturesList} />
         <div className="w-393 h-275 bg-white flex flex-col mb-[50px]">
