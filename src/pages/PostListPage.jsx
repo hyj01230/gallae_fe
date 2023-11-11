@@ -8,6 +8,7 @@ import PostCategory from "../components/post/PostCategory";
 import PostLine from "../components/post/PostLine";
 import PostRanking from "../components/post/PostRanking";
 import { axiosInstance } from "../api/axiosInstance";
+import Comments from "../components/postDetailsPage/Comments";
 
 export default function PostListPage() {
   const [postList, setPostList] = useState([]);
@@ -150,6 +151,42 @@ export default function PostListPage() {
       )
     : [];
 
+  const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
+  const [commentsModalData, setCommentsModalData] = useState({
+    postId: null,
+    commentsData: null,
+  });
+
+  const handleCommentClick = async (postId) => {
+    try {
+      // 해당 postId에 대한 댓글 정보 가져오기
+      const response = await axiosInstance.get(`/api/posts/${postId}/comments`);
+
+      // Comments 모달을 열어서 댓글 정보 전달
+      openCommentsModal(response.data, postId);
+    } catch (error) {
+      console.error("댓글 정보 가져오기 오류:", error);
+    }
+  };
+
+  const openCommentsModal = (commentsData, postId) => {
+    // Comments 모달을 열기 위한 로직
+    // 모달을 열기 위한 상태를 설정하고, 필요한 데이터를 전달
+    // 예시로 postId와 commentsData를 모달에 전달합니다.
+    // 이 데이터에 따라 Comments 컴포넌트에서 해당 댓글 정보를 표시할 수 있습니다.
+    // 또한, 이런 상황에서 모달의 렌더링 여부와 데이터 전달을 관리하는 방식은
+    // 프로젝트의 구조나 디자인에 따라 다를 수 있습니다.
+
+    // 예시로 모달을 열기 위한 상태를 추가
+    setIsCommentsModalOpen(true);
+
+    // 예시로 모달에 필요한 데이터 전달
+    setCommentsModalData({
+      postId: postId,
+      commentsData: commentsData,
+    });
+  };
+
   function formatDateDifference(createdAt) {
     const createdAtDate = new Date(createdAt);
     const now = new Date();
@@ -256,7 +293,7 @@ export default function PostListPage() {
                 <div className="flex items-center justify-between text-sm text-gray-500 h-[40px] bordertop-solid border-t-2">
                   <div
                     className="flex items-center space-x-2 flex-1 justify-center "
-                    onClick={() => {}}
+                    onClick={() => handleCommentClick(item.postId)} // 댓글 클릭 시 이벤트 핸들러 추가
                   >
                     <div className="cursor-pointer">
                       <PostListComment />
@@ -299,6 +336,13 @@ export default function PostListPage() {
           )}
         </div>
       </div>
+      {isCommentsModalOpen && (
+        <Comments
+          postId={commentsModalData.postId}
+          commentsData={commentsModalData.commentsData}
+          handleCloseModal={() => setIsCommentsModalOpen(false)}
+        />
+      )}
     </Layout>
   );
 }

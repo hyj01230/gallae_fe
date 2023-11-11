@@ -25,6 +25,7 @@ import SignUpAdminPage from "./SignUpAdminPage";
 import SignUpPage from "./SignUpPage";
 import SignUpCompletePage from "./SignUpCompletePage";
 import PostSearchPage from "./PostSearchPage";
+import UserProfile from "./UserProfile";
 
 export default {
   LoginPage,
@@ -54,4 +55,5 @@ export default {
   SignUpAdminPage,
   SignUpCompletePage,
   SignUpPage,
+  UserProfile,
 };
