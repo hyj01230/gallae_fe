@@ -157,7 +157,7 @@ export default function MyPage() {
         }
       );
       // console.log("소개글 put 성공 :", response);
-      toast(response.data.msg);
+      alert(response.data.msg);
       setAboutMeModal(false); // 모달창 닫기
       setMyPageInfo({ ...myPageInfo, aboutMe }); // 마이페이지 소개글에 바로 적용되게!
     } catch (error) {
@@ -316,8 +316,12 @@ export default function MyPage() {
             <textarea
               value={aboutMe}
               onChange={onChangeAboutMeHandler}
+              onInput={(e) => {
+                e.target.style.height = 0;
+                e.target.style.height = e.target.scrollHeight + "px";
+              }}
               maxLength={80}
-              rows={3}
+              rows={1}
               className="w-full bg-transparent text-center text-white placeholder:text-white border-b border-[#D9D9D9] outline-none resize-none"
             />
           </div>
