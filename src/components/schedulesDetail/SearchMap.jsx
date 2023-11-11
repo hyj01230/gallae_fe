@@ -73,6 +73,8 @@ export default function SearchMap({
     });
   }, [isSearch, map]);
 
+  console.log(schedule);
+
   return (
     <Map // 로드뷰를 표시할 Container
       center={
@@ -105,11 +107,13 @@ export default function SearchMap({
                 key={`${marker.content}-${marker.position.lat},${marker.position.lng}`}
                 position={marker.position}
               >
-                {schedule && schedule.placeName === marker.content && (
-                  <div className="text-[black] bg-[white] text-center p-1 mt-6 rounded-md opacity-90">
-                    {schedule.placeName}
-                  </div>
-                )}
+                {schedule &&
+                  schedule.y === marker.position.lat &&
+                  schedule.x === marker.position.lng && (
+                    <div className="text-[black] bg-[white] text-center p-1 mt-6 rounded-md opacity-90">
+                      {schedule.placeName}
+                    </div>
+                  )}
               </CustomOverlayMap>
             )}
           </React.Fragment>
