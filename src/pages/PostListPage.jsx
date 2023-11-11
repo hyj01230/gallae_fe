@@ -256,14 +256,7 @@ export default function PostListPage() {
                 <div className="flex items-center justify-between text-sm text-gray-500 h-[40px] bordertop-solid border-t-2">
                   <div
                     className="flex items-center space-x-2 flex-1 justify-center "
-                    onClick={() => {
-                      if (!localStorage.getItem("accessToken")) {
-                        alert("로그인이 필요한 서비스입니다.");
-                        navigate("/login");
-                      } else {
-                        navigate(`/posts/${item.postId}/`);
-                      }
-                    }}
+                    onClick={() => {}}
                   >
                     <div className="cursor-pointer">
                       <PostListComment />
