@@ -34,9 +34,11 @@ export default function MySchedulesAccountPage() {
         {subTitle}
       </div>
 
-      {accountList.map((value, index) => (
-        <List key={index} data={value} day={index + 1} />
-      ))}
+      <div className="mb-[100px]">
+        {accountList.map((value, index) => (
+          <List key={index} data={value} day={index + 1} />
+        ))}
+      </div>
 
       <div className="fixed bottom-0 left-0 right-0 mx-auto max-w-screen-md">
         <div
@@ -46,7 +48,7 @@ export default function MySchedulesAccountPage() {
             height: "27px",
           }}
         ></div>
-        <div className="py-6 font-semibold	text-center">
+        <div className="py-6 font-semibold text-center bg-white">
           총 {totalCosts.toLocaleString()}원 지출
         </div>
       </div>

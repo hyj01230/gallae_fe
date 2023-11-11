@@ -66,6 +66,8 @@ export default function ScheduleMap({
     }
   }, [map, mapRef, placeList]);
 
+  console.log({ placeList });
+
   return (
     <Map // 로드뷰를 표시할 Container
       center={{
@@ -81,9 +83,9 @@ export default function ScheduleMap({
       ref={mapRef}
     >
       {placeList.length > 0 &&
-        placeList.map((point) => (
+        placeList.map((point, index) => (
           <CustomOverlayMap
-            key={`${point.lat}-${point.lng}`}
+            key={`${index}-${point.lat}-${point.lng}`}
             position={{ lat: point.lat, lng: point.lng }}
           >
             <div className="flex flex-col items-center">
