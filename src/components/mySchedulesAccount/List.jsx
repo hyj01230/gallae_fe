@@ -21,8 +21,8 @@ export default function List({ data, day }) {
           key={schedule.schedulesId}
           className="flex items-center border-b border-[#F2F2F2]"
         >
-          <div className="flex items-center py-5">
-            <div className="mr-[9px]">
+          <div className="flex w-[65px] items-center py-5">
+            <div className="mr-2">
               {
                 ACCOUNT_ICON[
                   DETAIL_SCHEDULES_CATEGORIES.indexOf(
@@ -31,10 +31,11 @@ export default function List({ data, day }) {
                 ]
               }
             </div>
-            <div className="w-[42px] text-[12px] text-[#999] mr-[10px]">
+            <div className="text-[12px] text-[#999]">
               {schedule.schedulesCategory}
             </div>
           </div>
+
           <div className="flex flex-1 justify-between">
             <div className="font-semibold text-[#333]">
               {schedule.placeName}
