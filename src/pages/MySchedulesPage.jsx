@@ -1,36 +1,42 @@
 import { useNavigate } from "react-router-dom";
 import { Hamburger, Plus } from "../assets/Icon";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import { getMySchedules } from "../api";
 import Layout from "../components/common/Layout";
-import List from "../components/mySchedules/List";
-import ListModal from "../components/mySchedules/ListModal";
 import useModal from "../hooks/useModal";
+import Component from "../components/mySchedules";
 
 export default function MySchedulesPage() {
-  const navigate = useNavigate();
   const modal = useModal();
-  const [isSelect, setIsSelect] = useState(null);
-  const { data, isLoading, error } = useQuery("mySchedule", getMySchedules, {
-    retry: false,
-    onError: (err) => {
-      if (err.response.status === 500) {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        navigate("/posts");
-        return;
-      }
-    },
-  });
+  const navigate = useNavigate();
+  const [selectList, setSelectList] = useState(null);
 
-  const handleOpenModal = (data) => {
-    setIsSelect(data);
+  // 여행 일정 관련 모달 열기
+  const handleOpenModalClick = (e, data) => {
+    e.stopPropagation();
+    setSelectList(data);
     modal.handleOpenModal();
   };
 
+  // 여행 일정 리스트 클릭 시 일정 조회 페이지로 이동
+  const onNavigateClick = (event, schedule) => {
+    event.preventDefault();
+    navigate("/myschedules/details", {
+      state: {
+        postId: schedule.postId,
+        subTitle: schedule.subTitle,
+        tripDateId: schedule.tripDateIdList[0],
+      },
+    });
+  };
+
+  // 여행 일정 데이터 불러오기
+  const { data, isLoading } = useQuery("mySchedule", getMySchedules, {
+    retry: false,
+  });
+
   if (isLoading) {
-    // Loading state
     return <div>로딩중</div>;
   }
 
@@ -51,44 +57,25 @@ export default function MySchedulesPage() {
         </div>
       </div>
 
-      {data && data.length === 0 ? (
-        <div className="mx-auto mt-[100px]">
-          <img
-            src={"/img/woman_writing_with_a_big_pencil.png"}
-            className="mx-auto"
-          />
-
-          <div className="flex flex-col justify-center mx-auto mt-10 select-none">
-            <p className="text-center">아직 나의 여행 갈래가 비어있어요.</p>
-            <p className="text-center	font-semibold">
-              <span className="text-[#F90]">상단의 +</span> 를 눌러 일정을
-              생성해보세요.
-            </p>
-          </div>
-        </div>
-      ) : (
-        <></>
-      )}
-
-      {data && (
+      {data && data.length >= 1 ? (
         <div className="mb-[100px]">
           {data.map((schedule) => (
-            <List
+            <Component.List
               key={schedule.postId}
               schedule={schedule}
-              handleClick={(e) => {
-                e.stopPropagation();
-                handleOpenModal(schedule);
-              }}
+              onNavigateClick={(e) => onNavigateClick(e, schedule)}
+              onOpenModalClick={(e) => handleOpenModalClick(e, schedule)}
             />
           ))}
         </div>
+      ) : (
+        <Component.EmptyStateDisplay />
       )}
 
       {modal.isModal && (
-        <ListModal
-          handleClick={modal.handleCloseModal}
-          scheduleData={isSelect}
+        <Component.ListModal
+          scheduleData={selectList}
+          onCloseModalClick={modal.handleCloseModal}
         />
       )}
     </Layout>

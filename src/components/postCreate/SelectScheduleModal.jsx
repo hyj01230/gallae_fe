@@ -3,17 +3,17 @@ import { getMySchedules } from "../../api";
 import { LeftArrow } from "../../assets/Icon";
 import List from "../mySchedules/List";
 
-export default function SelectScheduleModal({ handleClick, setIsModal }) {
-  const { data, isLoading, error } = useQuery("mySchedule", getMySchedules);
+export default function SelectScheduleModal({
+  onScheduleClick,
+  onCloseModalClick,
+}) {
+  const { data } = useQuery("mySchedule", getMySchedules);
 
   return (
     <div className="max-w-screen-md h-screen fixed top-0 left-0 right-0 mx-auto bg-white z-50">
       <div className="flex items-center justify-between gap-x-1 p-2 ">
         <div className="flex items-center">
-          <div
-            className="mr-2 cursor-pointer"
-            onClick={() => setIsModal(false)}
-          >
+          <div className="mr-2 cursor-pointer" onClick={onCloseModalClick}>
             <LeftArrow />
           </div>
           <div className="h-14 flex items-center text-xl font-semibold">
@@ -26,8 +26,7 @@ export default function SelectScheduleModal({ handleClick, setIsModal }) {
           <List
             key={schedule.postId}
             schedule={schedule}
-            isPointer={false}
-            handlePostClick={() => handleClick(schedule)}
+            onScheduleClick={() => onScheduleClick(schedule)}
           />
         ))}
     </div>
