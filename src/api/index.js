@@ -104,3 +104,38 @@ export const loginUser = async (data) => {
   const response = await axiosInstance.post("/api/users/login", data);
   return response;
 };
+
+// <---------- 마이페이지 관련 API ---------->
+// GET : 마이페이지 데이터 가져오기
+export const getMyPageInfo = async () => {
+  const response = await axiosInstance.get("/api/users/profile");
+  return response.data;
+};
+
+// PUT : 프로필 사진 변경(앨범)
+export const putUpdateProfile = async (formData) => {
+  const response = await axiosInstance.put(
+    "/api/users/profile/update-profileImg",
+    formData
+  );
+  return response;
+};
+
+// PUT : 프로필 사진 변경(기본)
+export const putDefaultProfile = async () => {
+  const response = await axiosInstance.put(
+    "/api/users/profile/default-profileImg"
+  );
+  return response;
+};
+
+// PUT : 소개글 변경
+export const putAboutMe = async (aboutMe) => {
+  const response = await axiosInstance.put(
+    "/api/users/profile/update-aboutMe",
+    {
+      aboutMe,
+    }
+  );
+  return response;
+};
