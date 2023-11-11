@@ -317,7 +317,7 @@ export default function MyPage() {
               value={aboutMe || ""} // aboutMe가 null이거나 undefined일 때 빈 문자열을 할당해서 빈값일때 나타나는 에러 잡기!
               onChange={onChangeAboutMeHandler}
               onInput={(e) => {
-                e.target.style.height = 0;
+                e.target.style.height = "auto";
                 e.target.style.height = e.target.scrollHeight + "px";
               }}
               maxLength={80}
