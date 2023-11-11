@@ -27,17 +27,9 @@ function formatDate(date) {
   return formattedDate.replace("오전", "").replace("오후", "");
 }
 
-export default function Comments({
-  comments,
-  setComments,
-  newComment,
-  handleCommentSubmit,
-  setNewComment,
-  handleCloseModal,
-  postId,
-  updateCommentNum,
-}) {
+export default function Comments({ handleCloseModal, postId }) {
   const [selectedId, setSelectedId] = useState(null);
+  const [newComment, setNewComment] = useState({ contents: "" });
   const [isEditDelete, setIsEditDelete] = useState(false); // 댓글 수정/삭제 모달 상태 관리
   const [commentType, setCommentType] = useState("normal"); // 댓글 상태관리 (댓글 입력, 댓글 수정, 대댓글 입력,대댓글 수정)
   const navigate = useNavigate();
@@ -90,6 +82,26 @@ export default function Comments({
       console.log("🔍 막지막 페이지 확인", last);
     }
   }, [inView]);
+
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axiosInstance.post(
+        `/api/posts/${postId}/comments`,
+        newComment
+      );
+
+      const commentsResponse = await axiosInstance.get(
+        `/api/posts/${postId}/comments`
+      );
+      setCommentList(commentsResponse.data.content);
+      setNewComment({ contents: "" });
+      // console.log(response);
+    } catch (error) {
+      console.error("댓글 작성 오류:", error);
+    }
+  };
+
   // 댓글 작성 버튼 클릭 핸들러
   const handleCommentButtonClick = async () => {
     if (!localStorage.getItem("accessToken")) {
@@ -111,7 +123,7 @@ export default function Comments({
       const commentsResponse = await axiosInstance.get(
         `/api/posts/${postId}/comments`
       );
-      setComments(commentsResponse.data.content);
+      setCommentList(commentsResponse.data.content);
       setNewComment({ contents: "" });
     } catch (error) {
       console.error("댓글 삭제 중 오류 발생:", error);
@@ -129,7 +141,7 @@ export default function Comments({
       const commentsResponse = await axiosInstance.get(
         `/api/posts/${postId}/comments`
       );
-      setComments(commentsResponse.data.content);
+      setCommentList(commentsResponse.data.content);
       setNewComment({ contents: "" });
       setCommentType("normal");
     } catch (error) {
@@ -147,11 +159,11 @@ export default function Comments({
       const commentsResponse = await axiosInstance.get(
         `/api/posts/${postId}/comments`
       );
-      setComments(commentsResponse.data.content);
+      setCommentList(commentsResponse.data.content);
       setNewComment({ contents: "" });
       setCommentType("normal");
       console.log("response:", response);
-      setComments(commentsResponse.data.content);
+      setCommentList(commentsResponse.data.content);
     } catch (error) {
       console.error("대댓글 작성 오류:", error);
     }
@@ -168,7 +180,7 @@ export default function Comments({
       const commentsResponse = await axiosInstance.get(
         `/api/posts/${postId}/comments`
       );
-      setComments(commentsResponse.data.content);
+      setCommentList(commentsResponse.data.content);
       setNewComment({ contents: "" });
       setCommentType("normal");
     } catch (error) {
@@ -188,7 +200,7 @@ export default function Comments({
       const commentsResponse = await axiosInstance.get(
         `/api/posts/${postId}/comments`
       );
-      setComments(commentsResponse.data.content);
+      setCommentList(commentsResponse.data.content);
       setNewComment({ contents: "" });
       setCommentType("normal");
     } catch (error) {
@@ -215,7 +227,7 @@ export default function Comments({
         className="grid divide-y overflow-auto overflow-y-auto mb-[80px] mr-4 w-full"
         style={{ overflowX: "hidden" }}
       >
-        {commentList.length > 0 && Array.isArray(comments) ? (
+        {commentList.length > 0 && Array.isArray(commentList) ? (
           commentList.map((value, index) => (
             <div key={index} style={{ maxWidth: "100%" }}>
               {/* 댓글 */}
