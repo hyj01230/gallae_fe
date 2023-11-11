@@ -21,9 +21,7 @@ export default function PostDetailsPage() {
     postsPicturesList: [],
     // 다른 속성들 초기값 설정
   });
-  const [comments, setComments] = useState([]);
-  const [postComments, setPostComments] = useState([]);
-  const [newComment, setNewComment] = useState({ contents: "" });
+
   const { postId } = useParams();
   const [likedStatus, setLikedStatus] = useState({});
   const [areCommentsVisible, setCommentsVisible] = useState(false);
@@ -38,12 +36,6 @@ export default function PostDetailsPage() {
       try {
         const response = await axiosInstance.get(`/api/posts/${postId}`);
         setPostDetails(response.data);
-
-        const commentsResponse = await axiosInstance.get(
-          `/api/posts/${postId}/comments`
-        );
-
-        setPostComments(commentsResponse.data.content);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
       }
@@ -51,25 +43,6 @@ export default function PostDetailsPage() {
 
     getPostDetails();
   }, [postId]);
-
-  const handleCommentSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axiosInstance.post(
-        `/api/posts/${postId}/comments`,
-        newComment
-      );
-
-      const commentsResponse = await axiosInstance.get(
-        `/api/posts/${postId}/comments`
-      );
-      setPostComments(commentsResponse.data.content);
-      setNewComment({ contents: "" });
-      // console.log(response);
-    } catch (error) {
-      console.error("댓글 작성 오류:", error);
-    }
-  };
 
   const navigate = useNavigate();
 
@@ -136,8 +109,6 @@ export default function PostDetailsPage() {
     const commentsResponse = await axiosInstance.get(
       `/api/posts/${postId}/comments`
     );
-    setComments(commentsResponse.data.content);
-    setNewComment({ contents: "" });
 
     // 이 부분에서 updateCommentNum 함수를 호출하여 commentNum 업데이트
     updateCommentNum(commentsResponse.data.content.length);
@@ -167,9 +138,8 @@ export default function PostDetailsPage() {
 
   return (
     <Layout>
-      <div className="fixed top-0 left-0 w-full bg-white ">
-        <DetailsHeader />
-      </div>
+      <DetailsHeader />
+      <div className="fixed top-0 left-0 w-full bg-white "></div>
       <div>
         <Image url={postDetails.postsPicturesList} />
         <div className="w-393 h-275 bg-white flex flex-col mb-[50px]">
@@ -227,17 +197,7 @@ export default function PostDetailsPage() {
       </div>
 
       {isModalOpen && (
-        <Comments
-          postId={postId}
-          isUpdate={isUpdate}
-          setIsUpdate={setIsUpdate}
-          comments={postComments}
-          setComments={setPostComments}
-          newComment={newComment}
-          setNewComment={setNewComment}
-          handleCommentSubmit={handleCommentSubmit}
-          handleCloseModal={handleCloseModal}
-        />
+        <Comments postId={postId} handleCloseModal={handleCloseModal} />
       )}
     </Layout>
   );
