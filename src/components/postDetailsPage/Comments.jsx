@@ -6,26 +6,8 @@ import { nickNameState } from "../../store/atom";
 import { CommentThreeDots, LeftArrow, Reply } from "../../assets/Icon";
 import { useInView } from "react-intersection-observer";
 import EditDeleteModal from "./EditDeleteModal";
-
+import { formatDateComments } from "../../util/formatDate";
 // 날짜 시간 형식
-function formatDate(date) {
-  if (!date || isNaN(new Date(date).getTime())) {
-    return "";
-  }
-
-  const options = {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  };
-
-  const formattedDate = new Date(date).toLocaleString("ko-KR", options);
-
-  return formattedDate.replace("오전", "").replace("오후", "");
-}
 
 export default function Comments({ handleCloseModal, postId }) {
   const [selectedId, setSelectedId] = useState(null);
@@ -284,7 +266,7 @@ export default function Comments({ handleCloseModal, postId }) {
                 </div>
                 <div className="flex flex-row justify-between">
                   <div className="text-xs/normal font-light text-[#999999] flex items-end">
-                    {formatDate(
+                    {formatDateComments(
                       value.modifiedAt ? value.modifiedAt : value.createAt,
                       value.modifiedAt !== null
                     )}
@@ -364,7 +346,7 @@ export default function Comments({ handleCloseModal, postId }) {
                       </div>
                       <div className="ml-9 flex flex-row justify-between">
                         <div className="text-xs/normal font-light text-[#999999] flex items-end">
-                          {formatDate(
+                          {formatDateComments(
                             reply.modifiedAt
                               ? reply.modifiedAt
                               : reply.createAt,
