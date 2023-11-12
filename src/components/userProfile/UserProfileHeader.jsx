@@ -15,7 +15,7 @@ export default function UserProfileHeader() {
         >
           <LeftArrow />
           <span className="text-black text-[20px] py-3 font-bold cursor-pointer ml-2">
-            게시글
+            사용자 프로필
           </span>
         </div>
         <div className="flex items-center"></div>
