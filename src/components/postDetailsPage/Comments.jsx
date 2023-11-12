@@ -24,6 +24,7 @@ export default function Comments({ handleCloseModal, postId }) {
   const [ref, inView] = useInView();
   const [page, setPage] = useState(0); // 현재 페이지 번호
   const [commentList, setCommentList] = useState([]);
+  const [hasContent, setHasContent] = useState(false);
 
   const getCommentList = async () => {
     try {
@@ -270,7 +271,13 @@ export default function Comments({ handleCloseModal, postId }) {
                       value.modifiedAt ? value.modifiedAt : value.createAt,
                       value.modifiedAt !== null
                     )}
+                    {value.modifiedAt && (
+                      <span className="text-xs/normal text-[#999999] ml-1">
+                        (수정됨)
+                      </span>
+                    )}
                   </div>
+
                   <div className="flex flex-row">
                     <div className="mr-1 mt-4 flex flex-row items-center h-6 w-[59px] text-center border rounded-[18px] cursor-pointer">
                       <Reply />
@@ -292,7 +299,7 @@ export default function Comments({ handleCloseModal, postId }) {
                   </div>
                 </div>
               </div>
-              {/* 대댓글 */}
+              {/* 답글 */}
               {value.repliesList &&
                 value.repliesList.length >= 1 &&
                 value.repliesList.map((reply, index) => (
@@ -394,8 +401,10 @@ export default function Comments({ handleCloseModal, postId }) {
           value={newComment.contents}
           ref={editedContentRef}
           onChange={(e) => {
-            if (e.target.value.length <= 300) {
-              setNewComment({ contents: e.target.value });
+            const inputValue = e.target.value.trim();
+            setHasContent(inputValue.length > 0);
+            if (inputValue.length <= 300) {
+              setNewComment({ contents: inputValue });
             }
           }}
           maxLength={300}
@@ -406,11 +415,13 @@ export default function Comments({ handleCloseModal, postId }) {
             width: "90%",
             wordWrap: "break-word",
             overflowWrap: "break-word",
+            whiteSpace: "pre-wrap",
           }}
         />
+
         <button
           onClick={async (e) => {
-            if (newComment.contents.trim() === "") {
+            if (!hasContent) {
               alert("댓글 내용을 입력하세요.");
               return;
             }
@@ -427,12 +438,16 @@ export default function Comments({ handleCloseModal, postId }) {
               await handleSaveReply(newComment);
             }
           }}
-          className="bg-[#D9D9D9] font-[14px] ml-1 w-[55px] h-[45px] rounded-full text-[#666] mr-4 text-white"
+          className={`${
+            hasContent
+              ? "bg-[#f90] text-white transition-all duration-1000"
+              : "bg-[#D9D9D9] text-[white] transition-all duration-1000"
+          } font-[14px] ml-1 w-[60px] h-[45px] rounded-full mr-4`}
         >
           {commentType === "normal" && "등록"}
           {commentType === "edit" && "수정"}
-          {commentType === "reply" && "답글 등록"}
-          {commentType === "replyEdit" && "답글 수정"}
+          {commentType === "reply" && "등록"}
+          {commentType === "replyEdit" && "수정"}
         </button>
       </div>
     </div>
