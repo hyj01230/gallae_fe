@@ -38,4 +38,5 @@ export const router = createBrowserRouter([
   { path: "/mypage/like", element: <Page.MyPageLikeList /> },
   { path: "/mypage/comment", element: <Page.MyPageCommentList /> },
   { path: "/mypage/post", element: <Page.MyPagePostList /> },
+  { path: "/users/profile/:nickName", element: <Page.UserProfile /> },
 ]);

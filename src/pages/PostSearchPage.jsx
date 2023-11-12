@@ -4,6 +4,7 @@ import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate, useLocation } from "react-router-dom";
 import SearchCategory from "../components/postSearch/SearchCategory";
 import { LeftArrow, SearchIcon } from "../assets/Icon";
+import { formatCreatedAt } from "../util/formatDate";
 
 function highlightKeyword(text, keyword) {
   if (keyword && text) {
@@ -22,14 +23,6 @@ function highlightKeyword(text, keyword) {
   } else {
     return text;
   }
-}
-
-function formatCreatedAt(createdAt) {
-  const date = new Date(createdAt);
-  const year = date.getFullYear().toString().slice(2);
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const day = date.getDate().toString().padStart(2, "0");
-  return `${year}.${month}.${day}`;
 }
 
 function truncateText(text, maxLength) {
@@ -99,10 +92,22 @@ export default function PostSearchPage() {
   const renderContent = inputFocused ? null : (
     <div className="mr-[10px]">
       {searchResults.length === 0 && keyword && (
-        <p className="text-xl text-gray-600 mt-4 text-center p-4  bg-gray-100 border border-gray-300 rounded my-8 w-full  ">
-          <span className="text-yellow-500">{keyword}</span> 에 대한 검색 결과가
-          없습니다.
-        </p>
+        <div className="mx-auto  mt-[153px]">
+          <img src={"/img/question_mark_woman.png"} className="mx-auto" />
+
+          <div className="flex flex-col justify-center mx-auto mt-10 select-none text-[#D9D9D9]">
+            <p className="text-center mb-1">
+              {" "}
+              <span className="font-semibold">"{keyword}"</span> 을 찾을 수
+              없어요.
+            </p>
+            <p className="text-center	">
+              상단의{" "}
+              <span className="text-[#F90] font-semibold">추천 키워드</span>로
+              빠르게 둘러볼까요?
+            </p>
+          </div>
+        </div>
       )}
 
       <div className="w-full">
