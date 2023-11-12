@@ -223,7 +223,7 @@ export default function PostEditPage() {
           />
         </div>
 
-        {listData && <List schedule={listData} isPointer={false} />}
+        {listData && <List schedule={listData} />}
       </div>
 
       <div

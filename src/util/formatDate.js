@@ -46,6 +46,25 @@ export const timeStringToMinutes = (timeString) => {
   return parseInt(hours * 60 + minutes);
 };
 
+
+
+
+export const renderDateRange = (dateArray) => {
+  if (dateArray.length === 1) {
+    // 날짜 요소가 하나인 경우
+    return formatDateString(dateArray[0]);
+  } else if (dateArray.length > 1) {
+    // 날짜 요소가 여러 개인 경우
+    const startDate = formatDateString(dateArray[0]);
+    const endDate = formatDateString(dateArray[dateArray.length - 1]);
+    return `${startDate} ~ ${endDate}`;
+  } else {
+    // 날짜 요소가 없는 경우
+    return null;
+  }
+};
+
+
 //PostListPage formatDate
 export const formatDateDifference = (createdAt) => {
   const createdAtDate = new Date(createdAt);

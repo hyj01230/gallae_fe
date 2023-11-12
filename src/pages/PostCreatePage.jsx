@@ -1,9 +1,8 @@
 import List from "../components/mySchedules/List";
 import Layout from "../components/common/Layout";
-import ContentEditable from "react-contenteditable";
 import SelectScheduleModal from "../components/postCreate/SelectScheduleModal";
 import { DownArrow, LeftArrow } from "../assets/Icon";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getDetailPost, updatePost } from "../api";
 import { useMutation, useQueryClient } from "react-query";
@@ -12,11 +11,13 @@ import useImage from "../hooks/useImage";
 import UploadLimitMessage from "../components/postCreate/UploadLimitMessage";
 
 export default function PostCreatePage() {
-  const ref = useRef();
   const data = useLocation().state;
   const navigate = useNavigate();
   const [isModal, setIsModal] = useState(false);
-  const [isCategoryDrop, setIsCategoryDrop] = useState(false);
+  const [isDropDown, setIsDropDown] = useState({
+    category: false,
+    tagsList: false,
+  });
   const [isPurposeDrop, setIsPurposeDrop] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState(data.postId);
   const [postData, setPostData] = useState({
@@ -40,7 +41,7 @@ export default function PostCreatePage() {
   // 카테고리 설정
   const handleCategoryClick = async (e) => {
     setPostData((data) => ({ ...data, postCategory: e.target.innerText }));
-    setIsCategoryDrop(false);
+    setIsDropDown({ ...isDropDown, category: false });
   };
 
   // 태그 설정
@@ -60,7 +61,7 @@ export default function PostCreatePage() {
   };
 
   // 일정 설정 (일정 선택 후 useEffect 동작)
-  const handleScheduleClick = async (data) => {
+  const onScheduleClick = async (data) => {
     setSelectedPostId(data.postId);
     setListData(data);
     setIsModal(false);
@@ -117,7 +118,7 @@ export default function PostCreatePage() {
 
         <div
           className="border-b border-gray-300 pl-10"
-          onClick={() => setIsCategoryDrop(!isCategoryDrop)}
+          onClick={() => setIsDropDown({ ...isDropDown, category: true })}
         >
           <div className="h-12 flex items-center gap-x-4 text-base text-[#999] cursor-pointer select-none">
             카테고리
@@ -125,7 +126,7 @@ export default function PostCreatePage() {
             <span className="text-[black]">{postData.postCategory}</span>
           </div>
         </div>
-        {isCategoryDrop && (
+        {isDropDown.category && (
           <div className="pl-10 cursor-pointer">
             {CATEGORIES.map((category, index) => (
               <div key={index} className="py-5" onClick={handleCategoryClick}>
@@ -225,7 +226,7 @@ export default function PostCreatePage() {
           />
         </div>
 
-        {listData && <List schedule={listData} isPointer={false} />}
+        {listData && <List schedule={listData} />}
       </div>
       <div
         className="max-w-3xl flex fixed bottom-0 z-10"
@@ -241,8 +242,8 @@ export default function PostCreatePage() {
       </div>
       {isModal && (
         <SelectScheduleModal
-          handleClick={handleScheduleClick}
-          setIsModal={setIsModal}
+          onScheduleClick={onScheduleClick}
+          onCloseModalClick={() => setIsModal(false)}
         />
       )}
     </Layout>

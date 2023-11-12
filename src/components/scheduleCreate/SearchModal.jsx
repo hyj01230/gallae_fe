@@ -51,7 +51,7 @@ export default function SearchModal({
           <Search />
         </div>
         <input
-          className="w-full bg-[#F2F2F2] outline-none "
+          className="w-full bg-[#F2F2F2] outline-none text-[black]"
           placeholder="장소를 입력하세요"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}

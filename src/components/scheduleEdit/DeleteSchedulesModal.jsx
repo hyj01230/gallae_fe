@@ -26,7 +26,7 @@ export default function DeleteSchedulesModal({
 
   return (
     <div className="bg-black/50 fixed top-0 left-0 right-0 max-w-screen-md h-screen mx-auto z-50">
-      <div className="absolute top-[50%] left-0 right-0 bg-white w-fit mx-auto rounded-xl grid grid-cols-1 divide-y">
+      <div className="absolute top-[40%] left-0 right-0 bg-white w-fit mx-auto rounded-xl grid grid-cols-1 divide-y">
         <div className="px-[30px] py-[15px]">
           <div className="text-[18px] text-[#333] font-semibold text-center">
             여행 일정 삭제하기

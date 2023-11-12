@@ -131,7 +131,9 @@ export default function SchedulesCreatePage() {
         <div className="mr-2">
           <LeftArrow />
         </div>
-        <div className="h-14 flex items-center text-xl">나의 일정</div>
+        <div className="h-14 flex items-center text-xl font-semibold">
+          나의 일정
+        </div>
       </div>
 
       <div className="flex border border-[#EBEBEB] rounded-lg mx-4">

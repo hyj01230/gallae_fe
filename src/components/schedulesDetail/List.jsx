@@ -33,9 +33,9 @@ export default function List({ schedule, handleClick, move = true }) {
                 e.stopPropagation();
                 window.open(schedule.referenceURL);
               }}
-              className="text-[12px] text-[#D9D9D9] underline p-[2px]"
+              className="text-[12px] text-[#999] underline p-[2px] cursor-pointer"
             >
-              참고링크
+              첨부링크
             </span>
           )}
         </div>
