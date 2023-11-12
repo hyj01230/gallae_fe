@@ -361,15 +361,33 @@ export default function Comments({ handleCloseModal, postId }) {
           ))
         ) : (
           // 댓글이 없을 때 메시지 표시
-          <div className="text-center py-4">
-            댓글이 없습니다. 첫 댓글을 작성해보세요.
+          <div className="mx-auto  mt-[190px]">
+            <img src={"/img/question_mark_woman.png"} className="mx-auto" />
+
+            <div className="flex flex-col justify-center mx-auto mt-10 select-none text-[#D9D9D9]">
+              <p className="text-center mb-1">아직 댓글이 없네요.</p>
+              <p className="text-center	">
+                아래의
+                <span
+                  className="text-[#F90] font-semibold cursor-pointer"
+                  onClick={() => {
+                    if (editedContentRef && editedContentRef.current) {
+                      editedContentRef.current.focus();
+                    }
+                  }}
+                >
+                  댓글창
+                </span>
+                을 통해 첫 댓글을 달아주세요!
+              </p>
+            </div>
           </div>
         )}
       </div>
       {/* [CSS] 댓글 입력창 고정 부분 */}
       <div
-        className="fixed left-0 right-0 bottom-0 max-w-screen-md mx-auto "
-        style={{ backgroundColor: "#F2F2F2" }}
+        className="fixed left-0 right-0 bottom-0 max-w-screen-md mx-auto h-[87px] flex items-center "
+        style={{ backgroundColor: "#FAFAFA" }}
         onClick={handleCommentButtonClick}
       >
         <textarea
@@ -377,13 +395,12 @@ export default function Comments({ handleCloseModal, postId }) {
           ref={editedContentRef}
           onChange={(e) => {
             if (e.target.value.length <= 300) {
-              // 입력 길이가 300자 이하일 때만 값을 업데이트합니다.
               setNewComment({ contents: e.target.value });
             }
           }}
-          maxLength={300} // 최대 입력 길이를 300으로 설정
+          maxLength={300}
           placeholder="댓글을 입력하세요."
-          className="w-full h-[57px] p-4 resize-none outline-none overflow-hidden"
+          className="h-[45px] p-4 ml-4 overflow-hidden rounded-2xl bg-white  leading-[20px]"
           style={{
             backgroundColor: "#F2F2F2",
             width: "90%",
@@ -410,7 +427,7 @@ export default function Comments({ handleCloseModal, postId }) {
               await handleSaveReply(newComment);
             }
           }}
-          className="bg-[#f2f2f2] font-[14px] absolute top-4 right-5 mx-0 rounded-md  text-[#666]"
+          className="bg-[#D9D9D9] font-[14px] ml-1 w-[55px] h-[45px] rounded-full text-[#666] mr-4 text-white"
         >
           {commentType === "normal" && "등록"}
           {commentType === "edit" && "수정"}

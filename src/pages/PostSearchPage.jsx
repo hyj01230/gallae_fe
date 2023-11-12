@@ -93,10 +93,7 @@ export default function PostSearchPage() {
     <div className="mr-[10px]">
       {searchResults.length === 0 && keyword && (
         <div className="mx-auto  mt-[153px]">
-          <img
-            src={"/img/woman_writing_with_a_big_pencil.png"}
-            className="mx-auto"
-          />
+          <img src={"/img/question_mark_woman.png"} className="mx-auto" />
 
           <div className="flex flex-col justify-center mx-auto mt-10 select-none text-[#D9D9D9]">
             <p className="text-center mb-1">
