@@ -1,5 +1,3 @@
-// CommentsDisplay.js
-
 import { LikeHeart, LikeFullHeart, CommentIcon } from "../../assets/Icon";
 import { useNavigate } from "react-router-dom";
 
@@ -10,7 +8,6 @@ export default function PostCommentsDisplay({
   postDetails,
   likedStatus,
   handleLikeClick,
-  commentNum, // commentNum을 프롭으로 받아옴
 }) {
   const navigate = useNavigate();
   return (

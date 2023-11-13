@@ -182,12 +182,12 @@ export default function PostListPage() {
   return (
     <Layout isBottomNav={!isCommentsModalOpen}>
       {!isCommentsModalOpen && (
-        <div className="fixed top-0 bg-white z-10 w-full">
+        <div className="fixed top-0 bg-white z-10 w-full ">
           <PostHeader />
           <PostCategory onCategorySelect={handleCategorySelect} />
         </div>
       )}
-      <div className="overflow-y-auto mb-20">
+      <div className="overflow-y-auto mb-20 mt-[90px]">
         <div className="border-b-2 border-gray-100"></div>
         <PostRanking
           rankingList={rankingList}

@@ -105,7 +105,7 @@ export default function PostDetailsPage() {
   const handleCloseModal = async () => {
     setIsModalOpen(false);
 
-    // 모달 닫을 때 댓글 목록을 다시 불러와 렌더링
+    // 모달이 닫힐 때 댓글 목록을 다시 불러와 렌더링
     const commentsResponse = await axiosInstance.get(
       `/api/posts/${postId}/comments`
     );
@@ -129,12 +129,6 @@ export default function PostDetailsPage() {
       window.removeEventListener("click", handleModalClickOutside);
     };
   }, [isUpdate]);
-
-  const updateCommentNum = (num) => {
-    setCommentNum(num);
-  };
-
-  // console.log(postDetails.postsPicturesList);
 
   return (
     <Layout>
@@ -191,7 +185,6 @@ export default function PostDetailsPage() {
               postDetails={postDetails}
               likedStatus={likedStatus}
               handleLikeClick={handleLikeClick}
-              commentNum={commentNum}
             />
           </div>
         </div>
