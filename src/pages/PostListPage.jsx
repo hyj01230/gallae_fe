@@ -10,6 +10,12 @@ import PostRanking from "../components/post/PostRanking";
 import { axiosInstance } from "../api/axiosInstance";
 import Comments from "../components/postDetailsPage/Comments";
 import { formatDateDifference } from "../util/formatDate";
+import {
+  fetchRankingPostsAPI,
+  fetchLikedPostsAPI,
+  handleLikeClickAPI,
+  handleCommentClickAPI,
+} from "../api";
 
 export default function PostListPage() {
   const [postList, setPostList] = useState([]);
@@ -26,7 +32,7 @@ export default function PostListPage() {
 
   const fetchRankingPosts = async () => {
     try {
-      const response = await axiosInstance.get("/api/posts/rank");
+      const response = await fetchRankingPostsAPI();
       const rankingPosts = response.data;
 
       // 순위 목록을 최대 7개로 제한
@@ -47,7 +53,7 @@ export default function PostListPage() {
 
     if (accessToken) {
       try {
-        const response = await axiosInstance.get("/api/postlike/id");
+        const response = await fetchLikedPostsAPI();
         const likedPosts = response.data;
 
         // 서버에서 가져온 정보를 likedStatus 상태로 설정.
@@ -68,6 +74,7 @@ export default function PostListPage() {
     fetchLikedPosts();
   }, []);
 
+  // 무한 스크롤 시작
   const getPostList = async () => {
     try {
       console.log("getPostList 함수 호출");
@@ -109,8 +116,7 @@ export default function PostListPage() {
 
   const handleLikeClick = async (postId) => {
     try {
-      const response = await axiosInstance.get(`/api/posts/like/${postId}`);
-
+      const response = await handleLikeClickAPI(postId);
       if (response.data.check) {
         // 게시물에 좋아요 추가
         setLikedStatus({ ...likedStatus, [postId]: true });
@@ -161,7 +167,7 @@ export default function PostListPage() {
   const handleCommentClick = async (postId) => {
     try {
       // 해당 postId에 대한 댓글 정보 가져오기
-      const response = await axiosInstance.get(`/api/posts/${postId}/comments`);
+      const response = await handleCommentClickAPI(postId);
 
       // Comments 모달을 열어서 댓글 정보 전달
       openCommentsModal(response.data, postId);

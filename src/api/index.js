@@ -256,3 +256,38 @@ export const getRepliesListAPI = async (myRepliespage) => {
   });
   return response;
 };
+
+// PostLIstPage
+// GET : 좋아요 랭킹 조회
+export const fetchRankingPostsAPI = async () => {
+  const response = await axiosInstance.get("/api/posts/rank");
+
+  return response;
+};
+
+// GET : 아이디별로 좋아요한 PostId 조회
+export const fetchLikedPostsAPI = async () => {
+  const response = await axiosInstance.get("/api/postlike/id");
+  return response;
+};
+
+// GET : 좋아요한 게시글 조회
+export const handleLikeClickAPI = async (postId) => {
+  const response = await axiosInstance.get(`/api/posts/like/${postId}`);
+  return response;
+};
+
+// GET : 댓글 조회
+export const handleCommentClickAPI = async (postId) => {
+  // 해당 postId에 대한 댓글 정보 가져오기
+  const response = await axiosInstance.get(`/api/posts/${postId}/comments`);
+  return response;
+};
+
+// PostDetailsPage
+
+// GET : 상세 게시글 조회
+export const getPostDetailsAPI = async (postId) => {
+  const response = await axiosInstance.get(`/api/posts/${postId}`);
+  return response;
+};
