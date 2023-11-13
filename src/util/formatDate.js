@@ -45,3 +45,76 @@ export const timeStringToMinutes = (timeString) => {
 
   return parseInt(hours * 60 + minutes);
 };
+
+
+
+
+export const renderDateRange = (dateArray) => {
+  if (dateArray.length === 1) {
+    // 날짜 요소가 하나인 경우
+    return formatDateString(dateArray[0]);
+  } else if (dateArray.length > 1) {
+    // 날짜 요소가 여러 개인 경우
+    const startDate = formatDateString(dateArray[0]);
+    const endDate = formatDateString(dateArray[dateArray.length - 1]);
+    return `${startDate} ~ ${endDate}`;
+  } else {
+    // 날짜 요소가 없는 경우
+    return null;
+  }
+};
+
+
+//PostListPage formatDate
+export const formatDateDifference = (createdAt) => {
+  const createdAtDate = new Date(createdAt);
+  const now = new Date();
+  const timeDifference = now - createdAtDate;
+  const minutesDifference = Math.floor(timeDifference / (1000 * 60)); // 분 단위
+  const hoursDifference = Math.floor(minutesDifference / 60); // 시간 단위
+  const daysDifference = Math.floor(hoursDifference / 24); // 일 단위
+
+  if (minutesDifference === 0) {
+    return "방금";
+  } else if (daysDifference === 1) {
+    return "어제";
+  } else if (minutesDifference < 60) {
+    return `${minutesDifference}분 전`;
+  } else if (hoursDifference < 24) {
+    return `${hoursDifference}시간 전`;
+  } else if (daysDifference < 7) {
+    return `${daysDifference}일 전`;
+  } else {
+    const weeksDifference = Math.floor(daysDifference / 7); // 주 단위
+    return `${weeksDifference}주 전`;
+  }
+};
+
+// PostSearchPage formatDate
+export const formatCreatedAt = (createdAt) => {
+  const date = new Date(createdAt);
+  const year = date.getFullYear().toString().slice(2);
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  return `${year}.${month}.${day}`;
+};
+
+// Comments formatDate
+export const formatDateComments = (date) => {
+  if (!date || isNaN(new Date(date).getTime())) {
+    return "";
+  }
+
+  const options = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  };
+
+  const formattedDate = new Date(date).toLocaleString("ko-KR", options);
+
+  return formattedDate.replace("오전", "").replace("오후", "");
+};

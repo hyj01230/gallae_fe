@@ -6,26 +6,8 @@ import { nickNameState } from "../../store/atom";
 import { CommentThreeDots, LeftArrow, Reply } from "../../assets/Icon";
 import { useInView } from "react-intersection-observer";
 import EditDeleteModal from "./EditDeleteModal";
-
+import { formatDateComments } from "../../util/formatDate";
 // 날짜 시간 형식
-function formatDate(date) {
-  if (!date || isNaN(new Date(date).getTime())) {
-    return "";
-  }
-
-  const options = {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  };
-
-  const formattedDate = new Date(date).toLocaleString("ko-KR", options);
-
-  return formattedDate.replace("오전", "").replace("오후", "");
-}
 
 export default function Comments({ handleCloseModal, postId }) {
   const [selectedId, setSelectedId] = useState(null);
@@ -42,6 +24,7 @@ export default function Comments({ handleCloseModal, postId }) {
   const [ref, inView] = useInView();
   const [page, setPage] = useState(0); // 현재 페이지 번호
   const [commentList, setCommentList] = useState([]);
+  const [hasContent, setHasContent] = useState(false);
 
   const getCommentList = async () => {
     try {
@@ -220,7 +203,7 @@ export default function Comments({ handleCloseModal, postId }) {
         <div className="ml-4" onClick={handleCloseModal}>
           <LeftArrow />
         </div>
-        <div className="text-[20px] text-[#333] font-semibold py-3">댓글</div>
+        <div className="text-[20px] text-[#333] font-semibold py-2">댓글</div>
       </div>
       {/* [CSS] 댓글 및 대댓글 리스트 */}
       <div
@@ -284,11 +267,17 @@ export default function Comments({ handleCloseModal, postId }) {
                 </div>
                 <div className="flex flex-row justify-between">
                   <div className="text-xs/normal font-light text-[#999999] flex items-end">
-                    {formatDate(
+                    {formatDateComments(
                       value.modifiedAt ? value.modifiedAt : value.createAt,
                       value.modifiedAt !== null
                     )}
+                    {value.modifiedAt && (
+                      <span className="text-xs/normal text-[#999999] ml-1">
+                        (수정됨)
+                      </span>
+                    )}
                   </div>
+
                   <div className="flex flex-row">
                     <div className="mr-1 mt-4 flex flex-row items-center h-6 w-[59px] text-center border rounded-[18px] cursor-pointer">
                       <Reply />
@@ -310,7 +299,7 @@ export default function Comments({ handleCloseModal, postId }) {
                   </div>
                 </div>
               </div>
-              {/* 대댓글 */}
+              {/* 답글 */}
               {value.repliesList &&
                 value.repliesList.length >= 1 &&
                 value.repliesList.map((reply, index) => (
@@ -364,7 +353,7 @@ export default function Comments({ handleCloseModal, postId }) {
                       </div>
                       <div className="ml-9 flex flex-row justify-between">
                         <div className="text-xs/normal font-light text-[#999999] flex items-end">
-                          {formatDate(
+                          {formatDateComments(
                             reply.modifiedAt
                               ? reply.modifiedAt
                               : reply.createAt,
@@ -379,39 +368,60 @@ export default function Comments({ handleCloseModal, postId }) {
           ))
         ) : (
           // 댓글이 없을 때 메시지 표시
-          <div className="text-center py-4">
-            댓글이 없습니다. 첫 댓글을 작성해보세요.
+          <div className="mx-auto  mt-[190px]">
+            <img src={"/img/question_mark_woman.png"} className="mx-auto" />
+
+            <div className="flex flex-col justify-center mx-auto mt-10 select-none text-[#D9D9D9]">
+              <p className="text-center mb-1">아직 댓글이 없네요.</p>
+              <p className="text-center	">
+                아래의
+                <span
+                  className="text-[#F90] font-semibold cursor-pointer"
+                  onClick={() => {
+                    if (editedContentRef && editedContentRef.current) {
+                      editedContentRef.current.focus();
+                    }
+                  }}
+                >
+                  댓글창
+                </span>
+                을 통해 첫 댓글을 달아주세요!
+              </p>
+            </div>
           </div>
         )}
       </div>
       {/* [CSS] 댓글 입력창 고정 부분 */}
       <div
-        className="fixed left-0 right-0 bottom-0 max-w-screen-md mx-auto "
-        style={{ backgroundColor: "#F2F2F2" }}
+        className="fixed left-0 right-0 bottom-0 max-w-screen-md mx-auto h-[87px] flex items-center "
+        style={{ backgroundColor: "#FAFAFA" }}
         onClick={handleCommentButtonClick}
       >
         <textarea
           value={newComment.contents}
           ref={editedContentRef}
           onChange={(e) => {
-            if (e.target.value.length <= 300) {
-              // 입력 길이가 300자 이하일 때만 값을 업데이트합니다.
-              setNewComment({ contents: e.target.value });
+            const inputValue = e.target.value.trim();
+            setHasContent(inputValue.length > 0);
+            if (inputValue.length <= 300) {
+              setNewComment({ contents: inputValue });
             }
           }}
-          maxLength={300} // 최대 입력 길이를 300으로 설정
+          maxLength={300}
           placeholder="댓글을 입력하세요."
-          className="w-full h-[57px] p-4 resize-none outline-none overflow-hidden"
+          className="h-[45px] p-4 ml-4 overflow-hidden rounded-2xl bg-white  leading-[20px]"
           style={{
             backgroundColor: "#F2F2F2",
             width: "90%",
             wordWrap: "break-word",
             overflowWrap: "break-word",
+            whiteSpace: "pre-wrap",
           }}
         />
+
         <button
           onClick={async (e) => {
-            if (newComment.contents.trim() === "") {
+            if (!hasContent) {
               alert("댓글 내용을 입력하세요.");
               return;
             }
@@ -428,12 +438,16 @@ export default function Comments({ handleCloseModal, postId }) {
               await handleSaveReply(newComment);
             }
           }}
-          className="bg-[#f2f2f2] font-[14px] absolute top-4 right-5 mx-0 rounded-md  text-[#666]"
+          className={`${
+            hasContent
+              ? "bg-[#f90] text-white transition-all duration-1000"
+              : "bg-[#D9D9D9] text-[white] transition-all duration-1000"
+          } font-[14px] ml-1 w-[60px] h-[45px] rounded-full mr-4`}
         >
           {commentType === "normal" && "등록"}
           {commentType === "edit" && "수정"}
-          {commentType === "reply" && "답글 등록"}
-          {commentType === "replyEdit" && "답글 수정"}
+          {commentType === "reply" && "등록"}
+          {commentType === "replyEdit" && "수정"}
         </button>
       </div>
     </div>

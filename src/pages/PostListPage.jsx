@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import { LikeHeart, LikeFullHeart, PostListComment } from "../assets/Icon";
@@ -8,6 +8,8 @@ import PostCategory from "../components/post/PostCategory";
 import PostLine from "../components/post/PostLine";
 import PostRanking from "../components/post/PostRanking";
 import { axiosInstance } from "../api/axiosInstance";
+import Comments from "../components/postDetailsPage/Comments";
+import { formatDateDifference } from "../util/formatDate";
 
 export default function PostListPage() {
   const [postList, setPostList] = useState([]);
@@ -150,29 +152,42 @@ export default function PostListPage() {
       )
     : [];
 
-  function formatDateDifference(createdAt) {
-    const createdAtDate = new Date(createdAt);
-    const now = new Date();
-    const timeDifference = now - createdAtDate;
-    const minutesDifference = Math.floor(timeDifference / (1000 * 60)); // 분 단위
-    const hoursDifference = Math.floor(minutesDifference / 60); // 시간 단위
-    const daysDifference = Math.floor(hoursDifference / 24); // 일 단위
+  const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
+  const [commentsModalData, setCommentsModalData] = useState({
+    postId: null,
+    commentsData: null,
+  });
 
-    if (minutesDifference === 0) {
-      return "방금";
-    } else if (daysDifference === 1) {
-      return "어제";
-    } else if (minutesDifference < 60) {
-      return `${minutesDifference}분 전`;
-    } else if (hoursDifference < 24) {
-      return `${hoursDifference}시간 전`;
-    } else if (daysDifference < 7) {
-      return `${daysDifference}일 전`;
-    } else {
-      const weeksDifference = Math.floor(daysDifference / 7); // 주 단위
-      return `${weeksDifference}주 전`;
+  const handleCommentClick = async (postId) => {
+    try {
+      // 해당 postId에 대한 댓글 정보 가져오기
+      const response = await axiosInstance.get(`/api/posts/${postId}/comments`);
+
+      // Comments 모달을 열어서 댓글 정보 전달
+      openCommentsModal(response.data, postId);
+    } catch (error) {
+      console.error("댓글 정보 가져오기 오류:", error);
     }
-  }
+  };
+
+  const openCommentsModal = (commentsData, postId) => {
+    // Comments 모달을 열기 위한 로직
+    // 모달을 열기 위한 상태를 설정하고, 필요한 데이터를 전달
+    // 예시로 postId와 commentsData를 모달에 전달합니다.
+    // 이 데이터에 따라 Comments 컴포넌트에서 해당 댓글 정보를 표시할 수 있습니다.
+    // 또한, 이런 상황에서 모달의 렌더링 여부와 데이터 전달을 관리하는 방식은
+    // 프로젝트의 구조나 디자인에 따라 다를 수 있습니다.
+
+    // 예시로 모달을 열기 위한 상태를 추가
+    setIsCommentsModalOpen(true);
+
+    // 예시로 모달에 필요한 데이터 전달
+    setCommentsModalData({
+      postId: postId,
+      commentsData: commentsData,
+    });
+  };
+
   return (
     <Layout isBottomNav={true}>
       <div className="sticky top-0 bg-white z-10 ">
@@ -196,10 +211,13 @@ export default function PostListPage() {
                 className="w-393 h-275 bg-white flex flex-col relative"
               >
                 <div className="flex items-center justify-between mb-2 mt-5">
-                  <div className="flex items-center">
+                  <div className="flex items-center ">
                     <img
                       className="w-12 h-12 bg-gray-300 rounded-full ml-4 "
                       src={item.profileImage}
+                      onClick={() =>
+                        navigate(`/users/profile/${item.nickName}`)
+                      } // 닉네임 파라미터 전달
                     />
                     <div className="flex flex-col ml-[13px]">
                       <span
@@ -256,14 +274,7 @@ export default function PostListPage() {
                 <div className="flex items-center justify-between text-sm text-gray-500 h-[40px] bordertop-solid border-t-2">
                   <div
                     className="flex items-center space-x-2 flex-1 justify-center "
-                    onClick={() => {
-                      if (!localStorage.getItem("accessToken")) {
-                        alert("로그인이 필요한 서비스입니다.");
-                        navigate("/login");
-                      } else {
-                        navigate(`/posts/${item.postId}/`);
-                      }
-                    }}
+                    onClick={() => handleCommentClick(item.postId)} // 댓글 클릭 시 이벤트 핸들러 추가
                   >
                     <div className="cursor-pointer">
                       <PostListComment />
@@ -306,6 +317,13 @@ export default function PostListPage() {
           )}
         </div>
       </div>
+      {isCommentsModalOpen && (
+        <Comments
+          postId={commentsModalData.postId}
+          commentsData={commentsModalData.commentsData}
+          handleCloseModal={() => setIsCommentsModalOpen(false)}
+        />
+      )}
     </Layout>
   );
 }
