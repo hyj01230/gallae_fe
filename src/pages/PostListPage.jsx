@@ -171,14 +171,6 @@ export default function PostListPage() {
   };
 
   const openCommentsModal = (commentsData, postId) => {
-    // Comments 모달을 열기 위한 로직
-    // 모달을 열기 위한 상태를 설정하고, 필요한 데이터를 전달
-    // 예시로 postId와 commentsData를 모달에 전달합니다.
-    // 이 데이터에 따라 Comments 컴포넌트에서 해당 댓글 정보를 표시할 수 있습니다.
-    // 또한, 이런 상황에서 모달의 렌더링 여부와 데이터 전달을 관리하는 방식은
-    // 프로젝트의 구조나 디자인에 따라 다를 수 있습니다.
-
-    // 예시로 모달을 열기 위한 상태를 추가
     setIsCommentsModalOpen(true);
 
     // 예시로 모달에 필요한 데이터 전달
@@ -213,7 +205,7 @@ export default function PostListPage() {
                 <div className="flex items-center justify-between mb-2 mt-5">
                   <div className="flex items-center ">
                     <img
-                      className="w-12 h-12 bg-gray-300 rounded-full ml-4 "
+                      className="w-12 h-12 bg-gray-300 rounded-full ml-4 cursor-pointer"
                       src={item.profileImage}
                       onClick={() =>
                         navigate(`/users/profile/${item.nickName}`)
@@ -240,7 +232,7 @@ export default function PostListPage() {
                 <div onClick={() => navigate(`/posts/${item.postId}`)}>
                   {item.postsPicturesList.length > 0 ? (
                     <img
-                      className="w-full aspect-video object-cover   "
+                      className="w-full aspect-video object-cover  cursor-pointer "
                       src={item.postsPicturesList[0].postsPicturesURL}
                     />
                   ) : (
