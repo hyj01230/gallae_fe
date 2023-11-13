@@ -173,7 +173,6 @@ export default function PostListPage() {
   const openCommentsModal = (commentsData, postId) => {
     setIsCommentsModalOpen(true);
 
-    // 예시로 모달에 필요한 데이터 전달
     setCommentsModalData({
       postId: postId,
       commentsData: commentsData,
@@ -181,11 +180,13 @@ export default function PostListPage() {
   };
 
   return (
-    <Layout isBottomNav={true}>
-      <div className="sticky top-0 bg-white z-10 ">
-        <PostHeader />
-        <PostCategory onCategorySelect={handleCategorySelect} />
-      </div>
+    <Layout isBottomNav={!isCommentsModalOpen}>
+      {!isCommentsModalOpen && (
+        <div className="fixed top-0 bg-white z-10 w-full">
+          <PostHeader />
+          <PostCategory onCategorySelect={handleCategorySelect} />
+        </div>
+      )}
       <div className="overflow-y-auto mb-20">
         <div className="border-b-2 border-gray-100"></div>
         <PostRanking

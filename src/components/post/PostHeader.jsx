@@ -1,16 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PostSearch } from "../../assets/Icon";
 
 export default function PostHeader() {
-  const scrollToTop = () => {
-    window.scrollTo(0, 0);
-  };
+  const navigate = useNavigate();
 
   return (
     <div className="bg-[#ffffff] gap-x-1 mx-4 flex justify-between items-center ">
       <div
         className="text-black text-[20px] py-3 font-bold cursor-pointer"
-        onClick={scrollToTop}
+        onClick={() => navigate(`/posts`)}
       >
         커뮤니티
       </div>
