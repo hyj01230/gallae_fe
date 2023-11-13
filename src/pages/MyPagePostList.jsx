@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { LeftArrow, ThreecIrcle } from "../assets/Icon";
 import Layout from "../components/common/Layout";
-import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
-import { getDetailPost, updatePost } from "../api";
+import { getPostListAPI, updatePost } from "../api";
 import { shareKakao } from "../util/shareKakaoLink";
 // import { deleteScheduleDetail } from "../api";
 
@@ -57,7 +56,7 @@ export default function MyPagePostList() {
   // GET : 사용자별 게시글 가져오기
   const getPostList = async () => {
     try {
-      const response = await axiosInstance.get("/api/user/posts");
+      const response = await getPostListAPI();
       // console.log("response", response);
       setPostList(response.data);
     } catch (error) {

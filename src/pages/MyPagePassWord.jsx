@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/common/Layout";
-import { axiosInstance } from "../api/axiosInstance";
 import { LeftArrow } from "../assets/Icon";
 import { useNavigate } from "react-router-dom";
+import { putPasswordAPI } from "../api";
 
 export default function MyPagePassWord() {
   // 페이지 이동
@@ -59,7 +59,7 @@ export default function MyPagePassWord() {
     }
   }, [updatePassword, checkUpdatePassword]);
 
-  // PUT : 비번 변경
+  // PUT : 비밀번호 변경
   const onClickModifyNickNameHandler = async () => {
     // 에러메시지 있는지 확인
     if (updatePasswordMessage !== true || checkUpdatePassWordMessage !== true) {
@@ -68,13 +68,10 @@ export default function MyPagePassWord() {
     }
 
     try {
-      const response = await axiosInstance.put(
-        "/api/users/profile/update-password",
-        {
-          currentPassword: currentPassword,
-          updatePassword: checkUpdatePassword,
-        }
-      );
+      const response = await putPasswordAPI({
+        currentPassword: currentPassword,
+        updatePassword: checkUpdatePassword,
+      });
       // console.log("수정 response :", response.data);
 
       if (response.data.statusCode === 200) {

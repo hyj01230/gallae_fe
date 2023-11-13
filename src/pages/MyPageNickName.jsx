@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/common/Layout";
-import { axiosInstance } from "../api/axiosInstance";
+
 import { LeftArrow } from "../assets/Icon";
 import { useNavigate } from "react-router-dom";
+import { getMyPageInfoAPI, putNickNameAPI } from "../api";
 
 export default function MyPageNickName() {
   // 페이지 이동
@@ -35,10 +36,9 @@ export default function MyPageNickName() {
   // GET : 닉네임 가져오기
   const getMyPageInfo = async () => {
     try {
-      const response = await axiosInstance.get("/api/users/profile");
-      // console.log("닉네임 response :", response.data);
-      setMyPageInfo(response.data); // 마이페이지 데이터 저장
-      // setNickName(response.data.nickName);
+      const response = await getMyPageInfoAPI();
+      // console.log("닉네임 response :", response);
+      setMyPageInfo(response); // 마이페이지 데이터 저장
     } catch (error) {
       // console.log("error :", error);
     }
@@ -60,12 +60,9 @@ export default function MyPageNickName() {
     }
 
     try {
-      const response = await axiosInstance.put(
-        "/api/users/profile/update-nickname",
-        {
-          updateNickName: nickName,
-        }
-      );
+      const response = await putNickNameAPI({
+        updateNickName: nickName,
+      });
       // console.log("닉네임 변경", response);
       alert(response.data.msg);
       setMyPageInfo({ ...myPageInfo, nickName });

@@ -2,8 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { LeftArrow } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { useState } from "react";
-import { axiosInstance } from "../api/axiosInstance";
 import { removeCookie } from "../util/cookie";
+import { SignOutAPI } from "../api";
 
 export default function MyPageSignOut() {
   // 페이지 이동
@@ -24,7 +24,7 @@ export default function MyPageSignOut() {
   // delete : 탈퇴
   const onClickDeleteSignOutHandler = async () => {
     try {
-      const response = await axiosInstance.delete("/api/users/signout", {
+      const response = await SignOutAPI({
         data: { email, password },
       });
 

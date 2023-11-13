@@ -11,10 +11,10 @@ import { useRef, useState } from "react";
 import { removeCookie } from "../util/cookie";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
-  getMyPageInfo,
-  putUpdateProfile,
-  putDefaultProfile,
-  putAboutMe,
+  getMyPageInfoAPI,
+  putUpdateProfileAPI,
+  putDefaultProfileAPI,
+  putAboutMeAPI,
 } from "../api";
 
 export default function MyPage() {
@@ -48,7 +48,7 @@ export default function MyPage() {
   const [characterCount, setCharacterCount] = useState(0); // 소개글 입력 글자수
 
   // GET : 마이페이지 데이터 가져오기
-  const { isLoading, data } = useQuery("myPage", getMyPageInfo);
+  const { isLoading, data } = useQuery("myPage", getMyPageInfoAPI);
 
   // 프로필 사진 관련 --------------------------------------------------
   // useRef(input-div 연결)
@@ -59,7 +59,7 @@ export default function MyPage() {
 
   // PUT : 프로필 사진 변경(앨범)
   const updateProfileMutation = useMutation(
-    (formData) => putUpdateProfile(formData),
+    (formData) => putUpdateProfileAPI(formData),
     {
       onSuccess: () => {
         queryClient.invalidateQueries("myPage");
@@ -77,7 +77,7 @@ export default function MyPage() {
   };
 
   // PUT : 프로필 사진 변경(기본)
-  const defaultProfileMutation = useMutation(putDefaultProfile, {
+  const defaultProfileMutation = useMutation(putDefaultProfileAPI, {
     onSuccess: (response) => {
       queryClient.invalidateQueries("myPage");
       setProfileModal(false);
@@ -88,7 +88,7 @@ export default function MyPage() {
   });
 
   // PUT : 소개글 변경
-  const aboutMeMutation = useMutation(() => putAboutMe(aboutMe), {
+  const aboutMeMutation = useMutation(() => putAboutMeAPI(aboutMe), {
     onSuccess: (response) => {
       queryClient.invalidateQueries("myPage");
       setAboutMeModal(false); // 모달창 닫기

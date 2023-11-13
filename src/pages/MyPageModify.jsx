@@ -1,8 +1,8 @@
 import Layout from "../components/common/Layout";
 import { LeftArrow } from "../assets/Icon";
 import { useNavigate } from "react-router-dom";
-import { axiosInstance } from "../api/axiosInstance";
 import { useEffect, useState } from "react";
+import { getMyPageInfoAPI } from "../api";
 
 export default function MyPageModify() {
   // 페이지 이동
@@ -26,9 +26,9 @@ export default function MyPageModify() {
   // GET : 닉네임 가져오기
   const getMyPageInfo = async () => {
     try {
-      const response = await axiosInstance.get("/api/users/profile");
-      // console.log("닉네임 response :", response.data.nickName);
-      setNickName(response.data.nickName);
+      const response = await getMyPageInfoAPI();
+      // console.log("닉네임 response :", response);
+      setNickName(response.nickName);
     } catch (error) {
       // console.log("error :", error);
     }
