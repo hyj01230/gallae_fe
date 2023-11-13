@@ -25,6 +25,7 @@ export default function Comments({ handleCloseModal, postId }) {
   const [page, setPage] = useState(0); // 현재 페이지 번호
   const [commentList, setCommentList] = useState([]);
   const [hasContent, setHasContent] = useState(false);
+  const [parentCommentId, setParentCommentId] = useState(null); // 답글의 경우 부모 댓글 ID를 저장할 상태 변수
 
   const getCommentList = async () => {
     try {
@@ -86,12 +87,29 @@ export default function Comments({ handleCloseModal, postId }) {
   };
 
   // 댓글 작성 버튼 클릭 핸들러
+
   const handleCommentButtonClick = async () => {
     if (!localStorage.getItem("accessToken")) {
       alert("로그인이 필요한 서비스입니다.");
       navigate("/login");
       return;
     }
+
+    // "답글" 버튼을 클릭하여 일반 댓글 입력 모드로 전환될 때 commentType 및 parentCommentId를 초기화합니다.
+    setCommentType("normal");
+    setParentCommentId(null);
+  };
+
+  const handleReplyButtonClick = (commentId) => {
+    setSelectedId(commentId);
+    setCommentType("reply");
+    setParentCommentId(commentId);
+    if (editedContentRef && editedContentRef.current) {
+      editedContentRef.current.focus();
+    }
+
+    // 다른 답글 버튼을 눌렀을 때 textarea 내용을 초기화합니다.
+    setNewComment({ contents: "" });
   };
 
   // 댓글 삭제 로직
@@ -268,29 +286,25 @@ export default function Comments({ handleCloseModal, postId }) {
                 <div className="flex flex-row justify-between">
                   <div className="text-xs/normal font-light text-[#999999] flex items-end">
                     {formatDateComments(
-                      value.modifiedAt ? value.modifiedAt : value.createAt,
-                      value.modifiedAt !== null
+                      value.modifiedAt ? value.modifiedAt : value.createdAt,
+                      value.modifiedAt !== null &&
+                        value.modifiedAt !== value.createdAt
                     )}
-                    {value.modifiedAt && (
+
+                    {/* {value.modifiedAt && (
                       <span className="text-xs/normal text-[#999999] ml-1">
                         (수정됨)
                       </span>
-                    )}
+                    )} */}
                   </div>
 
-                  <div className="flex flex-row">
+                  <div
+                    className="flex flex-row"
+                    onClick={() => handleReplyButtonClick(value.commentId)}
+                  >
                     <div className="mr-1 mt-4 flex flex-row items-center h-6 w-[59px] text-center border rounded-[18px] cursor-pointer">
                       <Reply />
-                      <div
-                        className="text-xs/normal text-[#D9D9D9] font-normal"
-                        onClick={() => {
-                          setSelectedId(value.commentId);
-                          setCommentType("reply");
-                          if (editedContentRef && editedContentRef.current) {
-                            editedContentRef.current.focus();
-                          }
-                        }}
-                      >
+                      <div className="text-xs/normal text-[#D9D9D9] font-normal">
                         답글
                       </div>
                     </div>
@@ -408,7 +422,11 @@ export default function Comments({ handleCloseModal, postId }) {
             }
           }}
           maxLength={300}
-          placeholder="댓글을 입력하세요."
+          placeholder={
+            commentType === "reply"
+              ? "답글을 작성해주세요."
+              : "댓글을 입력하세요."
+          }
           className="h-[45px] p-4 ml-4 overflow-hidden rounded-2xl bg-white  leading-[20px]"
           style={{
             backgroundColor: "#F2F2F2",

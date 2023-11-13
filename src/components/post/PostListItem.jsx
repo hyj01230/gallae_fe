@@ -4,6 +4,7 @@ import { LikeHeart, LikeFullHeart, PostListComment } from "../../assets/Icon";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { axiosInstance } from "../../api/axiosInstance";
+import { formatDateDifference } from "../../util/formatDate";
 
 const PostListItem = ({
   item,
@@ -12,63 +13,39 @@ const PostListItem = ({
   postList,
   setPostList,
 }) => {
-  function formatDateDifference(createdAt) {
-    const createdAtDate = new Date(createdAt);
-    const now = new Date();
-    const timeDifference = now - createdAtDate;
-    const minutesDifference = Math.floor(timeDifference / (1000 * 60));
-    const hoursDifference = Math.floor(minutesDifference / 60);
-    const daysDifference = Math.floor(hoursDifference / 24);
+  // const [page, setPage] = useState(0);
+  // const [ref, inView] = useInView();
 
-    if (minutesDifference === 0) {
-      return "방금";
-    } else if (daysDifference === 1) {
-      return "어제";
-    } else if (minutesDifference < 60) {
-      return `${minutesDifference}분 전`;
-    } else if (hoursDifference < 24) {
-      return `${hoursDifference}시간 전`;
-    } else if (daysDifference < 7) {
-      return `${daysDifference}일 전`;
-    } else {
-      const weeksDifference = Math.floor(daysDifference / 7);
-      return `${weeksDifference}주 전`;
-    }
-  }
+  // const getPostList = async () => {
+  //   try {
+  //     const response = await axiosInstance.get("/api/posts", {
+  //       params: {
+  //         page: `${page}`,
+  //         size: 5,
+  //       },
+  //     });
+  //     const newPosts = response.data.content;
 
-  const [page, setPage] = useState(0);
-  const [ref, inView] = useInView();
+  //     // 이 부분에서 postList를 업데이트합니다.
+  //     setPostList((postList) => [...postList, ...newPosts]);
 
-  const getPostList = async () => {
-    try {
-      const response = await axiosInstance.get("/api/posts", {
-        params: {
-          page: `${page}`,
-          size: 5,
-        },
-      });
-      const newPosts = response.data.content;
+  //     console.log("페이지 번호 (응답):", response.data.pageable.pageNumber);
 
-      // 이 부분에서 postList를 업데이트합니다.
-      setPostList((postList) => [...postList, ...newPosts]);
+  //     setPage((prevPage) => prevPage + 1);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
-      console.log("페이지 번호 (응답):", response.data.pageable.pageNumber);
+  // useEffect(() => {
+  //   getPostList();
+  // }, [postList]); // postList가 변경될 때만 실행
 
-      setPage((prevPage) => prevPage + 1);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    getPostList();
-  }, [postList]); // postList가 변경될 때만 실행
-
-  useEffect(() => {
-    if (inView) {
-      getPostList();
-    }
-  }, [inView, postList]); // inView 또는 postList가 변경될 때 실행
+  // useEffect(() => {
+  //   if (inView) {
+  //     getPostList();
+  //   }
+  // }, [inView, postList]); // inView 또는 postList가 변경될 때 실행
 
   return (
     <div

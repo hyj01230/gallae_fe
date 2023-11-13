@@ -25,7 +25,6 @@ export default function PostDetailsPage() {
   const { postId } = useParams();
   const [likedStatus, setLikedStatus] = useState({});
   const [areCommentsVisible, setCommentsVisible] = useState(false);
-  const [commentNum, setCommentNum] = useState(0); // 댓글 개수 상태
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림/닫힘 상태 변수
   const [isUpdate, setIsUpdate] = useState(false);
 
