@@ -283,3 +283,11 @@ export const handleCommentClickAPI = async (postId) => {
   const response = await axiosInstance.get(`/api/posts/${postId}/comments`);
   return response;
 };
+
+// PostDetailsPage
+
+// GET : 상세 게시글 조회
+export const getPostDetailsAPI = async (postId) => {
+  const response = await axiosInstance.get(`/api/posts/${postId}`);
+  return response;
+};

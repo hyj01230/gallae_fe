@@ -7,6 +7,11 @@ import Image from "../components/postDetailsPage/Image";
 import Comments from "../components/postDetailsPage/Comments";
 import DetailSchedules from "../components/postDetailsPage/DetailSchedules";
 import PostCommentsDisplay from "../components/postDetailsPage/PostCommentDisplay";
+import {
+  getPostDetailsAPI,
+  fetchLikedPostsAPI,
+  handleLikeClickAPI,
+} from "../api";
 
 export default function PostDetailsPage() {
   const [postDetails, setPostDetails] = useState({
@@ -25,15 +30,12 @@ export default function PostDetailsPage() {
   const { postId } = useParams();
   const [likedStatus, setLikedStatus] = useState({});
   const [areCommentsVisible, setCommentsVisible] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림/닫힘 상태 변수
-  const [isUpdate, setIsUpdate] = useState(false);
-
-  const modalRef = useRef(null); // 모달 창 Ref
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const getPostDetails = async () => {
       try {
-        const response = await axiosInstance.get(`/api/posts/${postId}`);
+        const response = await getPostDetailsAPI(postId);
         setPostDetails(response.data);
       } catch (error) {
         console.error("데이터 가져오기 오류:", error);
@@ -58,7 +60,7 @@ export default function PostDetailsPage() {
 
     if (accessToken) {
       try {
-        const response = await axiosInstance.get("/api/postlike/id");
+        const response = await fetchLikedPostsAPI();
         const likedPosts = response.data;
         const likedStatusMap = {};
         likedPosts.forEach((postId) => {
@@ -78,7 +80,7 @@ export default function PostDetailsPage() {
 
   const handleLikeClick = async () => {
     try {
-      const response = await axiosInstance.get(`/api/posts/like/${postId}`);
+      const response = await handleLikeClickAPI(postId);
       if (response.data.check) {
         setLikedStatus({ ...likedStatus, [postId]: true });
         setPostDetails((prevDetails) => ({
@@ -103,31 +105,7 @@ export default function PostDetailsPage() {
 
   const handleCloseModal = async () => {
     setIsModalOpen(false);
-
-    // 모달이 닫힐 때 댓글 목록을 다시 불러와 렌더링
-    const commentsResponse = await axiosInstance.get(
-      `/api/posts/${postId}/comments`
-    );
-
-    // 이 부분에서 updateCommentNum 함수를 호출하여 commentNum 업데이트
-    updateCommentNum(commentsResponse.data.content.length);
   };
-
-  // 모달 바깥 영역 클릭 시 닫히도록 하는 핸들러
-  const handleModalClickOutside = (e) => {
-    if (modalRef.current && !modalRef.current.contains(e.target)) {
-      setIsModalOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    // 페이지가 로드될 때 이벤트 리스너 등록
-    window.addEventListener("click", handleModalClickOutside);
-    return () => {
-      // 페이지가 언로드될 때 이벤트 리스너 제거
-      window.removeEventListener("click", handleModalClickOutside);
-    };
-  }, [isUpdate]);
 
   return (
     <Layout>
