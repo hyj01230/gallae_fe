@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { LeftArrow, CommentIcon, ReplyIcon } from "../assets/Icon";
 import Layout from "../components/common/Layout";
-import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
+import { getCommetsListAPI, getRepliesListAPI } from "../api";
 
 export default function MyPageCommentList() {
   // 페이지 이동
@@ -30,7 +30,7 @@ export default function MyPageCommentList() {
   // GET : 사용자별 댓글 가져오기
   const getMyCommentsList = async () => {
     try {
-      const response = await axiosInstance.get("/api/commentsme", {
+      const response = await getCommetsListAPI(myCommentspage, {
         params: {
           page: `${myCommentspage}`, // 현재 페이지 번호
           size: 5, // 원하는 페이지 크기(게시물 수)
@@ -56,7 +56,7 @@ export default function MyPageCommentList() {
   // GET : 사용자별 대댓글 가져오기
   const getMyRepliesList = async () => {
     try {
-      const response = await axiosInstance.get("/api/repliesme", {
+      const response = await getRepliesListAPI(myRepliespage, {
         params: {
           page: `${myRepliespage}`, // 현재 페이지 번호
           size: 5, // 원하는 페이지 크기(게시물 수)

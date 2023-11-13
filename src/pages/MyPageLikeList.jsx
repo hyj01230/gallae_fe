@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { LeftArrow, ThreeDots } from "../assets/Icon";
 import Layout from "../components/common/Layout";
-import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { shareKakao } from "../util/shareKakaoLink";
 import { useInView } from "react-intersection-observer";
+import { getLikeAPI, getLikeListAPI } from "../api";
 
 export default function MyPageLikeList() {
   // 페이지 이동
@@ -60,7 +60,7 @@ export default function MyPageLikeList() {
   // GET : 사용자별 좋아요 게시글 가져오기
   const getLikeList = async () => {
     try {
-      const response = await axiosInstance.get("/api/posts/like", {
+      const response = await getLikeListAPI(page, {
         params: {
           page: `${page}`, // 현재 페이지 번호
           size: 5, // 원하는 페이지 크기(게시물 수)
@@ -95,7 +95,7 @@ export default function MyPageLikeList() {
 
   const onClickLikeCancleHandler = async (postId) => {
     try {
-      const response = await axiosInstance.get(`/api/posts/like/${postId}`);
+      const response = await getLikeAPI(postId);
       // console.log("response", response);
 
       // 상태 업데이트: postId와 일치하지 않는 항목만 남김

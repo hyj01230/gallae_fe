@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { RightArrow, LeftArrow } from "../assets/Icon";
 import Layout from "../components/common/Layout";
-// import CheckBox from "../components/signUp/CheckBox";
 import { useNavigate } from "react-router-dom";
-import { axiosInstance } from "../api/axiosInstance";
+import {
+  EmailAuthAPI,
+  checkEmailCordAPI,
+  checkNickNameAPI,
+  signUpAPI,
+} from "../api";
 
 export default function SignUpPage() {
   // 페이지 이동
@@ -117,12 +121,7 @@ export default function SignUpPage() {
     }
 
     try {
-      const response = await axiosInstance.post(
-        "/api/users/signup/check-nickname",
-        {
-          nickName,
-        }
-      );
+      const response = await checkNickNameAPI(nickName);
       // console.log("response", response);
       setCheckNickName(true); // 사용가능 닉네임은 checkNickName이 true로 => 가능 메시지 나옴!
     } catch (error) {
@@ -141,9 +140,7 @@ export default function SignUpPage() {
     }
 
     try {
-      const response = await axiosInstance.post("/api/users/signup/email", {
-        email,
-      });
+      const response = await EmailAuthAPI(email);
       // console.log("response", response);
       // alert(response.data.msg); // 인증번호 발송 완료 안내인데, 느려서 주석하고 위에 씀
     } catch (error) {
@@ -155,19 +152,14 @@ export default function SignUpPage() {
   // POST : 이메일 인증번호 확인
   const onClickEmailCordPostHandler = async () => {
     try {
-      const response = await axiosInstance.post(
-        "/api/users/signup/email/valid",
-        {
-          email,
-          validNumber: emailCord,
-        }
-      );
+      const response = await checkEmailCordAPI({
+        email,
+        validNumber: emailCord,
+      });
       // console.log("response", response);
 
-      if (response.status === 200) {
-        alert("인증완료!");
-        setEmailAuthCompleted(true);
-      }
+      alert("인증완료!");
+      setEmailAuthCompleted(true);
     } catch (error) {
       // console.log("error", error);
       alert(error.response.data.msg);
@@ -296,8 +288,7 @@ export default function SignUpPage() {
     }
 
     try {
-      // console.log({ nickName }, { email }, { password });
-      const response = await axiosInstance.post("/api/users/signup", {
+      const response = await signUpAPI({
         nickName: nickName || null, //닉네임이 비어있으면 null로 보내기
         email,
         password,

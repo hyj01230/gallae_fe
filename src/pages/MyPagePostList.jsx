@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { LeftArrow, ThreecIrcle } from "../assets/Icon";
+import { LeftArrow, Plus, ThreecIrcle } from "../assets/Icon";
 import Layout from "../components/common/Layout";
-import { axiosInstance } from "../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
-import { getDetailPost, updatePost } from "../api";
+import { getPostListAPI, updatePost } from "../api";
 import { shareKakao } from "../util/shareKakaoLink";
 // import { deleteScheduleDetail } from "../api";
 
@@ -57,7 +56,7 @@ export default function MyPagePostList() {
   // GET : 사용자별 게시글 가져오기
   const getPostList = async () => {
     try {
-      const response = await axiosInstance.get("/api/user/posts");
+      const response = await getPostListAPI();
       // console.log("response", response);
       setPostList(response.data);
     } catch (error) {
@@ -127,16 +126,20 @@ export default function MyPagePostList() {
           <LeftArrow />
         </div>
 
-        <div className="ml-[18px] text-xl/8 font-semibold">나의 게시글</div>
+        <div className="ml-[18px] mr-auto text-xl/8 font-semibold text-[#333333]">
+          나의 게시글
+        </div>
+        <div onClick={() => navigate(`/`)} className="mr-4">
+          <Plus />
+        </div>
       </div>
 
-      <div className="mt-[73px] mb-44">
-        {postList.length > 0 ? (
-          postList
-            .filter((item) => item.contents)
-            .map((item) => (
+      {postList.length > 0 && postList.find((item) => item.contents) ? (
+        postList
+          .filter((item) => item.contents)
+          .map((item) => (
+            <div key={item.postId} className="mt-[73px] mb-44">
               <div
-                key={item.postId}
                 onClick={() => onCilckMyPostHandler(item.postId)}
                 className="mx-4 mb-4 cursor-pointer"
               >
@@ -222,21 +225,28 @@ export default function MyPagePostList() {
                   </div>
                 </div>
               </div>
-            ))
-        ) : (
-          <div className="mt-60 mb-44">
-            <div className=" flex w-full justify-center text-xl/normal text-[#333333] font-normal">
-              커뮤니티에 게시된 나의 일정이 없습니다.
             </div>
-            <div
-              onClick={() => navigate(`/`)}
-              className="mt-5 flex w-full justify-center text-lg/normal text-[#FF9900] font-normal"
-            >
-              게시하러 가기
+          ))
+      ) : (
+        <div className="pb-[84px] flex flex-col justify-center items-center min-h-screen">
+          <div className="w-[184px] h-[184px] flex justify-center items-center">
+            <img
+              src={"/img/myPagePostsEmpty.png"}
+              className="w-[184px] h-[184px]"
+            />
+          </div>
+          <div className="mt-[30px] flex flex-col items-center">
+            <div className="text-base/7 font-semibold text-[#D9D9D9]">
+              아직 작성 게시글이 없어요.
+            </div>
+            <div className="text-base/7 font-semibold text-[#D9D9D9]">
+              우측의 <span className="text-[#FF9900]">버튼+</span>을 눌러
+              게시글을 업로드 해볼까요?
             </div>
           </div>
-        )}
-      </div>
+          <div className="flex flex-col justify-center items-center"></div>
+        </div>
+      )}
     </Layout>
   );
 }

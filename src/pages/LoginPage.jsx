@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Layout from "../components/common/Layout";
 import { Logo } from "../assets/Icon";
-import { loginUser } from "../api";
+import { loginUserAPI } from "../api";
 import { setCookie } from "../util/cookie";
 
 export default function LoginPage() {
@@ -41,7 +41,7 @@ export default function LoginPage() {
   // POST : 로그인 정보 보내기
   const onClickLoginHandler = async () => {
     try {
-      const response = await loginUser({ email, password });
+      const response = await loginUserAPI({ email, password });
       // console.log("response", response);
       // console.log("response", response.headers.authorization);
 
