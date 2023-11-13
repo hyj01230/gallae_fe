@@ -92,6 +92,29 @@ export default function Comments({ handleCloseModal, postId }) {
       navigate("/login");
       return;
     }
+
+    if (commentType === "normal" || commentType === "replyEdit") {
+      // "댓글" 버튼을 클릭하여 일반 댓글 입력 모드로 전환될 때 commentType 및 parentCommentId를 초기화해주기
+      setCommentType("normal");
+      setParentCommentId(null);
+    } else if (commentType === "reply") {
+      // "답글" 버튼을 한 번 더 클릭하면 commentType을 "normal"로 변경
+      setCommentType("normal");
+      setParentCommentId(null);
+    }
+  };
+
+  const [parentCommentId, setParentCommentId] = useState(null); // 답글의 경우 부모 댓글 ID를 저장할 상태 변수
+
+  const handleReplyButtonClick = (commentId) => {
+    setSelectedId(commentId);
+    setCommentType("reply");
+    setParentCommentId(commentId);
+    if (editedContentRef && editedContentRef.current) {
+      editedContentRef.current.focus();
+    }
+
+    setNewComment({ contents: "" });
   };
 
   // 댓글 삭제 로직
@@ -271,14 +294,17 @@ export default function Comments({ handleCloseModal, postId }) {
                       value.modifiedAt ? value.modifiedAt : value.createAt,
                       value.modifiedAt !== null
                     )}
-                    {value.modifiedAt && (
+                    {/* {value.modifiedAt && (
                       <span className="text-xs/normal text-[#999999] ml-1">
                         (수정됨)
                       </span>
-                    )}
+                    )} */}
                   </div>
 
-                  <div className="flex flex-row">
+                  <div
+                    className="flex flex-row"
+                    onClick={() => handleReplyButtonClick(value.commentId)}
+                  >
                     <div className="mr-1 mt-4 flex flex-row items-center h-6 w-[59px] text-center border rounded-[18px] cursor-pointer">
                       <Reply />
                       <div
@@ -408,7 +434,11 @@ export default function Comments({ handleCloseModal, postId }) {
             }
           }}
           maxLength={300}
-          placeholder="댓글을 입력하세요."
+          placeholder={
+            commentType !== "reply"
+              ? "댓글을 입력하세요."
+              : "답글을 입력하세요."
+          }
           className="h-[45px] p-4 ml-4 overflow-hidden rounded-2xl bg-white  leading-[20px]"
           style={{
             backgroundColor: "#F2F2F2",
