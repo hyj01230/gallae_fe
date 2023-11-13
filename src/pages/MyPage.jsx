@@ -265,7 +265,7 @@ export default function MyPage() {
           </div>
           <div className="w-full px-4 mt-[186px]">
             <textarea
-              value={aboutMe || ""} // aboutMe가 null이거나 undefined일 때 빈 문자열을 할당해서 빈값일때 나타나는 에러 잡기!
+              value={data.aboutMe || ""} // aboutMe가 null이거나 undefined일 때 빈 문자열을 할당해서 빈값일때 나타나는 에러 잡기!
               onChange={onChangeAboutMeHandler}
               onInput={(e) => {
                 e.target.style.height = "auto";
