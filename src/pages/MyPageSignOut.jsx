@@ -32,7 +32,7 @@ export default function MyPageSignOut() {
       alert("회원탈퇴");
       localStorage.removeItem("accessToken");
       removeCookie("refreshToken");
-      navigate("/posts");
+      navigate("/");
     } catch (error) {
       console.log("회원탈퇴 실패", error);
       alert(error.response.data.msg);

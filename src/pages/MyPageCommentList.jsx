@@ -190,7 +190,7 @@ export default function MyPageCommentList() {
               나의 댓글 내역이 없습니다.
             </div>
             <div
-              onClick={() => navigate(`/posts`)}
+              onClick={() => navigate(`/`)}
               className="mt-5 flex w-full justify-center text-lg/normal text-[#FF9900] font-normal"
             >
               댓글 작성하러 가기
