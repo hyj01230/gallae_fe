@@ -79,7 +79,7 @@ export default function SchedulesInfoPage() {
     <Layout>
       <div
         className="flex items-center gap-x-1 mx-4"
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/myschedules")}
       >
         <div className="flex gap-1 justify-center items-center">
           <div className="mr-2">

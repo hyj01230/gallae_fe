@@ -46,13 +46,13 @@ export default function SchedulesEditDatePage() {
     for (let i = 0; i < tripDateIdList.length; i++) {
       await updateTripDate(tripDateIdList[i], tripDateRange[i]);
     }
-    navigate("/");
+    navigate("/myschedules");
   };
 
   return (
     <Layout>
       <div className="flex items-center gap-x-1 p-2 border-b border-gray-300">
-        <div className="mr-2" onClick={() => navigate("/")}>
+        <div className="mr-2" onClick={() => navigate("/myschedules")}>
           <LeftArrow />
         </div>
         <div className="h-14 flex items-center text-xl">여행 일정</div>

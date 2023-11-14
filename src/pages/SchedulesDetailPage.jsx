@@ -81,7 +81,7 @@ export default function SchedulesDetailPage() {
         <div className="flex items-center justify-between gap-x-1 p-2   ">
           <div
             className="flex items-center cursor-pointer"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/myschedules")}
           >
             <div className="mr-2">
               <LeftArrow />

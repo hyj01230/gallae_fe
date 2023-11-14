@@ -80,7 +80,7 @@ export default function PostEditPage() {
       postCategory: postData.postCategory,
       tagsList: postData.tagsList,
     }),
-      navigate("/posts");
+      navigate("/");
   };
 
   const formValidation = () => {
@@ -100,7 +100,7 @@ export default function PostEditPage() {
     <Layout>
       <div className="mb-[70px]">
         <div className="flex items-center gap-x-1 p-2 border-b border-gray-300">
-          <div className="mr-2" onClick={() => navigate("/")}>
+          <div className="mr-2" onClick={() => navigate("/myschedules")}>
             <LeftArrow />
           </div>
           <div className="h-14 flex items-center text-xl">수정하기</div>
