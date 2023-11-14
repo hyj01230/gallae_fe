@@ -14,13 +14,6 @@ export default function BottomNav() {
   const currentPath = location.pathname;
   // console.log("현재 페이지 URL:", currentPath);
 
-  console.log(
-    (currentPath.includes("posts") ||
-      currentPath.includes("post") ||
-      currentPath.pathname === "/") &&
-      currentPath !== "/mypage/post"
-  );
-
   // 페이지 이동
   const navigate = useNavigate(); // navigate 할당
   const onClickMySchedules = () => {
@@ -42,7 +35,7 @@ export default function BottomNav() {
       navigate("/mypage");
     } // 마이페이지
   };
-  console.log(currentPath);
+
   return (
     // 하단 네브바(Layout 안에서 사용!)
     <div className="fixed bottom-0 max-w-3xl w-full h-[84px] bg-[#F2F2F2] flex justify-center">
