@@ -38,7 +38,7 @@ export default function PostDetailsPage() {
         const response = await getPostDetailsAPI(postId);
         setPostDetails(response.data);
       } catch (error) {
-        console.error("데이터 가져오기 오류:", error);
+        // console.error("데이터 가져오기 오류:", error);
       }
     };
 
@@ -69,7 +69,7 @@ export default function PostDetailsPage() {
 
         setLikedStatus(likedStatusMap);
       } catch (error) {
-        console.error("좋아요 정보 가져오기 오류:", error);
+        // console.error("좋아요 정보 가져오기 오류:", error);
       }
     }
   }, []);
@@ -95,7 +95,7 @@ export default function PostDetailsPage() {
         }));
       }
     } catch (error) {
-      console.error("좋아요 토글 오류:", error);
+      // console.error("좋아요 토글 오류:", error);
     }
   };
 
