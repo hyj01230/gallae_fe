@@ -214,7 +214,7 @@ export default function MyPageLikeList() {
               좋아요 목록이 없습니다.
             </div>
             <div
-              onClick={() => navigate(`/posts`)}
+              onClick={() => navigate(`/`)}
               className="mt-5 flex w-full justify-center text-lg/normal text-[#FF9900] font-normal"
             >
               좋아요 하러 가기

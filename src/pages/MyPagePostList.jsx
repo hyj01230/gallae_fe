@@ -129,7 +129,7 @@ export default function MyPagePostList() {
         <div className="ml-[18px] mr-auto text-xl/8 font-semibold text-[#333333]">
           나의 게시글
         </div>
-        <div onClick={() => navigate(`/`)} className="mr-4">
+        <div onClick={() => navigate(`/myschedules`)} className="mr-4">
           <Plus />
         </div>
       </div>

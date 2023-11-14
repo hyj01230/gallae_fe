@@ -78,7 +78,7 @@ export default function LoginPage() {
       <div className="mx-4 mb-10">
         <div
           className="flex justify-end mt-3 text-[#999999] text-base/normal font-normal cursor-pointer"
-          onClick={() => navigate("/posts")}
+          onClick={() => navigate("/")}
         >
           건너뛰기
         </div>

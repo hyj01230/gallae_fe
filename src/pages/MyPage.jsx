@@ -23,7 +23,7 @@ export default function MyPage() {
   const onClickLogOutHandler = () => {
     localStorage.removeItem("accessToken");
     removeCookie("refreshToken");
-    navigate("/posts"); // 로그아웃
+    navigate("/"); // 로그아웃
   };
   const onClickModifyHandler = () => {
     navigate("/mypage/modify"); // 톱니바퀴
