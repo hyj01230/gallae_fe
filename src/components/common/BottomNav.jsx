@@ -14,6 +14,13 @@ export default function BottomNav() {
   const currentPath = location.pathname;
   // console.log("현재 페이지 URL:", currentPath);
 
+  console.log(
+    (currentPath.includes("posts") ||
+      currentPath.includes("post") ||
+      currentPath.pathname === "/") &&
+      currentPath !== "/mypage/post"
+  );
+
   // 페이지 이동
   const navigate = useNavigate(); // navigate 할당
   const onClickMySchedules = () => {
@@ -68,20 +75,18 @@ export default function BottomNav() {
           onClick={onClickPosts}
           className="mx-auto w-10 h-10 flex flex-col justify-center items-center cursor-pointer"
         >
-          {(currentPath.includes("posts") ||
-            currentPath.includes("post") ||
-            currentPath.includes("/")) &&
-          currentPath !== "/mypage/post" ? (
+          {currentPath === "/" &&
+          !currentPath.includes("posts") &&
+          !currentPath.includes("post") ? (
             <CommunityColor />
           ) : (
             <Community />
           )}
           <div
             className={`${
-              (currentPath.includes("posts") ||
-                currentPath.includes("post") ||
-                currentPath.includes("/")) &&
-              currentPath !== "/mypage/post"
+              currentPath === "/" &&
+              !currentPath.includes("posts") &&
+              !currentPath.includes("post")
                 ? "text-[#FF9900] "
                 : "text-[#888888] "
             }mt-[5px] text-center text-[9px] font-extrabold leading-[9px]`}
