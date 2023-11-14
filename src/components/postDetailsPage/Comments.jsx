@@ -46,7 +46,7 @@ export default function Comments({ handleCloseModal, postId }) {
       setPage((page) => page + 1);
       setLast(response.data.last); // 마지막 페이지 확인값
     } catch (err) {
-      console.log("에러 발생:", err);
+      // console.log("에러 발생:", err);
     }
   };
 
@@ -59,10 +59,10 @@ export default function Comments({ handleCloseModal, postId }) {
   useEffect(() => {
     if (inView) {
       getCommentList();
-      console.log("📢 데이터를 더 가져와랏!!", inView);
-      console.log("page 번호", page);
-      console.log("로드된 데이터", commentList);
-      console.log("🔍 막지막 페이지 확인", last);
+      // console.log("📢 데이터를 더 가져와랏!!", inView);
+      // console.log("page 번호", page);
+      // console.log("로드된 데이터", commentList);
+      // console.log("🔍 막지막 페이지 확인", last);
     }
   }, [inView]);
 
@@ -109,7 +109,7 @@ export default function Comments({ handleCloseModal, postId }) {
       setCommentList(commentsResponse.data.content);
       setNewComment({ contents: "" });
     } catch (error) {
-      console.error("댓글 삭제 중 오류 발생:", error);
+      // console.error("댓글 삭제 중 오류 발생:", error);
     }
   };
   // 댓글 저장 로직
@@ -128,7 +128,7 @@ export default function Comments({ handleCloseModal, postId }) {
       setNewComment({ contents: "" });
       setCommentType("normal");
     } catch (error) {
-      console.error("댓글 수정 중 오류 발생:", error);
+      // console.error("댓글 수정 중 오류 발생:", error);
     }
   };
   // 대댓글 추가 로직
@@ -145,10 +145,10 @@ export default function Comments({ handleCloseModal, postId }) {
       setCommentList(commentsResponse.data.content);
       setNewComment({ contents: "" });
       setCommentType("normal");
-      console.log("response:", response);
+      // console.log("response:", response);
       setCommentList(commentsResponse.data.content);
     } catch (error) {
-      console.error("대댓글 작성 오류:", error);
+      // console.error("대댓글 작성 오류:", error);
     }
   };
   // 대댓글 저장 로직
@@ -167,7 +167,7 @@ export default function Comments({ handleCloseModal, postId }) {
       setNewComment({ contents: "" });
       setCommentType("normal");
     } catch (error) {
-      console.error("대댓글 수정 중 오류 발생:", error);
+      // console.error("대댓글 수정 중 오류 발생:", error);
     }
   };
   // 대댓글 삭제 로직
@@ -187,7 +187,7 @@ export default function Comments({ handleCloseModal, postId }) {
       setNewComment({ contents: "" });
       setCommentType("normal");
     } catch (error) {
-      console.error("대댓글 삭제 중 오류 발생:", error);
+      // console.error("대댓글 삭제 중 오류 발생:", error);
     }
   };
 

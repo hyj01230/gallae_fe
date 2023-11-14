@@ -39,7 +39,7 @@ export default function PostListPage() {
       const limitedRankingPosts = rankingPosts.slice(0, 7);
       setRankingList(limitedRankingPosts);
     } catch (error) {
-      console.error("순위 목록 가져오기 오류:", error);
+      // console.error("순위 목록 가져오기 오류:", error);
     }
   };
 
@@ -77,7 +77,7 @@ export default function PostListPage() {
   // 무한 스크롤 시작
   const getPostList = async () => {
     try {
-      console.log("getPostList 함수 호출");
+      // console.log("getPostList 함수 호출");
       const response = await axiosInstance.get("/api/posts", {
         params: {
           page: `${page}`, // 현재 페이지 번호
@@ -90,13 +90,13 @@ export default function PostListPage() {
       setPostList((postList) => [...postList, ...newPosts]);
 
       // 응답에서 페이지 번호를 확인
-      console.log("페이지 번호 (응답):", response.data.pageable.pageNumber);
+      // console.log("페이지 번호 (응답):", response.data.pageable.pageNumber);
 
       // 요청 성공 시에 페이지에 1 카운트 해주기
       // 라스트불린값이 트루면 끝 아니면 +1
       setPage((prevPage) => prevPage + 1);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 
@@ -146,7 +146,7 @@ export default function PostListPage() {
       // 좋아요 상태가 변경되면 랭킹 다시 업데이트
       fetchRankingPosts();
     } catch (error) {
-      console.error("좋아요 토글 오류:", error);
+      // console.error("좋아요 토글 오류:", error);
     }
   };
 
@@ -172,7 +172,7 @@ export default function PostListPage() {
       // Comments 모달을 열어서 댓글 정보 전달
       openCommentsModal(response.data, postId);
     } catch (error) {
-      console.error("댓글 정보 가져오기 오류:", error);
+      // console.error("댓글 정보 가져오기 오류:", error);
     }
   };
 
