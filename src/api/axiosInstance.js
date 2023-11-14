@@ -80,17 +80,17 @@ axiosInstance.interceptors.response.use(
         } catch (refreshError) {
           // console.log("리프레시 에러 refreshError", refreshError);
           // 토큰(액세스/리프레시) 지우고, 재로그인 시키기
-          // localStorage.removeItem("accessToken");
-          // removeCookie("refreshToken");
-          // window.location.href = "/login";
-          // alert("재로그인이 필요합니다.");
+          localStorage.removeItem("accessToken");
+          removeCookie("refreshToken");
+          window.location.href = "/login";
+          alert("재로그인이 필요합니다.");
         }
       } else {
         // 토큰(액세스/리프레시) 지우고, 재로그인 시키기
-        // localStorage.removeItem("accessToken");
-        // removeCookie("refreshToken");
-        // window.location.href = "/login";
-        // alert("재로그인이 필요합니다.");
+        localStorage.removeItem("accessToken");
+        removeCookie("refreshToken");
+        window.location.href = "/login";
+        alert("재로그인이 필요합니다.");
       }
     }
 
