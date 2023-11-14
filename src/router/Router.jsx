@@ -2,8 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import Page from "../pages";
 
 export const router = createBrowserRouter([
-  { path: "/", element: <Page.MySchedulesPage /> },
-  { path: "/posts", element: <Page.PostListPage /> },
+  { path: "/", element: <Page.PostListPage /> },
+  { path: "/myschedules", element: <Page.MySchedulesPage /> },
   { path: "/search", element: <Page.PostSearchPage /> },
   { path: "/signup", element: <Page.SignUpPage /> },
   { path: "/signup/admin", element: <Page.SignUpAdminPage /> },
