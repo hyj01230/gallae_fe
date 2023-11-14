@@ -8,7 +8,7 @@ export default function PostHeader() {
     <div className="bg-[#ffffff] gap-x-1 mx-4 flex justify-between items-center ">
       <div
         className="text-black text-[20px] py-3 font-bold cursor-pointer"
-        onClick={() => navigate(`/posts`)}
+        onClick={() => navigate(`/`)}
       >
         커뮤니티
       </div>

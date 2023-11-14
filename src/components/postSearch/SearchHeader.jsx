@@ -7,7 +7,7 @@ export default function SearchHeader() {
     <header className="bg-[#ffffff] p-4 flex justify-between items-center">
       <div
         className="text-black text-2xl font-bold cursor-pointer"
-        onClick={() => navigate(`/posts/`)}
+        onClick={() => navigate(`/`)}
       >
         뒤로가기
       </div>

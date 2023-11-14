@@ -175,10 +175,7 @@ export default function PostSearchPage() {
       <div className="mx-4 my-5 w-full">
         <div className="flex justify-center ">
           <div className="relative flex items-center">
-            <div
-              className="cursor-pointer mr-2"
-              onClick={() => navigate(`/posts`)}
-            >
+            <div className="cursor-pointer mr-2" onClick={() => navigate(`/`)}>
               <LeftArrow />
             </div>
             <div style={{ position: "absolute", left: "55px" }}>
