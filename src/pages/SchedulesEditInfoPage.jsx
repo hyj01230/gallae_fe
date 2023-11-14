@@ -39,7 +39,7 @@ export default function SchedulesEditInfoPage() {
   const editTagsMutation = useMutation(() => updatePost(postId, editPost), {
     onSuccess: () => {
       queryClient.invalidateQueries("mySchedule");
-      navigate("/");
+      navigate("/myschedules");
     },
   });
 
@@ -67,7 +67,7 @@ export default function SchedulesEditInfoPage() {
     <Layout>
       <div
         className="flex items-center gap-x-1 mx-4"
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/myschedules")}
       >
         <div className="mr-2">
           <LeftArrow />
