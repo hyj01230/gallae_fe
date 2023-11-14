@@ -21,11 +21,11 @@ export default function BottomNav() {
       alert("로그인이 필요한 서비스입니다.");
       navigate("/login");
     } else {
-      navigate("/");
+      navigate("/myschedules");
     } // 일정
   };
   const onClickPosts = () => {
-    navigate("/posts?page=0&size=3/"); // 커뮤니티
+    navigate("/"); // 커뮤니티
   };
   const onClickMypage = () => {
     if (!localStorage.getItem("accessToken")) {
@@ -35,7 +35,7 @@ export default function BottomNav() {
       navigate("/mypage");
     } // 마이페이지
   };
-
+  console.log(currentPath);
   return (
     // 하단 네브바(Layout 안에서 사용!)
     <div className="fixed bottom-0 max-w-3xl w-full h-[84px] bg-[#F2F2F2] flex justify-center">
@@ -45,7 +45,7 @@ export default function BottomNav() {
           className="w-10 h-10 flex flex-col justify-center items-center cursor-pointer"
         >
           {currentPath.includes("myschedules") ||
-          currentPath === "/" ||
+          currentPath === "/myschedules" ||
           currentPath === "/search" ? (
             <MySchedulesColor />
           ) : (
@@ -54,7 +54,7 @@ export default function BottomNav() {
           <div
             className={`${
               currentPath.includes("myschedules") ||
-              currentPath === "/" ||
+              currentPath === "/myschedules" ||
               currentPath === "/search"
                 ? "text-[#FF9900]"
                 : "text-[#888888]"
@@ -68,7 +68,9 @@ export default function BottomNav() {
           onClick={onClickPosts}
           className="mx-auto w-10 h-10 flex flex-col justify-center items-center cursor-pointer"
         >
-          {(currentPath.includes("posts") || currentPath.includes("post")) &&
+          {(currentPath.includes("posts") ||
+            currentPath.includes("post") ||
+            currentPath.includes("/")) &&
           currentPath !== "/mypage/post" ? (
             <CommunityColor />
           ) : (
@@ -76,7 +78,9 @@ export default function BottomNav() {
           )}
           <div
             className={`${
-              (currentPath.includes("posts") || currentPath.includes("post")) &&
+              (currentPath.includes("posts") ||
+                currentPath.includes("post") ||
+                currentPath.includes("/")) &&
               currentPath !== "/mypage/post"
                 ? "text-[#FF9900] "
                 : "text-[#888888] "
