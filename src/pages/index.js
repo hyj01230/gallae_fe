@@ -1,3 +1,4 @@
+import ErrorPage from "./ErrorPage";
 import MySchedulesAccountPage from "./MySchedulesAccountPage";
 import SchedulesDetailPage from "./SchedulesDetailPage";
 import LoginPage from "./LoginPage";
@@ -28,6 +29,7 @@ import PostSearchPage from "./PostSearchPage";
 import UserProfile from "./UserProfile";
 
 export default {
+  ErrorPage,
   LoginPage,
   LoginPageKakao,
   MyPage,
