@@ -38,12 +38,12 @@ export default function ListModal({ scheduleData, onCloseModalClick }) {
   };
 
   // 날짜 수정하기
-  const handleEditDateClick = () => {
-    const { tripDateIdList, chosenDateList } = scheduleData;
-    navigate("/myschedules/edit/date", {
-      state: { tripDateIdList, chosenDateList },
-    });
-  };
+  // const handleEditDateClick = () => {
+  //   const { tripDateIdList, chosenDateList } = scheduleData;
+  //   navigate("/myschedules/edit/date", {
+  //     state: { tripDateIdList, chosenDateList },
+  //   });
+  // };
 
   return (
     <div className="cursor-pointer">
@@ -71,9 +71,9 @@ export default function ListModal({ scheduleData, onCloseModalClick }) {
               이름 및 태그 수정하기
             </button>
           </div>
-          <div onClick={handleEditDateClick}>
+          {/* <div onClick={handleEditDateClick}>
             <button className="ml-8 my-[19px] text-lg">날짜 수정하기</button>
-          </div>
+          </div> */}
         </div>
 
         <div

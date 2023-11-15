@@ -110,7 +110,7 @@ export default function PostCreatePage() {
     <Layout>
       <div className="mb-[70px]">
         <div className="flex items-center gap-x-1 p-2 border-b border-gray-300">
-          <div className="mr-2" onClick={() => navigate("/myshedules")}>
+          <div className="mr-2" onClick={() => navigate("/myschedules")}>
             <LeftArrow />
           </div>
           <div className="h-14 flex items-center text-xl">글쓰기</div>

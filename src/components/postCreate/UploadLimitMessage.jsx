@@ -11,7 +11,7 @@ export default function UploadLimitMessage() {
       >
         <div className="hidden"></div>
       </div>
-      사진 업로드는 개당 1MB내외로 업로드 가능합니다.
+      사진 업로드는 개당 10MB 내외로 업로드 가능합니다.
     </div>
   );
 }
