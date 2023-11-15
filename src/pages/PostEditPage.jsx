@@ -66,12 +66,14 @@ export default function PostEditPage() {
     if (imageHandler.previewImage && data.postsPicturesList[0]) {
       const { postsPicturesId } = data.postsPicturesList[0];
       await imageHandler.handleUpdateImage(postsPicturesId);
+    } else {
+      await imageHandler.handleSubmitClick(selectedPostId);
     }
 
     // 기존에 사진이 없는데, 사진을 생성하기
-    if (imageHandler.previewImage) {
-      await imageHandler.handleSubmitClick(selectedPostId);
-    }
+    // if (imageHandler.previewImage) {
+    //   await imageHandler.handleSubmitClick(selectedPostId);
+    // }
 
     await updatePost(selectedPostId, {
       title: postData.title,
