@@ -66,8 +66,6 @@ export default function ScheduleMap({
     }
   }, [map, mapRef, placeList]);
 
-  console.log({ placeList });
-
   return (
     <Map // 로드뷰를 표시할 Container
       center={{

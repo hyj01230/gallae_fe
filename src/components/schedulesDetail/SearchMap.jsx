@@ -73,8 +73,6 @@ export default function SearchMap({
     });
   }, [isSearch, map]);
 
-  console.log(schedule);
-
   return (
     <Map // 로드뷰를 표시할 Container
       center={

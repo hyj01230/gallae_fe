@@ -69,7 +69,6 @@ export default function SchedulesEditPage() {
     if (imageHandler.previewImage && picturesResponseDtoList.length === 0) {
       // 미리보기 이미지가 있고, 기존에 업로드된 사진이 없는 상태라면
       await imageHandler.createScheduleImage(schedulesId);
-      console.log("??");
     } else {
       // 미리보기 이미지가 있고, 기존에 업로드된 사진이 있는 상태라면
       const { picturesId } = picturesResponseDtoList[0];
