@@ -8,7 +8,6 @@ export default function LoginPageKakao() {
 
   // 카카오에서 준 인가코드 뽑기
   const code = new URL(window.location.href).searchParams.get("code");
-  console.log(code);
 
   // 인가코드를 백에 보내보자
   // 참고 : https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api#request-token
@@ -23,12 +22,11 @@ export default function LoginPageKakao() {
             },
           }
         );
-        console.log("response", response);
         const accessToken = response.headers.authorization;
         localStorage.setItem("accessToken", `Bearer ${accessToken}`);
         navigate("/");
       } catch (error) {
-        console.log("error", error);
+        // alert(error.response.data.msg);
       }
     };
 

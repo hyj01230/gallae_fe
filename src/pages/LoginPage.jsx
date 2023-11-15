@@ -42,8 +42,6 @@ export default function LoginPage() {
   const onClickLoginHandler = async () => {
     try {
       const response = await loginUserAPI({ email, password });
-      // console.log("response", response);
-      // console.log("response", response.headers.authorization);
 
       localStorage.setItem("accessToken", response.headers.authorization); // accessToken 저장!
       setCookie("refreshToken", response.headers.authorization_refresh, {
@@ -53,9 +51,8 @@ export default function LoginPage() {
       });
       navigate("/");
 
-      alert(response.data.msg); //토스트 적용!
+      alert(response.data.msg);
     } catch (error) {
-      // console.log("error", error);
       if (email === "" || password === "") {
         alert("아이디와 비밀번호 모두 입력하세요.");
       } else {

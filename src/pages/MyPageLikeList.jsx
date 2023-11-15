@@ -66,13 +66,12 @@ export default function MyPageLikeList() {
           size: 5, // 원하는 페이지 크기(게시물 수)
         },
       });
-      // console.log("response", response);
 
       setLikeList((likeList) => [...likeList, ...response.data.content]); // 기존 데이터에 새 데이터 추가
       setPage((page) => page + 1); // 페이지 번호 +1 시킴
       setLast(response.data.last); // 마지막 페이지 확인값
     } catch (error) {
-      // console.log("error", error);
+      // alert(error.response.data.msg);
     }
   };
 
@@ -86,24 +85,19 @@ export default function MyPageLikeList() {
   useEffect(() => {
     if (inView) {
       getLikeList();
-      // console.log("📢 데이터를 더 가져와랏!!", inView);
-      // console.log("page 번호", page);
-      // console.log("로드된 데이터", likeList);
-      // console.log("🔍 막지막 페이지 확인", last);
     }
   }, [inView]);
 
   const onClickLikeCancleHandler = async (postId) => {
     try {
       const response = await getLikeAPI(postId);
-      // console.log("response", response);
 
       // 상태 업데이트: postId와 일치하지 않는 항목만 남김
       setLikeList((prevLikeList) =>
         prevLikeList.filter((item) => item.postId !== postId)
       );
     } catch (error) {
-      // console.log("error", error);
+      // alert(error.response.data.msg);
     }
   };
 

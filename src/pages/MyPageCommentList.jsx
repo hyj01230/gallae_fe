@@ -36,7 +36,6 @@ export default function MyPageCommentList() {
           size: 5, // 원하는 페이지 크기(게시물 수)
         },
       });
-      // console.log("댓글 response :", response);
       setMyCommentsList((myCommentsList) => [
         ...myCommentsList,
         ...response.data.content,
@@ -44,7 +43,7 @@ export default function MyPageCommentList() {
       setMyCommentsPage((myCommentspage) => myCommentspage + 1); // 페이지 번호 +1 시킴
       setMyCommentsLast(response.data.last);
     } catch (error) {
-      // console.log("댓글 error :", error);
+      // alert(error.response.data.msg);
     }
   };
 
@@ -62,7 +61,6 @@ export default function MyPageCommentList() {
           size: 5, // 원하는 페이지 크기(게시물 수)
         },
       });
-      // console.log("대댓글 response :", response);
       setMyRepliesList((myRepliesList) => [
         ...myRepliesList,
         ...response.data.content,
@@ -70,7 +68,7 @@ export default function MyPageCommentList() {
       setMyRepliesPage((myRepliespage) => myRepliespage + 1); // 페이지 번호 +1 시킴
       setMyRepliesLast(response.data.last);
     } catch (error) {
-      // console.log("대댓글 error :", error);
+      // alert(error.response.data.msg);
     }
   };
 
@@ -85,13 +83,6 @@ export default function MyPageCommentList() {
     if (inView) {
       getMyCommentsList();
       getMyRepliesList();
-      // console.log("📢 데이터를 더 가져와랏!!", inView);
-      // console.log("로드된 데이터", myCommentsRepliesList);
-      // console.log("💬 댓글 page 번호", myCommentspage);
-      // console.log("💬 댓글 막지막 페이지 확인", myCommentslast);
-      // console.log("➡️ 대댓글 page 번호", myRepliespage);
-      // console.log("➡️ 대댓글 막지막 페이지 확인", myReplieslast);
-      // console.log("-------------------------");
     }
   }, [inView]);
 

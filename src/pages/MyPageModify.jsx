@@ -27,10 +27,9 @@ export default function MyPageModify() {
   const getMyPageInfo = async () => {
     try {
       const response = await getMyPageInfoAPI();
-      // console.log("닉네임 response :", response);
       setNickName(response.nickName);
     } catch (error) {
-      // console.log("error :", error);
+      // alert(error.response.data.msg);
     }
   };
 

@@ -57,10 +57,9 @@ export default function MyPagePostList() {
   const getPostList = async () => {
     try {
       const response = await getPostListAPI();
-      // console.log("response", response);
       setPostList(response.data);
     } catch (error) {
-      // console.log("error", error);
+      // alert(error.response.data.msg);
     }
   };
 
@@ -87,7 +86,7 @@ export default function MyPagePostList() {
       // 페이지를 업데이트하기 위해 useState 상태를 변경한다.
       setIsUpdate(!isUpdate);
     } catch (error) {
-      // console.log("error", error);
+      // alert(error.response.data.msg);
     }
   };
 

@@ -37,10 +37,9 @@ export default function MyPageNickName() {
   const getMyPageInfo = async () => {
     try {
       const response = await getMyPageInfoAPI();
-      // console.log("닉네임 response :", response);
       setMyPageInfo(response); // 마이페이지 데이터 저장
     } catch (error) {
-      // console.log("error :", error);
+      // alert(error.response.data.msg);
     }
   };
 
@@ -63,11 +62,9 @@ export default function MyPageNickName() {
       const response = await putNickNameAPI({
         updateNickName: nickName,
       });
-      // console.log("닉네임 변경", response);
       alert(response.data.msg);
       setMyPageInfo({ ...myPageInfo, nickName });
     } catch (error) {
-      // console.log("error :", error);
       alert(error.response.data.msg);
     }
   };

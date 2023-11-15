@@ -72,7 +72,6 @@ export default function MyPagePassWord() {
         currentPassword: currentPassword,
         updatePassword: checkUpdatePassword,
       });
-      // console.log("수정 response :", response.data);
 
       if (response.data.statusCode === 200) {
         alert(response.data.msg);
@@ -81,7 +80,6 @@ export default function MyPagePassWord() {
         setCheckUpdatePassword("");
       }
     } catch (error) {
-      // console.log("error :", error);
       alert(error.response.data.msg);
     }
   };
