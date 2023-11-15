@@ -12,38 +12,19 @@ import {
   fetchLikedPostsAPI,
   handleLikeClickAPI,
 } from "../api";
+import { useQueries, useQuery } from "react-query";
 
 export default function PostDetailsPage() {
-  const [postDetails, setPostDetails] = useState({
-    title: "",
-    tagsList: [],
-    nickName: "",
-    likeNum: "",
-    viewNum: "",
-    createdAt: "",
-    modifiedAt: "",
-    commentNum: "",
-    postsPicturesList: [],
-    // 다른 속성들 초기값 설정
-  });
-
   const { postId } = useParams();
   const [likedStatus, setLikedStatus] = useState({});
   const [areCommentsVisible, setCommentsVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    const getPostDetails = async () => {
-      try {
-        const response = await getPostDetailsAPI(postId);
-        setPostDetails(response.data);
-      } catch (error) {
-        // console.error("데이터 가져오기 오류:", error);
-      }
-    };
+  const { isLoading, data } = useQuery("postDetail", () =>
+    getPostDetailsAPI(postId)
+  );
 
-    getPostDetails();
-  }, [postId]);
+  const postData = data?.data;
 
   const navigate = useNavigate();
 
@@ -83,16 +64,10 @@ export default function PostDetailsPage() {
       const response = await handleLikeClickAPI(postId);
       if (response.data.check) {
         setLikedStatus({ ...likedStatus, [postId]: true });
-        setPostDetails((prevDetails) => ({
-          ...prevDetails,
-          likeNum: prevDetails.likeNum + 1,
-        }));
+        postData.likeNum += 1;
       } else {
         setLikedStatus({ ...likedStatus, [postId]: false });
-        setPostDetails((prevDetails) => ({
-          ...prevDetails,
-          likeNum: prevDetails.likeNum - 1,
-        }));
+        postData.likeNum -= 1;
       }
     } catch (error) {
       // console.error("좋아요 토글 오류:", error);
@@ -107,13 +82,19 @@ export default function PostDetailsPage() {
     setIsModalOpen(false);
   };
 
+  if (isLoading) {
+    return <div></div>;
+  }
+
+  console.log(data);
+
   return (
     <Layout>
       <div className="fixed top-0 left-0 w-full bg-white ">
         <DetailsHeader />
       </div>
       <div>
-        <Image url={postDetails.postsPicturesList} />
+        <Image url={postData.postsPicturesList} />
         <div className="w-393 h-275 bg-white flex flex-col mb-[50px]">
           <div className="flex items-center justify-between mb-2 mt-5">
             <div className="flex items-center">
@@ -121,20 +102,20 @@ export default function PostDetailsPage() {
               <div className="flex items-center">
                 <img
                   className="w-12 h-12 bg-gray-300 rounded-full ml-4 cursor-pointer"
-                  src={postDetails.profileImage}
+                  src={postData.profileImage}
                 />
 
                 <div className="flex flex-col ml-[13px]">
-                  {postDetails ? (
+                  {postData ? (
                     <span className="text-[20px] font-semibold mr-5">
-                      {postDetails.title}
+                      {postData.title}
                     </span>
                   ) : (
                     <p>Loading...</p>
                   )}
                   <div className="">
-                    {postDetails && postDetails.tagsList ? (
-                      postDetails.tagsList.map((tag, index) => (
+                    {postData && postData.tagsList ? (
+                      postData.tagsList.map((tag, index) => (
                         <span
                           key={index}
                           className="text-gray-500 text-sm cursor-pointer mr-1"
@@ -151,7 +132,7 @@ export default function PostDetailsPage() {
               </div>
             </div>
           </div>
-          <span className="text-3 mt-2 mx-6 mb-3">{postDetails.contents}</span>
+          <span className="text-3 mt-2 mx-6 mb-3">{postData.contents}</span>
 
           <DetailSchedules postId={postId} />
           <div className="fixed bottom-0 left-0 w-full bg-white ">
@@ -159,7 +140,7 @@ export default function PostDetailsPage() {
               areCommentsVisible={areCommentsVisible}
               setCommentsVisible={setCommentsVisible}
               handleOpenModal={handleOpenModal}
-              postDetails={postDetails}
+              postDetails={postData}
               likedStatus={likedStatus}
               handleLikeClick={handleLikeClick}
             />

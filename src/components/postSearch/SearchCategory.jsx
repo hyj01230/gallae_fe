@@ -14,17 +14,20 @@ export default function SearchCategory({ onCategorySelect, keyword }) {
     "레저",
   ];
 
-  // "추천키워드" 섹션의 초기 상태를 키워드가 제공되는지 여부에 따라 설정합니다
+  // "추천키워드" 섹션의 초기 상태를 키워드가 제공되는지 여부에 따라 설정
   const [showCategories, setShowCategories] = useState(!keyword);
 
+  // 추천 카테고리를 토글하는 함수
   const toggleCategories = () => {
     setShowCategories(!showCategories);
   };
 
+  // 카테고리를 클릭했을 때 실행되는 함수
   const handleCategoryClick = (category) => {
     onCategorySelect(category);
   };
 
+  // 키워드가 변경될 때마다 호출
   useEffect(() => {
     // 키워드가 변경될 때 상태를 업데이트합니다
     setShowCategories(!keyword);
