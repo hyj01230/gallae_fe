@@ -41,6 +41,9 @@ export default function useImage() {
         withCredentials: true,
       }
     );
+
+    console.log(response);
+
     return response;
   };
 
