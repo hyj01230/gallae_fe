@@ -401,15 +401,15 @@ export default function Comments({ handleCloseModal, postId }) {
           value={newComment.contents}
           ref={editedContentRef}
           onChange={(e) => {
-            const inputValue = e.target.value.trim();
-            setHasContent(inputValue.length > 0);
-            if (inputValue.length <= 300) {
-              setNewComment({ contents: inputValue });
+            // const inputValue = e.target.value.trim();
+            // setHasContent(inputValue.length > 0);
+            if (newComment.contents.length <= 300) {
+              setNewComment({ contents: e.target.value });
             }
           }}
           maxLength={300}
           placeholder="댓글을 입력하세요."
-          className="h-[45px] p-4 ml-4 overflow-hidden rounded-2xl bg-white  leading-[20px]"
+          className="h-[45px] p-4 ml-4 overflow-hidden rounded-2xl bg-white leading-[20px]"
           style={{
             backgroundColor: "#F2F2F2",
             width: "90%",
@@ -421,7 +421,8 @@ export default function Comments({ handleCloseModal, postId }) {
 
         <button
           onClick={async (e) => {
-            if (!hasContent) {
+            // if (!hasContent) {
+            if (newComment.contents.trim().length === 0) {
               alert("댓글 내용을 입력하세요.");
               return;
             }
@@ -439,7 +440,8 @@ export default function Comments({ handleCloseModal, postId }) {
             }
           }}
           className={`${
-            hasContent
+            // hasContent
+            newComment.contents?.trim()
               ? "bg-[#f90] text-white transition-all duration-1000"
               : "bg-[#D9D9D9] text-[white] transition-all duration-1000"
           } font-[14px] ml-1 w-[60px] h-[45px] rounded-full mr-4`}
