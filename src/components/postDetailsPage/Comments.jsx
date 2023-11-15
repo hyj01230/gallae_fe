@@ -271,11 +271,11 @@ export default function Comments({ handleCloseModal, postId }) {
                       value.modifiedAt ? value.modifiedAt : value.createAt,
                       value.modifiedAt !== null
                     )}
-                    {value.modifiedAt && (
+                    {/* {value.modifiedAt && (
                       <span className="text-xs/normal text-[#999999] ml-1">
                         (수정됨)
                       </span>
-                    )}
+                    )} */}
                   </div>
 
                   <div className="flex flex-row">
