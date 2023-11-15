@@ -2,7 +2,11 @@ import { createBrowserRouter } from "react-router-dom";
 import Page from "../pages";
 
 export const router = createBrowserRouter([
-  { path: "/", element: <Page.PostListPage /> },
+  {
+    path: "/",
+    element: <Page.PostListPage />,
+    errorElement: <Page.ErrorPage />,
+  },
   { path: "/myschedules", element: <Page.MySchedulesPage /> },
   { path: "/search", element: <Page.PostSearchPage /> },
   { path: "/signup", element: <Page.SignUpPage /> },

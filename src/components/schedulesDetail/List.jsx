@@ -46,7 +46,7 @@ export default function List({ schedule, handleClick, move = true }) {
         </div>
       </div>
 
-      <div className="h-8">{move && <Move />}</div>
+      {/* <div className="h-8">{move && <Move />}</div> */}
     </div>
   );
 }
