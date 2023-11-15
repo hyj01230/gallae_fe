@@ -132,7 +132,9 @@ export default function PostDetailsPage() {
               </div>
             </div>
           </div>
-          <span className="text-3 mt-2 mx-6 mb-3">{postData.contents}</span>
+          <span className="text-3 mt-2 mx-6 mb-3 whitespace-pre-line">
+            {postData.contents}
+          </span>
 
           <DetailSchedules postId={postId} />
           <div className="fixed bottom-0 left-0 w-full bg-white ">

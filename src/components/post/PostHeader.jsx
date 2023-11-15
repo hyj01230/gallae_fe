@@ -14,10 +14,7 @@ export default function PostHeader() {
       </div>
       <div className="flex items-center  ">
         <div className="ml-4 text-gray-400 cursor-pointer"></div>
-        <Link
-          to="/search?keyword="
-          className="ml-4 mr-6 text-black cursor-pointer"
-        >
+        <Link to="/search?keyword=" className="ml-4  text-black cursor-pointer">
           <PostSearch />
         </Link>
       </div>
