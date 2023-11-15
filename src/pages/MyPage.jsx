@@ -121,12 +121,7 @@ export default function MyPage() {
           </div>
         </div>
 
-        <div
-          onClick={() => {
-            setProfileModal(true);
-          }}
-          className="flex flex-col items-center"
-        >
+        <div className="flex flex-col items-center">
           {/* 사진 선택 input */}
           <input
             type="file"
@@ -136,11 +131,19 @@ export default function MyPage() {
             ref={inputRef}
           />
           <img
+            onClick={() => {
+              setProfileModal(true);
+            }}
             className="mt-7 w-24 h-24 mx-auto rounded-full flex items-center justify-center cursor-pointer"
             // src={myPageInfo.profileImg ? myPageInfo.profileImg : defaultProfile}
             src={data.profileImg}
           />
-          <div className="absolute mt-[86px] ml-16">
+          <div
+            onClick={() => {
+              setProfileModal(true);
+            }}
+            className="absolute mt-[86px] ml-16"
+          >
             <MypageProfileEdit />
           </div>
         </div>
