@@ -30,7 +30,7 @@ export default function SchedulesEditPage() {
   const queryClient = useQueryClient();
   const modal = useModal();
   const {
-    postId, // 이거
+    postId,
     contents,
     costs,
     placeName,
@@ -66,10 +66,20 @@ export default function SchedulesEditPage() {
   const imageHandler = useImage();
 
   const handleUpdateClick = async () => {
-    if (imageHandler.previewImage) {
+    if (imageHandler.previewImage && picturesResponseDtoList.length === 0) {
+      // 미리보기 이미지가 있고, 기존에 업로드된 사진이 없는 상태라면
+      await imageHandler.createScheduleImage(schedulesId);
+      console.log("??");
+    } else {
+      // 미리보기 이미지가 있고, 기존에 업로드된 사진이 있는 상태라면
       const { picturesId } = picturesResponseDtoList[0];
       await imageHandler.handleUpdateSheduleImage(picturesId);
     }
+
+    // if (imageHandler.previewImage) {
+    //   const { picturesId } = picturesResponseDtoList[0];
+    //   await imageHandler.handleUpdateSheduleImage(picturesId);
+    // }
 
     let costs = Number(schedule.costs.replaceAll(",", ""));
     await updateScheduleDetail(schedulesId, { ...schedule, costs });
