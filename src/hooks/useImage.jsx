@@ -42,8 +42,6 @@ export default function useImage() {
       }
     );
 
-    console.log(response);
-
     return response;
   };
 
