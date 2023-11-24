@@ -1,8 +1,8 @@
-import Layout from "../components/common/Layout";
-import { LeftArrow } from "../assets/Icon";
+import Layout from "../../components/common/Layout";
+import { LeftArrow } from "../../assets/Icon";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getMyPageInfoAPI } from "../api";
+import { getMyPageInfoAPI } from "../../api";
 
 export default function MyPageModify() {
   // 페이지 이동

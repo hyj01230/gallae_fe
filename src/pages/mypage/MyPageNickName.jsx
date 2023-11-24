@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import Layout from "../components/common/Layout";
+import Layout from "../../components/common/Layout";
 
-import { LeftArrow } from "../assets/Icon";
+import { LeftArrow } from "../../assets/Icon";
 import { useNavigate } from "react-router-dom";
-import { getMyPageInfoAPI, putNickNameAPI } from "../api";
+import { getMyPageInfoAPI, putNickNameAPI } from "../../api";
 
 export default function MyPageNickName() {
   // 페이지 이동

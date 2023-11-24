@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import Layout from "../components/common/Layout";
-import { LeftArrow } from "../assets/Icon";
+import Layout from "../../components/common/Layout";
+import { LeftArrow } from "../../assets/Icon";
 import { useNavigate } from "react-router-dom";
-import { putPasswordAPI } from "../api";
+import { putPasswordAPI } from "../../api";
 
 export default function MyPagePassWord() {
   // 페이지 이동

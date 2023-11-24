@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { LeftArrow, Plus, ThreecIrcle } from "../assets/Icon";
-import Layout from "../components/common/Layout";
+import { LeftArrow, Plus, ThreecIrcle } from "../../assets/Icon";
+import Layout from "../../components/common/Layout";
 import { useNavigate } from "react-router-dom";
-import { getPostListAPI, updatePost } from "../api";
-import { shareKakao } from "../util/shareKakaoLink";
+import { getPostListAPI, updatePost } from "../../api";
+import { shareKakao } from "../../util/shareKakaoLink";
 // import { deleteScheduleDetail } from "../api";
 
 export default function MyPagePostList() {

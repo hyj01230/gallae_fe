@@ -1,21 +1,21 @@
-import Layout from "../components/common/Layout";
+import Layout from "../../components/common/Layout";
 import {
   GearIcon,
   Heart,
   MyCommentList,
   MyWriting,
   MypageProfileEdit,
-} from "../assets/Icon";
+} from "../../assets/Icon";
 import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
-import { removeCookie } from "../util/cookie";
+import { removeCookie } from "../../util/cookie";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   getMyPageInfoAPI,
   putUpdateProfileAPI,
   putDefaultProfileAPI,
   putAboutMeAPI,
-} from "../api";
+} from "../../api";
 
 export default function MyPage() {
   // 페이지 이동

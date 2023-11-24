@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Layout from "../components/common/Layout";
-import { Logo } from "../assets/Icon";
-import { loginUserAPI } from "../api";
-import { setCookie } from "../util/cookie";
+import Layout from "../../components/common/Layout";
+import { Logo } from "../../assets/Icon";
+import { loginUserAPI } from "../../api";
+import { setCookie } from "../../util/cookie";
 
 export default function LoginPage() {
   // 페이지 이동

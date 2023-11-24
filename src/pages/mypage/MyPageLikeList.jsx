@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { LeftArrow, ThreeDots } from "../assets/Icon";
-import Layout from "../components/common/Layout";
+import { LeftArrow, ThreeDots } from "../../assets/Icon";
+import Layout from "../../components/common/Layout";
 import { useNavigate } from "react-router-dom";
-import { shareKakao } from "../util/shareKakaoLink";
+import { shareKakao } from "../../util/shareKakaoLink";
 import { useInView } from "react-intersection-observer";
-import { getLikeAPI, getLikeListAPI } from "../api";
+import { getLikeAPI, getLikeListAPI } from "../../api";
 
 export default function MyPageLikeList() {
   // 페이지 이동

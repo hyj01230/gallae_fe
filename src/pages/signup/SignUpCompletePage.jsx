@@ -1,4 +1,4 @@
-import Layout from "../components/common/Layout";
+import Layout from "../../components/common/Layout";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export default function SignUpCompletePage() {

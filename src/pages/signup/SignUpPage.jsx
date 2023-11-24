@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
-import { RightArrow, LeftArrow } from "../assets/Icon";
-import Layout from "../components/common/Layout";
+import { RightArrow, LeftArrow } from "../../assets/Icon";
+import Layout from "../../components/common/Layout";
 import { useNavigate } from "react-router-dom";
-import { axiosInstance } from "../api/axiosInstance";
-import { EmailAuthAPI, checkEmailCordAPI, checkNickNameAPI } from "../api";
+import {
+  EmailAuthAPI,
+  checkEmailCordAPI,
+  checkNickNameAPI,
+  signUpAPI,
+} from "../../api";
+import SignUpInput from "../../components/signUp/SignUpInput";
 
 export default function SignUpPage() {
   // 페이지 이동
@@ -278,12 +283,11 @@ export default function SignUpPage() {
     }
 
     try {
-      const response = await axiosInstance.post("/api/users/signup", {
+      const response = await signUpAPI({
         nickName: nickName || null, //닉네임이 비어있으면 null로 보내기
         email,
         password,
         profileImg: null,
-        adminToken: import.meta.env.VITE_ADMIN_TOKEN,
       });
 
       if (response.data.statusCode === 201) {
@@ -303,7 +307,7 @@ export default function SignUpPage() {
             <LeftArrow />
           </div>
           <div className="mx-auto text-xl/normal font-medium text-[#333333]">
-            관리자 회원가입
+            회원가입
           </div>
           {/* 우측도 <LeftArrow />만큼 들어가게! */}
           <div className="w-8"></div>
@@ -321,13 +325,12 @@ export default function SignUpPage() {
               중복체크
             </div>
           </div>
-          <input
+          <SignUpInput
             type="text"
             placeholder="닉네임을 입력해주세요. (2~10자)"
-            maxLength={10}
             value={nickName}
             onChange={onChangeNickNameHandler}
-            className="mt-2 border border-[#D9D9D9] rounded-lg w-full h-[43px] px-[17px] placeholder:text-sm/normal placeholder:text-[#D9D9D9] placeholder:font-light outline-none"
+            maxLength={10}
           />
 
           {/* 닉네임 유효성 메시지 */}
@@ -372,12 +375,11 @@ export default function SignUpPage() {
               인증하기
             </div>
           </div>
-          <input
+          <SignUpInput
             type="text"
             placeholder="이메일을 입력해주세요"
             value={email}
             onChange={onChangeEmailHandler}
-            className="mt-2 border border-[#D9D9D9] rounded-lg w-full h-[43px] px-[17px] placeholder:text-sm/normal placeholder:text-[#D9D9D9] placeholder:font-light outline-none"
           />
 
           {/* 이메일 유효성 메시지 */}
@@ -438,13 +440,12 @@ export default function SignUpPage() {
               (필수)
             </div>
           </div>
-          <input
+          <SignUpInput
             type="password"
             placeholder="문자, 숫자, 특수문자(!@#$%^&*) 포함 8~15자"
-            maxLength={15}
             value={password}
             onChange={onChangePasswordHandler}
-            className="mt-2 border border-[#D9D9D9] rounded-lg w-full h-[43px] px-[17px] placeholder:text-sm/normal placeholder:text-[#D9D9D9] placeholder:font-light outline-none"
+            maxLength={15}
           />
 
           {/* 비밀번호 유효성 메시지 */}
@@ -464,13 +465,12 @@ export default function SignUpPage() {
               (필수)
             </div>
           </div>
-          <input
+          <SignUpInput
             type="password"
             placeholder="비밀번호 재입력"
-            maxLength={15}
             value={checkPassword}
             onChange={onChangeCheckPasswordHandler}
-            className="mt-2 border border-[#D9D9D9] rounded-lg w-full h-[43px] px-[17px] placeholder:text-sm/normal placeholder:text-[#D9D9D9] placeholder:font-light outline-none"
+            maxLength={15}
           />
 
           {/* 비밀번호 확인 유효성 메시지 */}

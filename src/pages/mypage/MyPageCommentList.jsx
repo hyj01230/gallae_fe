@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { LeftArrow, CommentIcon, ReplyIcon } from "../assets/Icon";
-import Layout from "../components/common/Layout";
+import { LeftArrow, CommentIcon, ReplyIcon } from "../../assets/Icon";
+import Layout from "../../components/common/Layout";
 import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
-import { getCommetsListAPI, getRepliesListAPI } from "../api";
+import { getCommetsListAPI, getRepliesListAPI } from "../../api";
 
 export default function MyPageCommentList() {
   // 페이지 이동

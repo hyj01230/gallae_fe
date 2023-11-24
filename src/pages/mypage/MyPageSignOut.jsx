@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { LeftArrow } from "../assets/Icon";
-import Layout from "../components/common/Layout";
+import { LeftArrow } from "../../assets/Icon";
+import Layout from "../../components/common/Layout";
 import { useState } from "react";
-import { removeCookie } from "../util/cookie";
-import { SignOutAPI } from "../api";
+import { removeCookie } from "../../util/cookie";
+import { SignOutAPI } from "../../api";
 
 export default function MyPageSignOut() {
   // 페이지 이동
