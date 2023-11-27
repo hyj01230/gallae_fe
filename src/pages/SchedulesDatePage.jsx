@@ -9,9 +9,7 @@ import { scheduleState } from "../store/atom";
 import { useRecoilState } from "recoil";
 import { createPost } from "../api";
 import { QueryClient, useMutation } from "react-query";
-import Header from "../components/schedules/common/Header";
-import Button from "../components/schedules/common/Button";
-import Title from "../components/schedules/common/Title";
+import { Header, Button, Title } from "../components/schedules/common";
 
 export default function SchedulesDatePage() {
   const queryClient = new QueryClient();
@@ -76,13 +74,6 @@ export default function SchedulesDatePage() {
             <XIcon />
           </Button>
         </Header>
-
-        {/* <div className="flex items-center gap-x-1 p-2 ">
-          <div className="mr-2 cursor-pointer" onClick={() => navigate(-1)}>
-            <LeftArrow />
-          </div>
-          <div className="h-14 flex items-center text-xl">여행 일정</div>
-        </div> */}
 
         <Calendar
           formatDay={(locale, date) => moment(date).format("DD")}

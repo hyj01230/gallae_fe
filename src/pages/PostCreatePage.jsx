@@ -9,9 +9,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { CATEGORIES, TAGS } from "../constants/mySchedule";
 import useImage from "../hooks/useImage";
 import UploadLimitMessage from "../components/postCreate/UploadLimitMessage";
-import Header from "../components/schedules/common/Header";
-import Title from "../components/schedules/common/Title";
-import Button from "../components/schedules/common/Button";
+import { Header, Button, Title } from "../components/schedules/common";
 
 export default function PostCreatePage() {
   const data = useLocation().state;
@@ -120,13 +118,6 @@ export default function PostCreatePage() {
             <Title type={"header"}>글쓰기</Title>
           </div>
         </Header>
-
-        {/* <div className="flex items-center gap-x-1 p-2 border-b border-gray-300">
-          <div className="mr-2" onClick={() => navigate("/myschedules")}>
-            <LeftArrow />
-          </div>
-          <div className="h-14 flex items-center text-xl">글쓰기</div>
-        </div> */}
 
         <div
           className="border-b border-gray-300 pl-10"
@@ -261,5 +252,3 @@ export default function PostCreatePage() {
     </Layout>
   );
 }
-
-// 카테고리 O, 목적 1개 이상, 제목, 내용까지 입력이 되어야 버튼이 활성화되고, 색깔도 바뀜

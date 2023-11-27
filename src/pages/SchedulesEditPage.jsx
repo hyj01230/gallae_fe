@@ -25,9 +25,7 @@ import useImage from "../hooks/useImage";
 import useModal from "../hooks/useModal";
 import SearchModal from "../components/scheduleCreate/SearchModal";
 import DeleteSchedulesModal from "../components/scheduleEdit/DeleteSchedulesModal";
-import Header from "../components/schedules/common/Header";
-import Button from "../components/schedules/common/Button";
-import Title from "../components/schedules/common/Title";
+import { Header, Button, Title } from "../components/schedules/common";
 
 export default function SchedulesEditPage() {
   const queryClient = useQueryClient();
@@ -167,25 +165,6 @@ export default function SchedulesEditPage() {
           <Trash />
         </Button>
       </Header>
-      {/* <div
-        className="flex items-center justify-between mx-4 py-3"
-        onClick={() =>
-          navigate("/myschedules/details", {
-            state: { postId, subTitle, tripDateId },
-          })
-        }
-      >
-        <div className="flex items-center gap-4">
-          <LeftArrow />
-          <div className="flex items-center text-[20px] font-bold">
-            {subTitle}
-          </div>
-        </div>
-
-        <button className="cursor-pointer mr-2" onClick={handleDelectClick}>
-          <Trash />
-        </button>
-      </div> */}
 
       <div className="flex border border-[#EBEBEB] rounded-lg mx-4">
         <div className="flex items-center w-full h-10 p-4">{subTitle}</div>

@@ -5,11 +5,8 @@ import { useQuery } from "react-query";
 import { getMySchedules } from "../api";
 import Layout from "../components/common/Layout";
 import useModal from "../hooks/useModal";
-import Component from "../components/mySchedules";
-import Header from "../components/schedules/common/Header";
-import Button from "../components/schedules/common/Button";
-import Title from "../components/schedules/common/Title";
-// import * as Header from "../components/schedules/common/Header";
+import { Header, Button, Title } from "../components/schedules/common";
+import { EmptyStateDisplay, List, ListModal } from "../components/mySchedules";
 
 export default function MySchedulesPage() {
   const modal = useModal();
@@ -55,22 +52,11 @@ export default function MySchedulesPage() {
           <Plus />
         </Button>
       </Header>
-      {/* <div className="flex items-center justify-between gap-x-1 mx-4">
-        <div className="py-3 flex items-center text-[20px] font-bold select-none">
-          나의 일정
-        </div>
-
-        <div className="flex items-center gap-1">
-          <button onClick={() => navigate("/myschedules/create/info")}>
-            <Plus />
-          </button>
-        </div>
-      </div> */}
 
       {data && data.length >= 1 ? (
         <div className="mb-[100px]">
           {data.map((schedule) => (
-            <Component.List
+            <List
               key={schedule.postId}
               schedule={schedule}
               onNavigateClick={(e) => onNavigateClick(e, schedule)}
@@ -79,11 +65,11 @@ export default function MySchedulesPage() {
           ))}
         </div>
       ) : (
-        <Component.EmptyStateDisplay />
+        <EmptyStateDisplay />
       )}
 
       {modal.isModal && (
-        <Component.ListModal
+        <ListModal
           scheduleData={selectList}
           onCloseModalClick={modal.handleCloseModal}
         />

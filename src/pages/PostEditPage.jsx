@@ -1,28 +1,22 @@
 import List from "../components/mySchedules/List";
 import Layout from "../components/common/Layout";
-// import ContentEditable from "react-contenteditable";
 import SelectScheduleModal from "../components/postCreate/SelectScheduleModal";
 import { DownArrow, LeftArrow } from "../assets/Icon";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getDetailPost, updatePost } from "../api";
-import { useMutation } from "react-query";
 import { CATEGORIES, TAGS } from "../constants/mySchedule";
 import useImage from "../hooks/useImage";
 import UploadLimitMessage from "../components/postCreate/UploadLimitMessage";
-import Header from "../components/schedules/common/Header";
-import Button from "../components/schedules/common/Button";
-import Title from "../components/schedules/common/Title";
+import { Header, Button, Title } from "../components/schedules/common";
 
 export default function PostEditPage() {
-  // const ref = useRef();
   const data = useLocation().state;
   const navigate = useNavigate();
   const [isModal, setIsModal] = useState(false);
   const [isCategoryDrop, setIsCategoryDrop] = useState(false);
   const [isPurposeDrop, setIsPurposeDrop] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState(data.postId);
-  // const [postData, setPostData] = useState({ contents: "", tagsList: [] });
   const [postData, setPostData] = useState(data);
   const [listData, setListData] = useState(data);
   const imageHandler = useImage();
@@ -73,11 +67,6 @@ export default function PostEditPage() {
       await imageHandler.handleSubmitClick(selectedPostId);
     }
 
-    // 기존에 사진이 없는데, 사진을 생성하기
-    // if (imageHandler.previewImage) {
-    //   await imageHandler.handleSubmitClick(selectedPostId);
-    // }
-
     await updatePost(selectedPostId, {
       title: postData.title,
       contents: postData.contents,
@@ -112,12 +101,6 @@ export default function PostEditPage() {
             <Title type={"header"}>수정하기</Title>
           </div>
         </Header>
-        {/* <div className="flex items-center gap-x-1 p-2 border-b border-gray-300">
-          <div className="mr-2" onClick={() => navigate("/myschedules")}>
-            <LeftArrow />
-          </div>
-          <div className="h-14 flex items-center text-xl">수정하기</div>
-        </div> */}
 
         <div
           className="border-b border-gray-300 pl-10"

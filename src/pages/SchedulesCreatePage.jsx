@@ -23,9 +23,7 @@ import useImage from "../hooks/useImage";
 import { useMutation, useQueryClient } from "react-query";
 import useModal from "../hooks/useModal";
 import SearchModal from "../components/scheduleCreate/SearchModal";
-import Header from "../components/schedules/common/Header";
-import Button from "../components/schedules/common/Button";
-import Title from "../components/schedules/common/Title";
+import { Header, Button, Title } from "../components/schedules/common";
 
 export default function SchedulesCreatePage() {
   const modal = useModal();
