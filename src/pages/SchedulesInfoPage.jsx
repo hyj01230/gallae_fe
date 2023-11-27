@@ -1,11 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import { LeftArrow, Search } from "../assets/Icon";
+import { LeftArrow, Search, XIcon } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { scheduleState } from "../store/atom";
 import { CATEGORIES, TAGS } from "../constants/mySchedule";
 import PlaceList from "../components/schedulesInfo/PlaceList";
+import Header from "../components/schedules/common/Header";
+import Button from "../components/schedules/common/Button";
+import Title from "../components/schedules/common/Title";
 
 export default function SchedulesInfoPage() {
   const navigate = useNavigate();
@@ -77,7 +80,19 @@ export default function SchedulesInfoPage() {
 
   return (
     <Layout>
-      <div
+      <Header>
+        <div className="flex gap-[15px]">
+          <Button onClick={() => navigate("/myschedules")}>
+            <LeftArrow />
+          </Button>
+          <Title type={"header"}>여행 만들기</Title>
+        </div>
+        <Button onClick={() => navigate("/myschedules")}>
+          <XIcon />
+        </Button>
+      </Header>
+
+      {/* <div
         className="flex items-center gap-x-1 mx-4"
         onClick={() => navigate("/myschedules")}
       >
@@ -89,11 +104,13 @@ export default function SchedulesInfoPage() {
             여행 만들기
           </div>
         </div>
-      </div>
-      <div className="mx-4 mt-3 mb-7">
-        <div className="font-semibold mb-4 select-none">
+      </div> */}
+
+      <div className="mx-4 mb-7 mt-[14px]">
+        <Title type={"question"}>어디로 여행을 떠나시나요?</Title>
+        {/* <div className="font-semibold mb-4 select-none">
           어디로 여행을 떠나시나요?
-        </div>
+        </div> */}
         <div className="flex border border-[#D9D9D9] rounded-lg divide-x">
           <div className="text-sm px-12 py-3">국내</div>
           <div className="flex flex-1 gap-2 items-center text-sm pl-[22px] cursor-pointer">
@@ -112,7 +129,8 @@ export default function SchedulesInfoPage() {
       </div>
 
       <div className="mb-7 mx-4 mt-3">
-        <div className="font-semibold mb-4 select-none">누구와 떠나시나요?</div>
+        <Title type={"question"}>누구와 떠나시나요?</Title>
+        {/* <div className="font-semibold mb-4 select-none">누구와 떠나시나요?</div> */}
         <div className="grid grid-cols-3 divide-x divide-y border border-[#d1d5db] rounded-xl">
           {CATEGORIES.map((category, index) => (
             <div
@@ -132,9 +150,12 @@ export default function SchedulesInfoPage() {
         </div>
       </div>
       <div className="mb-7 mx-4">
-        <div className="font-semibold mb-4 select-none">
+        <Title type={"question"}>
           여행의 목적은 어떻게 되시나요?(최대 3개 선택)
-        </div>
+        </Title>
+        {/* <div className="font-semibold mb-4 select-none">
+          여행의 목적은 어떻게 되시나요?(최대 3개 선택)
+        </div> */}
         <div className="grid grid-cols-3 divide-x divide-y border border-[#d1d5db] rounded-xl">
           {TAGS.map((tag, index) => (
             <div
@@ -153,7 +174,8 @@ export default function SchedulesInfoPage() {
       </div>
 
       <div className="mx-4">
-        <div className="font-semibold mb-4 select-none">여행의 이름은?</div>
+        <Title type={"question"}>여행의 이름은?</Title>
+        {/* <div className="font-semibold mb-4 select-none">여행의 이름은?</div> */}
         <div>
           <input
             type="text"

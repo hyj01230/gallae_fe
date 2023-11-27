@@ -9,6 +9,7 @@ import {
   Memo,
   Plus,
   Url,
+  XIcon,
 } from "../assets/Icon";
 import Layout from "../components/common/Layout";
 import { useEffect, useRef, useState } from "react";
@@ -22,6 +23,9 @@ import useImage from "../hooks/useImage";
 import { useMutation, useQueryClient } from "react-query";
 import useModal from "../hooks/useModal";
 import SearchModal from "../components/scheduleCreate/SearchModal";
+import Header from "../components/schedules/common/Header";
+import Button from "../components/schedules/common/Button";
+import Title from "../components/schedules/common/Title";
 
 export default function SchedulesCreatePage() {
   const modal = useModal();
@@ -120,7 +124,25 @@ export default function SchedulesCreatePage() {
 
   return (
     <Layout>
-      <div
+      <Header>
+        <div className="flex gap-[15px]">
+          <Button
+            onClick={() => {
+              navigate("/myschedules/details", {
+                state: { postId, subTitle, tripDateId },
+              });
+            }}
+          >
+            <LeftArrow />
+          </Button>
+          <Title type={"header"}>{subTitle}</Title>
+        </div>
+        <Button onClick={() => navigate(-1)}>
+          <XIcon />
+        </Button>
+      </Header>
+
+      {/* <div
         className="flex items-center gap-x-1 p-2"
         onClick={() => {
           navigate("/myschedules/details", {
@@ -134,7 +156,7 @@ export default function SchedulesCreatePage() {
         <div className="h-14 flex items-center text-xl font-semibold">
           나의 일정
         </div>
-      </div>
+      </div> */}
 
       <div className="flex border border-[#EBEBEB] rounded-lg mx-4">
         <div className="flex items-center w-full h-10 p-4">{subTitle}</div>

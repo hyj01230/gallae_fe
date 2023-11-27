@@ -2,13 +2,16 @@ import "../calendar.css";
 import moment from "moment";
 import Calendar from "react-calendar";
 import Layout from "../components/common/Layout";
-import { LeftArrow } from "../assets/Icon";
+import { LeftArrow, XIcon } from "../assets/Icon";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { scheduleState } from "../store/atom";
 import { useRecoilState } from "recoil";
 import { createPost } from "../api";
 import { QueryClient, useMutation } from "react-query";
+import Header from "../components/schedules/common/Header";
+import Button from "../components/schedules/common/Button";
+import Title from "../components/schedules/common/Title";
 
 export default function SchedulesDatePage() {
   const queryClient = new QueryClient();
@@ -62,12 +65,24 @@ export default function SchedulesDatePage() {
   return (
     <Layout>
       <div style={{ height: "calc(100vh - 56px)" }} className="flex flex-col">
-        <div className="flex items-center gap-x-1 p-2 ">
+        <Header>
+          <div className="flex gap-[15px]">
+            <Button onClick={() => navigate(-1)}>
+              <LeftArrow />
+            </Button>
+            <Title type={"header"}>여행 일정</Title>
+          </div>
+          <Button onClick={() => navigate("/myschedules")}>
+            <XIcon />
+          </Button>
+        </Header>
+
+        {/* <div className="flex items-center gap-x-1 p-2 ">
           <div className="mr-2 cursor-pointer" onClick={() => navigate(-1)}>
             <LeftArrow />
           </div>
           <div className="h-14 flex items-center text-xl">여행 일정</div>
-        </div>
+        </div> */}
 
         <Calendar
           formatDay={(locale, date) => moment(date).format("DD")}
