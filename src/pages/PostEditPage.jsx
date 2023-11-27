@@ -10,6 +10,9 @@ import { useMutation } from "react-query";
 import { CATEGORIES, TAGS } from "../constants/mySchedule";
 import useImage from "../hooks/useImage";
 import UploadLimitMessage from "../components/postCreate/UploadLimitMessage";
+import Header from "../components/schedules/common/Header";
+import Button from "../components/schedules/common/Button";
+import Title from "../components/schedules/common/Title";
 
 export default function PostEditPage() {
   // const ref = useRef();
@@ -101,12 +104,20 @@ export default function PostEditPage() {
   return (
     <Layout>
       <div className="mb-[70px]">
-        <div className="flex items-center gap-x-1 p-2 border-b border-gray-300">
+        <Header>
+          <div className="flex gap-[15px]">
+            <Button onClick={() => navigate("/mypage/post")}>
+              <LeftArrow />
+            </Button>
+            <Title type={"header"}>수정하기</Title>
+          </div>
+        </Header>
+        {/* <div className="flex items-center gap-x-1 p-2 border-b border-gray-300">
           <div className="mr-2" onClick={() => navigate("/myschedules")}>
             <LeftArrow />
           </div>
           <div className="h-14 flex items-center text-xl">수정하기</div>
-        </div>
+        </div> */}
 
         <div
           className="border-b border-gray-300 pl-10"

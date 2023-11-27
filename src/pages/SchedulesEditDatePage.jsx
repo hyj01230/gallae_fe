@@ -51,13 +51,23 @@ export default function SchedulesEditDatePage() {
 
   return (
     <Layout>
-      <div className="flex items-center gap-x-1 p-2 border-b border-gray-300">
+      <Header>
+        <div className="flex gap-[15px]">
+          <Button onClick={() => navigate("/myschedules")}>
+            <LeftArrow />
+          </Button>
+          <Title type={"header"}>여행 일정</Title>
+        </div>
+        <Button onClick={() => navigate("/myschedules")}>
+          <XIcon />
+        </Button>
+      </Header>
+      {/* <div className="flex items-center gap-x-1 p-2 border-b border-gray-300">
         <div className="mr-2" onClick={() => navigate("/myschedules")}>
           <LeftArrow />
         </div>
         <div className="h-14 flex items-center text-xl">여행 일정</div>
-      </div>
-
+      </div> */}
       <Calendar
         formatDay={(locale, date) => moment(date).format("DD")}
         onChange={changeDate}
@@ -65,7 +75,6 @@ export default function SchedulesEditDatePage() {
       />
       <div>시작일자 : {tripDateRange[0].chosenDate}</div>
       <div>끝일자 : {tripDateRange[tripDateRange.length - 1].chosenDate}</div>
-
       <div className="max-w-3xl	flex fixed bottom-0">
         <button
           className="w-screen h-14 bg-gray-300 text-white"

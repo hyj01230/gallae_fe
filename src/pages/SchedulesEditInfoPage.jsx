@@ -1,10 +1,13 @@
 import Layout from "../components/common/Layout";
 import { useState } from "react";
-import { LeftArrow } from "../assets/Icon";
+import { LeftArrow, XIcon } from "../assets/Icon";
 import { updatePost } from "../api";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "react-query";
 import { CATEGORIES, TAGS } from "../constants/mySchedule";
+import Header from "../components/schedules/common/Header";
+import Button from "../components/schedules/common/Button";
+import Title from "../components/schedules/common/Title";
 
 export default function SchedulesEditInfoPage() {
   const queryClient = useQueryClient();
@@ -65,7 +68,18 @@ export default function SchedulesEditInfoPage() {
 
   return (
     <Layout>
-      <div
+      <Header>
+        <div className="flex gap-[15px]">
+          <Button onClick={() => navigate("/myschedules")}>
+            <LeftArrow />
+          </Button>
+          <Title type={"header"}>여행 만들기</Title>
+        </div>
+        <Button onClick={() => navigate("/myschedules")}>
+          <XIcon />
+        </Button>
+      </Header>
+      {/* <div
         className="flex items-center gap-x-1 mx-4"
         onClick={() => navigate("/myschedules")}
       >
@@ -75,7 +89,7 @@ export default function SchedulesEditInfoPage() {
         <div className="py-3 flex items-center text-xl font-bold">
           여행 만들기
         </div>
-      </div>
+      </div> */}
 
       <div className="mb-7 mx-4 mt-3">
         <div className="font-semibold mb-4 select-none">누구와 떠나시나요?</div>

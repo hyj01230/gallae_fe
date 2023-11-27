@@ -6,6 +6,10 @@ import { getMySchedules } from "../api";
 import Layout from "../components/common/Layout";
 import useModal from "../hooks/useModal";
 import Component from "../components/mySchedules";
+import Header from "../components/schedules/common/Header";
+import Button from "../components/schedules/common/Button";
+import Title from "../components/schedules/common/Title";
+// import * as Header from "../components/schedules/common/Header";
 
 export default function MySchedulesPage() {
   const modal = useModal();
@@ -42,7 +46,16 @@ export default function MySchedulesPage() {
 
   return (
     <Layout isBottomNav={true}>
-      <div className="flex items-center justify-between gap-x-1 mx-4">
+      <Header>
+        <Title type={"header"}>나의 일정</Title>
+        <Button
+          type={"navigate"}
+          onClick={() => navigate("/myschedules/create/info")}
+        >
+          <Plus />
+        </Button>
+      </Header>
+      {/* <div className="flex items-center justify-between gap-x-1 mx-4">
         <div className="py-3 flex items-center text-[20px] font-bold select-none">
           나의 일정
         </div>
@@ -51,11 +64,8 @@ export default function MySchedulesPage() {
           <button onClick={() => navigate("/myschedules/create/info")}>
             <Plus />
           </button>
-          {/* <button>
-            <Hamburger />
-          </button> */}
         </div>
-      </div>
+      </div> */}
 
       {data && data.length >= 1 ? (
         <div className="mb-[100px]">

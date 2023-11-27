@@ -1,7 +1,10 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import Layout from "../components/common/Layout";
-import { XIcon } from "../assets/Icon";
+import { LeftArrow, XIcon } from "../assets/Icon";
 import List from "../components/mySchedulesAccount/List";
+import Header from "../components/schedules/common/Header";
+import Button from "../components/schedules/common/Button";
+import Title from "../components/schedules/common/Title";
 
 export default function MySchedulesAccountPage() {
   const navigate = useNavigate();
@@ -16,7 +19,20 @@ export default function MySchedulesAccountPage() {
 
   return (
     <Layout>
-      <div
+      <Header>
+        <div className="flex gap-[15px]">
+          <Button
+            onClick={() =>
+              navigate(-1, { state: { postId, subTitle, tripDateId } })
+            }
+          >
+            <LeftArrow />
+          </Button>
+          <Title type={"header"}>가계부</Title>
+        </div>
+      </Header>
+
+      {/* <div
         className="flex items-center gap-x-1 p-2"
         onClick={() =>
           navigate("/myschedules/details", {
@@ -28,7 +44,7 @@ export default function MySchedulesAccountPage() {
           <XIcon />
         </div>
         <div className="py-3 flex items-center text-xl font-bold">가계부</div>
-      </div>
+      </div> */}
 
       <div className="pl-[14px] py-1 mx-4 mb-[23px] border border-[#F2F2F2] rounded-md	">
         {subTitle}
