@@ -1,15 +1,15 @@
-import "../calendar.css";
+import "../../calendar.css";
 import moment from "moment";
 import Calendar from "react-calendar";
-import Layout from "../components/common/Layout";
-import { LeftArrow, XIcon } from "../assets/Icon";
+import Layout from "../../components/common/Layout";
+import { LeftArrow, XIcon } from "../../assets/Icon";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { scheduleState } from "../store/atom";
+import { scheduleState } from "../../store/atom";
 import { useRecoilState } from "recoil";
-import { createPost } from "../api";
+import { createPost } from "../../api";
 import { QueryClient, useMutation } from "react-query";
-import { Header, Button, Title } from "../components/schedules/common";
+import { Header, Button, Title } from "../../components/schedules/common";
 
 export default function SchedulesDatePage() {
   const queryClient = new QueryClient();

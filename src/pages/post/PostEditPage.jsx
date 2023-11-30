@@ -1,14 +1,14 @@
-import List from "../components/mySchedules/List";
-import Layout from "../components/common/Layout";
-import SelectScheduleModal from "../components/postCreate/SelectScheduleModal";
-import { DownArrow, LeftArrow } from "../assets/Icon";
+import List from "../../components/mySchedules/List";
+import Layout from "../../components/common/Layout";
+import SelectScheduleModal from "../../components/postCreate/SelectScheduleModal";
+import { DownArrow, LeftArrow } from "../../assets/Icon";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getDetailPost, updatePost } from "../api";
-import { CATEGORIES, TAGS } from "../constants/mySchedule";
-import useImage from "../hooks/useImage";
-import UploadLimitMessage from "../components/postCreate/UploadLimitMessage";
-import { Header, Button, Title } from "../components/schedules/common";
+import { getDetailPost, updatePost } from "../../api";
+import { CATEGORIES, TAGS } from "../../constants/mySchedule";
+import useImage from "../../hooks/useImage";
+import UploadLimitMessage from "../../components/postCreate/UploadLimitMessage";
+import { Header, Button, Title } from "../../components/schedules/common";
 
 export default function PostEditPage() {
   const data = useLocation().state;

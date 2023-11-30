@@ -1,11 +1,11 @@
-import Layout from "../components/common/Layout";
+import Layout from "../../components/common/Layout";
 import { useState } from "react";
-import { LeftArrow, XIcon } from "../assets/Icon";
-import { updatePost } from "../api";
+import { LeftArrow, XIcon } from "../../assets/Icon";
+import { updatePost } from "../../api";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "react-query";
-import { CATEGORIES, TAGS } from "../constants/mySchedule";
-import { Header, Button, Title } from "../components/schedules/common";
+import { CATEGORIES, TAGS } from "../../constants/mySchedule";
+import { Header, Button, Title } from "../../components/schedules/common";
 
 export default function SchedulesEditInfoPage() {
   const queryClient = useQueryClient();

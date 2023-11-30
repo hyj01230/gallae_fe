@@ -10,20 +10,20 @@ import {
   Plus,
   Url,
   XIcon,
-} from "../assets/Icon";
-import Layout from "../components/common/Layout";
+} from "../../assets/Icon";
+import Layout from "../../components/common/Layout";
 import { useEffect, useRef, useState } from "react";
-import { createScheduleDetail, getScheduleDetail } from "../api";
-import { formatDateString } from "../util/formatDate";
+import { createScheduleDetail, getScheduleDetail } from "../../api";
+import { formatDateString } from "../../util/formatDate";
 import {
   DETAIL_SCHEDULES_CATEGORIES,
   SPENT_TIME_LIST,
-} from "../constants/mySchedule";
-import useImage from "../hooks/useImage";
+} from "../../constants/mySchedule";
+import useImage from "../../hooks/useImage";
 import { useMutation, useQueryClient } from "react-query";
-import useModal from "../hooks/useModal";
-import SearchModal from "../components/scheduleCreate/SearchModal";
-import { Header, Button, Title } from "../components/schedules/common";
+import useModal from "../../hooks/useModal";
+import SearchModal from "../../components/scheduleCreate/SearchModal";
+import { Header, Button, Title } from "../../components/schedules/common";
 
 export default function SchedulesCreatePage() {
   const modal = useModal();

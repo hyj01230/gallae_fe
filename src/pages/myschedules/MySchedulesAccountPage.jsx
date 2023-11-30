@@ -1,8 +1,8 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import Layout from "../components/common/Layout";
-import { LeftArrow, XIcon } from "../assets/Icon";
-import List from "../components/mySchedulesAccount/List";
-import { Header, Button } from "../components/schedules/common";
+import Layout from "../../components/common/Layout";
+import { LeftArrow, XIcon } from "../../assets/Icon";
+import List from "../../components/mySchedulesAccount/List";
+import { Header, Title, Button } from "../../components/schedules/common";
 
 export default function MySchedulesAccountPage() {
   const navigate = useNavigate();

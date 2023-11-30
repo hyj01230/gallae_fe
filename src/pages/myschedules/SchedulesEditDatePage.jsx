@@ -1,12 +1,12 @@
-import "../calendar.css";
+import "../../calendar.css";
 import moment from "moment";
 import Calendar from "react-calendar";
-import Layout from "../components/common/Layout";
-import { LeftArrow, XIcon } from "../assets/Icon";
+import Layout from "../../components/common/Layout";
+import { LeftArrow, XIcon } from "../../assets/Icon";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { updateTripDate } from "../api";
-import { Header, Button } from "../components/schedules/common";
+import { updateTripDate } from "../../api";
+import { Header, Button } from "../../components/schedules/common";
 
 export default function SchedulesEditDatePage() {
   const navigate = useNavigate();

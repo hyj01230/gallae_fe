@@ -9,23 +9,23 @@ import {
   Plus,
   Trash,
   Url,
-} from "../assets/Icon";
-import Layout from "../components/common/Layout";
+} from "../../assets/Icon";
+import Layout from "../../components/common/Layout";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { updateScheduleDetail } from "../api";
-import { timeStringToMinutes } from "../util/formatDate";
+import { updateScheduleDetail } from "../../api";
+import { timeStringToMinutes } from "../../util/formatDate";
 import { useQueryClient } from "react-query";
-import { formatDateString } from "../util/formatDate";
+import { formatDateString } from "../../util/formatDate";
 import {
   DETAIL_SCHEDULES_CATEGORIES,
   SPENT_TIME_LIST,
-} from "../constants/mySchedule";
-import useImage from "../hooks/useImage";
-import useModal from "../hooks/useModal";
-import SearchModal from "../components/scheduleCreate/SearchModal";
-import DeleteSchedulesModal from "../components/scheduleEdit/DeleteSchedulesModal";
-import { Header, Button, Title } from "../components/schedules/common";
+} from "../../constants/mySchedule";
+import useImage from "../../hooks/useImage";
+import useModal from "../../hooks/useModal";
+import SearchModal from "../../components/scheduleCreate/SearchModal";
+import DeleteSchedulesModal from "../../components/scheduleEdit/DeleteSchedulesModal";
+import { Header, Button, Title } from "../../components/schedules/common";
 
 export default function SchedulesEditPage() {
   const queryClient = useQueryClient();

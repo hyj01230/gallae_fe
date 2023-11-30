@@ -5,17 +5,17 @@ import {
   PlusWithCircle,
   ZoomIn,
   ZoomOut,
-} from "../assets/Icon";
-import Layout from "../components/common/Layout";
-import List from "../components/schedulesDetail/List";
+} from "../../assets/Icon";
+import Layout from "../../components/common/Layout";
+import List from "../../components/schedulesDetail/List";
 import { useQuery } from "react-query";
-import { getTripDate } from "../api";
+import { getTripDate } from "../../api";
 import { useState } from "react";
-import DateDropbox from "../components/schedulesDetail/DateDropbox";
-import DateSelectModal from "../components/schedulesDetail/DateSelectModal";
-import useModal from "../hooks/useModal";
-import ScheduleMap from "../components/schedulesDetail/ScheduleMap";
-import { Header, Button, Title } from "../components/schedules/common";
+import DateDropbox from "../../components/schedulesDetail/DateDropbox";
+import DateSelectModal from "../../components/schedulesDetail/DateSelectModal";
+import useModal from "../../hooks/useModal";
+import ScheduleMap from "../../components/schedulesDetail/ScheduleMap";
+import { Header, Button, Title } from "../../components/schedules/common";
 
 export default function SchedulesDetailPage() {
   const navigate = useNavigate();

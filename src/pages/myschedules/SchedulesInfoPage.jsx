@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { LeftArrow, Search, XIcon } from "../assets/Icon";
-import Layout from "../components/common/Layout";
+import { LeftArrow, Search, XIcon } from "../../assets/Icon";
+import Layout from "../../components/common/Layout";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { scheduleState } from "../store/atom";
-import { CATEGORIES, TAGS } from "../constants/mySchedule";
-import PlaceList from "../components/schedulesInfo/PlaceList";
-import { Header, Button, Title } from "../components/schedules/common";
+import { scheduleState } from "../../store/atom";
+import { CATEGORIES, TAGS } from "../../constants/mySchedule";
+import PlaceList from "../../components/schedulesInfo/PlaceList";
+import { Header, Button, Title } from "../../components/schedules/common";
 
 export default function SchedulesInfoPage() {
   const navigate = useNavigate();

@@ -1,12 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import { Hamburger, Plus } from "../assets/Icon";
+import { Hamburger, Plus } from "../../assets/Icon";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { getMySchedules } from "../api";
-import Layout from "../components/common/Layout";
-import useModal from "../hooks/useModal";
-import { Header, Button, Title } from "../components/schedules/common";
-import { EmptyStateDisplay, List, ListModal } from "../components/mySchedules";
+import { getMySchedules } from "../../api";
+import Layout from "../../components/common/Layout";
+import useModal from "../../hooks/useModal";
+import { Header, Button, Title } from "../../components/schedules/common";
+import {
+  EmptyStateDisplay,
+  List,
+  ListModal,
+} from "../../components/mySchedules";
 
 export default function MySchedulesPage() {
   const modal = useModal();
