@@ -1,50 +1,38 @@
-import List from "../components/mySchedules/List";
-import Layout from "../components/common/Layout";
-import SelectScheduleModal from "../components/postCreate/SelectScheduleModal";
-import { DownArrow, LeftArrow } from "../assets/Icon";
+import List from "../../components/mySchedules/List";
+import Layout from "../../components/common/Layout";
+import SelectScheduleModal from "../../components/postCreate/SelectScheduleModal";
+import { DownArrow, LeftArrow } from "../../assets/Icon";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getDetailPost, updatePost } from "../api";
-import { useMutation, useQueryClient } from "react-query";
-import { CATEGORIES, TAGS } from "../constants/mySchedule";
-import useImage from "../hooks/useImage";
-import UploadLimitMessage from "../components/postCreate/UploadLimitMessage";
-import Header from "../components/schedules/common/Header";
-import Title from "../components/schedules/common/Title";
-import Button from "../components/schedules/common/Button";
+import { getDetailPost, updatePost } from "../../api";
+import { CATEGORIES, TAGS } from "../../constants/mySchedule";
+import useImage from "../../hooks/useImage";
+import UploadLimitMessage from "../../components/postCreate/UploadLimitMessage";
+import { Header, Button, Title } from "../../components/schedules/common";
 
-export default function PostCreatePage() {
+export default function PostEditPage() {
   const data = useLocation().state;
   const navigate = useNavigate();
   const [isModal, setIsModal] = useState(false);
-  const [isDropDown, setIsDropDown] = useState({
-    category: false,
-    tagsList: false,
-  });
+  const [isCategoryDrop, setIsCategoryDrop] = useState(false);
   const [isPurposeDrop, setIsPurposeDrop] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState(data.postId);
-  const [postData, setPostData] = useState({
-    title: "",
-    contents: "",
-    tagsList: [],
-  });
+  const [postData, setPostData] = useState(data);
   const [listData, setListData] = useState(data);
   const imageHandler = useImage();
-  const queryClient = useQueryClient();
 
   useEffect(() => {
+    if (data.postId === selectedPostId) return;
     const getData = async () => {
-      const response = await getDetailPost(selectedPostId);
+      const response = await getDetailPost(data.postId);
       setPostData({ ...response, contents: "" });
     };
-
     getData();
   }, [selectedPostId]);
 
   // 카테고리 설정
   const handleCategoryClick = async (e) => {
     setPostData((data) => ({ ...data, postCategory: e.target.innerText }));
-    setIsDropDown({ ...isDropDown, category: false });
   };
 
   // 태그 설정
@@ -64,10 +52,29 @@ export default function PostCreatePage() {
   };
 
   // 일정 설정 (일정 선택 후 useEffect 동작)
-  const onScheduleClick = async (data) => {
+  const handleScheduleClick = async (data) => {
     setSelectedPostId(data.postId);
     setListData(data);
     setIsModal(false);
+  };
+
+  const handleSubmitClick = async () => {
+    // 기존에 있는 사진을 수정하기
+    if (imageHandler.previewImage && data.postsPicturesList[0]) {
+      const { postsPicturesId } = data.postsPicturesList[0];
+      await imageHandler.handleUpdateImage(postsPicturesId);
+    } else {
+      await imageHandler.handleSubmitClick(selectedPostId);
+    }
+
+    await updatePost(selectedPostId, {
+      title: postData.title,
+      contents: postData.contents,
+      subTitle: data.subTitle,
+      postCategory: postData.postCategory,
+      tagsList: postData.tagsList,
+    }),
+      navigate("/");
   };
 
   const formValidation = () => {
@@ -83,54 +90,21 @@ export default function PostCreatePage() {
     return true;
   };
 
-  const handlePostCreateClick = async () => {
-    if (formValidation()) {
-      if (imageHandler.previewImage) {
-        imageHandler.handleSubmitClick(selectedPostId);
-      }
-      createPostMutation.mutate();
-    }
-  };
-
-  const createPostMutation = useMutation(
-    () =>
-      updatePost(selectedPostId, {
-        title: postData.title,
-        contents: postData.contents,
-        subTitle: data.subTitle,
-        postCategory: postData.postCategory,
-        tagsList: postData.tagsList,
-      }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("schedule");
-        navigate("/");
-      },
-    }
-  );
-
   return (
     <Layout>
       <div className="mb-[70px]">
         <Header>
           <div className="flex gap-[15px]">
-            <Button onClick={() => navigate("/myschedules")}>
+            <Button onClick={() => navigate("/mypage/post")}>
               <LeftArrow />
             </Button>
-            <Title type={"header"}>글쓰기</Title>
+            <Title type={"header"}>수정하기</Title>
           </div>
         </Header>
 
-        {/* <div className="flex items-center gap-x-1 p-2 border-b border-gray-300">
-          <div className="mr-2" onClick={() => navigate("/myschedules")}>
-            <LeftArrow />
-          </div>
-          <div className="h-14 flex items-center text-xl">글쓰기</div>
-        </div> */}
-
         <div
           className="border-b border-gray-300 pl-10"
-          onClick={() => setIsDropDown({ ...isDropDown, category: true })}
+          onClick={() => setIsCategoryDrop(!isCategoryDrop)}
         >
           <div className="h-12 flex items-center gap-x-4 text-base text-[#999] cursor-pointer select-none">
             카테고리
@@ -138,7 +112,7 @@ export default function PostCreatePage() {
             <span className="text-[black]">{postData.postCategory}</span>
           </div>
         </div>
-        {isDropDown.category && (
+        {isCategoryDrop && (
           <div className="pl-10 cursor-pointer">
             {CATEGORIES.map((category, index) => (
               <div key={index} className="py-5" onClick={handleCategoryClick}>
@@ -214,9 +188,16 @@ export default function PostCreatePage() {
           </div>
         </div>
 
-        {imageHandler.previewImage ? (
+        {imageHandler.previewImage ||
+        postData.postsPicturesList[0]?.postsPicturesURL ? (
           <div className="mx-4 mt-6">
-            <img src={imageHandler.previewImage} className="w-36 h-36" />
+            <img
+              src={
+                imageHandler.previewImage ||
+                postData.postsPicturesList[0].postsPicturesURL
+              }
+              className="w-36 h-36"
+            />
           </div>
         ) : (
           <UploadLimitMessage />
@@ -224,9 +205,9 @@ export default function PostCreatePage() {
 
         <div className="mx-4 my-5">
           <textarea
-            className="w-full h-[40px] p-1 outline-none resize-none"
+            placeholder="내용을 입력해주세요"
+            className="w-full h-[40px] outline-none"
             rows={10}
-            placeholder="내용을 입력하세요"
             value={postData.contents}
             onChange={(e) =>
               setPostData((prev) => ({ ...prev, contents: e.target.value }))
@@ -240,26 +221,26 @@ export default function PostCreatePage() {
 
         {listData && <List schedule={listData} />}
       </div>
+
       <div
         className="max-w-3xl flex fixed bottom-0 z-10"
-        onClick={handlePostCreateClick}
+        onClick={handleSubmitClick}
       >
         <button
           className={`w-screen h-14  text-white ${
             formValidation() ? "bg-[#F90]" : "bg-gray-300"
           }`}
         >
-          게시하기
+          수정하기
         </button>
       </div>
+
       {isModal && (
         <SelectScheduleModal
-          onScheduleClick={onScheduleClick}
-          onCloseModalClick={() => setIsModal(false)}
+          handleClick={handleScheduleClick}
+          setIsModal={setIsModal}
         />
       )}
     </Layout>
   );
 }
-
-// 카테고리 O, 목적 1개 이상, 제목, 내용까지 입력이 되어야 버튼이 활성화되고, 색깔도 바뀜

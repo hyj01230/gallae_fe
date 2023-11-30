@@ -1,13 +1,11 @@
-import Layout from "../components/common/Layout";
+import Layout from "../../components/common/Layout";
 import { useState } from "react";
-import { LeftArrow, XIcon } from "../assets/Icon";
-import { updatePost } from "../api";
+import { LeftArrow, XIcon } from "../../assets/Icon";
+import { updatePost } from "../../api";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "react-query";
-import { CATEGORIES, TAGS } from "../constants/mySchedule";
-import Header from "../components/schedules/common/Header";
-import Button from "../components/schedules/common/Button";
-import Title from "../components/schedules/common/Title";
+import { CATEGORIES, TAGS } from "../../constants/mySchedule";
+import { Header, Button, Title } from "../../components/schedules/common";
 
 export default function SchedulesEditInfoPage() {
   const queryClient = useQueryClient();
@@ -79,17 +77,6 @@ export default function SchedulesEditInfoPage() {
           <XIcon />
         </Button>
       </Header>
-      {/* <div
-        className="flex items-center gap-x-1 mx-4"
-        onClick={() => navigate("/myschedules")}
-      >
-        <div className="mr-2">
-          <LeftArrow />
-        </div>
-        <div className="py-3 flex items-center text-xl font-bold">
-          여행 만들기
-        </div>
-      </div> */}
 
       <div className="mb-7 mx-4 mt-3">
         <div className="font-semibold mb-4 select-none">누구와 떠나시나요?</div>

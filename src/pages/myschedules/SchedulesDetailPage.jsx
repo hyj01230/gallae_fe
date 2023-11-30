@@ -2,23 +2,20 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
   Money,
   LeftArrow,
-  Share,
   PlusWithCircle,
   ZoomIn,
   ZoomOut,
-} from "../assets/Icon";
-import Layout from "../components/common/Layout";
-import List from "../components/schedulesDetail/List";
+} from "../../assets/Icon";
+import Layout from "../../components/common/Layout";
+import List from "../../components/schedulesDetail/List";
 import { useQuery } from "react-query";
-import { getTripDate } from "../api";
+import { getTripDate } from "../../api";
 import { useState } from "react";
-import DateDropbox from "../components/schedulesDetail/DateDropbox";
-import DateSelectModal from "../components/schedulesDetail/DateSelectModal";
-import useModal from "../hooks/useModal";
-import ScheduleMap from "../components/schedulesDetail/ScheduleMap";
-import Header from "../components/schedules/common/Header";
-import Title from "../components/schedules/common/Title";
-import Button from "../components/schedules/common/Button";
+import DateDropbox from "../../components/schedulesDetail/DateDropbox";
+import DateSelectModal from "../../components/schedulesDetail/DateSelectModal";
+import useModal from "../../hooks/useModal";
+import ScheduleMap from "../../components/schedulesDetail/ScheduleMap";
+import { Header, Button, Title } from "../../components/schedules/common";
 
 export default function SchedulesDetailPage() {
   const navigate = useNavigate();
@@ -92,30 +89,6 @@ export default function SchedulesDetailPage() {
             <Money />
           </Button>
         </Header>
-        {/* 
-        <div className="flex items-center justify-between gap-x-1 p-2   ">
-          <div
-            className="flex items-center cursor-pointer"
-            onClick={() => navigate("/myschedules")}
-          >
-            <div className="mr-2">
-              <LeftArrow />
-            </div>
-            <div className="py-3 flex items-center text-xl font-bold">
-              나의 일정
-            </div>
-          </div>
-
-          <div className="flex items-center gap-1 mr-3">
-            <button onClick={handleAccountClick}>
-              <Money />
-            </button>
-          </div>
-        </div> */}
-
-        {/* <div className="flex justify-between items-center h-10 mt-1 mx-4 p-4 border border-[#EBEBEB] rounded-lg">
-          <div>{subTitle}</div>
-        </div> */}
 
         <div className="relative mt-3">
           <ScheduleMap

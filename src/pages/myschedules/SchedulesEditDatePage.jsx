@@ -1,11 +1,12 @@
-import "../calendar.css";
+import "../../calendar.css";
 import moment from "moment";
 import Calendar from "react-calendar";
-import Layout from "../components/common/Layout";
-import { LeftArrow } from "../assets/Icon";
+import Layout from "../../components/common/Layout";
+import { LeftArrow, XIcon } from "../../assets/Icon";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { updateTripDate } from "../api";
+import { updateTripDate } from "../../api";
+import { Header, Button } from "../../components/schedules/common";
 
 export default function SchedulesEditDatePage() {
   const navigate = useNavigate();
@@ -62,12 +63,7 @@ export default function SchedulesEditDatePage() {
           <XIcon />
         </Button>
       </Header>
-      {/* <div className="flex items-center gap-x-1 p-2 border-b border-gray-300">
-        <div className="mr-2" onClick={() => navigate("/myschedules")}>
-          <LeftArrow />
-        </div>
-        <div className="h-14 flex items-center text-xl">여행 일정</div>
-      </div> */}
+
       <Calendar
         formatDay={(locale, date) => moment(date).format("DD")}
         onChange={changeDate}
