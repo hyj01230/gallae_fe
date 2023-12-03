@@ -133,119 +133,121 @@ export default function MyPagePostList() {
         </div>
       </div>
 
-      {postList.length > 0 && postList.find((item) => item.contents) ? (
-        postList
-          .filter((item) => item.contents)
-          .map((item) => (
-            <div key={item.postId} className="mt-[73px] mb-44">
-              <div
-                onClick={() => onCilckMyPostHandler(item.postId)}
-                className="mx-4 mb-4 cursor-pointer"
-              >
-                <div className="flex flex-col w-full border rounded-xl border-[#D9D9D9">
-                  <div>
-                    {item.postsPicturesList.length > 0 ? (
-                      <img
-                        className="w-full h-[167px] rounded-t-xl"
-                        src={item.postsPicturesList[0].postsPicturesURL}
-                      />
-                    ) : (
-                      <div className="w-full h-[167px] bg-[#F2F2F2] text-4 text-black font-semibold flex justify-center items-center ">
-                        대표 이미지
-                      </div>
-                    )}
-                  </div>
-                  <div className="ml-[14px] mr-1 mt-3 flex flex-row items-center justify-between">
-                    <div className="text-lg/normal font-semibold text-[#333333]">
-                      {item.title}
-                    </div>
-                    <div
-                      onClick={(e) => {
-                        onClickThreeCIrcleHandler(e, item.postId);
-                      }}
-                    >
-                      <ThreecIrcle />
-                      {/* 케밥 모달 */}
-                      {modalPostId === item.postId && openModal && (
-                        <div className="absolute right-6">
-                          <div className="w-[136px] h-[121px] bg-white shadow-[0_0_4px_4px_rgba(0,0,0,0.05)]">
-                            <div
-                              onClick={() => onClickDeleteeHandler(item)}
-                              className="pl-3 w-full h-10 border-b border-[#F2F2F2] flex justify-start items-center cursor-pointer"
-                            >
-                              삭제하기
-                            </div>
-                            <div
-                              onClick={() =>
-                                navigate("/post/edit", { state: item })
-                              }
-                              className="pl-3 w-full h-10 border-b border-[#F2F2F2] flex justify-start items-center cursor-pointer"
-                            >
-                              수정하기
-                            </div>
-                            <div
-                              onClick={() =>
-                                shareKakao(item.title, item.postId)
-                              }
-                              className="pl-3 w-full h-10 flex justify-start items-center cursor-pointer"
-                            >
-                              공유하기
-                            </div>
-                          </div>
+      <div className="mt-[73px] mb-40">
+        {postList.length > 0 && postList.find((item) => item.contents) ? (
+          postList
+            .filter((item) => item.contents)
+            .map((item) => (
+              <div key={item.postId}>
+                <div
+                  onClick={() => onCilckMyPostHandler(item.postId)}
+                  className="mx-4 mb-4 cursor-pointer"
+                >
+                  <div className="flex flex-col w-full border rounded-xl border-[#D9D9D9">
+                    <div>
+                      {item.postsPicturesList.length > 0 ? (
+                        <img
+                          className="w-full h-[167px] rounded-t-xl"
+                          src={item.postsPicturesList[0].postsPicturesURL}
+                        />
+                      ) : (
+                        <div className="w-full h-[167px] bg-[#F2F2F2] text-4 text-black font-semibold flex justify-center items-center ">
+                          대표 이미지
                         </div>
                       )}
                     </div>
-                  </div>
-
-                  <div className="mt-[9px] px-3">
-                    {item.tagsList &&
-                      item.tagsList.map((tag, index) => (
-                        <div
-                          key={index}
-                          className="mr-1 inline-block border text-center border-[#D9D9D9] rounded-xl px-[9px] py-1 h-5 text-xs/3 font-normal text-[#888888]"
-                        >
-                          {tag}
-                        </div>
-                      ))}
-                  </div>
-
-                  <div className="mt-8 mb-4 ml-3 mr-[14px] flex justify-between items-center">
-                    <div className="flex flex-row text-xs/3 text-[#666666] font-normal">
-                      <div className="mr-2 text-[#666666]">
-                        댓글 {item.commentNum}
+                    <div className="ml-[14px] mr-1 mt-3 flex flex-row items-center justify-between">
+                      <div className="text-lg/normal font-semibold text-[#333333]">
+                        {item.title}
                       </div>
-                      <div className="text-[#666666]">
-                        좋아요 {item.likeNum}
+                      <div
+                        onClick={(e) => {
+                          onClickThreeCIrcleHandler(e, item.postId);
+                        }}
+                      >
+                        <ThreecIrcle />
+                        {/* 케밥 모달 */}
+                        {modalPostId === item.postId && openModal && (
+                          <div className="absolute right-6">
+                            <div className="w-[136px] h-[121px] bg-white shadow-[0_0_4px_4px_rgba(0,0,0,0.05)]">
+                              <div
+                                onClick={() => onClickDeleteeHandler(item)}
+                                className="pl-3 w-full h-10 border-b border-[#F2F2F2] flex justify-start items-center cursor-pointer"
+                              >
+                                삭제하기
+                              </div>
+                              <div
+                                onClick={() =>
+                                  navigate("/post/edit", { state: item })
+                                }
+                                className="pl-3 w-full h-10 border-b border-[#F2F2F2] flex justify-start items-center cursor-pointer"
+                              >
+                                수정하기
+                              </div>
+                              <div
+                                onClick={() =>
+                                  shareKakao(item.title, item.postId)
+                                }
+                                className="pl-3 w-full h-10 flex justify-start items-center cursor-pointer"
+                              >
+                                공유하기
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
-                    <div className="text-xs/normal font-normal text-[#666666]">
-                      게시일 {formatDate(item.createdAt)}
+
+                    <div className="mt-[9px] px-3">
+                      {item.tagsList &&
+                        item.tagsList.map((tag, index) => (
+                          <div
+                            key={index}
+                            className="mr-1 inline-block border text-center border-[#D9D9D9] rounded-xl px-[9px] py-1 h-5 text-xs/3 font-normal text-[#888888]"
+                          >
+                            {tag}
+                          </div>
+                        ))}
+                    </div>
+
+                    <div className="mt-8 mb-4 ml-3 mr-[14px] flex justify-between items-center">
+                      <div className="flex flex-row text-xs/3 text-[#666666] font-normal">
+                        <div className="mr-2 text-[#666666]">
+                          댓글 {item.commentNum}
+                        </div>
+                        <div className="text-[#666666]">
+                          좋아요 {item.likeNum}
+                        </div>
+                      </div>
+                      <div className="text-xs/normal font-normal text-[#666666]">
+                        게시일 {formatDate(item.createdAt)}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+            ))
+        ) : (
+          <div className="pb-[84px] flex flex-col justify-center items-center min-h-screen">
+            <div className="w-[184px] h-[184px] flex justify-center items-center">
+              <img
+                src={"/img/myPagePostsEmpty.png"}
+                className="w-[184px] h-[184px]"
+              />
             </div>
-          ))
-      ) : (
-        <div className="pb-[84px] flex flex-col justify-center items-center min-h-screen">
-          <div className="w-[184px] h-[184px] flex justify-center items-center">
-            <img
-              src={"/img/myPagePostsEmpty.png"}
-              className="w-[184px] h-[184px]"
-            />
+            <div className="mt-[30px] flex flex-col items-center">
+              <div className="text-base/7 font-semibold text-[#D9D9D9]">
+                아직 작성 게시글이 없어요.
+              </div>
+              <div className="text-base/7 font-semibold text-[#D9D9D9]">
+                우측의 <span className="text-[#FF9900]">버튼+</span>을 눌러
+                게시글을 업로드 해볼까요?
+              </div>
+            </div>
+            <div className="flex flex-col justify-center items-center"></div>
           </div>
-          <div className="mt-[30px] flex flex-col items-center">
-            <div className="text-base/7 font-semibold text-[#D9D9D9]">
-              아직 작성 게시글이 없어요.
-            </div>
-            <div className="text-base/7 font-semibold text-[#D9D9D9]">
-              우측의 <span className="text-[#FF9900]">버튼+</span>을 눌러
-              게시글을 업로드 해볼까요?
-            </div>
-          </div>
-          <div className="flex flex-col justify-center items-center"></div>
-        </div>
-      )}
+        )}
+      </div>
     </Layout>
   );
 }
